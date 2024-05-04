@@ -24,7 +24,7 @@ class PartResource extends Resource
 
     protected static ?string $navigationGroup = 'Devices';
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';  
 
     public static function form(Form $form): Form
     {
@@ -65,9 +65,9 @@ class PartResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            RelationManagers\AttachmentsRelationManager::class,
         ];
-    }
+    }  
 
     public static function getPages(): array
     {

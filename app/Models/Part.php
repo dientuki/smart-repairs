@@ -14,4 +14,8 @@ class Part extends Model
     public function brand() {
         return $this->belongsTo(Brand::class);
     }
+
+    public function attachments() {
+        return $this->hasMany(PartAttachment::class);
+    }
 }
