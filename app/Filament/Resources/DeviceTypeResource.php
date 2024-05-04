@@ -2,9 +2,9 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\BrandResource\Pages;
-use App\Filament\Resources\BrandResource\RelationManagers;
-use App\Models\Brand;
+use App\Filament\Resources\DeviceTypeResource\Pages;
+use App\Filament\Resources\DeviceTypeResource\RelationManagers;
+use App\Models\DeviceType;
 use Filament\Forms;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
@@ -15,9 +15,9 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
-class BrandResource extends Resource
+class DeviceTypeResource extends Resource
 {
-    protected static ?string $model = Brand::class;
+    protected static ?string $model = DeviceType::class;
 
     protected static bool $isScopedToTenant = false;
 
@@ -63,9 +63,9 @@ class BrandResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListBrands::route('/'),
-            'create' => Pages\CreateBrand::route('/create'),
-            'edit' => Pages\EditBrand::route('/{record}/edit'),
+            'index' => Pages\ListDeviceTypes::route('/'),
+            'create' => Pages\CreateDeviceType::route('/create'),
+            'edit' => Pages\EditDeviceType::route('/{record}/edit'),
         ];
     }
 }

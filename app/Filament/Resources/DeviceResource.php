@@ -2,11 +2,12 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\BrandResource\Pages;
-use App\Filament\Resources\BrandResource\RelationManagers;
-use App\Models\Brand;
+use App\Filament\Resources\DeviceResource\Pages;
+use App\Filament\Resources\DeviceResource\RelationManagers;
+use App\Models\Device;
 use Filament\Forms;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
@@ -15,11 +16,11 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
-class BrandResource extends Resource
+class DeviceResource extends Resource
 {
-    protected static ?string $model = Brand::class;
+    protected static ?string $model = Device::class;
 
-    protected static bool $isScopedToTenant = false;
+    protected static bool $isScopedToTenant = false;    
 
     protected static ?string $navigationGroup = 'Devices';
 
@@ -29,8 +30,18 @@ class BrandResource extends Resource
     {
         return $form
             ->schema([
-                TextInput::make('name')
+                TextInput::make('commercial_name')
                     ->required(),
+                TextInput::make('tech_name')
+                    ->required(),
+                TextInput::make('url')
+                    ->required(),
+                Select::make('brand_id')
+                    ->relationship('brand', 'name')
+                    ->preload(),
+                Select::make('device_type_id')
+                    ->relationship('device_type', 'name')
+                    ->preload()
             ]);
     }
 
@@ -38,7 +49,10 @@ class BrandResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('name'),
+                TextColumn::make('commercial_name'),
+                TextColumn::make('tech_name'),
+                TextColumn::make('brand.name'),
+                TextColumn::make('device_type.name'),
             ])
             ->filters([
                 //
@@ -63,9 +77,9 @@ class BrandResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListBrands::route('/'),
-            'create' => Pages\CreateBrand::route('/create'),
-            'edit' => Pages\EditBrand::route('/{record}/edit'),
+            'index' => Pages\ListDevices::route('/'),
+            'create' => Pages\CreateDevice::route('/create'),
+            'edit' => Pages\EditDevice::route('/{record}/edit'),
         ];
     }
 }
