@@ -14,7 +14,7 @@ class BrandSeeder extends Seeder
     public function run(): void
     {
         DB::table('brands')->insert([
-            'name' => 'ZTE',
+            'name' => 'Generica',
         ]);
         DB::table('brands')->insert([
             'name' => 'Motorola',
