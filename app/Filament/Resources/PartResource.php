@@ -20,7 +20,9 @@ class PartResource extends Resource
 {
     protected static ?string $model = Part::class;
 
-    protected static bool $isScopedToTenant = false;    
+    protected static bool $isScopedToTenant = false;   
+    
+    protected static ?int $navigationSort = 30;
 
     protected static ?string $navigationGroup = 'Devices';
 

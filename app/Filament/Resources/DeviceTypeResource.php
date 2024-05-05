@@ -21,6 +21,8 @@ class DeviceTypeResource extends Resource
 
     protected static bool $isScopedToTenant = false;
 
+    protected static ?int $navigationSort = 20;
+
     protected static ?string $navigationGroup = 'Devices';
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
