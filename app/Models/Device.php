@@ -17,4 +17,8 @@ class Device extends Model
     public function device_type() {
         return $this->belongsTo(DeviceType::class);
     }
+
+    public function attachments() {
+        return $this->hasMany(DeviceAttachment::class);
+    }    
 }
