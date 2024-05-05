@@ -14,7 +14,8 @@ return new class extends Migration
         Schema::create('part_attachments', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('file')->nullable();
+            $table->string('hash_filename')->nullable();
+            $table->string('original_file')->nullable();
             $table->unsignedBigInteger('part_id');
             $table->foreign('part_id')->references('id')->on('parts')->onDelete('cascade');
             $table->timestamps();

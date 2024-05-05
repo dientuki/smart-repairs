@@ -9,7 +9,7 @@ class PartAttachment extends Model
 {
     use HasFactory;
 
-    protected $fillable = [ 'name', 'file', 'part_id' ];
+    protected $fillable = [ 'name', 'hash_filename', 'original_filename', 'part_id' ];
 
     public function part() {
         return $this->belongsTo(Part::class);
