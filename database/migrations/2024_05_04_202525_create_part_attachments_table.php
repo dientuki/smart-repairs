@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('hash_filename')->nullable();
-            $table->string('original_file')->nullable();
+            $table->string('original_filename')->nullable();
             $table->unsignedBigInteger('part_id');
             $table->foreign('part_id')->references('id')->on('parts')->onDelete('cascade');
             $table->timestamps();

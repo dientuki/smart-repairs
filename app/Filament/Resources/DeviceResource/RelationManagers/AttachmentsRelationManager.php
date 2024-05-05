@@ -3,6 +3,8 @@
 namespace App\Filament\Resources\DeviceResource\RelationManagers;
 
 use Filament\Forms;
+use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
@@ -18,11 +20,19 @@ class AttachmentsRelationManager extends RelationManager
 
     public function form(Form $form): Form
     {
-        return $form
+            return $form
             ->schema([
-                Forms\Components\TextInput::make('name')
+                TextInput::make('name')
                     ->required()
-                    ->maxLength(255),
+                    ->maxLength(255)
+                    ->columnSpan('full'),
+                FileUpload::make('hash_filename')
+                    ->required()
+                    ->directory('device')
+                    ->storeFileNamesIn('original_filename')
+                    ->maxSize(10240)
+                    ->columnSpan('full')
+
             ]);
     }
 
