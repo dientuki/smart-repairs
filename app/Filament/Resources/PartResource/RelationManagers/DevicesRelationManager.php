@@ -1,8 +1,8 @@
 <?php
-namespace App\Filament\Resources\DeviceResource\RelationManagers;
+
+namespace App\Filament\Resources\PartResource\RelationManagers;
 
 use Filament\Forms;
-use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
@@ -12,15 +12,15 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
-class PartsRelationManager extends RelationManager
+class DevicesRelationManager extends RelationManager
 {
-    protected static string $relationship = 'parts';
+    protected static string $relationship = 'devices';
 
     public function form(Form $form): Form
     {
         return $form
             ->schema([
-                TextInput::make('part_number')
+                Forms\Components\TextInput::make('commercial_name')
                     ->required()
                     ->maxLength(255),
             ]);
@@ -29,11 +29,9 @@ class PartsRelationManager extends RelationManager
     public function table(Table $table): Table
     {
         return $table
-            ->recordTitleAttribute('part_number')
+            ->recordTitleAttribute('commercial_name')
             ->columns([
-                TextColumn::make('module_category.name'),
-                TextColumn::make('brand.name'),
-                TextColumn::make('part_number'),
+                TextColumn::make('commercial_name'),
             ])
             ->filters([
                 //
@@ -46,10 +44,12 @@ class PartsRelationManager extends RelationManager
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
-                Tables\Actions\DetachAction::make(),
+                Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
-
+                Tables\Actions\BulkActionGroup::make([
+                    Tables\Actions\DeleteBulkAction::make(),
+                ]),
             ]);
     }
 }

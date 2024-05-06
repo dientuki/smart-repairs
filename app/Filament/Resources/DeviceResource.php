@@ -32,18 +32,19 @@ class DeviceResource extends Resource
     {
         return $form
             ->schema([
+                Select::make('brand_id')
+                    ->relationship('brand', 'name')
+                    ->preload(),                
                 TextInput::make('commercial_name')
                     ->required(),
+                Select::make('device_type_id')
+                    ->relationship('device_type', 'name')
+                    ->preload(),
                 TextInput::make('tech_name')
                     ->required(),
                 TextInput::make('url')
                     ->required(),
-                Select::make('brand_id')
-                    ->relationship('brand', 'name')
-                    ->preload(),
-                Select::make('device_type_id')
-                    ->relationship('device_type', 'name')
-                    ->preload()
+
             ]);
     }
 
@@ -51,9 +52,9 @@ class DeviceResource extends Resource
     {
         return $table
             ->columns([
+                TextColumn::make('brand.name'),
                 TextColumn::make('commercial_name'),
                 TextColumn::make('tech_name'),
-                TextColumn::make('brand.name'),
                 TextColumn::make('device_type.name'),
             ])
             ->filters([

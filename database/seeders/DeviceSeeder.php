@@ -14,11 +14,19 @@ class DeviceSeeder extends Seeder
     public function run(): void
     {
         DB::table('devices')->insert([
-            'commercial_name' => 'Motorola One Hyper',
+            'commercial_name' => 'One Hyper',
             'tech_name' => 'motorola-one-hyper',
             'brand_id' => 2,
             'device_type_id' => 1,
             'url'=> 'https://www.gsmarena.com/motorola_one_hyper-9944.php'
-        ]);        
+        ]);   
+        
+        DB::table('devices')->insert([
+            'commercial_name' => 'Galaxy Z Flip',
+            'tech_name' => 'SM-F700F/DS',
+            'brand_id' => 3,
+            'device_type_id' => 1,
+            'url'=> 'https://www.gsmarena.com/samsung_galaxy_z_flip-10054.php'
+        ]);         
     }
 }

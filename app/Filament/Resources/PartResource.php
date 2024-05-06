@@ -22,7 +22,7 @@ class PartResource extends Resource
 
     protected static bool $isScopedToTenant = false;   
     
-    protected static ?int $navigationSort = 30;
+    protected static ?int $navigationSort = 50;
 
     protected static ?string $navigationGroup = 'Devices';
 
@@ -71,6 +71,7 @@ class PartResource extends Resource
     public static function getRelations(): array
     {
         return [
+            RelationManagers\DevicesRelationManager::class,
             RelationManagers\AttachmentsRelationManager::class,
         ];
     }  
