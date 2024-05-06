@@ -14,12 +14,15 @@ return new class extends Migration
         Schema::create('parts', function (Blueprint $table) {
             $table->id();
 
-            $table->string('name');
             $table->string('part_number');
+            $table->string('observations');
             $table->timestamps();
 
             $table->unsignedBigInteger('brand_id');
             $table->foreign('brand_id')->references('id')->on('brands');            
+
+            $table->unsignedBigInteger('module_category_id');
+            $table->foreign('module_category_id')->references('id')->on('module_categories');              
         });
     }
 

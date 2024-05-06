@@ -21,6 +21,7 @@ class DatabaseSeeder extends Seeder
             TeamUserSeeder::class,
             DeviceTypeSeeder::class,
             BrandSeeder::class,
+            ModuleCategorySeeder::class,
             PartSeeder::class,
             DeviceSeeder::class
         ]);

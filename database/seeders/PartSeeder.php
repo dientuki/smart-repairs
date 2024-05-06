@@ -14,13 +14,15 @@ class PartSeeder extends Seeder
     public function run(): void
     {
         DB::table('parts')->insert([
-            'name' => 'Pin de carga',
             'part_number' => 'abc123',
+            'observations' => 'Sin falla',
+            'module_category_id' => 1,
             'brand_id' => 1
         ]);
         DB::table('parts')->insert([
-            'name' => 'Pantalla',
             'part_number' => 'def456',
+            'observations' => 'Sin falla',
+            'module_category_id' => 2,
             'brand_id' => 2
         ]);
     }

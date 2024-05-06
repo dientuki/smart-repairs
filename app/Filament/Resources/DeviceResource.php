@@ -72,7 +72,9 @@ class DeviceResource extends Resource
     public static function getRelations(): array
     {
         return [
+            RelationManagers\PartsRelationManager::class,
             RelationManagers\AttachmentsRelationManager::class,
+            
         ];
     }
 

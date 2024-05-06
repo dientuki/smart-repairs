@@ -20,5 +20,9 @@ class Device extends Model
 
     public function attachments() {
         return $this->hasMany(DeviceAttachment::class);
-    }    
+    }  
+    
+    public function parts() {
+        return $this->belongsToMany(Part::class, 'device_parts');
+    }
 }
