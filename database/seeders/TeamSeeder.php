@@ -16,5 +16,9 @@ class TeamSeeder extends Seeder
         DB::table('teams')->insert([
             'name' => 'Primera empresa'
         ]);
+
+        DB::table('teams')->insert([
+            'name' => 'Laboratronica'
+        ]);        
     }
 }
