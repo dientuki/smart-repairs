@@ -14,6 +14,7 @@ use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class OrderResource extends Resource
@@ -31,7 +32,8 @@ class OrderResource extends Resource
                 Select::make('status')
                     ->options(OrderStatusEnum::class),                
                 Select::make('device_id')
-                    ->relationship('device', 'commercial_name')
+                    ->relationship('device')
+                    ->getOptionLabelFromRecordUsing(fn (Model $record) => "{$record->brand->name} {$record->commercial_name}")
                     ->preload(),
                 Select::make('client_id')
                     ->relationship('client', 'name')
