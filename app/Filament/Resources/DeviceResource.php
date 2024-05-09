@@ -43,6 +43,8 @@ class DeviceResource extends Resource
                 TextInput::make('tech_name')
                     ->required(),
                 TextInput::make('url')
+                    ->prefix('http://')
+                    ->suffixIcon('heroicon-m-globe-alt')
                     ->required(),
 
             ]);

@@ -14,10 +14,18 @@ class DeviceTypeSeeder extends Seeder
     public function run(): void
     {
         DB::table('device_types')->insert([
-            'name' => 'mobile'
+            'name' => 'mobile',
+            'express_check' => 'display,camara frontal, camara trasera, lateral superior, lateral inferior, lateral izquierdo, lateral derecho, tapa',
+            'express_check_default' => false,
+            'extra_check' => 'enciende, volumen arriba, volumen abajo, boton power',
+            'extra_check_default' => true
         ]);
         DB::table('device_types')->insert([
-            'name' => 'tablet'
+            'name' => 'tablet',
+            'express_check' => 'display,camara frontal, camara trasera, lateral superior, lateral inferior, lateral izquierdo, lateral derecho, tapa',
+            'express_check_default' => false,
+            'extra_check' => 'enciende, volumen arriba, volumen abajo, boton power',
+            'extra_check_default' => true            
         ]);        
     }
 }

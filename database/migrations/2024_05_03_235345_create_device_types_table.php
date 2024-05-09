@@ -14,6 +14,10 @@ return new class extends Migration
         Schema::create('device_types', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->string('express_check');
+            $table->string('express_check_default')->boolean()->default(false);
+            $table->string('extra_check');
+            $table->string('extra_check_default')->boolean()->default(true);
             $table->timestamps();
         });
     }

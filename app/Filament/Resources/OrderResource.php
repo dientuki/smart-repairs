@@ -44,8 +44,10 @@ class OrderResource extends Resource
                     ->searchable(true)
                     ->preload(),
                 Select::make('customer_id')
-                    ->relationship('customer', 'name')
+                    ->relationship('customer')
+                    ->getOptionLabelFromRecordUsing(fn (Model $record) => "{$record->first_name} {$record->last_name}")
                     ->native(false)
+                    ->searchable(true)
                     ->required()
                     ->createOptionForm([
                         ...self::commonFields(), 
@@ -54,6 +56,7 @@ class OrderResource extends Resource
                         $data['team_id'] = Filament::getTenant()->id;
                         return $data;
                     })),
+                
                     
             ]);
     }

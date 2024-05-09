@@ -39,7 +39,7 @@ class CustomerResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('name')->translateLabel(),
-                TextColumn::make('email'),
+                TextColumn::make('email')->icon('heroicon-m-envelope'),
                 TextColumn::make('phone'),
             ])
             ->filters([

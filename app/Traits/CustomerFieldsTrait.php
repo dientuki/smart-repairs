@@ -14,8 +14,10 @@ trait CustomerFieldsTrait
             TextInput::make('last_name')
                 ->required(),                
             TextInput::make('email')
+                ->email()
                 ->required(),
             TextInput::make('phone')
+                ->tel()
                 ->required(), 
         ];
     }
