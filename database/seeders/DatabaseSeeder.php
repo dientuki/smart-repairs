@@ -23,7 +23,8 @@ class DatabaseSeeder extends Seeder
             BrandSeeder::class,
             ModuleCategorySeeder::class,
             PartSeeder::class,
-            DeviceSeeder::class
+            DeviceSeeder::class,
+            CustomerSeeder::class,
         ]);
     }
 }

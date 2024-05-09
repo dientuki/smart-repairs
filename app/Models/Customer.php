@@ -9,5 +9,5 @@ class Customer extends ModelWithTeam
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'phone', 'email'];
+    protected $fillable = ['first_name', 'last_name', 'phone', 'email'];
 }
