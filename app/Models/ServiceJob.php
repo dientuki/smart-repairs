@@ -5,13 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class ServiceJob extends Model
+class ServiceJob extends ModelWithTeam
 {
     use HasFactory;
 
     protected $fillable = ['name', 'price'];
-
-    public function team() {
-        return $this->belongsTo(Team::class);
-    }        
 }
