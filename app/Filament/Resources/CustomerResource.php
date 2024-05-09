@@ -5,6 +5,7 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\CustomerResource\Pages;
 use App\Filament\Resources\CustomerResource\RelationManagers;
 use App\Models\Customer;
+use App\Traits\CustomerFieldsTrait;
 use Filament\Forms;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
@@ -23,14 +24,13 @@ class CustomerResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
+    use CustomerFieldsTrait;
+
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                TextInput::make('name')
-                    ->required(),
-                TextInput::make('email')
-                    ->required(),
+                ...self::commonFields(),
             ]);
     }
 
@@ -40,6 +40,7 @@ class CustomerResource extends Resource
             ->columns([
                 TextColumn::make('name')->translateLabel(),
                 TextColumn::make('email'),
+                TextColumn::make('phone'),
             ])
             ->filters([
                 //

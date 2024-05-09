@@ -20,6 +20,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Facades\Filament;
+use App\Traits\CustomerFieldsTrait;
 
 class OrderResource extends Resource
 {
@@ -28,6 +29,8 @@ class OrderResource extends Resource
     protected static ?string $tenantRelationshipName = 'customers';
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+
+    use CustomerFieldsTrait;
 
     public static function form(Form $form): Form
     {
@@ -38,14 +41,14 @@ class OrderResource extends Resource
                 Select::make('device_id')
                     ->relationship('device')
                     ->getOptionLabelFromRecordUsing(fn (Model $record) => "{$record->brand->name} {$record->commercial_name}")
+                    ->searchable(true)
                     ->preload(),
                 Select::make('customer_id')
                     ->relationship('customer', 'name')
                     ->native(false)
                     ->required()
                     ->createOptionForm([
-                        TextInput::make('name'),
-                        TextInput::make('email'),
+                        ...self::commonFields(), 
                     ])
                     ->createOptionAction(fn ($action) => $action->mutateFormDataUsing(function (array $data): array {
                         $data['team_id'] = Filament::getTenant()->id;
