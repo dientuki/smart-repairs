@@ -10,7 +10,7 @@ class Order extends ModelWithTeam
 {
     use HasFactory;
 
-    protected $fillable = ['status', 'device_id', 'client_id'];
+    protected $fillable = ['status', 'device_id', 'customer_id'];
 
     protected $casts = [
         'status' => OrderStatusEnum::class
@@ -20,7 +20,7 @@ class Order extends ModelWithTeam
         return $this->belongsTo(Device::class);
     }    
 
-    public function client() {
-        return $this->belongsTo(Client::class);
+    public function customer() {
+        return $this->belongsTo(Customer::class);
     }    
 }

@@ -6,6 +6,9 @@ use App\Models\Team;
 
 class ModelWithTeam extends Model
 {
+    
+    protected $fillable = ['team_id'];
+    
     /**
      * Method to define the relationship with the Team model.
      *
