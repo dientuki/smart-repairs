@@ -17,16 +17,16 @@ class Team extends Model
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
     public function members() {
-        return $this->belongsToMany(User::class, 'team_user', 'team_id', 'user_id');
+        return $this->belongsToMany(User::class, 'team_user', 'user_id');
     }
 
     /**
-     * Retrieve the clients associated with the team.
+     * Retrieve the customers associated with the team.
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */ 
-    public function clients() {
-        return $this->hasMany(Client::class);
+    public function customers() {
+        return $this->hasMany(Customer::class);
     }
 
 

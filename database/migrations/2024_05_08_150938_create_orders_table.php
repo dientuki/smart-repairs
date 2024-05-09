@@ -19,8 +19,8 @@ return new class extends Migration
             $table->unsignedBigInteger('device_id');
             $table->foreign('device_id')->references('id')->on('devices');
             
-            $table->unsignedBigInteger('client_id');
-            $table->foreign('client_id')->references('id')->on('clients');
+            $table->unsignedBigInteger('customer_id');
+            $table->foreign('customer_id')->references('id')->on('customers');
             
             $table->unsignedBigInteger('team_id');
             $table->foreign('team_id')->references('id')->on('teams')->onDelete('cascade');

@@ -5,9 +5,12 @@ namespace App\Filament\Resources;
 use App\Enum\OrderStatusEnum;
 use App\Filament\Resources\OrderResource\Pages;
 use App\Filament\Resources\OrderResource\RelationManagers;
+use App\Models\Customer;
 use App\Models\Order;
+use Filament\Actions\Modal\Actions\Action;
 use Filament\Forms;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
@@ -16,12 +19,13 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Filament\Facades\Filament;
 
 class OrderResource extends Resource
 {
     protected static ?string $model = Order::class;
 
-    protected static ?string $tenantRelationshipName = 'clients';
+    protected static ?string $tenantRelationshipName = 'customers';
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
@@ -35,9 +39,19 @@ class OrderResource extends Resource
                     ->relationship('device')
                     ->getOptionLabelFromRecordUsing(fn (Model $record) => "{$record->brand->name} {$record->commercial_name}")
                     ->preload(),
-                Select::make('client_id')
-                    ->relationship('client', 'name')
-                    ->preload(),
+                Select::make('customer_id')
+                    ->relationship('customer', 'name')
+                    ->native(false)
+                    ->required()
+                    ->createOptionForm([
+                        TextInput::make('name'),
+                        TextInput::make('email'),
+                    ])
+                    ->createOptionAction(fn ($action) => $action->mutateFormDataUsing(function (array $data): array {
+                        $data['team_id'] = Filament::getTenant()->id;
+                        return $data;
+                    })),
+                    
             ]);
     }
 
@@ -47,7 +61,7 @@ class OrderResource extends Resource
             ->columns([
                 TextColumn::make('status'),
                 TextColumn::make('device.commercial_name'),
-                TextColumn::make('client.name'),
+                TextColumn::make('customer.name'),
             ])
             ->filters([
                 //

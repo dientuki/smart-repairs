@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('order_details', function (Blueprint $table) {
             $table->id();
             $table->string('unlock_type'); //Enum
-            $table->string('unlock_code')->nullable(); //Enum
+            $table->string('unlock_code')->nullable();
             $table->timestamps();
         });
     }

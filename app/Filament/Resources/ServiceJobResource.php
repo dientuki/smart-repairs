@@ -19,7 +19,7 @@ class ServiceJobResource extends Resource
 {
     protected static ?string $model = ServiceJob::class;
 
-    protected static ?string $tenantRelationshipName = 'clients';
+    protected static ?string $tenantRelationshipName = 'customers';
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
