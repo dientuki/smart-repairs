@@ -2,7 +2,9 @@
 
 namespace App\Filament\Resources\PartResource\RelationManagers;
 
+use App\Models\Device;
 use Filament\Forms;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
@@ -31,6 +33,7 @@ class DevicesRelationManager extends RelationManager
         return $table
             ->recordTitleAttribute('commercial_name')
             ->columns([
+                TextColumn::make('brand.name'),
                 TextColumn::make('commercial_name'),
             ])
             ->filters([
@@ -38,6 +41,12 @@ class DevicesRelationManager extends RelationManager
             ])
             ->headerActions([
                 AttachAction::make()
+                    ->preloadRecordSelect()
+                    ->recordSelect(
+                        fn (Select $select) => $select->placeholder('Select a post'),
+                    )
+                    ->recordSelectSearchColumns(['tech_name', 'commercial_name'])
+                    ->recordTitle(fn (Device $record): string => "{$record->brand->name} {$record->commercial_name}")
                     ->form(fn (AttachAction $action): array => [
                         $action->getRecordSelect(),
                     ]),
