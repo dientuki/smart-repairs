@@ -9,5 +9,5 @@ class ServiceJob extends ModelWithTeam
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'price'];
+    protected $fillable = ['name', 'price', 'team_id'];
 }

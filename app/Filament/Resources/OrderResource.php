@@ -3,9 +3,11 @@
 namespace App\Filament\Resources;
 
 use App\Enum\OrderStatusEnum;
+use App\Enum\UnlockEnum;
 use App\Filament\Resources\OrderResource\Pages;
 use App\Filament\Resources\OrderResource\RelationManagers;
 use App\Models\Customer;
+use App\Models\Device;
 use App\Models\Order;
 use App\Models\DeviceUnit;
 use Filament\Actions\Modal\Actions\Action;
@@ -18,7 +20,6 @@ use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Facades\Filament;
 use App\Traits\CustomerFieldsTrait;
@@ -46,22 +47,25 @@ class OrderResource extends Resource
                         ->schema([
                             Select::make('device_id')
                                 ->relationship('device')
-                                ->getOptionLabelFromRecordUsing(fn (Model $record) => "{$record->brand->name} {$record->commercial_name}")
+                                ->getOptionLabelFromRecordUsing(fn (Device $record) => "{$record->brand->name} {$record->commercial_name}")
                                 ->searchable(true)
+                                ->required()
                                 ->preload(),
                             Select::make('customer_id')
-                                ->relationship('customer')
-                                ->getOptionLabelFromRecordUsing(fn (Model $record) => "{$record->first_name} {$record->last_name}")
+                                ->relationship('customer', 'full_name')
+                                ->preload()
+                                ->getOptionLabelFromRecordUsing(fn (Customer $record) => "{$record->first_name} {$record->last_name}")
                                 ->native(false)
-                                //->searchable(true)
+                                ->searchable(true)
                                 ->required()
                                 ->createOptionForm([
                                     ...self::commonFields(),
-                                ])
-                                ->createOptionAction(fn ($action) => $action->mutateFormDataUsing(function (array $data): array {
-                                    $data['team_id'] = Filament::getTenant()->id;
-                                    return $data;
-                                })),
+                                ])->createOptionAction(function ($action) {
+                                    $action->mutateFormDataUsing(function (array $data) {
+                                        $data['team_id'] = Filament::getTenant()->id;
+                                        return $data;
+                                    });
+                                })
                         ])
                         ->afterValidation(function(Get $get) {
                             $order = Order::updateOrCreate([
@@ -72,14 +76,16 @@ class OrderResource extends Resource
                         }),
                     Step::make('Device unit')
                         ->schema([
-                            TextInput::make('serial')->require(),
-                            Select::make('unlock_type')->options(OrderStatusEnum::class),
+                            TextInput::make('serial')->required(),
+                            Select::make('unlock_type')->options(UnlockEnum::class),
                             TextInput::make('unlock_code')
                         ])
                         ->afterValidation(function(Get $get) {
                             $order = DeviceUnit::updateOrCreate([
                                 'device_id' => $get('device_id'),
-                                'customer_id' => $get('customer_id'),
+                                'serial' => $get('serial'),
+                                'unlock_type' => $get('unlock_type'),
+                                'unlock_code' => $get('unlock_code'),
                                 'team_id' => Filament::getTenant()->id,
                             ]);
                         }),

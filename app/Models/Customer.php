@@ -2,12 +2,13 @@
 
 namespace App\Models;
 
+use Filament\Facades\Filament;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 
 class Customer extends ModelWithTeam
 {
     use HasFactory;
 
-    protected $fillable = ['first_name', 'last_name', 'phone', 'email'];
+    protected $fillable = ['first_name', 'last_name', 'phone', 'email', 'team_id'];
+
 }
