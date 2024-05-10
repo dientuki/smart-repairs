@@ -1,16 +1,14 @@
 <?php
 namespace App\Filament\Resources\DeviceResource\RelationManagers;
 
-use Filament\Forms;
+use Filament\Forms\Components\Select;
+use Filament\Tables\Actions\ViewAction;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
-use Filament\Tables;
-use Filament\Tables\Actions\AttachAction;
+use Filament\Tables\Actions\DetachAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class PartsRelationManager extends RelationManager
 {
@@ -39,14 +37,19 @@ class PartsRelationManager extends RelationManager
                 //
             ])
             ->headerActions([
-                AttachAction::make()
-                    ->form(fn (AttachAction $action): array => [
-                        $action->getRecordSelect(),
-                    ]),
+
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DetachAction::make(),
+                ViewAction::make()
+                    ->form([
+                        Select::make('module_category_id')
+                            ->relationship('module_category', 'name')->columns(1),
+                        Select::make('brand_id')
+                            ->relationship('brand', 'name')->columns(1),
+                        TextInput::make('part_number')->columns(1),
+                        TextInput::make('observations')->columnSpan(3)->columns(1),
+                    ]),
+                DetachAction::make(),
             ])
             ->bulkActions([
 

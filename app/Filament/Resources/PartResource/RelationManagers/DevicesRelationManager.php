@@ -33,8 +33,10 @@ class DevicesRelationManager extends RelationManager
         return $table
             ->recordTitleAttribute('commercial_name')
             ->columns([
+                TextColumn::make('device_type.name'),
                 TextColumn::make('brand.name'),
                 TextColumn::make('commercial_name'),
+                TextColumn::make('tech_name'),
             ])
             ->filters([
                 //
@@ -52,8 +54,7 @@ class DevicesRelationManager extends RelationManager
                     ]),
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
+                Tables\Actions\DetachAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
