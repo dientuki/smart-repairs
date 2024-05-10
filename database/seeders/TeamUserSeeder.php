@@ -17,9 +17,5 @@ class TeamUserSeeder extends Seeder
             'user_id' => 1,
             'team_id' => 1
         ]);
-        DB::table('team_user')->insert([
-            'user_id' => 2,
-            'team_id' => 2
-        ]);        
     }
 }

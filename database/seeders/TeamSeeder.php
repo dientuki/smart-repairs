@@ -14,11 +14,7 @@ class TeamSeeder extends Seeder
     public function run(): void
     {
         DB::table('teams')->insert([
-            'name' => 'Primera empresa'
-        ]);
-
-        DB::table('teams')->insert([
             'name' => 'Laboratronica'
-        ]);        
+        ]);
     }
 }
