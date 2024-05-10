@@ -28,7 +28,7 @@ class ServiceJobResource extends Resource
         return $form
             ->schema([
                 TextInput::make('name'),
-                TextInput::make('price'),
+                TextInput::make('price')->prefix('$'),
             ]);
     }
 
@@ -37,7 +37,7 @@ class ServiceJobResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('name'),
-                TextColumn::make('price'),
+                TextColumn::make('price')->money('ARS'),
             ])
             ->filters([
                 //

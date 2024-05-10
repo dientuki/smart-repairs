@@ -38,7 +38,8 @@ class CustomerResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('name')->translateLabel(),
+                TextColumn::make('last_name')
+                    ->formatStateUsing(fn (Customer $record): string => "{$record->first_name} {$record->last_name}" ),
                 TextColumn::make('email')->icon('heroicon-m-envelope'),
                 TextColumn::make('phone'),
             ])

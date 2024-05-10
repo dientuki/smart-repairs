@@ -20,7 +20,7 @@ class DeviceResource extends Resource
 {
     protected static ?string $model = Device::class;
 
-    protected static bool $isScopedToTenant = false;    
+    protected static bool $isScopedToTenant = false;
 
     protected static ?int $navigationSort = 40;
 
@@ -32,21 +32,19 @@ class DeviceResource extends Resource
     {
         return $form
             ->schema([
-                Select::make('brand_id')
-                    ->relationship('brand', 'name')
-                    ->preload(),                
-                TextInput::make('commercial_name')
-                    ->required(),
                 Select::make('device_type_id')
                     ->relationship('device_type', 'name')
                     ->preload(),
+                Select::make('brand_id')
+                    ->relationship('brand', 'name')
+                    ->preload(),
+                TextInput::make('commercial_name')
+                    ->required(),
                 TextInput::make('tech_name')
                     ->required(),
                 TextInput::make('url')
-                    ->prefix('http://')
                     ->suffixIcon('heroicon-m-globe-alt')
                     ->required(),
-
             ]);
     }
 
@@ -54,10 +52,15 @@ class DeviceResource extends Resource
     {
         return $table
             ->columns([
+                TextColumn::make('device_type.name'),
                 TextColumn::make('brand.name'),
                 TextColumn::make('commercial_name'),
                 TextColumn::make('tech_name'),
-                TextColumn::make('device_type.name'),
+                TextColumn::make('url')
+                    ->url(fn ($record) => $record->url, true)
+                    ->icon('heroicon-m-globe-alt')
+                    ->formatStateUsing(fn (string $state): string => __("Link"))
+                    ->tooltip(fn (Device $record): string => $record->url)
             ])
             ->filters([
                 //
@@ -77,7 +80,7 @@ class DeviceResource extends Resource
         return [
             RelationManagers\PartsRelationManager::class,
             RelationManagers\AttachmentsRelationManager::class,
-            
+
         ];
     }
 
