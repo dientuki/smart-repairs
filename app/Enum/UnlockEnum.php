@@ -2,9 +2,21 @@
 
 namespace App\Enum;
 
-enum UnlockEnum: string
+use Filament\Support\Contracts\HasLabel;
+
+enum UnlockEnum: string implements HasLabel
 {
-    case NONE = 'open';
-    case CODE = 'closed';
-    case PATTERN = 'closed';
+    case NONE = 'none';
+    case CODE = 'code';
+    case PATTERN = 'pattern';
+
+
+    public function getLabel(): string
+    {
+        return match ($this) {
+            self::NONE => __('None'),
+            self::CODE => __('Code'),
+            self::PATTERN => __('Pattern'),
+        };
+    }
 }
