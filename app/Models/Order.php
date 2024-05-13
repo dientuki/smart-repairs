@@ -19,4 +19,8 @@ class Order extends ModelWithTeam
     public function device_unit() {
         return $this->hasOne(DeviceUnit::class , 'order_id');
     }
+
+    public function getActiveOrders() {
+        return self::where('status', '!=', 'ready')->get();
+    }
 }
