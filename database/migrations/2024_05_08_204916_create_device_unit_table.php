@@ -11,10 +11,19 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('order_details', function (Blueprint $table) {
+        Schema::create('device_units', function (Blueprint $table) {
             $table->id();
+
+            $table->unsignedBigInteger('device_id');
+            $table->unsignedBigInteger('team_id');
+
+            $table->string('serial');
             $table->string('unlock_type'); //Enum
             $table->string('unlock_code')->nullable();
+
+            $table->foreign('team_id')->references('id')->on('teams')->onDelete('cascade');
+            $table->foreign('device_id')->references('id')->on('devices');
+
             $table->timestamps();
         });
     }
@@ -24,6 +33,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('order_details');
+        Schema::dropIfExists('device_units');
     }
 };

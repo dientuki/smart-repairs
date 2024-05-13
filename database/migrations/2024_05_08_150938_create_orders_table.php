@@ -16,15 +16,12 @@ return new class extends Migration
 
             $table->string('status'); //Enum
 
-            $table->unsignedBigInteger('device_id');
-            $table->foreign('device_id')->references('id')->on('devices');
-            
             $table->unsignedBigInteger('customer_id');
             $table->foreign('customer_id')->references('id')->on('customers');
-            
+
             $table->unsignedBigInteger('team_id');
             $table->foreign('team_id')->references('id')->on('teams')->onDelete('cascade');
-            
+
             $table->timestamps();
         });
     }
