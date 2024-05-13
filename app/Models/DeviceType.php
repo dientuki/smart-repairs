@@ -8,5 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class DeviceType extends Model
 {
     use HasFactory;
-    protected $fillable = ['name'];
+    protected $fillable = [
+        'name',
+        'hash_filename',
+    ];
 }

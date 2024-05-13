@@ -6,6 +6,7 @@ use App\Filament\Resources\DeviceTypeResource\Pages;
 use App\Filament\Resources\DeviceTypeResource\RelationManagers;
 use App\Models\DeviceType;
 use Filament\Forms;
+use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
@@ -13,6 +14,7 @@ use Filament\Forms\Components\Toggle;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ToggleColumn;
 use Filament\Tables\Table;
@@ -36,25 +38,10 @@ class DeviceTypeResource extends Resource
         return $form
             ->schema([
                 TextInput::make('name')
-                    ->required()
-                    ->columnSpan('full'),
-                Section::make('Express check')
-                    ->description('Prevent abuse by limiting the number of requests per period')
-                    ->schema([
-                        Textarea::make('express_check')
-                            ->required(),
-                        Toggle::make('express_check_default')
-                            ->required(),    
-                    ])->columnSpan(2)->columns(1),
-                Section::make('Extra check')
-                    ->description('Prevent abuse by limiting the number of requests per period')
-                    ->schema([
-                        Textarea::make('extra_check')
-                            ->required(),
-                        Toggle::make('extra_check_default')
-                            ->required(),                    
-                    ])->columnSpan(2)->columns(1),                     
-            ])->columns(4);
+                    ->required(),
+                FileUpload::make('hash_filename')
+                    ->directory('logos')
+        ]);
     }
 
     public static function table(Table $table): Table
@@ -62,10 +49,7 @@ class DeviceTypeResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('name'),
-                TextColumn::make('express_check')->listWithLineBreaks()->separator(','),
-                ToggleColumn::make('express_check_default'),
-                TextColumn::make('extra_check')->listWithLineBreaks()->separator(','),
-                ToggleColumn::make('extra_check_default'),
+                ImageColumn::make('hash_filename'),
             ])
             ->filters([
                 //

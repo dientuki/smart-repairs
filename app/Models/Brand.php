@@ -11,5 +11,6 @@ class Brand extends Model
 
     protected $fillable = [
         'name',
+        'hash_filename',
     ];
 }

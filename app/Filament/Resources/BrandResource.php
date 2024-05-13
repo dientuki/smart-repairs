@@ -6,10 +6,12 @@ use App\Filament\Resources\BrandResource\Pages;
 use App\Filament\Resources\BrandResource\RelationManagers;
 use App\Models\Brand;
 use Filament\Forms;
+use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
@@ -33,6 +35,9 @@ class BrandResource extends Resource
             ->schema([
                 TextInput::make('name')
                     ->required(),
+                FileUpload::make('hash_filename')
+                    ->directory('logos')
+                    ->acceptedFileTypes(['image/svg+xml'])
             ]);
     }
 
@@ -41,6 +46,7 @@ class BrandResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('name'),
+                ImageColumn::make('hash_filename'),
             ])
             ->filters([
                 //
