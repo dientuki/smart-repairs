@@ -17,6 +17,7 @@ class DeviceUnitSeeder extends Seeder
         DB::table('device_units')->insert([
             'device_id' => 1,
             'team_id' => 1,
+            'order_id' => 1,
             'serial' => '123456789',
             'unlock_type' => 'code', //UnlockEnum::CODE,
             'unlock_code' => '123456',

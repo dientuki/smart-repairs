@@ -15,4 +15,8 @@ class Order extends ModelWithTeam
     public function customer() {
         return $this->belongsTo(Customer::class);
     }
+
+    public function device_unit() {
+        return $this->hasOne(DeviceUnit::class , 'order_id');
+    }
 }

@@ -16,6 +16,7 @@ return new class extends Migration
 
             $table->unsignedBigInteger('device_id');
             $table->unsignedBigInteger('team_id');
+            $table->unsignedBigInteger('order_id');
 
             $table->string('serial');
             $table->string('unlock_type'); //Enum
@@ -23,6 +24,7 @@ return new class extends Migration
 
             $table->foreign('team_id')->references('id')->on('teams')->onDelete('cascade');
             $table->foreign('device_id')->references('id')->on('devices');
+            $table->foreign('order_id')->references('id')->on('orders');
 
             $table->timestamps();
         });
