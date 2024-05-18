@@ -32,10 +32,10 @@ function TodoCard({ todo, index, id, innerRef, draggableProps, dragHandleProps }
         <div className="flex justify-between">
           <div><ChatBubbleOvalLeftEllipsisIcon className="h-4 w-4 inline-block" />8</div>
           <div><PaperClipIcon className="h-4 w-4 inline-block" />8</div>
-          <div><CalendarIcon className="h-4 w-4 inline-block" />11/12/2022 13:20</div>
+          <div><CalendarIcon className="h-4 w-4 inline-block" />{todo.createdAt}</div>
         </div>
         <div>
-          Obersvaciones
+            {todo.observation}
         </div>
       </div>
     </div>

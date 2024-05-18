@@ -11,7 +11,7 @@ interface Column {
 
 interface Todo {
     $id: string;
-    $createdAt: string;
+    createdAt: timestamp;
     status: TypedColumn;
     brand: string,
     brandImage: string,
@@ -19,6 +19,7 @@ interface Todo {
     deviceTypeImage?: string,
     deviceCommercialName: string,
     deviceTechName: string,
+    observation: string
 }
 
 interface Images {

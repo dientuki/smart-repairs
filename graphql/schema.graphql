@@ -24,7 +24,14 @@ type Order {
     customer_id: String!
     customer: Customer!
     device_unit: DeviceUnit!
-    created_at: String!
+    created_at: DateTime!
+    observation: String!
+}
+
+type Comment {
+    id: ID!
+    comment: String!
+    created_at: DateTime!
 }
 
 type Customer {

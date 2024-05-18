@@ -50,7 +50,7 @@ export const useBoardStore = create<BoardStore>((set) => ({
 
       const newTodo: Todo = {
         $id: id,
-        $createdAt: new Date().toISOString(),
+        createdAt: new Date().toISOString(),
         title: todo,
         status: columnId,
         ...(file && { image: file })

@@ -17,6 +17,8 @@ export const getTodosGroupedByColumns = async () => {
                             last_name
                         }
 
+                        observation
+
                         device_unit {
                             serial
                             device {
@@ -54,14 +56,15 @@ export const getTodosGroupedByColumns = async () => {
 
         acc.get(todo.status)!.todos.push({
             $id: todo.id,
-            $createdAt: todo.created_at,
+            createdAt: todo.created_at,
             status: todo.status,
             brand: todo.device_unit.device.brand.name,
             brandImage: todo.device_unit.device.brand.imageUrl,
             deviceType: todo.device_unit.device.device_type.name,
             deviceTypeImage: todo.device_unit.device.device_type.imageUrl,
             deviceCommercialName: todo.device_unit.device.commercial_name,
-            deviceTechName: todo.device_unit.device.tech_name
+            deviceTechName: todo.device_unit.device.tech_name,
+            observation: todo.observation
         })
 
         return acc;
