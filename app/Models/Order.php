@@ -22,7 +22,7 @@ class Order extends ModelWithTeam
     }
 
     public function comments(): HasMany {
-        return $this->hasMany(OrderComment::class);
+        return $this->hasMany(OrderComment::class)->orderBy('created_at', 'desc')->skip(1)->take(5);
     }
 
     public function observation(): Attribute {

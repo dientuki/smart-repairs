@@ -4,9 +4,10 @@ scalar DateTime @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\Date
 "Indicates what fields are available at the top level of a query operation."
 type Query {
     brands: [Brand!] @all
-    orders(team_id: ID @eq): [Order!]!
+    orders(team_id: ID @eq): [Orders!]!
         @field(resolver: "Order@getActiveOrders")
         @namespace(field: "App\\Models")
+    order(id: ID @eq): Order! @find
 }
 
 type Brand {
@@ -19,9 +20,18 @@ type Brand {
 
 type Order {
     id: ID!
+    status: String!,
+    customer: Customer!
+    device_unit: DeviceUnit!
+    created_at: DateTime!
+    observation: String!
+    comments: [Comment!]
+}
+
+type Orders {
+    id: ID!
     team_id: ID!
     status: String!,
-    customer_id: String!
     customer: Customer!
     device_unit: DeviceUnit!
     created_at: DateTime!
