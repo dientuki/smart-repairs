@@ -24,5 +24,15 @@ class DeviceUnitSeeder extends Seeder
             'created_at' => now(),
             'updated_at' => now(),
         ]);
+        DB::table('device_units')->insert([
+            'device_id' => 2,
+            'team_id' => 1,
+            'order_id' => 2,
+            'serial' => '123456789',
+            'unlock_type' => 'code', //UnlockEnum::CODE,
+            'unlock_code' => '123456',
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
     }
 }

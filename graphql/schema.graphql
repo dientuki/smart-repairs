@@ -14,6 +14,7 @@ type Brand {
     id: ID!
     "Non-unique name."
     name: String!
+    imageUrl: String!
 }
 
 type Order {
@@ -50,4 +51,5 @@ type Device {
 type DeviceType {
     id: ID!
     name: String!
+    imageUrl: String!
 }
