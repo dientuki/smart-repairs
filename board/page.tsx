@@ -1,10 +1,9 @@
 import ReactDOM from 'react-dom/client';
 import Header from "@/components/Header";
-import Board from "@/Board";
+import Board from "@/components/Board";
 
 /*
 import AddButton from "@/components/AddButton";
-import Board from "@/components/Board";
 import Modal from "@/components/Modal";
 */
 import './global.css'

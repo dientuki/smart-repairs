@@ -12,7 +12,6 @@
         "react-avatar": "^5.0.3",
         "react-beautiful-dnd": "^13.1.1",
         "react-dom": "^18.3.1",
-        "react-query": "^3.39.3",
         "zustand": "^4.5.2"
     },
     "devDependencies": {
