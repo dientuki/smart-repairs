@@ -19,6 +19,10 @@ function TodoCard({ todo, index, id, innerRef, draggableProps, dragHandleProps }
         {...dragHandleProps}
         className="flex flex-col rounded-md bg-white drop-shadow-sm overflow-hidden"
         draggable
+        onClick={() => {
+            // open modal
+            console.log('todo card clicked')
+        }}
     >
       <div className="relative w-full aspect-video bg-cover bg-no-repeat" style={{backgroundImage: `url(${todo.deviceTypeImage})`}}>
         <img src={todo.brandImage} alt={todo.brand} className="absolute top-2 left-2 h-8 w-auto object-contain" />
