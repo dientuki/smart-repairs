@@ -24,9 +24,11 @@ export const getTodosGroupedByColumns = async () => {
                             tech_name
                             brand {
                                 name
+                                imageUrl
                             }
                             device_type {
                                 name
+                                imageUrl
                             }
                         }
 
@@ -53,13 +55,20 @@ export const getTodosGroupedByColumns = async () => {
         acc.get(todo.status)!.todos.push({
             $id: todo.id,
             $createdAt: todo.created_at,
-            title: todo.customer.first_name,
             status: todo.status,
+            brand: todo.device_unit.device.brand.name,
+            brandImage: todo.device_unit.device.brand.imageUrl,
+            deviceType: todo.device_unit.device.device_type.name,
+            deviceTypeImage: todo.device_unit.device.device_type.imageUrl,
+            deviceCommercialName: todo.device_unit.device.commercial_name,
+            deviceTechName: todo.device_unit.device.tech_name
         })
 
         return acc;
 
     }, new Map<TypedColumn, Column>());
+
+    console.log(columns)
 
     // if column doesn have inprogress or done or todo, create that column
     const columnTypes: TypedColumn[] = ["for budgeting", "budgeting", "budgeted", "to do", "repairing", "repaired"];

@@ -1,5 +1,6 @@
 'use client'
 
+import { ChatBubbleOvalLeftEllipsisIcon, PaperClipIcon, CalendarIcon } from "@heroicons/react/20/solid";
 import { DraggableProvidedDragHandleProps, DraggableProvidedDraggableProps } from "react-beautiful-dnd"
 
 type Props = {
@@ -16,14 +17,27 @@ function TodoCard({ todo, index, id, innerRef, draggableProps, dragHandleProps }
         ref={innerRef}
         {...draggableProps}
         {...dragHandleProps}
-        className="rounded-md bg-white space-y-2 drop-shadow-sm"
+        className="flex flex-col rounded-md bg-white drop-shadow-sm overflow-hidden"
         draggable
     >
-        <div className="flex justify-between items-center p-5">
-            <p>{todo.title}</p>
+      <div className="relative w-full aspect-video bg-cover bg-no-repeat" style={{backgroundImage: `url(${todo.deviceTypeImage})`}}>
+        <img src={todo.brandImage} alt={todo.brand} className="absolute top-2 left-2 h-8 w-auto object-contain" />
+        <div className="absolute bottom-2 right-2 text-base text-white bg-gray-800/50  px-1 py-0.5 rounded">
+            {todo.deviceCommercialName}
         </div>
-
-        {/* images */}
+      </div>
+      <div className="p-1 flex-col mt-2">
+        <div>{todo.brand} {todo.deviceCommercialName}</div>
+        <div>{todo.deviceType}: {todo.deviceTechName}</div>
+        <div className="flex justify-between">
+          <div><ChatBubbleOvalLeftEllipsisIcon className="h-4 w-4 inline-block" />8</div>
+          <div><PaperClipIcon className="h-4 w-4 inline-block" />8</div>
+          <div><CalendarIcon className="h-4 w-4 inline-block" />11/12/2022 13:20</div>
+        </div>
+        <div>
+          Obersvaciones
+        </div>
+      </div>
     </div>
   )
 }

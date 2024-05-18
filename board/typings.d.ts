@@ -12,8 +12,13 @@ interface Column {
 interface Todo {
     $id: string;
     $createdAt: string;
-    title: string;
     status: TypedColumn;
+    brand: string,
+    brandImage: string,
+    deviceType: string,
+    deviceTypeImage?: string,
+    deviceCommercialName: string,
+    deviceTechName: string,
 }
 
 interface Images {
