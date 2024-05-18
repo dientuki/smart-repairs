@@ -10,6 +10,12 @@ type Query {
     order(id: ID @eq): Order! @find
 }
 
+type Mutation {
+    updateOrderStatus(id: Int, status: String!): Boolean!
+        @field(resolver: "OrderMutation@updateStatus")
+        @namespace(field: "App\\GraphQL\\Mutations")
+}
+
 type Brand {
     "Unique primary key."
     id: ID!

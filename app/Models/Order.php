@@ -34,4 +34,18 @@ class Order extends ModelWithTeam
     public function getActiveOrders() {
         return self::where('status', '!=', 'ready')->get();
     }
+
+    /**
+     * Updates the status of an order.
+     *
+     * @param int $orderId The ID of the order.
+     * @param string $status The new status of the order.
+     * @return bool Returns true if the status was successfully updated, false otherwise.
+     */
+    public static function updateStatus(int $orderId, string $status): bool {
+        if (OrderStatusEnum::isValid($status)) {
+            return self::where('id', $orderId)->update(['status' => $status]);
+        }
+        return false;
+    }
 }
