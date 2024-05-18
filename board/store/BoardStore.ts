@@ -1,13 +1,13 @@
 import { uploadTask } from "@/lib/addTask";
 import { getTodosGroupedByColumns } from "@/lib/getTodosGroupedByColumns";
-import { updateTodo } from "@/lib/updateTodo";
+import { updateStatus } from "@/lib/updateStatus";
 import { create } from 'zustand'
 
 interface BoardStore {
     board: Board,
     getBoard: () => void,
     setBoardState: (board: Board) => void,
-    updateTodo: (todo: Todo, columnId: TypedColumn) => void,
+    updateStatus: (taskId: number, columnId: TypedColumn) => void,
 
     newTaskInput: string,
     setNewTaskInput: (input: string) => void,
@@ -27,8 +27,8 @@ export const useBoardStore = create<BoardStore>((set) => ({
     set({ board });
   },
   setBoardState: (board: Board) => set({ board }),
-  updateTodo: async (todo: Todo , columnId: TypedColumn) => {
-    await updateTodo(todo, columnId);
+  updateStatus: async (taskId: number , columnId: TypedColumn) => {
+    await updateStatus(taskId, columnId);
   },
 
   newTaskInput: "",

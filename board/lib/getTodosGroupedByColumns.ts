@@ -73,8 +73,6 @@ export const getTodosGroupedByColumns = async () => {
 
     }, new Map<TypedColumn, Column>());
 
-    console.log(columns)
-
     // if column doesn have inprogress or done or todo, create that column
     const columnTypes: TypedColumn[] = ["for budgeting", "budgeting", "budgeted", "to do", "repairing", "repaired"];
     for (const columnType of columnTypes) {

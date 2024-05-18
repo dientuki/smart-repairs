@@ -1,4 +1,4 @@
-export const updateTodo = async (todo: Todo, columnId: TypedColumn) => {
+export const updateStatus = async (taskId: number, columnId: TypedColumn) => {
 
   const data = await fetch('http://localhost/graphql', {
     method: 'POST',
@@ -8,7 +8,7 @@ export const updateTodo = async (todo: Todo, columnId: TypedColumn) => {
     body: JSON.stringify({
         query: `
             mutation {
-              updateOrderStatus(id: ${todo.$id}, status: "${columnId}")
+              updateOrderStatus(id: ${taskId}, status: "${columnId}")
           }
         `
     })
