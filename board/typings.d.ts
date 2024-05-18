@@ -19,7 +19,9 @@ interface Todo {
     deviceTypeImage?: string,
     deviceCommercialName: string,
     deviceTechName: string,
-    observation: string
+    deviceSerial: string,
+    customerFullName: string,
+    observation: string,
 }
 
 interface Images {

@@ -22,8 +22,8 @@ export const getTodosGroupedByColumns = async () => {
                         device_unit {
                             serial
                             device {
-                            commercial_name
-                            tech_name
+                                commercial_name
+                                tech_name
                             brand {
                                 name
                                 imageUrl
@@ -64,7 +64,9 @@ export const getTodosGroupedByColumns = async () => {
             deviceTypeImage: todo.device_unit.device.device_type.imageUrl,
             deviceCommercialName: todo.device_unit.device.commercial_name,
             deviceTechName: todo.device_unit.device.tech_name,
-            observation: todo.observation
+            deviceSerial: todo.device_unit.serial,
+            customerFullName: `${todo.customer.first_name} ${todo.customer.last_name}`,
+            observation: todo.observation,
         })
 
         return acc;

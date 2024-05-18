@@ -33,6 +33,8 @@ function TodoCard({ todo, index, id, innerRef, draggableProps, dragHandleProps }
       <div className="p-1 flex-col mt-2">
         <div>{todo.brand} {todo.deviceCommercialName}</div>
         <div>{todo.deviceType}: {todo.deviceTechName}</div>
+        <div>Imei: {todo.deviceSerial}</div>
+        <div>Customer: {todo.customerFullName}</div>
         <div className="flex justify-between">
           <div><ChatBubbleOvalLeftEllipsisIcon className="h-4 w-4 inline-block" />8</div>
           <div><PaperClipIcon className="h-4 w-4 inline-block" />8</div>
