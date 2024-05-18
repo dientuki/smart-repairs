@@ -40,6 +40,7 @@ function Board() {
 
     const newTodos = startCol.todos;
     const [todoMoved] = newTodos.splice(source.index, 1);
+    let newColumns: Map<TypedColumn, Column>;
 
     if (startCol.id === finishCol.id) {
       //same column move
@@ -48,16 +49,14 @@ function Board() {
         id: startCol.id,
         todos: newTodos
       }
-      const newColumns = new Map(board.columns);
+      newColumns = new Map(board.columns);
       newColumns.set(startCol.id, newCol);
-      setBoardState({ ...board, columns: newColumns });
-
     } else {
       //different column move
       const finishTodos = Array.from(finishCol.todos);
       finishTodos.splice(destination.index, 0, todoMoved);
 
-      const newColumns = new Map(board.columns);
+      newColumns = new Map(board.columns);
       const newCol = {
         id: startCol.id,
         todos: newTodos
@@ -69,13 +68,12 @@ function Board() {
         todos: finishTodos
       })
 
-      // update state
+      // update status
       updateStatus(todoMoved.$id, finishCol.id);
-
-      setBoardState({ ...board, columns: newColumns });
-
     }
 
+    // update board
+    setBoardState({ ...board, columns: newColumns });
   }
 
   return <DragDropContext onDragEnd={handleOnDragEnd}>

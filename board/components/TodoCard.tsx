@@ -2,6 +2,8 @@
 
 import { ChatBubbleOvalLeftEllipsisIcon, PaperClipIcon, CalendarIcon } from "@heroicons/react/20/solid";
 import { DraggableProvidedDragHandleProps, DraggableProvidedDraggableProps } from "react-beautiful-dnd"
+import { useBoardStore } from "@/store/BoardStore";
+import { useModalStore } from "@/store/ModalStore";
 
 type Props = {
     todo: Todo,
@@ -12,6 +14,9 @@ type Props = {
     dragHandleProps: DraggableProvidedDragHandleProps | null | undefined
 }
 function TodoCard({ todo, index, id, innerRef, draggableProps, dragHandleProps }: Props) {
+  const { getOrder } = useBoardStore();
+  const openModal = useModalStore((state) => state.openModal);
+
   return (
     <div
         ref={innerRef}
@@ -19,9 +24,10 @@ function TodoCard({ todo, index, id, innerRef, draggableProps, dragHandleProps }
         {...dragHandleProps}
         className="flex flex-col rounded-md bg-white drop-shadow-sm overflow-hidden"
         draggable
-        onClick={() => {
+        onClick={(e) => {
             // open modal
-            console.log('todo card clicked')
+            getOrder(todo.$id);
+            openModal();
         }}
     >
       <div className="relative w-full aspect-video bg-cover bg-no-repeat" style={{backgroundImage: `url(${todo.deviceTypeImage})`}}>

@@ -3,6 +3,7 @@ import Header from "@/components/Header";
 import Board from "@/components/Board";
 import AddButton from "@/components/AddButton";
 import Modal from "@/components/Modal";
+import ViewCardModal from "./components/ViewCardModal";
 import './global.css'
 
 const appElement = document.getElementById('app');
@@ -12,7 +13,7 @@ if (appElement) {
             <Header />
             <Board />
             <AddButton />
-            <Modal />
+            <ViewCardModal />
         </>
     );
 }
