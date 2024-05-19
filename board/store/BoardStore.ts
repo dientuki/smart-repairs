@@ -11,7 +11,7 @@ interface BoardStore {
 
     updateStatus: (taskId: number, columnId: TypedColumn) => void,
 
-    order: Todo,
+    order: Order,
     getOrder: (id: number) => void,
     cleanOrder: () => void,
 
@@ -37,12 +37,12 @@ export const useBoardStore = create<BoardStore>((set) => ({
     await updateStatus(taskId, columnId);
   },
 
-  order: {} as Todo,
+  order: {} as Order,
   getOrder: async(id: number) => {
     const order = await getOrder(id);
     set({ order });
   },
-  cleanOrder: () => set({ order: {} as Todo }),
+  cleanOrder: () => set({ order: {} as Order }),
 
   newTaskInput: "",
   setNewTaskInput: (input: string) => set({ newTaskInput: input }),
@@ -61,7 +61,7 @@ export const useBoardStore = create<BoardStore>((set) => ({
 
       const newColumns = new Map(state.board.columns);
 
-      const newTodo: Todo = {
+      const newTodo: Order = {
         $id: id,
         createdAt: new Date().toISOString(),
         title: todo,

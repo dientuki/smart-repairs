@@ -6,10 +6,10 @@ type TypedColumn = "for budgeting" | "budgeting" | "budgeted" | "to do" | "repai
 
 interface Column {
     id: TypedColumn;
-    todos: Todo[];
+    todos: Order[];
 }
 
-interface Todo {
+interface Order {
     $id: number;
     createdAt: timestamp;
     status: TypedColumn;

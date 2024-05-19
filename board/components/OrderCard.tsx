@@ -13,7 +13,7 @@ type Props = {
     draggableProps: DraggableProvidedDraggableProps,
     dragHandleProps: DraggableProvidedDragHandleProps | null | undefined
 }
-function TodoCard({ todo, index, id, innerRef, draggableProps, dragHandleProps }: Props) {
+function OrderCard({ todo, index, id, innerRef, draggableProps, dragHandleProps }: Props) {
   const { getOrder } = useBoardStore();
   const openModal = useModalStore((state) => state.openModal);
 
@@ -54,4 +54,4 @@ function TodoCard({ todo, index, id, innerRef, draggableProps, dragHandleProps }
   )
 }
 
-export default TodoCard
+export default OrderCard

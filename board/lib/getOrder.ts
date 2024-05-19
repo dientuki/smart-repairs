@@ -41,8 +41,23 @@ export const getOrder = async (id: number) => {
         })
     });
 
-    const order = await data.json();
-    //console.log(order.data.order);
+    const json = await data.json();
+    //console.log(json.data.order);
+    const order: Todo = {
+        $id: json.data.order.id,
+        createdAt: json.data.order.created_at,
+        status: json.data.order.status,
+        brand: json.data.order.device_unit.device.brand.name,
+        brandImage: json.data.order.device_unit.device.brand.imageUrl,
+        deviceType: json.data.order.device_unit.device.device_type.name,
+        deviceTypeImage: json.data.order.device_unit.device.device_type.imageUrl,
+        deviceCommercialName: json.data.order.device_unit.device.commercial_name,
+        deviceTechName: json.data.order.device_unit.device.tech_name,
+        deviceSerial: json.data.order.device_unit.serial,
+        customerFullName: `${json.data.order.customer.first_name} ${json.data.order.customer.last_name}`,
+        observation: json.data.order.observation,
+        comments: json.data.order.comments
+    }
 
-    return order.data.order
+    return order;
 }

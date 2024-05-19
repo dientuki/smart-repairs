@@ -1,9 +1,9 @@
 import { Draggable, Droppable } from "react-beautiful-dnd"
-import TodoCard from "@/components/TodoCard"
+import OrderCard from "@/components/OrderCard"
 
 type Props = {
     id: TypedColumn,
-    todos: Todo[],
+    todos: Order[],
     index: number
 }
 
@@ -27,7 +27,7 @@ function Column( { id, todos, index }: Props ) {
             {...provided.dragHandleProps}
             ref={provided.innerRef}
           >
-            {/* todo list */}
+            {/* order list */}
             <Droppable droppableId={index.toString()} type="card" direction="vertical">
               {(provided, snapshot) => (
                 <div
@@ -47,7 +47,7 @@ function Column( { id, todos, index }: Props ) {
                                 index={index}
                             >
                                 {(provided) => (
-                                    <TodoCard
+                                    <OrderCard
                                         todo={todo}
                                         index={index}
                                         id={id}
