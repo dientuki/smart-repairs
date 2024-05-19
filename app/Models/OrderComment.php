@@ -10,4 +10,8 @@ class OrderComment extends ModelWithTeam
     use HasFactory;
 
     protected $fillable = ['order_id', 'comment', 'team_id', 'user_id'];
+
+    public function user() {
+        return $this->belongsTo(User::class);
+    }
 }

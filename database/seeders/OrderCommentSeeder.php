@@ -17,7 +17,7 @@ class OrderCommentSeeder extends Seeder
         DB::table('order_comments')->insert([
             'order_id' => 1,
             'team_id' => 1,
-            'comment' => 'No enciende',
+            'comment' => 'No enciende (este es obs)',
             'user_id' => 1,
             'created_at' => now(),
             'updated_at' => now(),
@@ -33,8 +33,18 @@ class OrderCommentSeeder extends Seeder
         DB::table('order_comments')->insert([
             'order_id' => 1,
             'team_id' => 1,
-            'comment' => 'Lo hice encender, pero no da ningun sonido',
+            'comment' => 'Lo hice encender, pero no da ningun sonido, este es publico',
             'user_id' => 1,
+            'is_public' => true,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+        DB::table('order_comments')->insert([
+            'order_id' => 1,
+            'team_id' => 1,
+            'comment' => 'este es privado',
+            'user_id' => 1,
+            'is_public' => false,
             'created_at' => now(),
             'updated_at' => now(),
         ]);

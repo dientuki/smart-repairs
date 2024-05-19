@@ -19,6 +19,11 @@ export const getOrder = async (id: number) => {
                         }
                         comments {
                             comment
+                            created_at
+                            is_public
+                            user {
+                                name
+                            }
                         }
                         observation
                         device_unit {
@@ -58,6 +63,8 @@ export const getOrder = async (id: number) => {
         observation: json.data.order.observation,
         comments: json.data.order.comments
     }
+
+    console.log(order)
 
     return order;
 }

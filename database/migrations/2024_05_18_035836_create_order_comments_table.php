@@ -24,6 +24,8 @@ return new class extends Migration
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users');
 
+            $table->boolean('is_public')->default(false);
+
             $table->timestamps();
         });
     }

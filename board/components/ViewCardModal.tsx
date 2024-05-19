@@ -1,8 +1,8 @@
-'use client'
 import { useBoardStore } from "@/store/BoardStore";
 import { useModalStore } from "@/store/ModalStore"
 import { Dialog, DialogPanel, DialogTitle, Transition, TransitionChild } from '@headlessui/react'
 import { Fragment, useRef } from "react"
+import Comments from "./Comments";
 
 function ViewCardModal() {
 
@@ -16,8 +16,6 @@ function ViewCardModal() {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
   }
-
-  console.log(order)
 
   return (
       <Transition show={isOpen} as={Fragment} appear>
@@ -40,8 +38,8 @@ function ViewCardModal() {
               <div className="fixed inset-0 bg-black bg-opacity-25" />
           </TransitionChild>
 
-          <div className="fixed inset-0 overflow-y-auto">
-            <div className="flex min-h-full items-center justify-center p-4 text-center">
+          <div className="fixed inset-0 overflow-y-auto flex">
+            <div className="flex absolute inset-0 items-center justify-center">
               <TransitionChild
               enter="ease-out duration-300"
               enterFrom="opacity-0 scale-95"
@@ -50,14 +48,25 @@ function ViewCardModal() {
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
               >
-                <DialogPanel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
+                <DialogPanel className="h-[80vh] w-[80vh] transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
                   <DialogTitle
                     className="text-lg font-medium leading-6 text-gray-900 pb-2"
                     as="h3"
                   >
-                    {order.brand} {order.deviceCommercialName} {order.deviceSerial}
+                    {order.brand} {order.deviceCommercialName}
                   </DialogTitle>
-                  {order.$id}
+                  <div className="flex flex-row">
+                    <div className="basis-3/4">
+                      <p>Serie: {order.deviceSerial}</p>
+                      <p>{order.observation}</p>
+                      <Comments comments={order.comments?.length ? order.comments : []}/>
+                    </div>
+                    <div className="basis-1/4">
+                      <p>Fecha: {order.createdAt}</p>
+                      <p>Cliente: {order.customerFullName}</p>
+                      <p>Estatus: {order.status}</p>
+                    </div>
+                  </div>
                 </DialogPanel>
               </TransitionChild>
             </div>

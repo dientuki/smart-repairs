@@ -48,6 +48,13 @@ type Comment {
     id: ID!
     comment: String!
     created_at: DateTime!
+    is_public: Boolean
+    user: User
+}
+
+type User {
+    id: ID!
+    name: String!
 }
 
 type Customer {

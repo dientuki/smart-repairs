@@ -22,7 +22,17 @@ interface Order {
     deviceSerial: string,
     customerFullName: string,
     observation: string,
-    comments?: string
+    comments?: Comment[]
+}
+
+interface Comment {
+    id: number;
+    comment: string;
+    created_at: timestamp;
+    is_public: boolean;
+    user: {
+        name: string;
+    }
 }
 
 interface Images {
