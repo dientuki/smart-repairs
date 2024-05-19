@@ -6,7 +6,7 @@ type TypedColumn = "for budgeting" | "budgeting" | "budgeted" | "to do" | "repai
 
 interface Column {
     id: TypedColumn;
-    todos: Order[];
+    orders: Order[];
 }
 
 interface Order {

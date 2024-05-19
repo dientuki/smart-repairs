@@ -1,4 +1,4 @@
-export const getTodosGroupedByColumns = async () => {
+export const getOrdersGroupedByColumns = async () => {
 
     const data = await fetch('http://localhost/graphql', {
         method: 'POST',
@@ -43,18 +43,18 @@ export const getTodosGroupedByColumns = async () => {
 
     const eljson = await data.json();
 
-    const todos = eljson.data.orders;
+    const orders = eljson.data.orders;
 
-    const columns = todos.reduce((acc: Map<TypedColumn, Column>, todo: any ) => {
+    const columns = orders.reduce((acc: Map<TypedColumn, Column>, todo: any ) => {
 
         if (!acc.get(todo.status)) {
             acc.set(todo.status, {
                 id: todo.status,
-                todos: []
+                orders: []
             })
         }
 
-        acc.get(todo.status)!.todos.push({
+        acc.get(todo.status)!.orders.push({
             $id: todo.id,
             createdAt: todo.created_at,
             status: todo.status,
@@ -79,7 +79,7 @@ export const getTodosGroupedByColumns = async () => {
         if (!columns.get(columnType)) {
             columns.set(columnType, {
                 id: columnType,
-                todos: []
+                orders: []
             })
         }
     }

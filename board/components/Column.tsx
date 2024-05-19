@@ -3,7 +3,7 @@ import OrderCard from "@/components/OrderCard"
 
 type Props = {
     id: TypedColumn,
-    todos: Order[],
+    orders: Order[],
     index: number
 }
 
@@ -18,7 +18,7 @@ const idToColumnText: {
     repaired: "reparado",
 }
 
-function Column( { id, todos, index }: Props ) {
+function Column( { id, orders, index }: Props ) {
   return (
     <Draggable key={id} draggableId={id} index={index} isDragDisabled={true}>
         {(provided) => (
@@ -37,10 +37,10 @@ function Column( { id, todos, index }: Props ) {
                 >
                     <h2 className="flex justify-between text-xl font-bold p-2">
                         {idToColumnText[id]}
-                        <span className="text-gray-500 bg-gray-200 rounded-full px-2 py-1 text-sm font-normal">{todos.length}</span>
+                        <span className="text-gray-500 bg-gray-200 rounded-full px-2 py-1 text-sm font-normal">{orders.length}</span>
                     </h2>
                     <div className="space-y-2">
-                        {todos.map((todo, index) => (
+                        {orders.map((todo, index) => (
                             <Draggable
                                 key={todo.$id}
                                 draggableId={todo.$id}

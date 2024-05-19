@@ -1,5 +1,5 @@
 import { uploadTask } from "@/lib/addTask";
-import { getTodosGroupedByColumns } from "@/lib/getTodosGroupedByColumns";
+import { getOrdersGroupedByColumns } from "@/lib/getOrdersGroupedByColumns";
 import { getOrder } from "@/lib/getOrder";
 import { updateStatus } from "@/lib/updateStatus";
 import { create } from 'zustand'
@@ -29,7 +29,7 @@ export const useBoardStore = create<BoardStore>((set) => ({
     columns: new Map<TypedColumn, Column>(),
   },
   getBoard: async() => {
-    const board = await getTodosGroupedByColumns();
+    const board = await getOrdersGroupedByColumns();
     set({ board });
   },
   setBoardState: (board: Board) => set({ board }),
@@ -74,10 +74,10 @@ export const useBoardStore = create<BoardStore>((set) => ({
       if (!column) {
         newColumns.set(columnId, {
           id: columnId,
-          todos: [newTodo]
+          orders: [newTodo]
         });
       } else {
-        newColumns.set(columnId)?.todos.push(newTodo);
+        newColumns.set(columnId)?.orders.push(newTodo);
       }
 
       return {
