@@ -6,14 +6,14 @@ import { useBoardStore } from "@/store/BoardStore";
 import { useModalStore } from "@/store/ModalStore";
 
 type Props = {
-    todo: Todo,
+    order: Order,
     index: number,
     id: TypedColumn,
     innerRef: (element: HTMLElement | null) => void,
     draggableProps: DraggableProvidedDraggableProps,
     dragHandleProps: DraggableProvidedDragHandleProps | null | undefined
 }
-function OrderCard({ todo, index, id, innerRef, draggableProps, dragHandleProps }: Props) {
+function OrderCard({ order, index, id, innerRef, draggableProps, dragHandleProps }: Props) {
   const { getOrder } = useBoardStore();
   const openModal = useModalStore((state) => state.openModal);
 
@@ -26,28 +26,28 @@ function OrderCard({ todo, index, id, innerRef, draggableProps, dragHandleProps 
         draggable
         onClick={(e) => {
             // open modal
-            getOrder(todo.$id);
+            getOrder(order.$id);
             openModal();
         }}
     >
-      <div className="relative w-full aspect-video bg-cover bg-no-repeat" style={{backgroundImage: `url(${todo.deviceTypeImage})`}}>
-        <img src={todo.brandImage} alt={todo.brand} className="absolute top-2 left-2 h-8 w-auto object-contain" />
+      <div className="relative w-full aspect-video bg-cover bg-no-repeat" style={{backgroundImage: `url(${order.deviceTypeImage})`}}>
+        <img src={order.brandImage} alt={order.brand} className="absolute top-2 left-2 h-8 w-auto object-contain" />
         <div className="absolute bottom-2 right-2 text-base text-white bg-gray-800/50  px-1 py-0.5 rounded">
-            {todo.deviceCommercialName}
+            {order.deviceCommercialName}
         </div>
       </div>
       <div className="p-1 flex-col mt-2">
-        <div>{todo.brand} {todo.deviceCommercialName}</div>
-        <div>{todo.deviceType}: {todo.deviceTechName}</div>
-        <div>Imei: {todo.deviceSerial}</div>
-        <div>Customer: {todo.customerFullName}</div>
+        <div>{order.brand} {order.deviceCommercialName}</div>
+        <div>{order.deviceType}: {order.deviceTechName}</div>
+        <div>Imei: {order.deviceSerial}</div>
+        <div>Customer: {order.customerFullName}</div>
         <div className="flex justify-between">
           <div><ChatBubbleOvalLeftEllipsisIcon className="h-4 w-4 inline-block" />8</div>
           <div><PaperClipIcon className="h-4 w-4 inline-block" />8</div>
-          <div><CalendarIcon className="h-4 w-4 inline-block" />{todo.createdAt}</div>
+          <div><CalendarIcon className="h-4 w-4 inline-block" />{order.createdAt}</div>
         </div>
         <div>
-            {todo.observation}
+            {order.observation}
         </div>
       </div>
     </div>

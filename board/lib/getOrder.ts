@@ -43,7 +43,7 @@ export const getOrder = async (id: number) => {
 
     const json = await data.json();
     //console.log(json.data.order);
-    const order: Todo = {
+    const order: Order = {
         $id: json.data.order.id,
         createdAt: json.data.order.created_at,
         status: json.data.order.status,

@@ -40,15 +40,15 @@ function Column( { id, orders, index }: Props ) {
                         <span className="text-gray-500 bg-gray-200 rounded-full px-2 py-1 text-sm font-normal">{orders.length}</span>
                     </h2>
                     <div className="space-y-2">
-                        {orders.map((todo, index) => (
+                        {orders.map((order, index) => (
                             <Draggable
-                                key={todo.$id}
-                                draggableId={todo.$id}
+                                key={order.$id}
+                                draggableId={order.$id}
                                 index={index}
                             >
                                 {(provided) => (
                                     <OrderCard
-                                        todo={todo}
+                                        order={order}
                                         index={index}
                                         id={id}
                                         innerRef={provided.innerRef}

@@ -57,7 +57,7 @@ function ViewCardModal() {
                   >
                     {order.brand} {order.deviceCommercialName} {order.deviceSerial}
                   </DialogTitle>
-                  {order.id}
+                  {order.$id}
                 </DialogPanel>
               </TransitionChild>
             </div>

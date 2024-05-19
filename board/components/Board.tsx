@@ -39,12 +39,12 @@ function Board() {
     if (source.index === destination.index && startCol === finishCol) return;
 
     const newOrders = startCol.orders;
-    const [todoMoved] = newOrders.splice(source.index, 1);
+    const [orderMoved] = newOrders.splice(source.index, 1);
     let newColumns: Map<TypedColumn, Column>;
 
     if (startCol.id === finishCol.id) {
       //same column move
-      newOrders.splice(destination.index, 0, todoMoved);
+      newOrders.splice(destination.index, 0, orderMoved);
       const newCol = {
         id: startCol.id,
         orders: newOrders
@@ -54,7 +54,7 @@ function Board() {
     } else {
       //different column move
       const finishOrders = Array.from(finishCol.orders);
-      finishOrders.splice(destination.index, 0, todoMoved);
+      finishOrders.splice(destination.index, 0, orderMoved);
 
       newColumns = new Map(board.columns);
       const newCol = {
@@ -69,7 +69,7 @@ function Board() {
       })
 
       // update status
-      updateStatus(todoMoved.$id, finishCol.id);
+      updateStatus(orderMoved.$id, finishCol.id);
     }
 
     // update board

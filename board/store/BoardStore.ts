@@ -21,7 +21,7 @@ interface BoardStore {
     image: File | null,
     setImage: (image: File | null) => void,
 
-    addTask: (todo: string, columnId: TypedColumn, image?: File | null) => void
+    addTask: (order: string, columnId: TypedColumn, image?: File | null) => void
 }
 
 export const useBoardStore = create<BoardStore>((set) => ({
@@ -50,10 +50,10 @@ export const useBoardStore = create<BoardStore>((set) => ({
   image: null,
   setImage: (image: File | null) => set({ image }),
 
-  addTask: async (todo: string, columnId: TypedColumn, image?: File | null) => {
+  addTask: async (order: string, columnId: TypedColumn, image?: File | null) => {
     let file: File | undefined;
 
-    const id = await uploadTask(todo, columnId, file);
+    const id = await uploadTask(order, columnId, file);
 
     set( {newTaskInput: ""});
 
@@ -61,10 +61,10 @@ export const useBoardStore = create<BoardStore>((set) => ({
 
       const newColumns = new Map(state.board.columns);
 
-      const newTodo: Order = {
+      const newOrder: Order = {
         $id: id,
         createdAt: new Date().toISOString(),
-        title: todo,
+        title: order,
         status: columnId,
         ...(file && { image: file })
       }
@@ -74,10 +74,10 @@ export const useBoardStore = create<BoardStore>((set) => ({
       if (!column) {
         newColumns.set(columnId, {
           id: columnId,
-          orders: [newTodo]
+          orders: [newOrder]
         });
       } else {
-        newColumns.set(columnId)?.orders.push(newTodo);
+        newColumns.set(columnId)?.orders.push(newOrder);
       }
 
       return {
