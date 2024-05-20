@@ -1,6 +1,6 @@
 import { useBoardStore } from "@/store/BoardStore";
 import { useModalStore } from "@/store/ModalStore"
-import { Dialog, DialogPanel, DialogTitle, Transition, TransitionChild } from '@headlessui/react'
+import { Dialog, DialogPanel, DialogTitle, Textarea, Transition, TransitionChild } from '@headlessui/react'
 import { Fragment, useRef } from "react"
 import Comments from "./Comments";
 
@@ -60,6 +60,7 @@ function ViewCardModal() {
                       <p>Serie: {order.deviceSerial}</p>
                       <p>{order.observation}</p>
                       <Comments comments={order.comments?.length ? order.comments : []}/>
+                      <Textarea name="description" />
                     </div>
                     <div className="basis-1/4">
                       <p>Fecha: {order.createdAt}</p>
