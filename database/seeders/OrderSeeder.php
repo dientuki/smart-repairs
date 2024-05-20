@@ -21,5 +21,12 @@ class OrderSeeder extends Seeder
             'created_at' => now(),
             'updated_at' => now(),
         ]);
+        DB::table('orders')->insert([
+            'status' => 'for budgeting', //'OrderStatusEnum::FORBUDGETING,
+            'customer_id' => 1,
+            'team_id' => 1,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
     }
 }

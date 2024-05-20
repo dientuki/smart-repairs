@@ -4,9 +4,16 @@ scalar DateTime @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\Date
 "Indicates what fields are available at the top level of a query operation."
 type Query {
     brands: [Brand!] @all
-    orders(team_id: ID @eq): [Order!]!
+    orders(team_id: ID @eq): [Orders!]!
         @field(resolver: "Order@getActiveOrders")
         @namespace(field: "App\\Models")
+    order(id: ID @eq): Order! @find
+}
+
+type Mutation {
+    updateOrderStatus(id: Int, status: String!): Boolean!
+        @field(resolver: "OrderMutation@updateStatus")
+        @namespace(field: "App\\GraphQL\\Mutations")
 }
 
 type Brand {
@@ -14,16 +21,40 @@ type Brand {
     id: ID!
     "Non-unique name."
     name: String!
+    imageUrl: String!
 }
 
 type Order {
     id: ID!
-    team_id: ID!
     status: String!,
-    customer_id: String!
     customer: Customer!
     device_unit: DeviceUnit!
-    created_at: String!
+    created_at: DateTime!
+    observation: String!
+    comments: [Comment!]
+}
+
+type Orders {
+    id: ID!
+    team_id: ID!
+    status: String!,
+    customer: Customer!
+    device_unit: DeviceUnit!
+    created_at: DateTime!
+    observation: String!
+}
+
+type Comment {
+    id: ID!
+    comment: String!
+    created_at: DateTime!
+    is_public: Boolean
+    user: User
+}
+
+type User {
+    id: ID!
+    name: String!
 }
 
 type Customer {
@@ -50,4 +81,5 @@ type Device {
 type DeviceType {
     id: ID!
     name: String!
+    imageUrl: String!
 }

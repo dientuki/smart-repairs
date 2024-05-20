@@ -1,18 +1,18 @@
 <?php
 
-namespace App\Enums;
+namespace App\Enum;
 
-use Filament\Support\Contracts\HasLabel;
+//use Filament\Support\Contracts\HasLabel;
 
-enum OrderStatusEnum: string implements HasLabel
+enum OrderStatusEnum: string //implements HasLabel
 {
-    const FORBUDGETING = 'for budgeting';
-    const BUDGETING = 'budgeting';
-    const BUDGETED = 'budgeted';
-    const TODO = 'to do';
-    const REPAIRING = 'repairing';
-    const REPAIRED = 'repaired';
-    const READY = 'ready';
+    case FORBUDGETING = 'for budgeting';
+    case BUDGETING = 'budgeting';
+    case BUDGETED = 'budgeted';
+    case TODO = 'to do';
+    case REPAIRING = 'repairing';
+    case REPAIRED = 'repaired';
+    case READY = 'ready';
 
     public function getLabel(): string {
         return match ($this) {
@@ -24,5 +24,9 @@ enum OrderStatusEnum: string implements HasLabel
             self::REPAIRED => __('Repaired'),
             self::READY => __('Ready'),
         };
+    }
+
+    public static function isValid(string $value): bool {
+        return in_array($value, array_column(self::cases(), 'value'), true);
     }
 }
