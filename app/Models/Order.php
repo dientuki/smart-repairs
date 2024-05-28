@@ -44,7 +44,9 @@ class Order extends ModelWithTeam
      */
     public static function updateStatus(int $orderId, string $status): bool {
         if (OrderStatusEnum::isValid($status)) {
-            return self::where('id', $orderId)->update(['status' => $status]);
+            $order = self::find($orderId);
+            $order->status = $status;
+            return $order->save();
         }
         return false;
     }
