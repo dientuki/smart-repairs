@@ -3,9 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 
-class Part extends Model
+class Part extends ModelAuditable
 {
     use HasFactory;
 
@@ -25,5 +24,5 @@ class Part extends Model
 
     public function module_category() {
         return $this->belongsTo(ModuleCategory::class);
-    }    
+    }
 }

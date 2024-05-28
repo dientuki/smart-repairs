@@ -3,9 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 
-class Team extends Model
+class Team extends ModelAuditable
 {
     use HasFactory;
 
@@ -24,7 +23,7 @@ class Team extends Model
      * Retrieve the customers associated with the team.
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */ 
+     */
     public function customers() {
         return $this->hasMany(Customer::class);
     }

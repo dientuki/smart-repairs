@@ -3,9 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 
-class PartAttachment extends Model
+class PartAttachment extends ModelAuditable
 {
     use HasFactory;
 
