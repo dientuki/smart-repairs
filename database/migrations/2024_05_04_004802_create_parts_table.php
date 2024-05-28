@@ -12,17 +12,14 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('parts', function (Blueprint $table) {
-            $table->id();
+            $table->ulid('id')->primary();
 
             $table->string('part_number');
             $table->string('observations');
+            $table->foreignUlid('brand_id')->constrained();
+            $table->foreignUlid('module_category_id')->constrained();
+
             $table->timestamps();
-
-            $table->unsignedBigInteger('brand_id');
-            $table->foreign('brand_id')->references('id')->on('brands');            
-
-            $table->unsignedBigInteger('module_category_id');
-            $table->foreign('module_category_id')->references('id')->on('module_categories');              
         });
     }
 

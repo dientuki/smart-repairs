@@ -20,6 +20,7 @@ class DatabaseSeeder extends Seeder
         $this->call([
             UserSeeder::class,
             TeamSeeder::class,
+            /*
             TeamUserSeeder::class,
             DeviceTypeSeeder::class,
             BrandSeeder::class,
@@ -30,6 +31,7 @@ class DatabaseSeeder extends Seeder
             OrderSeeder::class,
             DeviceUnitSeeder::class,
             OrderCommentSeeder::class,
+            */
         ]);
     }
 }
