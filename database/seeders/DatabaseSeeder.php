@@ -5,7 +5,6 @@ namespace Database\Seeders;
 use App\Models\Order;
 use App\Models\OrderComment;
 use App\Models\User;
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -20,7 +19,6 @@ class DatabaseSeeder extends Seeder
         $this->call([
             UserSeeder::class,
             TeamSeeder::class,
-            /*
             TeamUserSeeder::class,
             DeviceTypeSeeder::class,
             BrandSeeder::class,
@@ -31,7 +29,6 @@ class DatabaseSeeder extends Seeder
             OrderSeeder::class,
             DeviceUnitSeeder::class,
             OrderCommentSeeder::class,
-            */
         ]);
     }
 }
