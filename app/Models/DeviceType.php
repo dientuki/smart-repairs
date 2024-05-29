@@ -4,9 +4,8 @@ namespace App\Models;
 
 use App\Traits\HasImageTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 
-class DeviceType extends Model
+class DeviceType extends ModelAuditable
 {
     use HasFactory;
 

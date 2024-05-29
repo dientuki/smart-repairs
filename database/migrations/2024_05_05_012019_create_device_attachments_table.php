@@ -12,12 +12,11 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('device_attachments', function (Blueprint $table) {
-            $table->id();
+            $table->ulid('id')->primary();
             $table->string('name');
             $table->string('hash_filename')->nullable();
             $table->string('original_filename')->nullable();
-            $table->unsignedBigInteger('device_id');
-            $table->foreign('device_id')->references('id')->on('devices')->onDelete('cascade');
+            $table->foreignUlid('device_id')->constrained();
             $table->timestamps();
         });
     }

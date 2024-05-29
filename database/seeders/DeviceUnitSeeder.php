@@ -3,9 +3,9 @@
 namespace Database\Seeders;
 
 use App\Enum\UnlockEnum;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class DeviceUnitSeeder extends Seeder
 {
@@ -14,10 +14,15 @@ class DeviceUnitSeeder extends Seeder
      */
     public function run(): void
     {
+        $team = DB::table('teams')->first()->id;
+        $devices = DB::table('devices')->get();
+        $orders = DB::table('orders')->get();
+
         DB::table('device_units')->insert([
-            'device_id' => 1,
-            'team_id' => 1,
-            'order_id' => 1,
+            'id' => (string) Str::ulid(),
+            'device_id' => $devices[0]->id,
+            'team_id' => $team,
+            'order_id' => $orders[0]->id,
             'serial' => '123456789',
             'unlock_type' => 'code', //UnlockEnum::CODE,
             'unlock_code' => '123456',
@@ -25,9 +30,10 @@ class DeviceUnitSeeder extends Seeder
             'updated_at' => now(),
         ]);
         DB::table('device_units')->insert([
-            'device_id' => 2,
-            'team_id' => 1,
-            'order_id' => 2,
+            'id' => (string) Str::ulid(),
+            'device_id' => $devices[1]->id,
+            'team_id' => $team,
+            'order_id' => $orders[1]->id,
             'serial' => '123456789',
             'unlock_type' => 'code', //UnlockEnum::CODE,
             'unlock_code' => '123456',

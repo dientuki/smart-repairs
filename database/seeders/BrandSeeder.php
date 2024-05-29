@@ -6,6 +6,7 @@ use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class BrandSeeder extends Seeder
 {
@@ -14,7 +15,9 @@ class BrandSeeder extends Seeder
      */
     public function run(): void
     {
+
         DB::table('brands')->insert([
+            'id' => (string) Str::ulid(),
             'name' => 'Generica',
             'created_at' => now(),
             'updated_at' => now(),
@@ -29,17 +32,13 @@ class BrandSeeder extends Seeder
             // Upload file to storage
             $uploadedFile = Storage::putFile('logos', $fileData[0]);
 
-            // Save uploaded file path and description to database
-            $brand = DB::table('brands')->where('name', $fileData[1])->first();
-
-            if (!$brand) {
-                DB::table('brands')->insert([
-                    'name' => $fileData[1],
-                    'hash_filename' => $uploadedFile,
-                    'created_at' => now(),
-                    'updated_at' => now(),
-                ]);
-            }
+            DB::table('brands')->insert([
+                'id' => (string) Str::ulid(),
+                'name' => $fileData[1],
+                'hash_filename' => $uploadedFile,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
         }
     }
 }

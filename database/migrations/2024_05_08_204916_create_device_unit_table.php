@@ -12,19 +12,15 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('device_units', function (Blueprint $table) {
-            $table->id();
-
-            $table->unsignedBigInteger('device_id');
-            $table->unsignedBigInteger('team_id');
-            $table->unsignedBigInteger('order_id');
+            $table->ulid('id')->primary();
 
             $table->string('serial');
             $table->string('unlock_type'); //Enum
             $table->string('unlock_code')->nullable();
 
-            $table->foreign('team_id')->references('id')->on('teams')->onDelete('cascade');
-            $table->foreign('device_id')->references('id')->on('devices');
-            $table->foreign('order_id')->references('id')->on('orders');
+            $table->foreignUlid('team_id')->constrained();
+            $table->foreignUlid('device_id')->constrained();
+            $table->foreignUlid('order_id')->constrained();
 
             $table->timestamps();
         });

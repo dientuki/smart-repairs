@@ -1,10 +1,9 @@
 <?php
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use App\Models\Team;
 
-class ModelWithTeam extends Model
+class ModelWithTeam extends ModelAuditable
 {
     /**
      * Method to define the relationship with the Team model.
