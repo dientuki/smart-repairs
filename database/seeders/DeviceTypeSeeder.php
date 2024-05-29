@@ -6,6 +6,7 @@ use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class DeviceTypeSeeder extends Seeder
 {
@@ -24,17 +25,13 @@ class DeviceTypeSeeder extends Seeder
             // Upload file to storage
             $uploadedFile = Storage::putFile('device-types', $fileData[0]);
 
-            // Save uploaded file path and description to database
-            $deviceType = DB::table('device_types')->where('name', $fileData[1])->first();
-
-            if (!$deviceType) {
-                DB::table('device_types')->insert([
-                    'name' => $fileData[1],
-                    'hash_filename' => $uploadedFile,
-                    'created_at' => now(),
-                    'updated_at' => now(),
-                ]);
-            }
+            DB::table('device_types')->insert([
+                'id' => (string) Str::ulid(),
+                'name' => $fileData[1],
+                'hash_filename' => $uploadedFile,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
         }
         /*
 

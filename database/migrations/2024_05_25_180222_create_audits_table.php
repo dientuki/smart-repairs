@@ -22,10 +22,15 @@ class CreateAuditsTable extends Migration
 
             $table->bigIncrements('id');
             $table->string($morphPrefix . '_type')->nullable();
-            $table->unsignedBigInteger($morphPrefix . '_id')->nullable();
-            $table->unsignedBigInteger('team_id')->nullable();
+            $table->ulid($morphPrefix . '_id')->nullable();
+            $table->ulid('team_id')->nullable();
             $table->string('event');
-            $table->morphs('auditable');
+            $table->string('auditable_type');
+            $table->ulid('auditable_id');
+            $table->index([
+                'auditable_type',
+                'auditable_id',
+            ]);
             $table->text('old_values')->nullable();
             $table->text('new_values')->nullable();
             $table->text('url')->nullable();

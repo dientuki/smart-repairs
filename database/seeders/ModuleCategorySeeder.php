@@ -2,9 +2,9 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class ModuleCategorySeeder extends Seeder
 {
@@ -14,10 +14,16 @@ class ModuleCategorySeeder extends Seeder
     public function run(): void
     {
         DB::table('module_categories')->insert([
+            'id' => (string) Str::ulid(),
             'name' => 'Modulo de carga',
+            'created_at' => now(),
+            'updated_at' => now(),
         ]);
         DB::table('module_categories')->insert([
+            'id' => (string) Str::ulid(),
             'name' => 'Modulo de pantalla',
+            'created_at' => now(),
+            'updated_at' => now(),
         ]);
     }
 }

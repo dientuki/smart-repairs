@@ -12,14 +12,13 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('service_jobs', function (Blueprint $table) {
-            $table->id();
+            $table->ulid('id')->primary();
             $table->string('name');
             $table->bigInteger('price');
 
-            $table->unsignedBigInteger('team_id');
-            $table->foreign('team_id')->references('id')->on('teams')->onDelete('cascade');
+            $table->foreignUlid('team_id')->constrained();
 
-            
+
             $table->timestamps();
         });
     }

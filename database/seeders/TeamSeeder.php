@@ -2,9 +2,9 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class TeamSeeder extends Seeder
 {
@@ -14,7 +14,10 @@ class TeamSeeder extends Seeder
     public function run(): void
     {
         DB::table('teams')->insert([
-            'name' => 'Laboratronica'
+            'id' => (string) Str::ulid(),
+            'name' => 'Laboratronica',
+            'created_at' => now(),
+            'updated_at' => now(),
         ]);
     }
 }
