@@ -11,7 +11,7 @@ type Query {
 }
 
 type Mutation {
-    updateOrderStatus(id: Int, status: String!): Boolean!
+    updateOrderStatus(id: String, status: String!): Boolean!
         @field(resolver: "OrderMutation@updateStatus")
         @namespace(field: "App\\GraphQL\\Mutations")
 }

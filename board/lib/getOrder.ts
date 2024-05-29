@@ -1,5 +1,5 @@
 
-export const getOrder = async (id: number) => {
+export const getOrder = async (id: string) => {
 
     const data = await fetch('http://localhost/graphql', {
         method: 'POST',
@@ -9,7 +9,7 @@ export const getOrder = async (id: number) => {
         body: JSON.stringify({
             query: `
                 query {
-                    order(id: ${id}) {
+                    order(id: "${id}") {
                         id
                         status
                         created_at
