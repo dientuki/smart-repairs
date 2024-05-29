@@ -10,7 +10,7 @@ interface Column {
 }
 
 interface Order {
-    $id: number;
+    $id: string;
     createdAt: timestamp;
     status: TypedColumn;
     brand: string,
@@ -26,7 +26,7 @@ interface Order {
 }
 
 interface Comment {
-    id: number;
+    id: string;
     comment: string;
     created_at: timestamp;
     is_public: boolean;
