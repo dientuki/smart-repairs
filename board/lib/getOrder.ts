@@ -51,6 +51,7 @@ export const getOrder = async (id: string) => {
     return {
         $id: json.data.order.id,
         createdAt: json.data.order.created_at,
+        createdAtDate: new Date(json.data.order.created_at),
         status: json.data.order.status,
         brand: json.data.order.device_unit.device.brand.name,
         brandImage: json.data.order.device_unit.device.brand.imageUrl,
