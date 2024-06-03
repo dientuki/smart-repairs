@@ -56,5 +56,14 @@ class OrderCommentSeeder extends Seeder
             'created_at' => now(),
             'updated_at' => now(),
         ]);
+        DB::table('order_comments')->insert([
+            'id' => (string) Str::ulid(),
+            'order_id' => $orders[2]->id,
+            'team_id' => $team,
+            'comment' => 'creo que es error de usuario',
+            'user_id' => $user,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
     }
 }
