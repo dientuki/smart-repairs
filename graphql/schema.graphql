@@ -42,6 +42,7 @@ type Orders {
     device_unit: DeviceUnit!
     created_at: DateTime!
     observation: String!
+    comments: [Comment!]
 }
 
 type Comment {

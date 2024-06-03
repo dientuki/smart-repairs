@@ -16,6 +16,7 @@ type Props = {
 function OrderCard({ order, index, id, innerRef, draggableProps, dragHandleProps }: Props) {
   const openCard = () => Modal.open(ViewCardModal, { order: order.$id });
 
+
   return (
     <div
         ref={innerRef}
@@ -37,9 +38,9 @@ function OrderCard({ order, index, id, innerRef, draggableProps, dragHandleProps
         <div>Imei: {order.deviceSerial}</div>
         <div>Customer: {order.customerFullName}</div>
         <div className="flex justify-between">
-          <div><ChatBubbleOvalLeftEllipsisIcon className="h-4 w-4 inline-block" />8</div>
-          <div><PaperClipIcon className="h-4 w-4 inline-block" />8</div>
-          <div><CalendarIcon className="h-4 w-4 inline-block" />{order.createdAt}</div>
+          <div><ChatBubbleOvalLeftEllipsisIcon className="h-4 w-4 inline-block" />{order.commentsQuantity}</div>
+          <div><PaperClipIcon className="h-4 w-4 inline-block" />0</div>
+          <div><CalendarIcon className="h-4 w-4 inline-block" />{order.createdAtDate.toLocaleDateString()} {order.createdAtDate.toLocaleTimeString()}</div>
         </div>
         <div>
             {order.observation}
