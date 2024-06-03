@@ -2,7 +2,6 @@
 
 import { ChatBubbleOvalLeftEllipsisIcon, PaperClipIcon, CalendarIcon } from "@heroicons/react/20/solid";
 import { DraggableProvidedDragHandleProps, DraggableProvidedDraggableProps } from "react-beautiful-dnd"
-import { useModalStore } from "@/store/ModalStore";
 import Modal from "@/components/modal/Modal";
 import ViewCardModal from "@/components/modal/ViewCardModal";
 
@@ -15,7 +14,6 @@ type Props = {
     dragHandleProps: DraggableProvidedDragHandleProps | null | undefined
 }
 function OrderCard({ order, index, id, innerRef, draggableProps, dragHandleProps }: Props) {
-  const openModal = useModalStore((state) => state.openModal);
   const openCard = () => Modal.open(ViewCardModal, { order: order.$id });
 
   return (

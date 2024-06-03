@@ -8,7 +8,6 @@ import ModalLayout from "@/components/modal/ModalLayout";
 
 type ModalParams = {
   order: string;
-  // other properties of modal.params
 };
 
 function ViewCardModal() {
@@ -23,9 +22,6 @@ function ViewCardModal() {
   if (order) {
     date = new Date(order.createdAt);
   }
-
-
-  console.log('soy el popup', modal, order);
 
   return (
     <ModalLayout>
