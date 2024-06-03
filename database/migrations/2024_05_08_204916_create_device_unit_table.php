@@ -1,5 +1,6 @@
 <?php
 
+use App\Enum\UnlockEnum;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -15,7 +16,7 @@ return new class extends Migration
             $table->ulid('id')->primary();
 
             $table->string('serial');
-            $table->string('unlock_type'); //Enum
+            $table->enum('unlock_type', UnlockEnum::getAllCasesAsArray()); //Enum
             $table->string('unlock_code')->nullable();
 
             $table->foreignUlid('team_id')->constrained();

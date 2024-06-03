@@ -69,6 +69,8 @@ type DeviceUnit {
     serial: String!
     device_id: String!
     device: Device!
+    unlock_type: String!
+    unlock_code: String
 }
 
 type Device {
