@@ -1,4 +1,3 @@
-
 export const getOrder = async (id: string) => {
 
     const data = await fetch('http://localhost/graphql', {
@@ -50,6 +49,20 @@ export const getOrder = async (id: string) => {
 
     const json = await data.json();
 
+    const comments: OrderComment[] = json.data.order.comments.reduce((acc: OrderComment[], comment: any) => {
+        acc.push({
+            id: comment.id,
+            comment: comment.comment,
+            createdAt: comment.created_at,
+            createdAtDate: new Date(comment.created_at),
+            isPublic: comment.is_public,
+            userName: comment.user.name
+        });
+
+        return acc;
+
+    }, []);
+
     return {
         $id: json.data.order.id,
         createdAt: json.data.order.created_at,
@@ -64,6 +77,6 @@ export const getOrder = async (id: string) => {
         deviceSerial: json.data.order.device_unit.serial,
         customerFullName: `${json.data.order.customer.first_name} ${json.data.order.customer.last_name}`,
         observation: json.data.order.observation,
-        comments: json.data.order.comments
+        comments: comments
     } as Order;
 }

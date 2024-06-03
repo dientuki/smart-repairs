@@ -23,18 +23,17 @@ interface Order {
     deviceSerial: string,
     customerFullName: string,
     observation: string,
-    comments?: Comment[],
+    comments?: OrderComment[],
     commentsQuantity?: number,
 }
 
-interface Comment {
+interface OrderComment {
     id: string;
     comment: string;
-    created_at: timestamp;
-    is_public: boolean;
-    user: {
-        name: string;
-    }
+    createdAt: string;
+    createdAtDate: Date;
+    isPublic: boolean;
+    userName: string;
 }
 
 interface Images {
