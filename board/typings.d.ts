@@ -12,6 +12,7 @@ interface Column {
 interface Order {
     $id: string;
     createdAt: timestamp;
+    createdAtDate: Date;
     status: TypedColumn;
     brand: string,
     brandImage: string,
@@ -22,7 +23,8 @@ interface Order {
     deviceSerial: string,
     customerFullName: string,
     observation: string,
-    comments?: Comment[]
+    comments?: Comment[],
+    commentsQuantity?: number,
 }
 
 interface Comment {

@@ -62,5 +62,5 @@ export const getOrder = async (id: string) => {
         customerFullName: `${json.data.order.customer.first_name} ${json.data.order.customer.last_name}`,
         observation: json.data.order.observation,
         comments: json.data.order.comments
-    }
+    } as Order;
 }
