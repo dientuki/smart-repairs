@@ -42,6 +42,7 @@ type Orders {
     device_unit: DeviceUnit!
     created_at: DateTime!
     observation: String!
+    comments: [Comment!]
 }
 
 type Comment {
@@ -68,6 +69,8 @@ type DeviceUnit {
     serial: String!
     device_id: String!
     device: Device!
+    unlock_type: String!
+    unlock_code: String
 }
 
 type Device {

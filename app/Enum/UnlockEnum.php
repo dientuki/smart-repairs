@@ -3,20 +3,22 @@
 namespace App\Enum;
 
 use Filament\Support\Contracts\HasLabel;
+use App\Traits\EnumAsArrayTrait;
 
 enum UnlockEnum: string implements HasLabel
 {
-    case NONE = 'none';
-    case CODE = 'code';
-    case PATTERN = 'pattern';
+    case None = 'none';
+    case Code = 'code';
+    case Pattern = 'pattern';
 
+    use EnumAsArrayTrait;
 
     public function getLabel(): string
     {
         return match ($this) {
-            self::NONE => __('None'),
-            self::CODE => __('Code'),
-            self::PATTERN => __('Pattern'),
+            self::None => __('None'),
+            self::Code => __('Code'),
+            self::Pattern => __('Pattern'),
         };
     }
 }

@@ -1,6 +1,6 @@
 import ReactDOM from 'react-dom/client';
 import Header from "@/components/Header";
-import Board from "@/components/Board";
+import Board from "@/components/board/Board";
 import Modal from "@/components/modal/Modal";
 import { ModalContainer } from "react-modal-global";
 import { Suspense } from "react";

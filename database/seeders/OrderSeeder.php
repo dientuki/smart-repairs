@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Enums\OrderStatusEnum;
+use App\Enum\OrderStatusEnum;
 use Illuminate\Support\Str;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
@@ -19,7 +19,7 @@ class OrderSeeder extends Seeder
 
         DB::table('orders')->insert([
             'id' => (string) Str::ulid(),
-            'status' => 'for budgeting', //'OrderStatusEnum::FORBUDGETING,
+            'status' => OrderStatusEnum::ForBudgeting,
             'customer_id' => $customers[0]->id,
             'team_id' => $team,
             'created_at' => now(),
@@ -27,7 +27,7 @@ class OrderSeeder extends Seeder
         ]);
         DB::table('orders')->insert([
             'id' => (string) Str::ulid(),
-            'status' => 'for budgeting', //'OrderStatusEnum::FORBUDGETING,
+            'status' => OrderStatusEnum::ForBudgeting,
             'customer_id' => $customers[0]->id,
             'team_id' => $team,
             'created_at' => now(),
@@ -35,7 +35,7 @@ class OrderSeeder extends Seeder
         ]);
         DB::table('orders')->insert([
             'id' => (string) Str::ulid(),
-            'status' => 'for budgeting', //'OrderStatusEnum::FORBUDGETING,
+            'status' => OrderStatusEnum::ForBudgeting,
             'customer_id' => $customers[1]->id,
             'team_id' => $team,
             'created_at' => now(),

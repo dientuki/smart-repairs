@@ -18,6 +18,9 @@ export const getOrdersGroupedByColumns = async () => {
                         }
 
                         observation
+                        comments {
+                            id
+                        }
 
                         device_unit {
                             serial
@@ -57,6 +60,7 @@ export const getOrdersGroupedByColumns = async () => {
         acc.get(order.status)!.orders.push({
             $id: order.id,
             createdAt: order.created_at,
+            createdAtDate: new Date(order.created_at),
             status: order.status,
             brand: order.device_unit.device.brand.name,
             brandImage: order.device_unit.device.brand.imageUrl,
@@ -67,6 +71,7 @@ export const getOrdersGroupedByColumns = async () => {
             deviceSerial: order.device_unit.serial,
             customerFullName: `${order.customer.first_name} ${order.customer.last_name}`,
             observation: order.observation,
+            commentsQuantity: order.comments?.length
         })
 
         return acc;

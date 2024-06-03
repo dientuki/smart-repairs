@@ -3,7 +3,7 @@
 import { useBoardStore } from "@/store/BoardStore";
 import { useEffect } from 'react';
 import { DragDropContext, DropResult, Droppable } from 'react-beautiful-dnd';
-import Column from "@/components/Column";
+import Column from "@/components/board/Column";
 
 function Board() {
   const { board, getBoard, setBoardState, updateStatus } = useBoardStore();
@@ -11,7 +11,6 @@ function Board() {
   useEffect(() => {
     getBoard()
   }, [getBoard]);
-
 
   const handleOnDragEnd = (result: DropResult) => {
     const { destination, source, type } = result;
