@@ -1,5 +1,5 @@
 import { Draggable, Droppable } from "react-beautiful-dnd"
-import OrderCard from "@/components/OrderCard"
+import OrderCard from "@/components/board/OrderCard"
 
 type Props = {
     id: TypedColumn,

@@ -5,7 +5,6 @@ import { Textarea } from '@headlessui/react'
 import Comments from "@/components/Comments";
 import { useEffect } from "react";
 import ModalLayout from "@/components/modal/ModalLayout";
-import { DNA } from "react-loader-spinner";
 
 type ModalParams = {
   order: string;
@@ -21,37 +20,36 @@ function ViewCardModal() {
 
   return (
     <ModalLayout>
-      {(modal.params.order == order.$id) ?
-        <>
-          <div className="flex flex-row">
-            <div className="basis-3/4">
+      {(modal.params.order == order.$id) &&
+          <div className="flex flex-row h-full">
+            <div className="basis-3/4 pr-6">
               <h2 className="text-2xl font-medium leading-6 text-gray-900">
                 {order.brand} {order.deviceCommercialName} ({order.deviceTechName})
               </h2>
-              <p><b>Serie:</b> {order.deviceSerial}</p>
+              <p className="my-2"><b>Serie:</b> {order.deviceSerial}</p>
               <div>
                 <p><b>Descripcion inicial del problema:</b></p>
-                {order.observation}
+                <p className="border border-gray-300 p-3 rounded min-h-20">{order.observation}</p>
               </div>
+              <div>attachments</div>
+              <div>presupuesto</div>
               <Comments comments={order.comments?.length ? order.comments : []}/>
               <Textarea name="description" />
             </div>
             <div className="basis-1/4">
               <p>Estado: {order.status}</p>
-              <p>Fecha de entrada: {order.createdAtDate?.toDateString()} {order.createdAtDate?.toLocaleTimeString()}</p>
-              <p>Cliente: {order.customerFullName}</p>
-              <p>Tecnico: Usuario</p>
-              <p>Reportado: Usuario</p>
+              <div className="border border-gray-300 p-3 rounded mt-4">
+                <p className="my-2">Fecha de entrada: {order.createdAtDate?.toDateString()} {order.createdAtDate?.toLocaleTimeString()}</p>
+                <p className="my-2">Cliente: {order.customerFullName}</p>
+                <p className="my-2">Tecnico: Usuario</p>
+                <p className="my-2">Vendedor: Usuario</p>
+              </div>
+              <div className="border border-gray-300 p-3 rounded mt-4">
+                <p className="my-2">Desbloqueo: Usuario</p>
+                <p className="my-2">Validaciones: Usuario</p>
+              </div>
             </div>
           </div>
-        </>
-        : <DNA
-        visible={true}
-        height="120"
-        width="120"
-        ariaLabel="dna-loading"
-        wrapperClass="dna-wrapper m-auto absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
-        />
       }
     </ModalLayout>
   )
