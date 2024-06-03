@@ -17,7 +17,15 @@ class CustomerSeeder extends Seeder
             'id' => (string) Str::ulid(),
             'first_name' => 'Juan Alberto',
             'last_name' => 'Perez',
-            'email' => 'dientuki@gmail.com',
+            'email' => 'juan@perez.com',
+            'phone' => '1324',
+            'team_id' => DB::table('teams')->first()->id,
+        ]);
+        DB::table('customers')->insert([
+            'id' => (string) Str::ulid(),
+            'first_name' => 'Camila Lucrecia',
+            'last_name' => 'Silca',
+            'email' => 'calusilva@gmail.com',
             'phone' => '1324',
             'team_id' => DB::table('teams')->first()->id,
         ]);
