@@ -28,6 +28,8 @@ export const getOrder = async (id: string) => {
                         observation
                         device_unit {
                             serial
+                            unlock_type
+                            unlock_code
                             device {
                                 commercial_name
                                 tech_name
