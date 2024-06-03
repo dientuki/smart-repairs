@@ -2,8 +2,8 @@
 
 import { ChatBubbleOvalLeftEllipsisIcon, PaperClipIcon, CalendarIcon } from "@heroicons/react/20/solid";
 import { DraggableProvidedDragHandleProps, DraggableProvidedDraggableProps } from "react-beautiful-dnd"
-import { useBoardStore } from "@/store/BoardStore";
-import { useModalStore } from "@/store/ModalStore";
+import Modal from "@/components/modal/Modal";
+import ViewCardModal from "@/components/modal/ViewCardModal";
 
 type Props = {
     order: Order,
@@ -14,8 +14,7 @@ type Props = {
     dragHandleProps: DraggableProvidedDragHandleProps | null | undefined
 }
 function OrderCard({ order, index, id, innerRef, draggableProps, dragHandleProps }: Props) {
-  const { getOrder } = useBoardStore();
-  const openModal = useModalStore((state) => state.openModal);
+  const openCard = () => Modal.open(ViewCardModal, { order: order.$id });
 
   return (
     <div
@@ -24,11 +23,7 @@ function OrderCard({ order, index, id, innerRef, draggableProps, dragHandleProps
         {...dragHandleProps}
         className="flex flex-col rounded-md bg-white drop-shadow-sm overflow-hidden"
         draggable
-        onClick={(e) => {
-            // open modal
-            getOrder(order.$id);
-            openModal();
-        }}
+        onClick={openCard}
     >
       <div className="relative w-full aspect-video bg-cover bg-no-repeat" style={{backgroundImage: `url(${order.deviceTypeImage})`}}>
         <img src={order.brandImage} alt={order.brand} className="absolute top-2 left-2 h-8 w-auto object-contain" />

@@ -14,13 +14,13 @@ class OrderSeeder extends Seeder
      */
     public function run(): void
     {
-        $customer = DB::table('customers')->first()->id;
+        $customers = DB::table('customers')->get();
         $team = DB::table('teams')->first()->id;
 
         DB::table('orders')->insert([
             'id' => (string) Str::ulid(),
             'status' => 'for budgeting', //'OrderStatusEnum::FORBUDGETING,
-            'customer_id' => $customer,
+            'customer_id' => $customers[0]->id,
             'team_id' => $team,
             'created_at' => now(),
             'updated_at' => now(),
@@ -28,7 +28,15 @@ class OrderSeeder extends Seeder
         DB::table('orders')->insert([
             'id' => (string) Str::ulid(),
             'status' => 'for budgeting', //'OrderStatusEnum::FORBUDGETING,
-            'customer_id' => $customer,
+            'customer_id' => $customers[0]->id,
+            'team_id' => $team,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+        DB::table('orders')->insert([
+            'id' => (string) Str::ulid(),
+            'status' => 'for budgeting', //'OrderStatusEnum::FORBUDGETING,
+            'customer_id' => $customers[1]->id,
             'team_id' => $team,
             'created_at' => now(),
             'updated_at' => now(),
