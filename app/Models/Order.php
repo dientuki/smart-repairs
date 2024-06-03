@@ -42,9 +42,11 @@ class Order extends ModelWithTeam
      * @param string $status The new status of the order.
      * @return bool Returns true if the status was successfully updated, false otherwise.
      */
-    public static function updateStatus(int $orderId, string $status): bool {
+    public static function updateStatus(string $orderId, string $status): bool {
         if (OrderStatusEnum::isValid($status)) {
-            return self::where('id', $orderId)->update(['status' => $status]);
+            $order = self::find($orderId);
+            $order->status = $status;
+            return $order->save();
         }
         return false;
     }

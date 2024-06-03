@@ -12,12 +12,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('device_parts', function (Blueprint $table) {
-            $table->id();
+            $table->foreignUlid('device_id')->constrained();
+            $table->foreignUlid('part_id')->constrained();
 
-            $table->unsignedBigInteger('device_id');
-            $table->foreign('device_id')->references('id')->on('devices');
-            $table->unsignedBigInteger('part_id');
-            $table->foreign('part_id')->references('id')->on('parts');
+            $table->unique(['device_id', 'part_id']);
         });
     }
 

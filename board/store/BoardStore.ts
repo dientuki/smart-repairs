@@ -9,10 +9,10 @@ interface BoardStore {
     getBoard: () => void,
     setBoardState: (board: Board) => void,
 
-    updateStatus: (taskId: number, columnId: TypedColumn) => void,
+    updateStatus: (taskId: string, columnId: TypedColumn) => void,
 
     order: Order,
-    getOrder: (id: number) => void,
+    getOrder: (id: string) => void,
     cleanOrder: () => void,
 
     newTaskInput: string,
@@ -33,12 +33,12 @@ export const useBoardStore = create<BoardStore>((set) => ({
     set({ board });
   },
   setBoardState: (board: Board) => set({ board }),
-  updateStatus: async (taskId: number , columnId: TypedColumn) => {
+  updateStatus: async (taskId: string , columnId: TypedColumn) => {
     await updateStatus(taskId, columnId);
   },
 
   order: {} as Order,
-  getOrder: async(id: number) => {
+  getOrder: async(id: string) => {
     const order = await getOrder(id);
     set({ order });
   },

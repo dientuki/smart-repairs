@@ -17,6 +17,8 @@ function ViewCardModal() {
     e.preventDefault();
   }
 
+  console.log('view modal')
+
   return (
       <Transition show={isOpen} as={Fragment} appear>
         <Dialog

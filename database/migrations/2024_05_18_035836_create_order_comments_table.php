@@ -12,17 +12,12 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('order_comments', function (Blueprint $table) {
-            $table->id();
+            $table->ulid('id')->primary();
             $table->text('comment');
 
-            $table->unsignedBigInteger('order_id');
-            $table->foreign('order_id')->references('id')->on('orders');
-
-            $table->unsignedBigInteger('team_id');
-            $table->foreign('team_id')->references('id')->on('teams')->onDelete('cascade');
-
-            $table->unsignedBigInteger('user_id');
-            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreignUlid('order_id')->constrained();
+            $table->foreignUlid('team_id')->constrained();
+            $table->foreignUlid('user_id')->constrained();
 
             $table->boolean('is_public')->default(false);
 

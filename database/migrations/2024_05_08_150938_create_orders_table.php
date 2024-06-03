@@ -12,15 +12,12 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('orders', function (Blueprint $table) {
-            $table->id();
+            $table->ulid('id')->primary();
 
             $table->string('status'); //Enum
 
-            $table->unsignedBigInteger('customer_id');
-            $table->foreign('customer_id')->references('id')->on('customers');
-
-            $table->unsignedBigInteger('team_id');
-            $table->foreign('team_id')->references('id')->on('teams')->onDelete('cascade');
+            $table->foreignUlid('customer_id')->constrained();
+            $table->foreignUlid('team_id')->constrained();
 
             $table->timestamps();
         });
