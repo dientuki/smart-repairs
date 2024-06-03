@@ -2,9 +2,10 @@
 
 namespace App\Enum;
 
-//use Filament\Support\Contracts\HasLabel;
+use Filament\Support\Contracts\HasLabel;
+use App\Traits\EnumAsArrayTrait;
 
-enum OrderStatusEnum: string //implements HasLabel
+enum OrderStatusEnum: string implements HasLabel
 {
     case FORBUDGETING = 'for budgeting';
     case BUDGETING = 'budgeting';
@@ -13,6 +14,8 @@ enum OrderStatusEnum: string //implements HasLabel
     case REPAIRING = 'repairing';
     case REPAIRED = 'repaired';
     case READY = 'ready';
+
+    use EnumAsArrayTrait;
 
     public function getLabel(): string {
         return match ($this) {

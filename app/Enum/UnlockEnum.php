@@ -3,12 +3,16 @@
 namespace App\Enum;
 
 use Filament\Support\Contracts\HasLabel;
+use App\Traits\EnumAsArrayTrait;
 
 enum UnlockEnum: string implements HasLabel
 {
     case None = 'none';
     case Code = 'code';
     case Pattern = 'pattern';
+
+    use EnumAsArrayTrait;
+
     public function getLabel(): string
     {
         return match ($this) {
@@ -17,15 +21,4 @@ enum UnlockEnum: string implements HasLabel
             self::Pattern => __('Pattern'),
         };
     }
-
-    /**
-     * Returns an array containing the values of all cases in the UnlockEnum.
-     *
-     * @return array An array of string values representing the cases in the UnlockEnum.
-     */
-    public static function getAllCasesAsArray(): array
-    {
-        return array_map(fn($case) => $case->value, self::cases());
-    }
-
 }
