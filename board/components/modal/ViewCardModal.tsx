@@ -1,6 +1,6 @@
 import "react-modal-global/styles/modal.scss" // Imports essential styles for `ModalContainer`.
 import { useModalWindow } from "react-modal-global";
-import { useBoardStore } from "@/store/BoardStore";
+import { useOrderStore } from "@/store/OrderStore";
 import { Textarea } from '@headlessui/react'
 import Comments from "@/components/Comments";
 import { useEffect } from "react";
@@ -12,42 +12,43 @@ type ModalParams = {
 
 function ViewCardModal() {
   const modal = useModalWindow<ModalParams>();
-  const { order, getOrder } = useBoardStore();
-  let date:Date;
+  const { order, getOrder } = useOrderStore();
 
   useEffect(() => {
-    getOrder(modal.params.order)
+    getOrder(modal.params.order);
   }, [getOrder]);
-
-  if (order) {
-    date = new Date(order.createdAt);
-  }
 
   return (
     <ModalLayout>
-      {order &&
-        <>
-          <h2 className="text-2xl font-medium leading-6 text-gray-900">
-            {order.brand} {order.deviceCommercialName} ({order.deviceTechName})
-          </h2>
-          <div className="flex flex-row">
-            <div className="basis-3/4">
-              <p><b>Serie:</b> {order.deviceSerial}</p>
+      {(modal.params.order == order.$id) &&
+          <div className="flex flex-row h-full">
+            <div className="basis-3/4 pr-6 overflow-y-scroll mr-3">
+              <h2 className="text-2xl font-medium leading-6 text-gray-900">
+                {order.brand} {order.deviceCommercialName} ({order.deviceTechName})
+              </h2>
+              <p className="my-2"><b>Serie:</b> {order.deviceSerial}</p>
               <div>
                 <p><b>Descripcion inicial del problema:</b></p>
-                {order.observation}
+                <p className="border border-gray-300 p-3 rounded min-h-20">{order.observation}</p>
               </div>
-
-              <Textarea name="description" />
-              <Comments comments={order.comments?.length ? order.comments : []}/>
+              <div className="my-2">attachments</div>
+              <div className="my-2">presupuesto</div>
+              <Comments orderId={order.$id} comments={order.comments?.length ? order.comments : []}/>
             </div>
             <div className="basis-1/4">
-              <p>Fecha: {date.toLocaleDateString()} {date.toLocaleTimeString()}</p>
-              <p>Cliente: {order.customerFullName}</p>
               <p>Estado: {order.status}</p>
+              <div className="border border-gray-300 p-3 rounded mt-4">
+                <p className="my-2">Fecha de entrada: {order.createdAtDate?.toDateString()} {order.createdAtDate?.toLocaleTimeString()}</p>
+                <p className="my-2">Cliente: {order.customerFullName}</p>
+                <p className="my-2">Tecnico: Usuario</p>
+                <p className="my-2">Vendedor: Usuario</p>
+              </div>
+              <div className="border border-gray-300 p-3 rounded mt-4">
+                <p className="my-2">Desbloqueo: Codigo/patron</p>
+                <p className="my-2">Validaciones: Usuario</p>
+              </div>
             </div>
           </div>
-        </>
       }
     </ModalLayout>
   )

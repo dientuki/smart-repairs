@@ -1,6 +1,6 @@
 'use client'
 
-import { ChatBubbleOvalLeftEllipsisIcon, PaperClipIcon, CalendarIcon } from "@heroicons/react/20/solid";
+import { ChatBubbleOvalLeftEllipsisIcon, PaperClipIcon, CalendarIcon, UserCircleIcon, ClockIcon } from "@heroicons/react/20/solid";
 import { DraggableProvidedDragHandleProps, DraggableProvidedDraggableProps } from "react-beautiful-dnd"
 import Modal from "@/components/modal/Modal";
 import ViewCardModal from "@/components/modal/ViewCardModal";
@@ -15,6 +15,7 @@ type Props = {
 }
 function OrderCard({ order, index, id, innerRef, draggableProps, dragHandleProps }: Props) {
   const openCard = () => Modal.open(ViewCardModal, { order: order.$id });
+
 
   return (
     <div
@@ -35,11 +36,11 @@ function OrderCard({ order, index, id, innerRef, draggableProps, dragHandleProps
         <div>{order.brand} {order.deviceCommercialName}</div>
         <div>{order.deviceType}: {order.deviceTechName}</div>
         <div>Imei: {order.deviceSerial}</div>
-        <div>Customer: {order.customerFullName}</div>
+        <div><UserCircleIcon className="h-4 w-4 inline-block" /> {order.customerFullName}</div>
         <div className="flex justify-between">
-          <div><ChatBubbleOvalLeftEllipsisIcon className="h-4 w-4 inline-block" />8</div>
-          <div><PaperClipIcon className="h-4 w-4 inline-block" />8</div>
-          <div><CalendarIcon className="h-4 w-4 inline-block" />{order.createdAt}</div>
+          <div><ChatBubbleOvalLeftEllipsisIcon className="h-4 w-4 inline-block" />{order.commentsQuantity}</div>
+          <div><PaperClipIcon className="h-4 w-4 inline-block" />0</div>
+          <div><CalendarIcon className="h-4 w-4 inline-block" />{order.createdAtDate.toLocaleDateString()} <ClockIcon className="h-4 w-4 inline-block" />{order.createdAtDate.toLocaleTimeString()}</div>
         </div>
         <div>
             {order.observation}

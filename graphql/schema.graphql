@@ -14,6 +14,18 @@ type Mutation {
     updateOrderStatus(id: String, status: String!): Boolean!
         @field(resolver: "OrderMutation@updateStatus")
         @namespace(field: "App\\GraphQL\\Mutations")
+    updateCommentVisibility(commentId: String, isPublic: Boolean!): Boolean!
+        @field(resolver: "CommentMutation@updateVisibility")
+        @namespace(field: "App\\GraphQL\\Mutations")
+    updateComment(commentId: String, text: String): Boolean!
+        @field(resolver: "CommentMutation@updateText")
+        @namespace(field: "App\\GraphQL\\Mutations")
+    deleteComment(commentId: String): Boolean!
+        @field(resolver: "CommentMutation@delete")
+        @namespace(field: "App\\GraphQL\\Mutations")
+    addComment(orderId: String, isPublic: Boolean, comment: String): Comment!
+        @field(resolver: "CommentMutation@create")
+        @namespace(field: "App\\GraphQL\\Mutations")
 }
 
 type Brand {
@@ -42,6 +54,7 @@ type Orders {
     device_unit: DeviceUnit!
     created_at: DateTime!
     observation: String!
+    comments: [Comment!]
 }
 
 type Comment {
@@ -50,11 +63,14 @@ type Comment {
     created_at: DateTime!
     is_public: Boolean
     user: User
+    user_id: ID!
+    was_edited: Boolean
 }
 
 type User {
     id: ID!
     name: String!
+    email: String!
 }
 
 type Customer {
@@ -68,6 +84,8 @@ type DeviceUnit {
     serial: String!
     device_id: String!
     device: Device!
+    unlock_type: String!
+    unlock_code: String
 }
 
 type Device {

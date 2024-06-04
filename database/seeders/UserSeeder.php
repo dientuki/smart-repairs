@@ -20,6 +20,8 @@ class UserSeeder extends Seeder
             'name' => 'Juan Alberto',
             'email' => 'dientuki@gmail.com',
             'password' => Hash::make('1234'),
+            'created_at' => now(),
+            'updated_at' => now(),
         ]);
     }
 }

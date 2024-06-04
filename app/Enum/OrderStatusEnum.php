@@ -2,27 +2,30 @@
 
 namespace App\Enum;
 
-//use Filament\Support\Contracts\HasLabel;
+use Filament\Support\Contracts\HasLabel;
+use App\Traits\EnumAsArrayTrait;
 
-enum OrderStatusEnum: string //implements HasLabel
+enum OrderStatusEnum: string implements HasLabel
 {
-    case FORBUDGETING = 'for budgeting';
-    case BUDGETING = 'budgeting';
-    case BUDGETED = 'budgeted';
-    case TODO = 'to do';
-    case REPAIRING = 'repairing';
-    case REPAIRED = 'repaired';
-    case READY = 'ready';
+    case ForBudgeting = 'for budgeting';
+    case Budgeting = 'budgeting';
+    case Budgeted = 'budgeted';
+    case ToDo = 'to do';
+    case Repairing = 'repairing';
+    case Repaired = 'repaired';
+    case Ready = 'ready';
+
+    use EnumAsArrayTrait;
 
     public function getLabel(): string {
         return match ($this) {
-            self::FORBUDGETING => __('For budgeting'),
-            self::BUDGETING => __('Budgeting'),
-            self::BUDGETED => __('Budgeted'),
-            self::TODO => __('To do'),
-            self::REPAIRING => __('Repairing'),
-            self::REPAIRED => __('Repaired'),
-            self::READY => __('Ready'),
+            self::ForBudgeting => __('For budgeting'),
+            self::Budgeting => __('Budgeting'),
+            self::Budgeted => __('Budgeted'),
+            self::ToDo => __('To do'),
+            self::Repairing => __('Repairing'),
+            self::Repaired => __('Repaired'),
+            self::Ready => __('Ready'),
         };
     }
 

@@ -1,5 +1,6 @@
 <?php
 
+use App\Enum\OrderStatusEnum;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -14,10 +15,13 @@ return new class extends Migration
         Schema::create('orders', function (Blueprint $table) {
             $table->ulid('id')->primary();
 
-            $table->string('status'); //Enum
+            $table->enum('status', OrderStatusEnum::getAllCasesAsArray());
+            $table->text('observation')->nullable();
+            $table->boolean('was_edited')->default(false);
 
             $table->foreignUlid('customer_id')->constrained();
             $table->foreignUlid('team_id')->constrained();
+            $table->foreignUlid('user_id')->constrained();
 
             $table->timestamps();
         });
