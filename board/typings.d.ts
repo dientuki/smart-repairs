@@ -38,6 +38,12 @@ interface OrderComment {
     wasEdited: boolean;
 }
 
+interface NewOrderComment {
+    comment: string;
+    isPublic: boolean;
+    orderId: string;
+}
+
 interface Images {
     bucketId: string;
     fileId: string;

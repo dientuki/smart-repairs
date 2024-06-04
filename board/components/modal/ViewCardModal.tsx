@@ -34,7 +34,6 @@ function ViewCardModal() {
               <div className="my-2">attachments</div>
               <div className="my-2">presupuesto</div>
               <Comments orderId={order.$id} comments={order.comments?.length ? order.comments : []}/>
-              <Textarea name="description" />
             </div>
             <div className="basis-1/4">
               <p>Estado: {order.status}</p>

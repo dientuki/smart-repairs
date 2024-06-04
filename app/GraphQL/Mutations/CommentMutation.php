@@ -3,6 +3,8 @@
 namespace App\GraphQL\Mutations;
 
 use App\Models\OrderComment;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 use Nuwave\Lighthouse\Execution\ResolveInfo;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 
@@ -42,6 +44,25 @@ final readonly class CommentMutation
         //$phone = $args['phone'];
 
         return OrderComment::destroy($args['commentId']);
+    }
+
+    public function create(null $root, array $args, GraphQLContext $context, ResolveInfo $resolveInfo): mixed
+    {
+        // TODO implement the resolver
+        //$user = auth()->user();
+        //$phone = $args['phone'];
+        $team = DB::table('teams')->first()->id;
+        $user = DB::table('users')->first()->id;
+        //dd($args);
+
+        return OrderComment::create([
+            'id' => (string) Str::ulid(),
+            'order_id' => $args['orderId'],
+            'team_id' => $team,
+            'comment' => strip_tags($args['comment']),
+            'user_id' => $user,
+            'is_public' => $args['isPublic'],
+        ]);
     }
 
 }

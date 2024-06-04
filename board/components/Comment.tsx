@@ -14,7 +14,7 @@ function Comment({ comment, onDelete }: Props) {
   const [isEditing, setIsEditing] = useState(false);
   const [commentData, setCommentData] = useState(comment);
   const { updateCommentVisibility, updateComment } = useOrderStore();
-  let text = commentData.comment;
+  let text:string = commentData.comment;
 
   const toogleVisibility = () => {
     updateCommentVisibility(comment.id, !commentData.isPublic);
@@ -49,6 +49,8 @@ function Comment({ comment, onDelete }: Props) {
 
             <div>{commentData.createdAtDate?.toDateString()} {commentData.createdAtDate?.toLocaleTimeString()}</div>
 
+            {commentData.wasEdited && <div className="text-gray-500">Editado</div>}
+
             <div className="cursor-pointer" onClick={toogleVisibility} >{commentData.isPublic ?
               <><LockOpenIcon className="h-4 w-4 inline-block" /> Publico</>:
               <><LockClosedIcon className="h-4 w-4 inline-block" /> Privado</>
@@ -69,8 +71,6 @@ function Comment({ comment, onDelete }: Props) {
                 <button className="rounded-md bg-sky-600 px-3 py-1.5 text-sm font-bold leading-6 text-white shadow-sm hover:bg-sky-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-600" onClick={saveComment}>Guardar</button> :
                 <button className="rounded-md bg-sky-600 px-3 py-1.5 text-sm font-bold leading-6 text-white shadow-sm hover:bg-sky-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-600" onClick={editComment}>Editar</button>}
               <button className="rounded-md bg-red-600 px-3 py-1.5 text-sm font-bold leading-6 text-white shadow-sm hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600" onClick={onDelete}>Borrar</button>
-
-              {commentData.wasEdited && <div className="text-xs text-gray-500">Editado</div>}
           </div>
 
         </div>

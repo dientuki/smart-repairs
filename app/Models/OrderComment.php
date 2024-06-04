@@ -8,7 +8,7 @@ class OrderComment extends ModelWithTeam
 {
     use HasFactory;
 
-    protected $fillable = ['order_id', 'comment', 'team_id', 'user_id'];
+    protected $fillable = ['order_id', 'comment', 'team_id', 'user_id', 'is_public', 'was_edited'];
 
     public function user() {
         return $this->belongsTo(User::class);
