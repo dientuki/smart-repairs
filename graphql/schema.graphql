@@ -17,6 +17,9 @@ type Mutation {
     updateCommentVisibility(commentId: String, isPublic: Boolean!): Boolean!
         @field(resolver: "CommentMutation@updateVisibility")
         @namespace(field: "App\\GraphQL\\Mutations")
+    updateComment(commentId: String, text: String): Boolean!
+        @field(resolver: "CommentMutation@updateText")
+        @namespace(field: "App\\GraphQL\\Mutations")
 }
 
 type Brand {

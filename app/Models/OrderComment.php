@@ -19,4 +19,10 @@ class OrderComment extends ModelWithTeam
         $comment->is_public = $status;
         return $comment->save();
     }
+
+    public static function updateText(string $commentId, string $text): bool {
+        $comment = OrderComment::find($commentId);
+        $comment->comment = $text;
+        return $comment->save();
+    }
 }

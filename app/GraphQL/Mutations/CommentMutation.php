@@ -26,5 +26,13 @@ final readonly class CommentMutation
         return OrderComment::updateVisibility($args['commentId'], $args['isPublic']);
     }
 
+    public function updateText(null $root, array $args, GraphQLContext $context, ResolveInfo $resolveInfo): mixed
+    {
+        // TODO implement the resolver
+        //$user = auth()->user();
+        //$phone = $args['phone'];
+
+        return OrderComment::updateText($args['commentId'], $args['text']);
+    }
 
 }

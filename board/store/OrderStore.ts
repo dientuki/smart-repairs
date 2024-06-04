@@ -1,5 +1,5 @@
 import { getOrder } from "@/lib/getOrder";
-import { updateCommentVisibility } from "@/lib/comments";
+import { updateCommentVisibility, updateComment } from "@/lib/comments";
 import { create } from 'zustand'
 
 interface OrderStore {
@@ -7,6 +7,7 @@ interface OrderStore {
     getOrder: (id: string) => void,
 
     updateCommentVisibility: (commentId: string, isPublic: boolean) => void
+    updateComment: (commentId: string, text: string) => void
 }
 
 export const useOrderStore = create<OrderStore>((set) => ({
@@ -18,5 +19,9 @@ export const useOrderStore = create<OrderStore>((set) => ({
 
   updateCommentVisibility: async (commentId: string, isPublic: boolean) => {
     await updateCommentVisibility(commentId, isPublic);
+  },
+
+  updateComment: async (commentId: string, text: string) => {
+    await updateComment(commentId, text);
   }
 }));
