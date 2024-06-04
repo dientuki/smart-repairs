@@ -1,6 +1,5 @@
 import { uploadTask } from "@/lib/addTask";
 import { getOrdersGroupedByColumns } from "@/lib/getOrdersGroupedByColumns";
-import { getOrder } from "@/lib/getOrder";
 import { updateStatus } from "@/lib/updateStatus";
 import { create } from 'zustand'
 
@@ -10,10 +9,6 @@ interface BoardStore {
     setBoardState: (board: Board) => void,
 
     updateStatus: (taskId: string, columnId: TypedColumn) => void,
-
-    order: Order,
-    getOrder: (id: string) => void,
-    cleanOrder: () => void,
 
     newTaskInput: string,
     setNewTaskInput: (input: string) => void,
@@ -36,13 +31,6 @@ export const useBoardStore = create<BoardStore>((set) => ({
   updateStatus: async (taskId: string , columnId: TypedColumn) => {
     await updateStatus(taskId, columnId);
   },
-
-  order: {} as Order,
-  getOrder: async(id: string) => {
-    const order = await getOrder(id);
-    set({ order });
-  },
-  cleanOrder: () => set({ order: {} as Order }),
 
   newTaskInput: "",
   setNewTaskInput: (input: string) => set({ newTaskInput: input }),
