@@ -6,10 +6,11 @@ import Avatar from 'react-avatar';
 
 
 type Props = {
-  comment: OrderComment
+  comment: OrderComment,
+  onDelete: MouseEventHandler<HTMLDivElement>
 }
 
-function Comment({ comment }: Props) {
+function Comment({ comment, onDelete }: Props) {
   const [isEditing, setIsEditing] = useState(false);
   const [commentData, setCommentData] = useState(comment);
   const { updateCommentVisibility, updateComment } = useOrderStore();
@@ -22,11 +23,6 @@ function Comment({ comment }: Props) {
       isPublic: !commentData.isPublic,
       comment: text
     });
-  }
-
-  const deleteComment = () => {
-    //deleteComment(comment.id, !commentData.isPublic);
-    //setCommentData({ ...commentData, isPublic: !commentData.isPublic });
   }
 
   const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -66,7 +62,7 @@ function Comment({ comment }: Props) {
           />
           <div className="mt-2 flex items-center gap-3">
               { isEditing ? <div className="cursor-pointer" onClick={saveComment}>Guardar</div> : <div className="cursor-pointer" onClick={editComment}>Editar</div>}
-              <div className="cursor-pointer" onClick={deleteComment}>Borrar</div>
+              <div className="cursor-pointer" onClick={onDelete}>Borrar</div>
           </div>
 
         </div>
