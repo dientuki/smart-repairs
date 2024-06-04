@@ -1,7 +1,6 @@
 import "react-modal-global/styles/modal.scss" // Imports essential styles for `ModalContainer`.
 import { useModalWindow } from "react-modal-global";
 import { useOrderStore } from "@/store/OrderStore";
-import { Textarea } from '@headlessui/react'
 import Comments from "@/components/Comments";
 import { useEffect } from "react";
 import ModalLayout from "@/components/modal/ModalLayout";
