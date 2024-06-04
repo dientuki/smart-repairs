@@ -17,9 +17,12 @@ export const getOrder = async (id: string) => {
                             last_name
                         }
                         comments {
+                            id
                             comment
                             created_at
                             is_public
+                            user_id
+                            was_edited
                             user {
                                 name
                             }
@@ -56,12 +59,16 @@ export const getOrder = async (id: string) => {
             createdAt: comment.created_at,
             createdAtDate: new Date(comment.created_at),
             isPublic: comment.is_public,
-            userName: comment.user.name
+            userId: comment.user_id,
+            userName: comment.user.name,
+            wasEdited: comment.was_edited
         });
 
         return acc;
 
     }, []);
+
+
 
     return {
         $id: json.data.order.id,

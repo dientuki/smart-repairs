@@ -20,6 +20,7 @@ return new class extends Migration
             $table->foreignUlid('user_id')->constrained();
 
             $table->boolean('is_public')->default(false);
+            $table->boolean('was_edited')->default(false);
 
             $table->timestamps();
         });

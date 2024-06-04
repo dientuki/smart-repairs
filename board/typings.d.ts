@@ -33,7 +33,15 @@ interface OrderComment {
     createdAt: string;
     createdAtDate: Date;
     isPublic: boolean;
+    userId: string;
     userName: string;
+    wasEdited: boolean;
+}
+
+interface NewOrderComment {
+    comment: string;
+    isPublic: boolean;
+    orderId: string;
 }
 
 interface Images {
