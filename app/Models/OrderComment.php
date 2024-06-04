@@ -23,6 +23,7 @@ class OrderComment extends ModelWithTeam
     public static function updateText(string $commentId, string $text): bool {
         $comment = OrderComment::find($commentId);
         $comment->comment = $text;
+        $comment->was_edited = true;
         return $comment->save();
     }
 }

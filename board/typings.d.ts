@@ -35,6 +35,7 @@ interface OrderComment {
     isPublic: boolean;
     userId: string;
     userName: string;
+    wasEdited: boolean;
 }
 
 interface Images {

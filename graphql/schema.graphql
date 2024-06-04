@@ -58,6 +58,7 @@ type Comment {
     is_public: Boolean
     user: User
     user_id: ID!
+    was_edited: Boolean
 }
 
 type User {

@@ -22,6 +22,7 @@ export const getOrder = async (id: string) => {
                             created_at
                             is_public
                             user_id
+                            was_edited
                             user {
                                 name
                             }
@@ -59,7 +60,8 @@ export const getOrder = async (id: string) => {
             createdAtDate: new Date(comment.created_at),
             isPublic: comment.is_public,
             userId: comment.user_id,
-            userName: comment.user.name
+            userName: comment.user.name,
+            wasEdited: comment.was_edited
         });
 
         return acc;

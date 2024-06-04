@@ -7,7 +7,7 @@ import Avatar from 'react-avatar';
 
 type Props = {
   comment: OrderComment,
-  onDelete: MouseEventHandler<HTMLDivElement>
+  onDelete: React.MouseEventHandler<HTMLButtonElement>
 }
 
 function Comment({ comment, onDelete }: Props) {
@@ -36,6 +36,10 @@ function Comment({ comment, onDelete }: Props) {
   const saveComment = () => {
     setIsEditing(false);
     updateComment(comment.id, text);
+    setCommentData({
+      ...commentData,
+      wasEdited: true,
+    });
   };
 
   return (
@@ -55,14 +59,18 @@ function Comment({ comment, onDelete }: Props) {
 
         <div className="ml-12">
           <Textarea
-            className="w-full p-2 border border-gray-300 rounded"
+            className="w-full p-2 border border-gray-300 rounded h-auto"
             defaultValue={commentData.comment}
             onClick={editComment}
             onChange={handleChange}
           />
           <div className="mt-2 flex items-center gap-3">
-              { isEditing ? <div className="cursor-pointer" onClick={saveComment}>Guardar</div> : <div className="cursor-pointer" onClick={editComment}>Editar</div>}
-              <div className="cursor-pointer" onClick={onDelete}>Borrar</div>
+              { isEditing ?
+                <button className="rounded-md bg-sky-600 px-3 py-1.5 text-sm font-bold leading-6 text-white shadow-sm hover:bg-sky-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-600" onClick={saveComment}>Guardar</button> :
+                <button className="rounded-md bg-sky-600 px-3 py-1.5 text-sm font-bold leading-6 text-white shadow-sm hover:bg-sky-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-600" onClick={editComment}>Editar</button>}
+              <button className="rounded-md bg-red-600 px-3 py-1.5 text-sm font-bold leading-6 text-white shadow-sm hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600" onClick={onDelete}>Borrar</button>
+
+              {commentData.wasEdited && <div className="text-xs text-gray-500">Editado</div>}
           </div>
 
         </div>
