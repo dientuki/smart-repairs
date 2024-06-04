@@ -8,7 +8,7 @@ interface ModalLayoutProps {
 function ModalLayout(props: ModalLayoutProps) {
 
   return (
-    <div className="h-[80vh] w-[80vw] transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl m-auto">
+    <div className="h-[80vh] w-[80vw] transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl m-auto cursor-auto">
       {props.children ?
         props.children :
         <DNA

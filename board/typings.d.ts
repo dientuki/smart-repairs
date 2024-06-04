@@ -33,6 +33,7 @@ interface OrderComment {
     createdAt: string;
     createdAtDate: Date;
     isPublic: boolean;
+    userId: string;
     userName: string;
 }
 

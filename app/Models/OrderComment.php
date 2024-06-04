@@ -13,4 +13,10 @@ class OrderComment extends ModelWithTeam
     public function user() {
         return $this->belongsTo(User::class);
     }
+
+    public static function updateVisibility(string $commentId, bool $status): bool {
+        $comment = OrderComment::find($commentId);
+        $comment->is_public = $status;
+        return $comment->save();
+    }
 }
