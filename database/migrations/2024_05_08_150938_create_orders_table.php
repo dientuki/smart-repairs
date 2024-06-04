@@ -15,10 +15,13 @@ return new class extends Migration
         Schema::create('orders', function (Blueprint $table) {
             $table->ulid('id')->primary();
 
-            $table->enum('status', OrderStatusEnum::getAllCasesAsArray()); //Enum
+            $table->enum('status', OrderStatusEnum::getAllCasesAsArray());
+            $table->text('observation')->nullable();
+            $table->boolean('was_edited')->default(false);
 
             $table->foreignUlid('customer_id')->constrained();
             $table->foreignUlid('team_id')->constrained();
+            $table->foreignUlid('user_id')->constrained();
 
             $table->timestamps();
         });
