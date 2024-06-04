@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Comment from "./Comment";
 import { useBoardStore } from "@/store/BoardStore";
+import { useOrderStore } from "@/store/OrderStore";
 
 type Props = {
   orderId: string
@@ -9,10 +10,12 @@ type Props = {
 
 function Comments({ orderId, comments }: Props) {
   const { board, setBoardState } = useBoardStore();
+  const { deleteComment } = useOrderStore();
   const [currentComments, setComments] = useState(comments);
 
-  const deleteComment = (id: string) => {
+  const onDelete = (id: string) => {
     setComments(currentComments => currentComments.filter(comment => comment.id !== id));
+    deleteComment(id);
 
     for (let [key, column] of board.columns.entries()) {
       const order = column.orders.findIndex((order: Order) => order.$id === orderId);
@@ -32,7 +35,7 @@ function Comments({ orderId, comments }: Props) {
               <Comment
                 key={comment.id}
                 comment={comment}
-                onDelete={() => deleteComment(comment.id)}
+                onDelete={() => onDelete(comment.id)}
               />
           ))}
         </div>

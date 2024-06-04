@@ -31,3 +31,20 @@ export const updateComment = async (commentId: string, text: string) => {
     })
   });
 }
+
+export const deleteComment = async (commentId: string) => {
+
+  await fetch('http://localhost/graphql', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+        query: `
+            mutation {
+              deleteComment(commentId: "${commentId}")
+          }
+        `
+    })
+  });
+}

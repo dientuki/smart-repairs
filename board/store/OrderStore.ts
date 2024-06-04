@@ -1,5 +1,5 @@
 import { getOrder } from "@/lib/getOrder";
-import { updateCommentVisibility, updateComment } from "@/lib/comments";
+import { updateCommentVisibility, updateComment, deleteComment } from "@/lib/comments";
 import { create } from 'zustand'
 
 interface OrderStore {
@@ -8,6 +8,7 @@ interface OrderStore {
 
     updateCommentVisibility: (commentId: string, isPublic: boolean) => void
     updateComment: (commentId: string, text: string) => void
+    deleteComment: (commentId: string) => void
 }
 
 export const useOrderStore = create<OrderStore>((set) => ({
@@ -23,5 +24,9 @@ export const useOrderStore = create<OrderStore>((set) => ({
 
   updateComment: async (commentId: string, text: string) => {
     await updateComment(commentId, text);
+  },
+
+  deleteComment: async (commentId: string) => {
+    await deleteComment(commentId);
   }
 }));

@@ -20,6 +20,9 @@ type Mutation {
     updateComment(commentId: String, text: String): Boolean!
         @field(resolver: "CommentMutation@updateText")
         @namespace(field: "App\\GraphQL\\Mutations")
+    deleteComment(commentId: String): Boolean!
+        @field(resolver: "CommentMutation@delete")
+        @namespace(field: "App\\GraphQL\\Mutations")
 }
 
 type Brand {

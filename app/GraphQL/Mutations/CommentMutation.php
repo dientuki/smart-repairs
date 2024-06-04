@@ -35,4 +35,13 @@ final readonly class CommentMutation
         return OrderComment::updateText($args['commentId'], $args['text']);
     }
 
+    public function delete(null $root, array $args, GraphQLContext $context, ResolveInfo $resolveInfo): mixed
+    {
+        // TODO implement the resolver
+        //$user = auth()->user();
+        //$phone = $args['phone'];
+
+        return OrderComment::destroy($args['commentId']);
+    }
+
 }
