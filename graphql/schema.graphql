@@ -8,6 +8,10 @@ type Query {
         @field(resolver: "Order@getActiveOrders")
         @namespace(field: "App\\Models")
     order(id: ID @eq): Order! @find
+    customers(team_id: ID @eq): [Customer!]!
+        @field(resolver: "Customer@getCustomers")
+        @namespace(field: "App\\Models")
+
 }
 
 type Mutation {
@@ -77,6 +81,9 @@ type Customer {
     id: ID!
     first_name: String!
     last_name: String!
+    fullName: String!
+    phone: String!
+    email: String!
 }
 
 type DeviceUnit {

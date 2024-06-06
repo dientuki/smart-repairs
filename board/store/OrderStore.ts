@@ -1,6 +1,7 @@
 import { getOrder } from "@/lib/getOrder";
 import { addComment, updateCommentVisibility, updateComment, deleteComment } from "@/lib/comments";
 import { create } from 'zustand'
+import { getCustomersDevices } from "@/lib/createOrder";
 
 interface OrderStore {
     order: Order,
@@ -10,6 +11,9 @@ interface OrderStore {
     updateComment: (commentId: string, text: string) => void,
     deleteComment: (commentId: string) => void,
     addComment: (newComment:NewOrderComment) => Promise<OrderComment>
+
+    data: any,
+    getData: (tenantId:string) => Promise<any>
 }
 
 export const useOrderStore = create<OrderStore>((set) => ({
@@ -33,5 +37,11 @@ export const useOrderStore = create<OrderStore>((set) => ({
 
   addComment: async (newComment:NewOrderComment) => {
     return await addComment(newComment);
+  },
+
+  data: {} as any,
+  getData: async (tenantId:string) => {
+    const data = await getCustomersDevices(tenantId);
+    set({ data });
   }
 }));

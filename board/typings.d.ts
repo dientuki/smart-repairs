@@ -9,6 +9,15 @@ interface Column {
     orders: Order[];
 }
 
+interface Customer {
+    id: string;
+    label: string;
+    firstName?: string;
+    lastName?: string;
+    phone?: string;
+    email?: string;
+}
+
 interface Order {
     $id: string;
     createdAt: timestamp;
