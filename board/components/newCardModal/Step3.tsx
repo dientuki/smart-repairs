@@ -21,6 +21,8 @@ function Step3({ customer, prevStep, device }: Props) {
     console.log(selectedDevice, data);
     nextStep(selectedDevice.id);
     */
+   data.customer = customer;
+   data.device = device;
    console.log(data);
    return;
   };
@@ -33,6 +35,7 @@ function Step3({ customer, prevStep, device }: Props) {
     serial: { required: "First name is required" },
     unlockType: { required: "First name is required" },
     unlockCode: { },
+    observations: {required: "First name is required" },
   };
 
   return (
@@ -90,6 +93,25 @@ function Step3({ customer, prevStep, device }: Props) {
           {errors?.unlockCode && errors.unlockCode.message && (
             <small className="text-danger">
               <span>{typeof errors.unlockCode.message === 'string' ? errors.unlockCode.message : JSON.stringify(errors.unlockCode.message)}</span>
+            </small>
+          )}
+
+        </Field>
+
+        <Field className="mt-4">
+          <Label className="">Problema</Label>
+          <Controller
+            name="observations"
+            control={control}
+            defaultValue=""
+            rules={registerOptions.observations}
+            render={({ field }) => (
+              <Input  {...field} className="border border-gray-300 p-3 block w-full rounded-lg" />
+            )}
+          />
+          {errors?.observations && errors.observations.message && (
+            <small className="text-danger">
+              <span>{typeof errors.observations.message === 'string' ? errors.observations.message : JSON.stringify(errors.observations.message)}</span>
             </small>
           )}
 

@@ -2,9 +2,9 @@ import "react-modal-global/styles/modal.scss" // Imports essential styles for `M
 import ModalLayout from "@/components/modal/ModalLayout";
 import { Field, Input, Label, Tab, TabGroup, TabList, TabPanel, TabPanels } from '@headlessui/react'
 import { useEffect, useState } from "react";
-import Step1 from "@/components/newCardForm/Step1";
-import Step2 from "@/components/newCardForm/Step2";
-import Step3 from "@/components/newCardForm/Step3";
+import Step1 from "@/components/newCardModal/Step1";
+import Step2 from "@/components/newCardModal/Step2";
+import Step3 from "@/components/newCardModal/Step3";
 import { useOrderStore } from "@/store/OrderStore";
 
 function NewCardModal() {
