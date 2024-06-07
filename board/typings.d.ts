@@ -18,6 +18,16 @@ interface Customer {
     email?: string;
 }
 
+interface Device {
+    id: string;
+    label: string;
+    commercialName?: string;
+    techName?: string;
+    brand?: string;
+    type?: string;
+    url?: string;
+}
+
 interface Order {
     $id: string;
     createdAt: timestamp;

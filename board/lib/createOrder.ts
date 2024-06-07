@@ -18,6 +18,18 @@ export const getCustomersDevices = async (tenantId: string) => {
                 phone
                 email
               }
+              devices {
+                  id
+                  commercial_name
+                  tech_name
+                  url
+                  brand {
+                      name
+                  }
+                  device_type {
+                      name
+                  }
+                }
             }
         `
     })
@@ -37,11 +49,26 @@ export const getCustomersDevices = async (tenantId: string) => {
 
     return acc;
 
+  }, []);
+
+  const devices: Device[] = json.data.devices.reduce((acc: Device[], device: any) => {
+    acc.push({
+        id: device.id,
+        label: `${device.brand.name} ${device.commercial_name}`,
+        commercialName: device.commercial_name,
+        techName: device.tech_name,
+        brand: device.brand.name,
+        type: device.device_type.name,
+        url: device.url
+    });
+
+    return acc;
+
 }, []);
 
   return {
     customers: customers,
-    devices: 'devices',
+    devices: devices,
     devicesUnit: 'devicesUnit'
   }
 };
