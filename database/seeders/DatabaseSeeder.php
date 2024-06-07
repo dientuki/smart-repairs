@@ -26,8 +26,8 @@ class DatabaseSeeder extends Seeder
             PartSeeder::class,
             DeviceSeeder::class,
             CustomerSeeder::class,
-            OrderSeeder::class,
             DeviceUnitSeeder::class,
+            OrderSeeder::class,
             OrderCommentSeeder::class,
         ]);
     }

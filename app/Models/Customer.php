@@ -14,7 +14,7 @@ class Customer extends ModelWithTeam
     public static function getCustomers($teamId)
     {
         //dd($teamId);
-        return self::where('team_id', '01HZJ9PYBNDCMQYHGCXMFHBFK3')->get();
+        return self::where('team_id', '01HZRBD546A6AE8CP91AEP1N64')->get();
     }
 
     /**

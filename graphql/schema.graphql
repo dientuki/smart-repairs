@@ -11,6 +11,7 @@ type Query {
     customers(team_id: ID @eq): [Customer!]!
         @field(resolver: "Customer@getCustomers")
         @namespace(field: "App\\Models")
+    devices: [Device!] @all
 
 }
 
@@ -101,6 +102,16 @@ type Device {
     tech_name: String!
     brand: Brand!
     device_type: DeviceType!
+    url: String
+}
+
+type DeviceRepaired {
+    id: ID!
+    commercial_name: String!
+    tech_name: String!
+    brand: Brand!
+    device_type: DeviceType!
+    deviceUnit: DeviceUnit!
 }
 
 type DeviceType {
