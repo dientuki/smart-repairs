@@ -1,7 +1,7 @@
 'use client'
 import { PlusCircleIcon } from "@heroicons/react/24/solid"
 import Modal from "@/components/modal/Modal";
-import NewCardModal from "@/components/modal/NewCardModal";
+import NewCardModal from "@/components/newCardModal/NewCardModal";
 
 function AddButton() {
   const openCard = () => Modal.open(NewCardModal);

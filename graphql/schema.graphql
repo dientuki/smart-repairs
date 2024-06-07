@@ -12,6 +12,9 @@ type Query {
         @field(resolver: "Customer@getCustomers")
         @namespace(field: "App\\Models")
     devices: [Device!] @all
+    devicesRepared(team_id: ID @eq): [DeviceUnit!]
+        @field(resolver: "DeviceUnit@getDeviceUnitsByTenant")
+        @namespace(field: "App\\Models")
 
 }
 

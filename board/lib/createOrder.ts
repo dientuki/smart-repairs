@@ -19,17 +19,24 @@ export const getCustomersDevices = async (tenantId: string) => {
                 email
               }
               devices {
-                  id
-                  commercial_name
-                  tech_name
-                  url
-                  brand {
-                      name
-                  }
-                  device_type {
-                      name
-                  }
+                id
+                commercial_name
+                tech_name
+                url
+                brand {
+                    name
                 }
+                device_type {
+                    name
+                }
+              }
+              devicesRepared(team_id:"01HZRBD546A6AE8CP91AEP1N64") {
+                id
+                serial
+                device {
+                    id
+                }
+              }
             }
         `
     })
