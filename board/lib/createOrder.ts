@@ -35,6 +35,10 @@ export const getCustomersDevices = async (tenantId: string) => {
                 serial
                 device {
                     id
+                    commercial_name
+                    brand {
+                      name
+                    }
                 }
               }
             }
@@ -71,11 +75,24 @@ export const getCustomersDevices = async (tenantId: string) => {
 
     return acc;
 
-}, []);
+  }, []);
+
+  const devicesRepared: DeviceRepared[] = json.data.devicesRepared.reduce((acc: DeviceRepared[], device: any) => {
+    acc.push({
+        id: device.id,
+        label: `${device.device.brand.name} ${device.device.commercial_name} - ${device.serial}`,
+        deviceId: device.device.id,
+        serial: device.serial,
+
+    });
+
+    return acc;
+
+  }, []);
 
   return {
     customers: customers,
     devices: devices,
-    devicesUnit: 'devicesUnit'
+    devicesRepared: devicesRepared
   }
 };

@@ -1,30 +1,38 @@
 import { Autocomplete, Skeleton, TextField, createFilterOptions } from "@mui/material";
 import { Field, Input, Label, TabPanel } from '@headlessui/react';
 import { Controller, useForm, FieldValues, FieldErrors } from "react-hook-form";
-import { useState } from "react";
 
-const filter = createFilterOptions<Customer>();
 type Props = {
   prevStep: () => void,
-  customer: string | null,
-  device: string | null
+  device: string | null,
+  devicesRepared: DeviceRepared[] | undefined,
+  nextStep: (data: { deviceUnitId: string, observations: string }) => void
 }
 
-function Step3({ customer, prevStep, device }: Props) {
+function Step3({ prevStep, device, devicesRepared, nextStep }: Props) {
+  console.log(device)
   const { handleSubmit, control, formState: { errors }, setValue } = useForm();
+  const autocomplete = device ? devicesRepared?.filter((d) => d.deviceId === device) : null;
+  let deviceUnitSelected: string | null = null;
 
-  console.log(customer, device);
+  if (autocomplete) {
+    autocomplete.push({
+      id: 'new',
+      label: 'Add new device',
+    })
+  }
 
   const handleRegistration = (data: FieldValues ) => {
-    /*
-    if (selectedDevice === null) return;
-    console.log(selectedDevice, data);
-    nextStep(selectedDevice.id);
-    */
-   data.customer = customer;
-   data.device = device;
-   console.log(data);
-   return;
+    console.log(deviceUnitSelected, data);
+    //update deviceUnitSelected
+
+    nextStep({
+      deviceUnitId: deviceUnitSelected,
+      observations: data.observations,
+    });
+
+
+    return;
   };
 
   const handleError = (errors: FieldErrors<FieldValues>) => {
@@ -40,6 +48,34 @@ function Step3({ customer, prevStep, device }: Props) {
 
   return (
     <TabPanel unmount={false}>
+      <Field>
+        <Label>Devices Repared</Label>
+        {autocomplete ? (
+          <Autocomplete
+            selectOnFocus
+            disablePortal
+            handleHomeEndKeys
+            id="combo-box-demo"
+            onKeyDown={(e) => {e.preventDefault();}}
+            onChange={(event, newValue) => {
+              if (newValue != null && newValue?.id !== 'new') {
+                deviceUnitSelected = newValue.id;
+                setValue('serial', newValue.serial);
+              } else {
+                deviceUnitSelected = null;
+                setValue('serial', '');
+              }
+            }}
+            isOptionEqualToValue={() => true}
+            options={autocomplete}
+            renderInput={(params) => <TextField {...params} />}
+            renderOption={(props, option) => <li {...props} key={option.id}>{option.label}</li>}
+          />
+        ) : (
+          <Skeleton variant="rectangular" width={210} height={32} />
+        )}
+      </Field>
+
       <form onSubmit={handleSubmit(handleRegistration, handleError)}>
 
         <Field className="mt-4">

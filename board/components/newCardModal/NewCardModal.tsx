@@ -35,6 +35,15 @@ function NewCardModal() {
     setSelectedIndex(selectedIndex + 1);
   };
 
+  const saveOrder = (deviceUnit) => {
+    const orderData = {
+      customer: customer,
+      problem: deviceUnit.observations,
+      deviceUnit: deviceUnit.deviceUnitId
+    }
+    console.log(orderData)
+  }
+
   return (
     <ModalLayout>
       <div className="flex flex-row h-full relative z-50">
@@ -46,14 +55,14 @@ function NewCardModal() {
           <TabGroup defaultIndex={0} selectedIndex={selectedIndex} onChange={setSelectedIndex}>
             <TabList className="my-5">
               <Tab className="mr-2 border border-gray-300 p-3">Informacion del cliente</Tab>
-              <Tab  className="mx-2 border border-gray-300 p-3">Informacion del equipo</Tab>
+              <Tab className="mx-2 border border-gray-300 p-3">Informacion del equipo</Tab>
               <Tab className="mx-2 border border-gray-300 p-3">Problema</Tab>
             </TabList>
             <TabPanels>
 
               <Step1 nextStep={goToStep2} customers={data.customers} />
               <Step2 prevStep={prevStep} nextStep={goToStep3} devices={data.devices} />
-              <Step3 prevStep={prevStep} customer={customer} device={device} />
+              <Step3 prevStep={prevStep} nextStep={saveOrder} device={device} devicesRepared={data.devicesRepared} />
 
               <TabPanel unmount={false}>
                 <Field>

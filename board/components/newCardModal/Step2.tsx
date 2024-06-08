@@ -11,13 +11,13 @@ type Props = {
 }
 
 function Step2({ nextStep, prevStep, devices }: Props) {
-  const [selectedDevice, setSelectedDevice] = useState<Device | null>(null);
+  //const [selectedDevice, setSelectedDevice] = useState<Device | null>(null);
   const { handleSubmit, control, formState: { errors }, setValue } = useForm();
+  let selectedDevice: string | null = null;
 
   const handleRegistration = (data: FieldValues ) => {
     if (selectedDevice === null) return;
-    console.log(selectedDevice, data);
-    nextStep(selectedDevice.id);
+    nextStep(selectedDevice);
   };
 
   const handleError = (errors: FieldErrors<FieldValues>) => {
@@ -42,16 +42,15 @@ function Step2({ nextStep, prevStep, devices }: Props) {
             handleHomeEndKeys
             id="combo-box-demo"
             onChange={(event, newValue) => {
-              console.log(newValue);
               if (newValue != null && newValue?.id !== 'new') {
-                setSelectedDevice(newValue);
+                selectedDevice = newValue.id
                 setValue('deviceType', newValue.type);
                 setValue('brand', newValue.brand);
                 setValue('commercialName', newValue.commercialName);
                 setValue('techName', newValue.techName);
                 setValue('url', newValue.url);
               } else {
-                setSelectedDevice(null);
+                selectedDevice = null;
                 setValue('deviceType', '');
                 setValue('brand', '');
                 setValue('commercialName', '');

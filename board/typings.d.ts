@@ -28,6 +28,13 @@ interface Device {
     url?: string;
 }
 
+interface DeviceRepared {
+    id: string;
+    label: string;
+    serial?: string;
+    deviceId?: string;
+}
+
 interface Order {
     $id: string;
     createdAt: timestamp;
@@ -41,6 +48,7 @@ interface Order {
     deviceTechName: string,
     deviceSerial: string,
     customerFullName: string,
+    customerPhone?: string,
     observation: string,
     comments?: OrderComment[],
     commentsQuantity?: number,

@@ -10,13 +10,15 @@ type Props = {
 }
 
 function Step1({ nextStep, customers }: Props) {
-  const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(null);
+  //const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(null);
   const { handleSubmit, control, formState: { errors }, setValue } = useForm();
+  let selectedCustomer: string | null = null;
 
   const handleRegistration = (data: FieldValues ) => {
+    console.log(selectedCustomer);
     if (selectedCustomer === null) return;
-    console.log(selectedCustomer, data);
-    nextStep(selectedCustomer.id);
+
+    nextStep(selectedCustomer);
   };
 
   const handleError = (errors: FieldErrors<FieldValues>) => {
@@ -41,13 +43,14 @@ function Step1({ nextStep, customers }: Props) {
             id="combo-box-demo"
             onChange={(event, newValue) => {
               if (newValue != null && newValue?.id !== 'new') {
-                setSelectedCustomer(newValue);
+                //setSelectedCustomer(newValue);
+                selectedCustomer = newValue.id;
                 setValue('firstName', newValue.firstName);
                 setValue('lastName', newValue.lastName);
                 setValue('phone', newValue.phone);
                 setValue('email', newValue.email);
               } else {
-                setSelectedCustomer(null);
+                selectedCustomer = null;
                 setValue('firstName', '');
                 setValue('lastName', '');
                 setValue('phone', '');
