@@ -9,10 +9,10 @@ export const createDevice = async(device: NewDevice) => {
             query: `
                 mutation {
                     addDevice(device: {
-                        type: "${device.type}"
-                        brand: "${device.brand}"
-                        commercialName: "${device.commercialName}"
-                        techName: "${device.techName}"
+                        device_type_id: "${device.type}"
+                        brand_id: "${device.brand}"
+                        commercial_name: "${device.commercialName}"
+                        tech_name: "${device.techName}"
                         url: "${device.url}"
                     }) {
                         id
@@ -37,10 +37,10 @@ export const updateDevice = async(device: NewDevice) => {
             query: `
                 mutation {
                     updateDevice(deviceId: "${device.id}", device: {
-                        type: "${device.type}"
-                        brand: "${device.brand}"
-                        commercialName: "${device.commercialName}"
-                        techName: "${device.techName}"
+                        device_type_id: "${device.type}"
+                        brand_id: "${device.brand}"
+                        commercial_name: "${device.commercialName}"
+                        tech_name: "${device.techName}"
                         url: "${device.url}"
                     }) {
                         id

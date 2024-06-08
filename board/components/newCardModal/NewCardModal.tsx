@@ -62,7 +62,7 @@ function NewCardModal() {
             <TabPanels>
 
               <Step1 nextStep={goToStep2} customers={data.customers} />
-              <Step2 prevStep={prevStep} nextStep={goToStep3} devices={data.devices} />
+              <Step2 prevStep={prevStep} nextStep={goToStep3} devices={data.devices} brands={data.brands} deviceTypes={data.deviceTypes}  />
               <Step3 prevStep={prevStep} nextStep={saveOrder} device={device} devicesRepared={data.devicesRepared} />
 
               <TabPanel unmount={false}>

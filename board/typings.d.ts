@@ -92,3 +92,13 @@ interface NewOrder {
     observations: String;
     deviceUnitId: String;
 }
+
+interface Brand {
+    id: string;
+    label: string;
+}
+
+interface DeviceType {
+    id: string;
+    label: string;
+}

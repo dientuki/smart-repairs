@@ -2,13 +2,12 @@
 
 namespace App\GraphQL\Mutations;
 
-use App\Models\Customer;
 use App\Models\Device;
 use Illuminate\Support\Str;
 use Nuwave\Lighthouse\Execution\ResolveInfo;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 
-final readonly class CustomerMutation
+final readonly class DeviceMutation
 {
     /**
      * Return a value for the field.
@@ -28,8 +27,8 @@ final readonly class CustomerMutation
             'id' => (string) Str::upper(Str::ulid()),
             'commercial_name' => $args['device']['commercial_name'],
             'tech_name' => $args['device']['tech_name'],
-            'brand' => $args['device']['brand'],
-            'type' => $args['device']['type'],
+            'brand_id' => $args['device']['brand_id'],
+            'device_type_id' => $args['device']['device_type_id'],
             'url' => $args['device']['url'],
         ]);
     }
@@ -39,8 +38,8 @@ final readonly class CustomerMutation
         $device = Device::find($args['deviceId']);
         $device->commercial_name = $args['device']['commercial_name'];
         $device->tech_name = $args['device']['tech_name'];
-        $device->brand = $args['device']['brand'];
-        $device->type = $args['device']['type'];
+        $device->brand_id = $args['device']['brand_id'];
+        $device->device_type_id = $args['device']['device_type_id'];
         $device->url = $args['device']['url'];
         $device->save();
         return $device;

@@ -41,6 +41,14 @@ export const getCustomersDevices = async (tenantId: string) => {
                     }
                 }
               }
+              brands {
+                id
+                label
+              }
+              deviceTypes {
+                id
+                label
+              }
             }
         `
     })
@@ -93,6 +101,8 @@ export const getCustomersDevices = async (tenantId: string) => {
   return {
     customers: customers,
     devices: devices,
-    devicesRepared: devicesRepared
+    devicesRepared: devicesRepared,
+    brands: json.data.brands,
+    deviceTypes: json.data.deviceTypes
   }
 };

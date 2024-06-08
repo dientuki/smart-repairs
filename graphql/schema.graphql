@@ -3,12 +3,13 @@ scalar DateTime @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\Date
 
 "Indicates what fields are available at the top level of a query operation."
 type Query {
-    brands: [Brand!] @all
+    brands: [Brand!] @all @orderBy(column: "name", direction: ASC)
+    deviceTypes: [DeviceType!] @all @orderBy(column: "name", direction: ASC)
     orders(team_id: ID @eq): [Orders!]!
         @field(resolver: "Order@getActiveOrders")
         @namespace(field: "App\\Models")
     order(id: ID @eq): Order! @find
-    customers(team_id: ID @eq): [Customer!]!
+    customers(team_id: ID @eq): [Customer!]! @orderBy(column: "first_name", direction: ASC)
         @field(resolver: "Customer@getCustomers")
         @namespace(field: "App\\Models")
     devices: [Device!] @all
@@ -54,6 +55,7 @@ type Brand {
     "Non-unique name."
     name: String!
     imageUrl: String!
+    label: String!
 }
 
 type Order {
@@ -148,4 +150,5 @@ type DeviceType {
     id: ID!
     name: String!
     imageUrl: String!
+    label: String!
 }
