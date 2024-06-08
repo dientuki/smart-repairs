@@ -1,23 +1,52 @@
-import { Autocomplete, Skeleton, TextField, createFilterOptions } from "@mui/material";
+import { Autocomplete, TextField, createFilterOptions } from "@mui/material";
 import { Field, Input, Label, TabPanel } from '@headlessui/react';
 import { Controller, useForm, FieldValues, FieldErrors } from "react-hook-form";
+import { useOrderStore } from "@/store/OrderStore";
 import { useState } from "react";
 
-const filter = createFilterOptions<Customer>();
+const filter = createFilterOptions<Device>();
 type Props = {
   nextStep: (customerId: string) => void,
   prevStep: () => void,
   devices: Device[],
 }
 
-function Step2({ nextStep, prevStep, devices }: Props) {
-  //const [selectedDevice, setSelectedDevice] = useState<Device | null>(null);
-  const { handleSubmit, control, formState: { errors }, setValue } = useForm();
-  let selectedDevice: string | null = null;
+const topBrands = [
+  { label: 'Motorola', id: '01HZRBD55KQ8D22AHVFR0A73DH' },
+  { label: 'Samsung', id: '01HZRBD55QE0T56S0S25YYTG95' }
+];
 
-  const handleRegistration = (data: FieldValues ) => {
-    if (selectedDevice === null) return;
-    nextStep(selectedDevice);
+function Step2({ nextStep, prevStep, devices }: Props) {
+  const { addDevice, updateDevice } = useOrderStore();
+  const [ selectedDevice, setSelectedDevice ] = useState<Device | null>(null);
+  const { handleSubmit, control, formState: { errors }, setValue } = useForm();
+  const comboBox = {
+    brand: null,
+    type: null
+  };
+
+  const handleRegistration = async (data: FieldValues ) => {
+    const toValidate = ['type', 'brand', 'commercialName', 'techName', 'url'];
+    const newDevice = data as NewDevice;
+    newDevice.brand = comboBox.brand;
+    newDevice.type = comboBox.type;
+    let id: string;
+
+    if (selectedDevice === null) {
+      console.log('new device')
+      id = await addDevice(newDevice);
+    } else {
+      id = selectedDevice.id;
+      for (let i = 0, c = toValidate.length; i < c; i++) {
+        if (data[toValidate[i]] !== selectedDevice[toValidate[i]]) {
+          console.log('update device')
+          await updateDevice(newDevice);
+          break;
+        }
+      }
+    }
+    console.log('sigoooo')
+    //nextStep(id);
   };
 
   const handleError = (errors: FieldErrors<FieldValues>) => {
@@ -25,8 +54,9 @@ function Step2({ nextStep, prevStep, devices }: Props) {
   };
 
   const registerOptions = {
+    id: {required: false},
     type: { required: "First name is required" },
-    brand: { required: "First name is required" },
+    brand: { required: "brand name is required" },
     commercialName: { required: "phone is required" },
     techName: { required: "Last Name is required" },
     url: { required: "email is required" },
@@ -36,22 +66,22 @@ function Step2({ nextStep, prevStep, devices }: Props) {
     <TabPanel unmount={false}>
       <Field>
         <Label>Devices</Label>
-        {devices ? (
+        {devices && (
           <Autocomplete
             selectOnFocus
             handleHomeEndKeys
-            id="combo-box-demo"
+            id="devices"
             onChange={(event, newValue) => {
               if (newValue != null && newValue?.id !== 'new') {
-                selectedDevice = newValue.id
-                setValue('deviceType', newValue.type);
+                setSelectedDevice(newValue);
+                setValue('type', newValue.type);
                 setValue('brand', newValue.brand);
                 setValue('commercialName', newValue.commercialName);
                 setValue('techName', newValue.techName);
                 setValue('url', newValue.url);
               } else {
-                selectedDevice = null;
-                setValue('deviceType', '');
+                setSelectedDevice(null);
+                setValue('type', '');
                 setValue('brand', '');
                 setValue('commercialName', '');
                 setValue('techName', '');
@@ -63,7 +93,7 @@ function Step2({ nextStep, prevStep, devices }: Props) {
 
               if (params.inputValue !== '') {
                 filtered.push({
-                  label: `Add new client`,
+                  label: `Add new device`,
                   id: 'new'
                 });
               }
@@ -75,18 +105,26 @@ function Step2({ nextStep, prevStep, devices }: Props) {
             renderInput={(params) => <TextField {...params} />}
             renderOption={(props, option) => <li {...props} key={option.id}>{option.label}</li>}
           />
-        ) : (
-          <Skeleton variant="rectangular" width={210} height={32} />
         )}
       </Field>
 
 
       <form onSubmit={handleSubmit(handleRegistration, handleError)}>
+        <Controller
+            name="id"
+            defaultValue=""
+            control={control}
+            rules={registerOptions.id}
+            render={({ field }) => (
+              <Input {...field} type="hidden"/>
+            )}
+          />
+
 
         <Field className="mt-4">
-          <Label>deviceType</Label>
+          <Label>type</Label>
           <Controller
-            name="deviceType"
+            name="type"
             defaultValue=""
             control={control}
             rules={registerOptions.type}
@@ -94,12 +132,14 @@ function Step2({ nextStep, prevStep, devices }: Props) {
               <Input {...field} className="border border-gray-300 p-3 block w-full rounded-lg" />
             )}
           />
-          {errors?.deviceType && errors.deviceType.message && (
+          {errors?.type && errors.type.message && (
             <small className="text-danger">
-              <span>{typeof errors.deviceType.message === 'string' ? errors.deviceType.message : JSON.stringify(errors.deviceType.message)}</span>
+              <span>{typeof errors.type.message === 'string' ? errors.type.message : JSON.stringify(errors.type.message)}</span>
             </small>
           )}
         </Field>
+
+
 
         <Field className="mt-4">
           <Label className="">brand</Label>
@@ -109,7 +149,19 @@ function Step2({ nextStep, prevStep, devices }: Props) {
             defaultValue=""
             rules={registerOptions.brand}
             render={({ field }) => (
-              <Input  {...field} className="border border-gray-300 p-3 block w-full rounded-lg" />
+              <Autocomplete
+                {...field}
+                selectOnFocus
+                handleHomeEndKeys
+                id="brands"
+                onChange={(event, newValue) => {
+                  setValue('brand', newValue?.label);
+                  comboBox.brand = newValue?.id;
+                }}
+                options={topBrands}
+                isOptionEqualToValue={() => true}
+                renderInput={(params) => <TextField {...params} />}
+              />
             )}
           />
           {errors?.brand && errors.brand.message && (

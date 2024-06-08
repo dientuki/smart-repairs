@@ -1,8 +1,9 @@
-import { getOrder } from "@/lib/getOrder";
-import { addComment, updateCommentVisibility, updateComment, deleteComment } from "@/lib/comments";
 import { create } from 'zustand'
+import { getOrder } from "@/lib/getOrder";
 import { getCustomersDevices } from "@/lib/createOrder";
-import { createCustomer, updateCustomer } from "@/lib/customer";
+import { addComment, updateCommentVisibility, updateComment, deleteComment } from "@/lib/comments";
+import { createCustomer, updateCustomer } from "@/lib/customers";
+import { createDevice, updateDevice } from "@/lib/devices";
 
 interface OrderStore {
     order: Order,
@@ -17,10 +18,10 @@ interface OrderStore {
     getData: (tenantId:string) => Promise<any>
 
     addCustomer: (customer: Customer) => Promise<string>
-    updateCustomer: (customer: Customer) => void
+    updateCustomer: (customer: Customer) => Promise<void>
 
-    // addDevice: (newDevice: NewDevice) => void
-    // updateDevice: (device: Device) => void
+    addDevice: (device: NewDevice) => Promise<string>
+    updateDevice: (device: NewDevice) => Promise<void>
     // deleteDevice: (deviceId: string) => void
 
     // addOrder: (newOrder: NewOrder) => void
@@ -56,11 +57,19 @@ export const useOrderStore = create<OrderStore>((set) => ({
     const data = await getCustomersDevices(tenantId);
     set({ data });
   },
-  addCustomer: async (customer: Customer) => {
+  addCustomer: async (customer: Customer): Promise<string> => {
     return await createCustomer(customer);
   },
 
-  updateCustomer : async (customer: Customer) => {
+  updateCustomer: async (customer: Customer): Promise<void> => {
     await updateCustomer(customer);
+  },
+
+  addDevice: async (device: NewDevice): Promise<string> => {
+    return await createDevice(device);
+  },
+
+  updateDevice: async (device: NewDevice): Promise<void> => {
+    await updateDevice(device);
   }
 }));

@@ -27,6 +27,16 @@ interface Device {
     brand?: string;
     type?: string;
     url?: string;
+    [key: string]: string | undefined; // Add this line
+}
+
+interface NewDevice {
+    id: string;
+    brand: string | null;
+    type: string | null;
+    commercialName: string;
+    techName: string;
+    url: string;
 }
 
 interface DeviceRepared {

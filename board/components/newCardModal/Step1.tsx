@@ -55,7 +55,6 @@ function Step1({ nextStep, customers }: Props) {
             handleHomeEndKeys
             id="customer"
             onChange={(event, newValue) => {
-              console.log('aca');
               if (newValue != null && newValue?.id !== 'new') {
                 setSelectedCustomer(newValue);
                 setValue('id', newValue.id);
@@ -96,15 +95,15 @@ function Step1({ nextStep, customers }: Props) {
 
 
       <form onSubmit={handleSubmit(handleRegistration, handleError)}>
-          <Controller
-            name="id"
-            defaultValue=""
-            control={control}
-            rules={registerOptions.id}
-            render={({ field }) => (
-              <Input {...field} type="hidden"/>
-            )}
-          />
+        <Controller
+          name="id"
+          defaultValue=""
+          control={control}
+          rules={registerOptions.id}
+          render={({ field }) => (
+            <Input {...field} type="hidden"/>
+          )}
+        />
 
         <Field className="mt-4">
           <Label>Name</Label>
