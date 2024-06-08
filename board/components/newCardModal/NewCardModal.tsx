@@ -27,6 +27,16 @@ function NewCardModal() {
     nextStep();
   };
 
+  const saveOrder = (partialOrder: NewOrder) => {
+    const newOrder = {
+      customerId: customer,
+      observations: partialOrder.observations,
+      deviceUnitId: partialOrder.deviceUnitId
+    } as NewOrder;
+
+    console.log(newOrder);
+  }
+
   const prevStep = () => {
     setSelectedIndex(selectedIndex - 1);
   };
@@ -34,15 +44,6 @@ function NewCardModal() {
   const nextStep = () => {
     setSelectedIndex(selectedIndex + 1);
   };
-
-  const saveOrder = (deviceUnit) => {
-    const orderData = {
-      customer: customer,
-      problem: deviceUnit.observations,
-      deviceUnit: deviceUnit.deviceUnitId
-    }
-    console.log(orderData)
-  }
 
   return (
     <ModalLayout>

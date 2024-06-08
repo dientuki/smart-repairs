@@ -16,6 +16,7 @@ interface Customer {
     lastName?: string;
     phone?: string;
     email?: string;
+    [key: string]: string | undefined; // Add this line
 }
 
 interface Device {
@@ -74,4 +75,10 @@ interface NewOrderComment {
 interface Images {
     bucketId: string;
     fileId: string;
+}
+
+interface NewOrder {
+    customerId?: String;
+    observations: String;
+    deviceUnitId: String;
 }

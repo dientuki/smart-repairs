@@ -1,6 +1,7 @@
 import { Autocomplete, Skeleton, TextField, createFilterOptions } from "@mui/material";
 import { Field, Input, Label, TabPanel } from '@headlessui/react';
 import { Controller, useForm, FieldValues, FieldErrors } from "react-hook-form";
+import { useOrderStore } from "@/store/OrderStore";
 import { useState } from "react";
 
 const filter = createFilterOptions<Customer>();
@@ -10,15 +11,26 @@ type Props = {
 }
 
 function Step1({ nextStep, customers }: Props) {
-  //const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(null);
+  const { addCustomer, updateCustomer } = useOrderStore();
   const { handleSubmit, control, formState: { errors }, setValue } = useForm();
-  let selectedCustomer: string | null = null;
+  const [ selectedCustomer, setSelectedCustomer ] = useState<Customer | null>(null);
 
-  const handleRegistration = (data: FieldValues ) => {
-    console.log(selectedCustomer);
-    if (selectedCustomer === null) return;
+  const handleRegistration = async (data: FieldValues ) => {
+    const toValidate = ['firstName', 'lastName', 'phone', 'email'];
+    let id: string;
 
-    nextStep(selectedCustomer);
+    if (selectedCustomer === null) {
+      id = await addCustomer(data as Customer);
+    } else {
+      id = selectedCustomer.id;
+      for (let i = 0, c = toValidate.length; i < c; i++) {
+        if (data[toValidate[i]] !== selectedCustomer[toValidate[i]]) {
+          await updateCustomer(data as Customer);
+          break;
+        }
+      }
+    }
+    nextStep(id);
   };
 
   const handleError = (errors: FieldErrors<FieldValues>) => {
@@ -26,6 +38,7 @@ function Step1({ nextStep, customers }: Props) {
   };
 
   const registerOptions = {
+    id: {required: false},
     firstName: { required: "First name is required" },
     lastName: { required: "Last Name is required" },
     phone: { required: "phone is required" },
@@ -40,17 +53,19 @@ function Step1({ nextStep, customers }: Props) {
           <Autocomplete
             selectOnFocus
             handleHomeEndKeys
-            id="combo-box-demo"
+            id="customer"
             onChange={(event, newValue) => {
+              console.log('aca');
               if (newValue != null && newValue?.id !== 'new') {
-                //setSelectedCustomer(newValue);
-                selectedCustomer = newValue.id;
+                setSelectedCustomer(newValue);
+                setValue('id', newValue.id);
                 setValue('firstName', newValue.firstName);
                 setValue('lastName', newValue.lastName);
                 setValue('phone', newValue.phone);
                 setValue('email', newValue.email);
               } else {
-                selectedCustomer = null;
+                setSelectedCustomer(null);
+                setValue('id', '');
                 setValue('firstName', '');
                 setValue('lastName', '');
                 setValue('phone', '');
@@ -81,6 +96,15 @@ function Step1({ nextStep, customers }: Props) {
 
 
       <form onSubmit={handleSubmit(handleRegistration, handleError)}>
+          <Controller
+            name="id"
+            defaultValue=""
+            control={control}
+            rules={registerOptions.id}
+            render={({ field }) => (
+              <Input {...field} type="hidden"/>
+            )}
+          />
 
         <Field className="mt-4">
           <Label>Name</Label>

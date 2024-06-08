@@ -34,6 +34,12 @@ type Mutation {
     addComment(orderId: String, isPublic: Boolean, comment: String): Comment!
         @field(resolver: "CommentMutation@create")
         @namespace(field: "App\\GraphQL\\Mutations")
+    addCustomer(customer: CustomerInput): Customer!
+        @field(resolver: "CustomerMutation@create")
+        @namespace(field: "App\\GraphQL\\Mutations")
+    updateCustomer(customerId: String, customer: CustomerInput): Customer!
+        @field(resolver: "CustomerMutation@update")
+        @namespace(field: "App\\GraphQL\\Mutations")
 }
 
 type Brand {
@@ -78,6 +84,13 @@ type Comment {
 type User {
     id: ID!
     name: String!
+    email: String!
+}
+
+input CustomerInput {
+    first_name: String!
+    last_name: String!
+    phone: String!
     email: String!
 }
 
