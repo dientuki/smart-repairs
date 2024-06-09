@@ -1,17 +1,22 @@
 import "react-modal-global/styles/modal.scss" // Imports essential styles for `ModalContainer`.
 import ModalLayout from "@/components/modal/ModalLayout";
-import { Field, Input, Label, Tab, TabGroup, TabList, TabPanel, TabPanels } from '@headlessui/react'
+import { Tab, TabGroup, TabList, TabPanels } from '@headlessui/react'
 import { useEffect, useState } from "react";
 import Step1 from "@/components/newCardModal/Step1";
 import Step2 from "@/components/newCardModal/Step2";
 import Step3 from "@/components/newCardModal/Step3";
 import { useOrderStore } from "@/store/OrderStore";
+import { useBoardStore } from "@/store/BoardStore";
+import { useModalWindow } from "react-modal-global";
+
 
 function NewCardModal() {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const { data, getData, addOrder } = useOrderStore();
   const [customer, setCustomer] = useState<string | null>(null);
   const [device, setDevice] = useState<string | null>(null);
+  const { getBoard } = useBoardStore();
+  const modal = useModalWindow();
 
   useEffect(() => {
     getData("01HZJ9PYBNDCMQYHGCXMFHBFK3");
@@ -34,6 +39,8 @@ function NewCardModal() {
     } as NewOrder;
 
     await addOrder(newOrder);
+    await getBoard();
+    modal.close();
   }
 
   const prevStep = () => {
