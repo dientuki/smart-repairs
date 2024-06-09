@@ -2,7 +2,7 @@ export const getCustomersDevices = async (tenantId: string) => {
 
   //01HZJ9PYBNDCMQYHGCXMFHBFK3
 
-  const data = await fetch('http://localhost/graphql', {
+  const data = await fetch('/graphql', {
     method: 'POST',
     headers: {
         'Content-Type': 'application/json',

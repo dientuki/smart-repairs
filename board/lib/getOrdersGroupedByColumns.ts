@@ -1,6 +1,6 @@
 export const getOrdersGroupedByColumns = async () => {
 
-    const data = await fetch('http://localhost/graphql', {
+    const data = await fetch('/graphql', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',

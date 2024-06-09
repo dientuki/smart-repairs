@@ -1,6 +1,6 @@
 export const createOrder = async (newOrder: NewOrder) => {
     console.log(newOrder)
-    await fetch('http://localhost/graphql', {
+    await fetch('/graphql', {
         method: 'POST',
         headers: {
                 'Content-Type': 'application/json',

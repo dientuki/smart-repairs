@@ -1,6 +1,6 @@
 export const createCustomer = async(customer: Customer) => {
 
-    const data = await fetch('http://localhost/graphql', {
+    const data = await fetch('/graphql', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -27,7 +27,7 @@ export const createCustomer = async(customer: Customer) => {
 }
 
 export const updateCustomer = async(customer: Customer) => {
-    await fetch('http://localhost/graphql', {
+    await fetch('/graphql', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
