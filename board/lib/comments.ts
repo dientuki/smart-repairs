@@ -1,6 +1,6 @@
 export const updateCommentVisibility = async (commentId: string, isPublic: boolean) => {
 
-  await fetch('http://localhost/graphql', {
+  await fetch('/graphql', {
     method: 'POST',
     headers: {
         'Content-Type': 'application/json',
@@ -17,7 +17,7 @@ export const updateCommentVisibility = async (commentId: string, isPublic: boole
 
 export const updateComment = async (commentId: string, text: string) => {
 
-  await fetch('http://localhost/graphql', {
+  await fetch('/graphql', {
     method: 'POST',
     headers: {
         'Content-Type': 'application/json',
@@ -34,7 +34,7 @@ export const updateComment = async (commentId: string, text: string) => {
 
 export const deleteComment = async (commentId: string) => {
 
-  await fetch('http://localhost/graphql', {
+  await fetch('/graphql', {
     method: 'POST',
     headers: {
         'Content-Type': 'application/json',
@@ -51,7 +51,7 @@ export const deleteComment = async (commentId: string) => {
 
 export const addComment = async (newComment:NewOrderComment) => {
 
-  const data = await fetch('http://localhost/graphql', {
+  const data = await fetch('/graphql', {
     method: 'POST',
     headers: {
         'Content-Type': 'application/json',

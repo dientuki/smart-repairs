@@ -1,5 +1,5 @@
 export async function createDeviceUnit(deviceUnit: DeviceUnit): Promise<string> {
-    const data = await fetch('http://localhost/graphql', {
+    const data = await fetch('/graphql', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -26,7 +26,7 @@ export async function createDeviceUnit(deviceUnit: DeviceUnit): Promise<string> 
 }
 
 export async function updateDeviceUnit(deviceUnit: DeviceUnit): Promise<void> {
-    await fetch('http://localhost/graphql', {
+    await fetch('/graphql', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
