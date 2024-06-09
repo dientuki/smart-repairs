@@ -4,9 +4,59 @@ interface Board {
 
 type TypedColumn = "for budgeting" | "budgeting" | "budgeted" | "to do" | "repairing" | "repaired";
 
+enum UnlockTypeEnum {
+    NONE = 'none',
+    CODE = 'code',
+    PATTERN = 'pattern',
+}
 interface Column {
     id: TypedColumn;
     orders: Order[];
+}
+
+interface Customer {
+    id: string;
+    label: string;
+    firstName?: string;
+    lastName?: string;
+    phone?: string;
+    email?: string;
+    [key: string]: string | undefined; // Add this line
+}
+
+interface Device {
+    id: string;
+    label: string;
+    commercialName?: string;
+    techName?: string;
+    brand?: string;
+    type?: string;
+    url?: string;
+    [key: string]: string | undefined; // Add this line
+}
+
+interface DeviceUnit {
+    id: string | null;
+    serial: string;
+    unlockType: UnlockTypeEnum;
+    unlockCode?: string;
+    deviceId: string | null;
+}
+
+interface NewDevice {
+    id: string;
+    brand: string | null;
+    type: string | null;
+    commercialName: string;
+    techName: string;
+    url: string;
+}
+
+interface DeviceRepared {
+    id: string;
+    label: string;
+    serial?: string;
+    deviceId?: string;
 }
 
 interface Order {
@@ -22,6 +72,7 @@ interface Order {
     deviceTechName: string,
     deviceSerial: string,
     customerFullName: string,
+    customerPhone?: string,
     observation: string,
     comments?: OrderComment[],
     commentsQuantity?: number,
@@ -47,4 +98,20 @@ interface NewOrderComment {
 interface Images {
     bucketId: string;
     fileId: string;
+}
+
+interface NewOrder {
+    customerId?: String;
+    observation: String;
+    deviceUnitId: String;
+}
+
+interface Brand {
+    id: string;
+    label: string;
+}
+
+interface DeviceType {
+    id: string;
+    label: string;
 }

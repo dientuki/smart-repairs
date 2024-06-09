@@ -1,6 +1,11 @@
-import { getOrder } from "@/lib/getOrder";
-import { addComment, updateCommentVisibility, updateComment, deleteComment } from "@/lib/comments";
 import { create } from 'zustand'
+import { getOrder } from "@/lib/getOrder";
+import { getCustomersDevices } from "@/lib/createOrder";
+import { addComment, updateCommentVisibility, updateComment, deleteComment } from "@/lib/comments";
+import { createCustomer, updateCustomer } from "@/lib/customers";
+import { createDevice, updateDevice } from "@/lib/devices";
+import { createDeviceUnit, updateDeviceUnit } from "@/lib/deviceUnits";
+import { createOrder } from "@/lib/order";
 
 interface OrderStore {
     order: Order,
@@ -10,6 +15,20 @@ interface OrderStore {
     updateComment: (commentId: string, text: string) => void,
     deleteComment: (commentId: string) => void,
     addComment: (newComment:NewOrderComment) => Promise<OrderComment>
+
+    data: any,
+    getData: (tenantId:string) => Promise<any>
+
+    addCustomer: (customer: Customer) => Promise<string>
+    updateCustomer: (customer: Customer) => Promise<void>
+
+    addDevice: (device: NewDevice) => Promise<string>
+    updateDevice: (device: NewDevice) => Promise<void>
+
+    addDeviceUnit: (deviceUnit: DeviceUnit) => Promise<string>
+    updateDeviceUnit: (deviceUnit: DeviceUnit) => Promise<void>
+
+    addOrder: (newOrder: NewOrder) => Promise<void>
 }
 
 export const useOrderStore = create<OrderStore>((set) => ({
@@ -33,5 +52,38 @@ export const useOrderStore = create<OrderStore>((set) => ({
 
   addComment: async (newComment:NewOrderComment) => {
     return await addComment(newComment);
-  }
+  },
+
+  data: {} as any,
+  getData: async (tenantId:string) => {
+    const data = await getCustomersDevices(tenantId);
+    set({ data });
+  },
+  addCustomer: async (customer: Customer): Promise<string> => {
+    return await createCustomer(customer);
+  },
+
+  updateCustomer: async (customer: Customer): Promise<void> => {
+    await updateCustomer(customer);
+  },
+
+  addDevice: async (device: NewDevice): Promise<string> => {
+    return await createDevice(device);
+  },
+
+  updateDevice: async (device: NewDevice): Promise<void> => {
+    await updateDevice(device);
+  },
+
+  addDeviceUnit: async (deviceUnit: DeviceUnit): Promise<string> => {
+    return await createDeviceUnit(deviceUnit);
+  },
+
+  updateDeviceUnit: async (deviceUnit: DeviceUnit): Promise<void> => {
+    await updateDeviceUnit(deviceUnit);
+  },
+
+  addOrder: async (newOrder: NewOrder): Promise<void> => {
+    await createOrder(newOrder);
+  },
 }));

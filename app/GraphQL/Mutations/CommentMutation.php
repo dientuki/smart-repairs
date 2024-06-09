@@ -56,7 +56,7 @@ final readonly class CommentMutation
         //dd($args);
 
         return OrderComment::create([
-            'id' => (string) Str::ulid(),
+            'id' => (string) Str::upper(Str::ulid()),
             'order_id' => $args['orderId'],
             'team_id' => $team,
             'comment' => strip_tags($args['comment']),

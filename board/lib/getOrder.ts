@@ -15,6 +15,7 @@ export const getOrder = async (id: string) => {
                         customer {
                             first_name
                             last_name
+                            phone
                         }
                         comments {
                             id
@@ -68,8 +69,6 @@ export const getOrder = async (id: string) => {
 
     }, []);
 
-
-
     return {
         $id: json.data.order.id,
         createdAt: json.data.order.created_at,
@@ -83,6 +82,7 @@ export const getOrder = async (id: string) => {
         deviceTechName: json.data.order.device_unit.device.tech_name,
         deviceSerial: json.data.order.device_unit.serial,
         customerFullName: `${json.data.order.customer.first_name} ${json.data.order.customer.last_name}`,
+        customerPhone: json.data.order.customer.phone,
         observation: json.data.order.observation,
         comments: comments
     } as Order;

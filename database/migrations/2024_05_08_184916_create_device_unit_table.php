@@ -21,7 +21,6 @@ return new class extends Migration
 
             $table->foreignUlid('team_id')->constrained();
             $table->foreignUlid('device_id')->constrained();
-            $table->foreignUlid('order_id')->constrained();
 
             $table->timestamps();
         });

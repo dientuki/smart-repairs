@@ -3,22 +3,26 @@
 namespace App\Models;
 
 use App\Enum\OrderStatusEnum;
-use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Order extends ModelWithTeam
 {
     use HasFactory;
 
-    protected $fillable = ['status', 'customer_id', 'team_id'];
+    protected $fillable = ['customer_id', 'team_id', 'user_id', 'device_unit_id', 'observation'];
 
-    public function customer() {
+    protected $casts = [
+        'was_edited' => 0,
+    ];
+
+    public function customer():BelongsTo {
         return $this->belongsTo(Customer::class);
     }
 
-    public function device_unit() {
-        return $this->hasOne(DeviceUnit::class , 'order_id');
+    public function device_unit():BelongsTo {
+        return $this->belongsTo(DeviceUnit::class);
     }
 
     public function comments(): HasMany {

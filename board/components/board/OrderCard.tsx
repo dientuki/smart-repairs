@@ -16,7 +16,6 @@ type Props = {
 function OrderCard({ order, index, id, innerRef, draggableProps, dragHandleProps }: Props) {
   const openCard = () => Modal.open(ViewCardModal, { order: order.$id });
 
-
   return (
     <div
         ref={innerRef}

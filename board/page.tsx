@@ -6,6 +6,7 @@ import { ModalContainer } from "react-modal-global";
 import { Suspense } from "react";
 import './global.css'
 import ModalLayout from "@/components/modal/ModalLayout";
+import AddButton from "./components/AddButton";
 
 const appElement = document.getElementById('app');
 
@@ -14,6 +15,7 @@ if (appElement) {
         <>
             <Header />
             <Board />
+            <AddButton />
             <Suspense>
                 <ModalContainer controller={Modal} template={ModalLayout} />
             </Suspense>

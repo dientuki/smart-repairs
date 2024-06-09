@@ -1,7 +1,6 @@
 import "react-modal-global/styles/modal.scss" // Imports essential styles for `ModalContainer`.
 import { useModalWindow } from "react-modal-global";
 import { useOrderStore } from "@/store/OrderStore";
-import { Textarea } from '@headlessui/react'
 import Comments from "@/components/Comments";
 import { useEffect } from "react";
 import ModalLayout from "@/components/modal/ModalLayout";
@@ -40,6 +39,7 @@ function ViewCardModal() {
               <div className="border border-gray-300 p-3 rounded mt-4">
                 <p className="my-2">Fecha de entrada: {order.createdAtDate?.toDateString()} {order.createdAtDate?.toLocaleTimeString()}</p>
                 <p className="my-2">Cliente: {order.customerFullName}</p>
+                <p className="my-2">Whatsap: <a target="_blank" href={`https://wa.me/${order.customerPhone}`}>whatsap</a></p>
                 <p className="my-2">Tecnico: Usuario</p>
                 <p className="my-2">Vendedor: Usuario</p>
               </div>

@@ -24,7 +24,7 @@
     "baseUrl": "./board",
     "paths": {
       "@/*": ["./*"]
-  }
+    }
   },
   "include": ["board"],
   "references": [{ "path": "./tsconfig.node.json" }],

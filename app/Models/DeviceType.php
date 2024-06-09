@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Traits\HasImageTrait;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class DeviceType extends ModelAuditable
@@ -17,4 +18,11 @@ class DeviceType extends ModelAuditable
         'name',
         'hash_filename',
     ];
+
+    public function label(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => $this->name
+        );
+    }
 }

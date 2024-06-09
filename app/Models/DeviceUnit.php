@@ -13,4 +13,9 @@ class DeviceUnit extends ModelWithTeam
     public function device() {
         return $this->belongsTo(Device::class);
     }
+
+    public static function getDeviceUnitsByTenant($tenant)
+    {
+        return static::where('team_id', '01HZRBD546A6AE8CP91AEP1N64')->get();
+    }
 }
