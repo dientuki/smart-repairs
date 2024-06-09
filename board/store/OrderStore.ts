@@ -4,6 +4,7 @@ import { getCustomersDevices } from "@/lib/createOrder";
 import { addComment, updateCommentVisibility, updateComment, deleteComment } from "@/lib/comments";
 import { createCustomer, updateCustomer } from "@/lib/customers";
 import { createDevice, updateDevice } from "@/lib/devices";
+import { createDeviceUnit, updateDeviceUnit } from "@/lib/deviceUnits";
 
 interface OrderStore {
     order: Order,
@@ -22,7 +23,9 @@ interface OrderStore {
 
     addDevice: (device: NewDevice) => Promise<string>
     updateDevice: (device: NewDevice) => Promise<void>
-    // deleteDevice: (deviceId: string) => void
+
+    addDeviceUnit: (deviceUnit: DeviceUnit) => Promise<string>
+    updateDeviceUnit: (deviceUnit: DeviceUnit) => Promise<void>
 
     // addOrder: (newOrder: NewOrder) => void
     // updateOrder: (order: Order) => void
@@ -71,5 +74,14 @@ export const useOrderStore = create<OrderStore>((set) => ({
 
   updateDevice: async (device: NewDevice): Promise<void> => {
     await updateDevice(device);
-  }
+  },
+
+  addDeviceUnit: async (deviceUnit: DeviceUnit): Promise<string> => {
+    return await createDeviceUnit(deviceUnit);
+  },
+
+  updateDeviceUnit: async (deviceUnit: DeviceUnit): Promise<void> => {
+    await updateDeviceUnit(deviceUnit);
+  },
+
 }));

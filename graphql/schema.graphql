@@ -47,6 +47,12 @@ type Mutation {
     updateDevice(deviceId: String, device: DeviceInput): Device!
         @field(resolver: "DeviceMutation@update")
         @namespace(field: "App\\GraphQL\\Mutations")
+    addDeviceUnit(deviceUnit: DeviceUnitInput): DeviceUnit!
+        @field(resolver: "DeviceUnitMutation@create")
+        @namespace(field: "App\\GraphQL\\Mutations")
+    updateDeviceUnit(deviceUnitId: String, deviceUnit: DeviceUnitInput): DeviceUnit!
+        @field(resolver: "DeviceUnitMutation@update")
+        @namespace(field: "App\\GraphQL\\Mutations")
 }
 
 type Brand {
@@ -109,6 +115,13 @@ type Customer {
     fullName: String!
     phone: String!
     email: String!
+}
+
+input DeviceUnitInput {
+    serial: String!
+    device_id: String!
+    unlock_type: String!
+    unlock_code: String
 }
 
 type DeviceUnit {

@@ -4,6 +4,11 @@ interface Board {
 
 type TypedColumn = "for budgeting" | "budgeting" | "budgeted" | "to do" | "repairing" | "repaired";
 
+enum UnlockTypeEnum {
+    NONE = 'none',
+    CODE = 'code',
+    PATTERN = 'pattern',
+}
 interface Column {
     id: TypedColumn;
     orders: Order[];
@@ -28,6 +33,14 @@ interface Device {
     type?: string;
     url?: string;
     [key: string]: string | undefined; // Add this line
+}
+
+interface DeviceUnit {
+    id: string | null;
+    serial: string;
+    unlockType: UnlockTypeEnum;
+    unlockCode?: string;
+    deviceId: string | null;
 }
 
 interface NewDevice {
