@@ -5,6 +5,7 @@ import { addComment, updateCommentVisibility, updateComment, deleteComment } fro
 import { createCustomer, updateCustomer } from "@/lib/customers";
 import { createDevice, updateDevice } from "@/lib/devices";
 import { createDeviceUnit, updateDeviceUnit } from "@/lib/deviceUnits";
+import { createOrder } from "@/lib/order";
 
 interface OrderStore {
     order: Order,
@@ -27,9 +28,7 @@ interface OrderStore {
     addDeviceUnit: (deviceUnit: DeviceUnit) => Promise<string>
     updateDeviceUnit: (deviceUnit: DeviceUnit) => Promise<void>
 
-    // addOrder: (newOrder: NewOrder) => void
-    // updateOrder: (order: Order) => void
-    // deleteOrder: (orderId: string) => void
+    addOrder: (newOrder: NewOrder) => Promise<void>
 }
 
 export const useOrderStore = create<OrderStore>((set) => ({
@@ -84,4 +83,7 @@ export const useOrderStore = create<OrderStore>((set) => ({
     await updateDeviceUnit(deviceUnit);
   },
 
+  addOrder: async (newOrder: NewOrder): Promise<void> => {
+    await createOrder(newOrder);
+  },
 }));

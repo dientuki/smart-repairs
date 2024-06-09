@@ -50,7 +50,6 @@ function Step3({ prevStep, device, devicesRepared, nextStep }: Props) {
     };
 
     if (deviceUnitSelected === null) {
-      console.log('adding new device unit');
       id = await addDeviceUnit(deviceUnit);
     } else {
       await updateDeviceUnit(deviceUnit);
@@ -58,7 +57,7 @@ function Step3({ prevStep, device, devicesRepared, nextStep }: Props) {
 
     nextStep({
       deviceUnitId: id as string,
-      observations: data.observations,
+      observation: data.observation,
     });
   };
 
@@ -70,7 +69,7 @@ function Step3({ prevStep, device, devicesRepared, nextStep }: Props) {
     serial: { required: "First name is required" },
     unlockType: { required: "First name is required" },
     unlockCode: { },
-    observations: {required: "First name is required" },
+    observation: {required: "First name is required" },
   };
 
   return (
@@ -174,17 +173,17 @@ function Step3({ prevStep, device, devicesRepared, nextStep }: Props) {
         <Field className="mt-4">
           <Label className="">Problema</Label>
           <Controller
-            name="observations"
+            name="observation"
             control={control}
             defaultValue=""
-            rules={registerOptions.observations}
+            rules={registerOptions.observation}
             render={({ field }) => (
               <Input  {...field} className="border border-gray-300 p-3 block w-full rounded-lg" />
             )}
           />
-          {errors?.observations && errors.observations.message && (
+          {errors?.observation && errors.observation.message && (
             <small className="text-danger">
-              <span>{typeof errors.observations.message === 'string' ? errors.observations.message : JSON.stringify(errors.observations.message)}</span>
+              <span>{typeof errors.observation.message === 'string' ? errors.observation.message : JSON.stringify(errors.observation.message)}</span>
             </small>
           )}
 

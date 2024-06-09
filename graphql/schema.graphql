@@ -53,6 +53,9 @@ type Mutation {
     updateDeviceUnit(deviceUnitId: String, deviceUnit: DeviceUnitInput): DeviceUnit!
         @field(resolver: "DeviceUnitMutation@update")
         @namespace(field: "App\\GraphQL\\Mutations")
+    addOrder(order: OrderInput): Order!
+        @field(resolver: "OrderMutation@create")
+        @namespace(field: "App\\GraphQL\\Mutations")
 }
 
 type Brand {
@@ -62,6 +65,12 @@ type Brand {
     name: String!
     imageUrl: String!
     label: String!
+}
+
+input OrderInput {
+    customer_id: String!
+    device_unit_id: String!
+    observation: String!
 }
 
 type Order {

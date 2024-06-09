@@ -9,7 +9,7 @@ import { useOrderStore } from "@/store/OrderStore";
 
 function NewCardModal() {
   const [selectedIndex, setSelectedIndex] = useState(0);
-  const { data, getData } = useOrderStore();
+  const { data, getData, addOrder } = useOrderStore();
   const [customer, setCustomer] = useState<string | null>(null);
   const [device, setDevice] = useState<string | null>(null);
 
@@ -27,14 +27,13 @@ function NewCardModal() {
     nextStep();
   };
 
-  const saveOrder = (partialOrder: NewOrder) => {
+  const saveOrder =  async (partialOrder: NewOrder) => {
     const newOrder = {
+      ...partialOrder,
       customerId: customer,
-      observations: partialOrder.observations,
-      deviceUnitId: partialOrder.deviceUnitId
     } as NewOrder;
 
-    console.log(newOrder);
+    await addOrder(newOrder);
   }
 
   const prevStep = () => {
@@ -64,26 +63,8 @@ function NewCardModal() {
               <Step1 nextStep={goToStep2} customers={data.customers} />
               <Step2 prevStep={prevStep} nextStep={goToStep3} devices={data.devices} brands={data.brands} deviceTypes={data.deviceTypes}  />
               <Step3 prevStep={prevStep} nextStep={saveOrder} device={device} devicesRepared={data.devicesRepared} />
-
-              <TabPanel unmount={false}>
-                <Field>
-                  <Label className="">Imei</Label>
-                  <Input name="full_name" className="border border-gray-300 p-3 mt-3 block w-full rounded-lg " />
-                </Field>
-                <Field>
-                  <Label className="">Selector de codigo</Label>
-                  <Input name="full_name" className="border border-gray-300 p-3 mt-3 block w-full rounded-lg " />
-                </Field>
-                <Field>
-                  <Label className="">codigo/algo</Label>
-                  <Input name="full_name" className="border border-gray-300 p-3 mt-3 block w-full rounded-lg " />
-                </Field>
-                <Field>
-                  <Label className="">observaciones</Label>
-                  <Input name="full_name" className="border border-gray-300 p-3 mt-3 block w-full rounded-lg " />
-                </Field>
-              </TabPanel>
             </TabPanels>
+
           </TabGroup>
 
 

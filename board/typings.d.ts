@@ -102,7 +102,7 @@ interface Images {
 
 interface NewOrder {
     customerId?: String;
-    observations: String;
+    observation: String;
     deviceUnitId: String;
 }
 
