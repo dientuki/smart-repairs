@@ -1,50 +1,36 @@
+import { graphqlRequest } from "@/helper/functions";
+
 export const createCustomer = async(customer: Customer) => {
 
-    const data = await fetch('/graphql', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            query: `
-                mutation {
-                    addCustomer(customer: {
-                        first_name: "${customer.firstName}"
-                        last_name: "${customer.lastName}"
-                        phone: "${customer.phone}"
-                        email: "${customer.email}"
-                    }) {
-                        id
-                    }
-                }
-            `
-        })
-    });
+    const data = await graphqlRequest(`
+                        mutation {
+                            addCustomer(customer: {
+                                first_name: "${customer.firstName}"
+                                last_name: "${customer.lastName}"
+                                phone: "${customer.phone}"
+                                email: "${customer.email}"
+                            }) {
+                                id
+                            }
+                        }
+                    `);
 
     const json = await data.json();
 
     return json.data.addCustomer.id;
 }
 
-export const updateCustomer = async(customer: Customer) => {
-    await fetch('/graphql', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            query: `
-                mutation {
-                    updateCustomer(customerId: "${customer.id}", customer: {
-                        first_name: "${customer.firstName}"
-                        last_name: "${customer.lastName}"
-                        phone: "${customer.phone}"
-                        email: "${customer.email}"
-                    }) {
-                        id
-                    }
-                }
-            `
-        })
-    });
-}
+export const updateCustomer = (customer: Customer) => {
+    graphqlRequest(`
+        mutation {
+            updateCustomer(customerId: "${customer.id}", customer: {
+                first_name: "${customer.firstName}"
+                last_name: "${customer.lastName}"
+                phone: "${customer.phone}"
+                email: "${customer.email}"
+            }) {
+                id
+            }
+        }
+    `);
+};

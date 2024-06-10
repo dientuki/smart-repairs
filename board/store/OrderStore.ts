@@ -38,12 +38,12 @@ export const useOrderStore = create<OrderStore>((set) => ({
     set({ order });
   },
 
-  updateCommentVisibility: async (commentId: string, isPublic: boolean) => {
-    await updateCommentVisibility(commentId, isPublic);
+  updateCommentVisibility: (commentId: string, isPublic: boolean) => {
+    updateCommentVisibility(commentId, isPublic);
   },
 
-  updateComment: async (commentId: string, text: string) => {
-    await updateComment(commentId, text);
+  updateComment: (commentId: string, text: string) => {
+    updateComment(commentId, text);
   },
 
   deleteComment: async (commentId: string) => {
