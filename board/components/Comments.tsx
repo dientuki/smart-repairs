@@ -32,7 +32,7 @@ function Comments({ orderId, comments }: Props) {
       comment: text,
       isPublic: isPublic,
     };
-    console.log('antes manda', newComment)
+
     const comment = await addComment(newComment);
     setComments(currentComments => [...currentComments, comment]);
 

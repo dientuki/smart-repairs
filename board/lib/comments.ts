@@ -1,63 +1,32 @@
-export const updateCommentVisibility = async (commentId: string, isPublic: boolean) => {
+import { graphqlRequest } from "@/helper/functions";
 
-  await fetch('/graphql', {
-    method: 'POST',
-    headers: {
-        'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-        query: `
-            mutation {
-              updateCommentVisibility(commentId: "${commentId}", isPublic: ${isPublic})
-          }
-        `
-    })
-  });
+export const updateCommentVisibility = (commentId: string, isPublic: boolean) => {
+  graphqlRequest(`
+    mutation {
+      updateCommentVisibility(commentId: "${commentId}", isPublic: ${isPublic})
+    }
+  `);
 };
 
-export const updateComment = async (commentId: string, text: string) => {
-
-  await fetch('/graphql', {
-    method: 'POST',
-    headers: {
-        'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-        query: `
-            mutation {
-              updateComment(commentId: "${commentId}", text: "${text}")
-          }
-        `
-    })
-  });
+export const updateComment = (commentId: string, text: string) => {
+  graphqlRequest(`
+    mutation {
+      updateComment(commentId: "${commentId}", text: "${text}")
+    }
+  `);
 }
 
-export const deleteComment = async (commentId: string) => {
-
-  await fetch('/graphql', {
-    method: 'POST',
-    headers: {
-        'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-        query: `
-            mutation {
-              deleteComment(commentId: "${commentId}")
-          }
-        `
-    })
-  });
+export const deleteComment = (commentId: string) => {
+  graphqlRequest(`
+    mutation {
+      deleteComment(commentId: "${commentId}")
+    }
+  `);
 }
 
 export const addComment = async (newComment:NewOrderComment) => {
 
-  const data = await fetch('/graphql', {
-    method: 'POST',
-    headers: {
-        'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-        query: `
+  const data = await graphqlRequest(`
             mutation {
               addComment(
                 comment: "${newComment.comment}",
@@ -75,9 +44,7 @@ export const addComment = async (newComment:NewOrderComment) => {
                 }
               }
           }
-        `
-    })
-  });
+        `);
 
   const json = await data.json();
 
