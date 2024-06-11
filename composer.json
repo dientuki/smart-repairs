@@ -9,6 +9,7 @@
         "filament/filament": "^3.2",
         "laravel/framework": "^11.0",
         "laravel/tinker": "^2.9",
+        "laravel/ui": "^4.5",
         "mll-lab/laravel-graphiql": "^3.2",
         "nuwave/lighthouse": "^6.36",
         "owen-it/laravel-auditing": "^13.6"
