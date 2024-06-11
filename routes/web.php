@@ -7,8 +7,10 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/board', function () {
-    return view('board');
+Route::group(['middleware' => 'auth'], function() {
+    Route::get('/board', function () {
+        return view('board');
+    });
 });
 
 Auth::routes();
