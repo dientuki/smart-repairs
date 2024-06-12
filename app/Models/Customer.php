@@ -11,10 +11,9 @@ class Customer extends ModelWithTeam
 
     protected $fillable = ['first_name', 'last_name', 'phone', 'email', 'team_id'];
 
-    public static function getCustomers($teamId)
+    public static function getCustomers()
     {
-        //dd($teamId);
-        return self::where('team_id', '01HZRBD546A6AE8CP91AEP1N64')->get();
+        return self::where('team_id', auth()->user()->teams()->first()->id)->get();
     }
 
     /**

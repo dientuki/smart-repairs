@@ -26,19 +26,26 @@ final readonly class OrderMutation
         //$user = auth()->user();
         //$phone = $args['phone'];
 
-        return Order::updateStatus($args['id'], $args['status']);
+        $order = Order::find($args['id']);
+
+        if ($order && $order->team_id === auth()->user()->teams()->first()->id) {
+
+            return Order::updateStatus($args['id'], $args['status']);
+        }
+
+        return null;
     }
 
 
     public function create(null $root, array $args, GraphQLContext $context, ResolveInfo $resolveInfo): Order
     {
         return Order::create([
-            'id' => (string) Str::upper(Str::ulid()),
+            'id' => (string) Str::ulid(),
             'status' => OrderStatusEnum::ForBudgeting,
             'observation' => $args['order']['observation'],
             'customer_id' => $args['order']['customer_id'],
-            'team_id' => DB::table('teams')->first()->id,
-            'user_id' => DB::table('users')->first()->id,
+            'team_id' => auth()->user()->teams()->first()->id,
+            'user_id' => auth()->user()->id,
             'device_unit_id' => $args['order']['device_unit_id'],
         ]);
     }

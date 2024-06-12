@@ -21,10 +21,9 @@ final readonly class DeviceMutation
     public function create(null $root, array $args, GraphQLContext $context, ResolveInfo $resolveInfo): mixed
     {
         // TODO implement the resolver
-        //$user = auth()->user();
 
         return Device::create([
-            'id' => (string) Str::upper(Str::ulid()),
+            'id' => (string) Str::ulid(),
             'commercial_name' => $args['device']['commercial_name'],
             'tech_name' => $args['device']['tech_name'],
             'brand_id' => $args['device']['brand_id'],
