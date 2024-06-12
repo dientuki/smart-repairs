@@ -36,7 +36,22 @@ return [
 
             // Logs in a user if they are authenticated. In contrast to Laravel's 'auth'
             // middleware, this delegates auth and permission checks to the field level.
-            Nuwave\Lighthouse\Http\Middleware\AttemptAuthentication::class,
+            //Nuwave\Lighthouse\Http\Middleware\AttemptAuthentication::class,
+
+            Illuminate\Cookie\Middleware\EncryptCookies::class,
+            Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
+            Illuminate\Session\Middleware\StartSession::class,
+            Illuminate\View\Middleware\ShareErrorsFromSession::class,
+            //Illuminate\Foundation\Http\Middleware\ValidateCsrfToken::class,
+            Illuminate\Auth\Middleware\Authenticate::class,
+            Illuminate\Routing\Middleware\SubstituteBindings::class,
+
+
+
+            //Illuminate\Auth\Middleware\Authenticate::class,
+            //Illuminate\Session\Middleware\AuthenticateSession::class,
+            //Illuminate\Foundation\Http\Middleware\VerifyCsrfToken::class,
+
 
             // Logs every incoming GraphQL query.
             // Nuwave\Lighthouse\Http\Middleware\LogGraphQLQueries::class,
