@@ -27,7 +27,7 @@ final readonly class DeviceUnitMutation
         return DeviceUnit::create([
             'id' => (string) Str::upper(Str::ulid()),
             'device_id' => $args['deviceUnit']['device_id'],
-            'team_id' => auth()->user()->teams()->first()->id,
+            'team_id' => auth()->user()->teams->first()->id,
             'serial' => $args['deviceUnit']['serial'],
             'unlock_type' => $args['deviceUnit']['unlock_type'],
             'unlock_code' => $args['deviceUnit']['unlock_code'],
@@ -38,7 +38,7 @@ final readonly class DeviceUnitMutation
     {
         $deviceUnit = DeviceUnit::find($args['deviceUnitId']);
 
-        if ($deviceUnit && $deviceUnit->team_id === auth()->user()->teams()->first()->id) {
+        if ($deviceUnit && $deviceUnit->team_id === auth()->user()->teams->first()->id) {
             $deviceUnit->serial = $args['deviceUnit']['serial'];
             $deviceUnit->unlock_type = $args['deviceUnit']['unlock_type'];
             $deviceUnit->unlock_code = $args['deviceUnit']['unlock_code'];

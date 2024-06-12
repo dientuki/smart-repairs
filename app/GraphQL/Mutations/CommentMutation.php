@@ -64,7 +64,7 @@ final readonly class CommentMutation
         return OrderComment::create([
             'id' => (string) Str::ulid(),
             'order_id' => $args['orderId'],
-            'team_id' => auth()->user()->teams()->first()->id,
+            'team_id' => auth()->user()->teams->first()->id,
             'comment' => strip_tags($args['comment']),
             'user_id' => auth()->user()->id,
             'is_public' => $args['isPublic'],
