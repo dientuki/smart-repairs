@@ -10,6 +10,13 @@ use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 
 final readonly class CommentMutation
 {
+    private function isMyComment(string $commentId): bool {
+        $user = auth()->user();
+        $comment = OrderComment::find($commentId);
+
+        return $user && $user->id === $comment->user_id;
+    }
+
     /**
      * Return a value for the field.
      *
@@ -22,45 +29,44 @@ final readonly class CommentMutation
     public function updateVisibility(null $root, array $args, GraphQLContext $context, ResolveInfo $resolveInfo): mixed
     {
         // TODO implement the resolver
-        //$user = auth()->user();
-        //$phone = $args['phone'];
 
-        return OrderComment::updateVisibility($args['commentId'], $args['isPublic']);
+        if ($this->isMyComment($args['commentId'])) {
+            return OrderComment::updateVisibility($args['commentId'], $args['isPublic']);
+        }
+
+        return null;
     }
 
     public function updateText(null $root, array $args, GraphQLContext $context, ResolveInfo $resolveInfo): mixed
     {
         // TODO implement the resolver
-        //$user = auth()->user();
-        //$phone = $args['phone'];
+        if ($this->isMyComment($args['commentId'])) {
+            return OrderComment::updateText($args['commentId'], $args['text']);
+        }
 
-        return OrderComment::updateText($args['commentId'], $args['text']);
+        return null;
     }
 
     public function delete(null $root, array $args, GraphQLContext $context, ResolveInfo $resolveInfo): mixed
     {
         // TODO implement the resolver
-        //$user = auth()->user();
-        //$phone = $args['phone'];
+        if ($this->isMyComment($args['commentId'])) {
+            return OrderComment::destroy($args['commentId']);
+        }
 
-        return OrderComment::destroy($args['commentId']);
+        return null;
     }
 
     public function create(null $root, array $args, GraphQLContext $context, ResolveInfo $resolveInfo): mixed
     {
         // TODO implement the resolver
-        //$user = auth()->user();
-        //$phone = $args['phone'];
-        $team = DB::table('teams')->first()->id;
-        $user = DB::table('users')->first()->id;
-        //dd($args);
 
         return OrderComment::create([
-            'id' => (string) Str::upper(Str::ulid()),
+            'id' => (string) Str::ulid(),
             'order_id' => $args['orderId'],
-            'team_id' => $team,
+            'team_id' => auth()->user()->teams()->first()->id,
             'comment' => strip_tags($args['comment']),
-            'user_id' => $user,
+            'user_id' => auth()->user()->id,
             'is_public' => $args['isPublic'],
         ]);
     }

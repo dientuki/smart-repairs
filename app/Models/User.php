@@ -7,6 +7,7 @@ namespace App\Models;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Models\Contracts\HasTenants;
 use Filament\Panel;
+use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -19,6 +20,7 @@ class User extends Authenticatable implements FilamentUser, HasTenants, Auditabl
 {
     use HasFactory, Notifiable;
     use \OwenIt\Auditing\Auditable;
+    use HasUlids;
 
     /**
      * The attributes that are mass assignable.

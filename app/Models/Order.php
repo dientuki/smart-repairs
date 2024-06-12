@@ -30,7 +30,14 @@ class Order extends ModelWithTeam
     }
 
     public function getActiveOrders() {
-        return self::where('status', '!=', 'ready')->get();
+        $team = auth()->user()->teams()->get();
+
+        $teamIds = [];
+        foreach ($team as $t) {
+            $teamIds[] = $t->id;
+        }
+
+        return self::whereIn('team_id', $teamIds)->where('status', '!=', 'ready')->get();
     }
 
     /**

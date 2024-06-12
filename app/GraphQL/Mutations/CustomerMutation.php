@@ -22,28 +22,30 @@ final readonly class CustomerMutation
     public function create(null $root, array $args, GraphQLContext $context, ResolveInfo $resolveInfo): mixed
     {
         // TODO implement the resolver
-        //$user = auth()->user();
-
-        $team = DB::table('teams')->first()->id;
 
         return Customer::create([
-            'id' => (string) Str::upper(Str::ulid()),
+            'id' => (string) Str::ulid(),
             'first_name' => $args['customer']['first_name'],
             'last_name' => $args['customer']['last_name'],
             'phone' => $args['customer']['phone'],
             'email' => $args['customer']['email'],
-            'team_id' => $team
+            'team_id' => auth()->user()->teams()->first()->id
         ]);
     }
 
     public function update(null $root, array $args, GraphQLContext $context, ResolveInfo $resolveInfo): mixed
     {
         $customer = Customer::find($args['customerId']);
-        $customer->first_name = $args['customer']['first_name'];
-        $customer->last_name = $args['customer']['last_name'];
-        $customer->phone = $args['customer']['phone'];
-        $customer->email = $args['customer']['email'];
-        $customer->save();
-        return $customer;
+
+        if ($customer && $customer->team_id === auth()->user()->teams()->first()->id) {
+            $customer->first_name = $args['customer']['first_name'];
+            $customer->last_name = $args['customer']['last_name'];
+            $customer->phone = $args['customer']['phone'];
+            $customer->email = $args['customer']['email'];
+            $customer->save();
+            return $customer;
+        }
+
+        return null;
     }
 }
