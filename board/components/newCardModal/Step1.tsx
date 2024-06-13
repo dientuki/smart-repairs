@@ -3,10 +3,11 @@ import { Field, Input, Label, TabPanel } from '@headlessui/react';
 import { Controller, useForm, FieldValues, FieldErrors } from "react-hook-form";
 import { useOrderStore } from "@/store/OrderStore";
 import { useState } from "react";
+import { EnvelopeIcon, PhoneIcon } from "@heroicons/react/16/solid";
 
 const filter = createFilterOptions<Customer>();
 type Props = {
-  nextStep: (customerId: string) => void,
+  nextStep: (customer: CustomerFullName) => void,
   customers: Customer[],
 }
 
@@ -17,12 +18,14 @@ function Step1({ nextStep, customers }: Props) {
 
   const handleRegistration = async (data: FieldValues ) => {
     const toValidate = ['firstName', 'lastName', 'phone', 'email'];
-    let id: string;
+    const customer: CustomerFullName = {};
 
     if (selectedCustomer === null) {
-      id = await addCustomer(data as Customer);
+      customer.id = await addCustomer(data as Customer);
+      customer.fullName = data.firstName + ' ' + data.lastName;
     } else {
-      id = selectedCustomer.id;
+      customer.id = selectedCustomer.id;
+      customer.fullName = selectedCustomer.firstName + ' ' + selectedCustomer.lastName;
       for (let i = 0, c = toValidate.length; i < c; i++) {
         if (data[toValidate[i]] !== selectedCustomer[toValidate[i]]) {
           await updateCustomer(data as Customer);
@@ -30,7 +33,8 @@ function Step1({ nextStep, customers }: Props) {
         }
       }
     }
-    nextStep(id);
+
+    nextStep(customer);
   };
 
   const handleError = (errors: FieldErrors<FieldValues>) => {
@@ -48,7 +52,7 @@ function Step1({ nextStep, customers }: Props) {
   return (
     <TabPanel unmount={false}>
       <Field>
-        <Label>Cliente</Label>
+        <Label className="block mb-2 text-sm font-medium text-gray-900">Cliente</Label>
         {customers ? (
           <Autocomplete
             selectOnFocus
@@ -76,7 +80,7 @@ function Step1({ nextStep, customers }: Props) {
 
               if (params.inputValue !== '') {
                 filtered.push({
-                  label: `Add new client`,
+                  label: `Agregar nuevo cliente`,
                   id: 'new'
                 });
               }
@@ -85,7 +89,7 @@ function Step1({ nextStep, customers }: Props) {
             }}
             isOptionEqualToValue={() => true}
             options={customers}
-            renderInput={(params) => <TextField {...params} />}
+            renderInput={(params) => <TextField {...params} size="small" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" />}
             renderOption={(props, option) => <li {...props} key={option.id}>{option.label}</li>}
           />
         ) : (
@@ -105,86 +109,98 @@ function Step1({ nextStep, customers }: Props) {
           )}
         />
 
-        <Field className="mt-4">
-          <Label>Name</Label>
-          <Controller
-            name="firstName"
-            defaultValue=""
-            control={control}
-            rules={registerOptions.firstName}
-            render={({ field }) => (
-              <Input {...field} className="border border-gray-300 p-3 block w-full rounded-lg" />
+        <div className="grid gap-6 grid-cols-2 mt-4">
+          <Field>
+            <Label className="block mb-2 text-sm font-medium text-gray-900">Nombre</Label>
+            <Controller
+              name="firstName"
+              defaultValue=""
+              control={control}
+              rules={registerOptions.firstName}
+              render={({ field }) => (
+                <Input {...field} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" />
+              )}
+            />
+            {errors?.firstName && errors.firstName.message && (
+              <small className="text-danger">
+                <span>{typeof errors.firstName.message === 'string' ? errors.firstName.message : JSON.stringify(errors.firstName.message)}</span>
+              </small>
             )}
-          />
-          {errors?.firstName && errors.firstName.message && (
-            <small className="text-danger">
-              <span>{typeof errors.firstName.message === 'string' ? errors.firstName.message : JSON.stringify(errors.firstName.message)}</span>
-            </small>
-          )}
-        </Field>
+          </Field>
 
-        <Field className="mt-4">
-          <Label>Last Name</Label>
-          <Controller
-            name="lastName"
-            control={control}
-            defaultValue=""
-            rules={registerOptions.lastName}
-            render={({ field }) => (
-              <Input  {...field} className="border border-gray-300 p-3 block w-full rounded-lg" />
+          <Field>
+            <Label className="block mb-2 text-sm font-medium text-gray-900">Apellido</Label>
+            <Controller
+              name="lastName"
+              control={control}
+              defaultValue=""
+              rules={registerOptions.lastName}
+              render={({ field }) => (
+                <Input  {...field} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" />
+              )}
+            />
+            {errors?.lastName && errors.lastName.message && (
+              <small className="text-danger">
+                <span>{typeof errors.lastName.message === 'string' ? errors.lastName.message : JSON.stringify(errors.lastName.message)}</span>
+              </small>
             )}
-          />
-          {errors?.lastName && errors.lastName.message && (
-            <small className="text-danger">
-              <span>{typeof errors.lastName.message === 'string' ? errors.lastName.message : JSON.stringify(errors.lastName.message)}</span>
-            </small>
-          )}
+          </Field>
+        </div>
 
-        </Field>
+        <div className="grid gap-6 grid-cols-2 mt-4">
+          <Field>
+            <Label className="block mb-2 text-sm font-medium text-gray-900">Email</Label>
+            <div className="flex">
+              <div className="inline-flex items-center px-3 text-sm text-gray-900 bg-gray-200 border rounded-e-0 border-gray-300 border-e-0 rounded-s-md">
+                <EnvelopeIcon className="w-4 h-4 text-gray-500 " aria-hidden="true" />
+              </div>
+              <Controller
+                name="email"
+                control={control}
+                defaultValue=""
+                rules={registerOptions.email}
+                render={({ field }) => (
+                  <Input  {...field} className="rounded-none rounded-e-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5 " />
+                )}
+              />
 
-
-        <Field className="mt-4">
-          <Label>email</Label>
-          <Controller
-            name="email"
-            control={control}
-            defaultValue=""
-            rules={registerOptions.email}
-            render={({ field }) => (
-              <Input  {...field} className="border border-gray-300 p-3 block w-full rounded-lg" />
+            </div>
+            {errors?.email && errors.email.message && (
+              <small className="text-danger">
+                <span>{typeof errors.email.message === 'string' ? errors.email.message : JSON.stringify(errors.email.message)}</span>
+              </small>
             )}
-          />
-          {errors?.email && errors.email.message && (
-            <small className="text-danger">
-              <span>{typeof errors.email.message === 'string' ? errors.email.message : JSON.stringify(errors.email.message)}</span>
-            </small>
-          )}
+          </Field>
 
-        </Field>
-
-        <Field className="mt-4">
-          <Label>phone</Label>
-          <Controller
-            name="phone"
-            control={control}
-            defaultValue=""
-            rules={registerOptions.phone}
-            render={({ field }) => (
-              <Input  {...field} className="border border-gray-300 p-3 block w-full rounded-lg" />
+          <Field>
+            <Label className="block mb-2 text-sm font-medium text-gray-900">Telefono</Label>
+            <div className="flex">
+              <div className="inline-flex items-center px-3 text-sm text-gray-900 bg-gray-200 border rounded-e-0 border-gray-300 border-e-0 rounded-s-md">
+                <PhoneIcon className="w-4 h-4 text-gray-500 " aria-hidden="true" />
+              </div>
+              <Controller
+                name="phone"
+                control={control}
+                defaultValue=""
+                rules={registerOptions.phone}
+                render={({ field }) => (
+                  <Input  {...field} className="rounded-none rounded-e-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5 " />
+                )}
+              />
+            </div>
+            <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">Completar con el codigo de pais correspondiente.</p>
+            {errors?.phone && errors.phone.message && (
+              <small className="text-danger">
+                <span>{typeof errors.phone.message === 'string' ? errors.phone.message : JSON.stringify(errors.phone.message)}</span>
+              </small>
             )}
-          />
-          {errors?.phone && errors.phone.message && (
-            <small className="text-danger">
-              <span>{typeof errors.phone.message === 'string' ? errors.phone.message : JSON.stringify(errors.phone.message)}</span>
-            </small>
-          )}
+          </Field>
+        </div>
 
-        </Field>
-
-        <input type="submit" className="mt-6 rounded-md bg-sky-600 px-3 py-1.5 text-sm font-bold leading-6 text-white shadow-sm hover:bg-sky-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-600" />
-
+        <div className="flex justify-end mt-6">
+          <button type="submit" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center w-1/4">Siguiente</button>
+        </div>
       </form>
-
     </TabPanel>
   )
 }

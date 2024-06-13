@@ -13,17 +13,18 @@ import { useModalWindow } from "react-modal-global";
 function NewCardModal() {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const { data, getData, addOrder } = useOrderStore();
-  const [customer, setCustomer] = useState<string | null>(null);
+  const [customer, setCustomer] = useState<CustomerFullName | null>(null);
   const [device, setDevice] = useState<string | null>(null);
   const { getBoard } = useBoardStore();
   const modal = useModalWindow();
+  const date = new Date();
 
   useEffect(() => {
     getData("01HZJ9PYBNDCMQYHGCXMFHBFK3");
   }, [getData]);
 
-  const goToStep2 = (customerId: string) => {
-    setCustomer(customerId);
+  const goToStep2 = (customer: CustomerFullName) => {
+    setCustomer(customer);
     nextStep();
   };
 
@@ -35,7 +36,7 @@ function NewCardModal() {
   const saveOrder =  async (partialOrder: NewOrder) => {
     const newOrder = {
       ...partialOrder,
-      customerId: customer,
+      customerId: customer?.id,
     } as NewOrder;
 
     await addOrder(newOrder);
@@ -55,18 +56,42 @@ function NewCardModal() {
     <ModalLayout>
       <div className="flex flex-row h-full relative z-50">
         <div className="basis-3/4 pr-6 overflow-y-scroll mr-3">
-          <h2 className="text-2xl font-medium leading-6 text-gray-900">
+          <h2 className="text-2xl font-medium leading-6 text-gray-900 mb-6">
             Creacion de orden
           </h2>
 
-          <TabGroup defaultIndex={0} selectedIndex={selectedIndex} onChange={setSelectedIndex}>
-            <TabList className="my-5">
-              <Tab className="mr-2 border border-gray-300 p-3">Informacion del cliente</Tab>
-              <Tab className="mx-2 border border-gray-300 p-3">Informacion del equipo</Tab>
-              <Tab className="mx-2 border border-gray-300 p-3">Problema</Tab>
+          <TabGroup defaultIndex={0} selectedIndex={selectedIndex} onChange={setSelectedIndex} className="pl-1 pb-1">
+            <TabList className="flex items-center w-full justify-between border rounded">
+              <Tab className="flex items-center data-[selected]:text-blue-600 text-gray-500  space-x-2.5 p-2 grow">
+                <span className="flex items-center justify-center w-8 h-8 border border-gray-500 rounded-full  ">
+                    1
+                </span>
+                <span>
+                    <h3 className="font-medium leading-tight">Cliente</h3>
+                    <p className="text-sm">Informacion del cliente</p>
+                </span>
+              </Tab>
+              <Tab className="flex items-center data-[selected]:text-blue-600 text-gray-500 space-x-2.5 p-2 grow">
+                <span className="flex items-center justify-center w-8 h-8 border border-gray-500 rounded-full  ">
+                    2
+                </span>
+                <span>
+                    <h3 className="font-medium leading-tight">Equipo</h3>
+                    <p className="text-sm">Informacion general del equipo</p>
+                </span>
+              </Tab>
+              <Tab className="flex items-center data-[selected]:text-blue-600 text-gray-500 space-x-2.5 p-2 grow">
+                <span className="flex items-center justify-center w-8 h-8 border border-gray-500 rounded-full  ">
+                    3
+                </span>
+                <span>
+                    <h3 className="font-medium leading-tight">Problema</h3>
+                    <p className="text-sm">Detalle del problema a resolver</p>
+                </span>
+              </Tab>
             </TabList>
-            <TabPanels>
 
+            <TabPanels className="mt-4">
               <Step1 nextStep={goToStep2} customers={data.customers} />
               <Step2 prevStep={prevStep} nextStep={goToStep3} devices={data.devices} brands={data.brands} deviceTypes={data.deviceTypes}  />
               <Step3 prevStep={prevStep} nextStep={saveOrder} device={device} devicesRepared={data.devicesRepared} />
@@ -80,13 +105,13 @@ function NewCardModal() {
         <div className="basis-1/4">
           <p>Estado: FIJO</p>
           <div className="border border-gray-300 p-3 rounded mt-4">
-            <p className="my-2">Fecha de entrada: Fijo</p>
-            <p className="my-2">Cliente: Elegir</p>
-            <p className="my-2">Vendedor: Fijo</p>
+            <p className="my-2">Fecha de entrada: {date.toDateString()} {date.toLocaleTimeString()} </p>
+            <p className="my-2">Vendedor: </p>
+
           </div>
           <div className="border border-gray-300 p-3 rounded mt-4">
-            <p className="my-2">Desbloqueo: Codigo/patron</p>
-            <p className="my-2">Validaciones: Usuario</p>
+            <p className="my-2">Cliente: {customer?.fullName} </p>
+            <p className="my-2">Telefono: </p>
           </div>
         </div>
       </div>

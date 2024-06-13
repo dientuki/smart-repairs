@@ -14,6 +14,11 @@ interface Column {
     orders: Order[];
 }
 
+interface CustomerFullName {
+    id?: string;
+    fullName?: string;
+}
+
 interface Customer {
     id: string;
     label: string;
