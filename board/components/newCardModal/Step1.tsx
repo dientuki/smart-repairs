@@ -80,8 +80,8 @@ function Step1({ nextStep, customers }: Props) {
 
               if (params.inputValue !== '') {
                 filtered.push({
-                  label: `Agregar nuevo cliente`,
-                  id: 'new'
+                  id: 'new',
+                  label: 'Agregar nuevo cliente',
                 });
               }
 

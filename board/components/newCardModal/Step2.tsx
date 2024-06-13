@@ -105,8 +105,8 @@ function Step2({ nextStep, prevStep, devices, brands, deviceTypes }: Props) {
 
               if (params.inputValue !== '') {
                 filtered.push({
-                  label: `Add new device`,
-                  id: 'new'
+                  id: 'new',
+                  label: 'Agregar equipo nuevo',
                 });
               }
 
@@ -133,7 +133,6 @@ function Step2({ nextStep, prevStep, devices, brands, deviceTypes }: Props) {
         />
 
         <div className="grid gap-6 grid-cols-2 mt-4">
-
           <Field>
             <Label className="block mb-2 text-sm font-medium text-gray-900">Tipo de equipo</Label>
             { brands &&
@@ -196,7 +195,6 @@ function Step2({ nextStep, prevStep, devices, brands, deviceTypes }: Props) {
                 <span>{typeof errors.brand.message === 'string' ? errors.brand.message : JSON.stringify(errors.brand.message)}</span>
               </small>
             )}
-
           </Field>
         </div>
 
@@ -260,7 +258,6 @@ function Step2({ nextStep, prevStep, devices, brands, deviceTypes }: Props) {
                 <span>{typeof errors.url.message === 'string' ? errors.url.message : JSON.stringify(errors.url.message)}</span>
               </small>
             )}
-
           </Field>
         </div>
 
