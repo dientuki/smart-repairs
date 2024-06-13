@@ -163,7 +163,6 @@ function Step1({ nextStep, customers }: Props) {
                   <Input  {...field} className="rounded-none rounded-e-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5 " />
                 )}
               />
-
             </div>
             {errors?.email && errors.email.message && (
               <small className="text-danger">

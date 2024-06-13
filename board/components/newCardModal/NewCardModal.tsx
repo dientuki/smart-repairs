@@ -28,7 +28,7 @@ function NewCardModal() {
     nextStep();
   };
 
-  const goToStep3 = (deviceId: string) => {
+  const goToStep3 = (device: string) => {
     setDevice(deviceId);
     nextStep();
   };
@@ -111,7 +111,7 @@ function NewCardModal() {
           </div>
           <div className="border border-gray-300 p-3 rounded mt-4">
             <p className="my-2">Cliente: {customer?.fullName} </p>
-            <p className="my-2">Telefono: </p>
+            <p className="my-2">Equipo: </p>
           </div>
         </div>
       </div>
