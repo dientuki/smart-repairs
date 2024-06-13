@@ -7,7 +7,7 @@ import { GlobeAltIcon } from "@heroicons/react/16/solid";
 
 const filter = createFilterOptions<Device>();
 type Props = {
-  nextStep: (customerId: string) => void,
+  nextStep: (device: DeviceInfo) => void,
   prevStep: () => void,
   devices: Device[],
   brands: Brand[],
@@ -35,13 +35,17 @@ function Step2({ nextStep, prevStep, devices, brands, deviceTypes }: Props) {
       brand: comboBox.brand,
       type: comboBox.type
     }
-    let id: string;
+    const device: DeviceInfo = {};
 
     if (selectedDevice === null) {
-      id = await addDevice(newDevice);
+      device.id = await addDevice(newDevice);
+      device.label = newDevice.brand + ' ' + newDevice.commercialName;
+      device.type = newDevice.type;
     } else {
-      id = selectedDevice.id;
       newDevice.id = selectedDevice.id;
+      device.id = selectedDevice.id;
+      device.label = selectedDevice.brand + ' ' + selectedDevice.commercialName;
+      device.type = selectedDevice.type;
       for (let i = 0, c = toValidate.length; i < c; i++) {
         if (data[toValidate[i]] !== selectedDevice[toValidate[i]]) {
           await updateDevice(newDevice);
@@ -49,7 +53,7 @@ function Step2({ nextStep, prevStep, devices, brands, deviceTypes }: Props) {
         }
       }
     }
-    nextStep(id);
+    nextStep(device);
   };
 
   const handleError = (errors: FieldErrors<FieldValues>) => {

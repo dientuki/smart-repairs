@@ -29,6 +29,12 @@ interface Customer {
     [key: string]: string | undefined; // Add this line
 }
 
+interface DeviceInfo {
+    id?: string;
+    label?: string;
+    type?: string | null;
+}
+
 interface Device {
     id: string;
     label: string;

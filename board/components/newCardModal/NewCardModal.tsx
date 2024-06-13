@@ -14,7 +14,7 @@ function NewCardModal() {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const { data, getData, addOrder } = useOrderStore();
   const [customer, setCustomer] = useState<CustomerFullName | null>(null);
-  const [device, setDevice] = useState<string | null>(null);
+  const [device, setDevice] = useState<DeviceInfo | null>(null);
   const { getBoard } = useBoardStore();
   const modal = useModalWindow();
   const date = new Date();
@@ -28,8 +28,8 @@ function NewCardModal() {
     nextStep();
   };
 
-  const goToStep3 = (device: string) => {
-    setDevice(deviceId);
+  const goToStep3 = (device: DeviceInfo) => {
+    setDevice(device);
     nextStep();
   };
 
@@ -111,7 +111,9 @@ function NewCardModal() {
           </div>
           <div className="border border-gray-300 p-3 rounded mt-4">
             <p className="my-2">Cliente: {customer?.fullName} </p>
-            <p className="my-2">Equipo: </p>
+            <p className="my-2">
+              {device?.type ? device.type : 'Equipo'}: {device?.label}
+            </p>
           </div>
         </div>
       </div>
