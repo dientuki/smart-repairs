@@ -14,6 +14,11 @@ interface Column {
     orders: Order[];
 }
 
+interface CustomerFullName {
+    id?: string;
+    fullName?: string;
+}
+
 interface Customer {
     id: string;
     label: string;
@@ -22,6 +27,12 @@ interface Customer {
     phone?: string;
     email?: string;
     [key: string]: string | undefined; // Add this line
+}
+
+interface DeviceInfo {
+    id?: string;
+    label?: string;
+    type?: string | null;
 }
 
 interface Device {

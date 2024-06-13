@@ -29,7 +29,7 @@ final readonly class CustomerMutation
             'last_name' => $args['customer']['last_name'],
             'phone' => $args['customer']['phone'],
             'email' => $args['customer']['email'],
-            'team_id' => auth()->user()->teams()->first()->id
+            'team_id' => auth()->user()->teams->first()->id
         ]);
     }
 
@@ -37,7 +37,7 @@ final readonly class CustomerMutation
     {
         $customer = Customer::find($args['customerId']);
 
-        if ($customer && $customer->team_id === auth()->user()->teams()->first()->id) {
+        if ($customer && $customer->team_id === auth()->user()->teams->first()->id) {
             $customer->first_name = $args['customer']['first_name'];
             $customer->last_name = $args['customer']['last_name'];
             $customer->phone = $args['customer']['phone'];

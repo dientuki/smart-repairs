@@ -13,7 +13,7 @@ class Customer extends ModelWithTeam
 
     public static function getCustomers()
     {
-        return self::where('team_id', auth()->user()->teams()->first()->id)->get();
+        return self::where('team_id', auth()->user()->teams->first()->id)->get();
     }
 
     /**

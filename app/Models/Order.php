@@ -30,7 +30,7 @@ class Order extends ModelWithTeam
     }
 
     public function getActiveOrders() {
-        $team = auth()->user()->teams()->get();
+        $team = auth()->user()->teams;
 
         $teamIds = [];
         foreach ($team as $t) {

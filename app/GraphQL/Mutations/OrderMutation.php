@@ -28,7 +28,7 @@ final readonly class OrderMutation
 
         $order = Order::find($args['id']);
 
-        if ($order && $order->team_id === auth()->user()->teams()->first()->id) {
+        if ($order && $order->team_id === auth()->user()->teams->first()->id) {
 
             return Order::updateStatus($args['id'], $args['status']);
         }
@@ -44,7 +44,7 @@ final readonly class OrderMutation
             'status' => OrderStatusEnum::ForBudgeting,
             'observation' => $args['order']['observation'],
             'customer_id' => $args['order']['customer_id'],
-            'team_id' => auth()->user()->teams()->first()->id,
+            'team_id' => auth()->user()->teams->first()->id,
             'user_id' => auth()->user()->id,
             'device_unit_id' => $args['order']['device_unit_id'],
         ]);

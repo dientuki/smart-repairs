@@ -6,7 +6,7 @@ import { useOrderStore } from "@/store/OrderStore";
 
 type Props = {
   prevStep: () => void,
-  device: string | null,
+  device: DeviceInfo | null,
   devicesRepared: DeviceRepared[] | undefined,
   nextStep: (data: NewOrder) => void
 }
@@ -35,7 +35,7 @@ function Step3({ prevStep, device, devicesRepared, nextStep }: Props) {
   if (autocomplete) {
     autocomplete.push({
       id: 'new',
-      label: 'Add new device',
+      label: 'Agregar nuevo equipo',
     })
   }
 
@@ -43,7 +43,7 @@ function Step3({ prevStep, device, devicesRepared, nextStep }: Props) {
     let id: string | null = deviceUnitSelected;
     const deviceUnit: DeviceUnit = {
       id: id,
-      deviceId: device,
+      deviceId: device?.id ?? null,
       serial: data.serial,
       unlockType: unlockType,
       unlockCode: data.unlockCode
@@ -75,13 +75,13 @@ function Step3({ prevStep, device, devicesRepared, nextStep }: Props) {
   return (
     <TabPanel unmount={false}>
       <Field>
-        <Label>Devices Repared</Label>
+      <Label className="block mb-2 text-sm font-medium text-gray-900">Devices Repared</Label>
         {autocomplete && (
           <Autocomplete
             selectOnFocus
             disablePortal
             handleHomeEndKeys
-            id="combo-box-demo"
+            id="autocomplete"
             onKeyDown={(e) => {e.preventDefault();}}
             onChange={(event, newValue) => {
               if (newValue != null && newValue?.id !== 'new') {
@@ -94,23 +94,22 @@ function Step3({ prevStep, device, devicesRepared, nextStep }: Props) {
             }}
             isOptionEqualToValue={() => true}
             options={autocomplete}
-            renderInput={(params) => <TextField {...params} />}
+            renderInput={(params) => <TextField {...params} size="small" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" />}
             renderOption={(props, option) => <li {...props} key={option.id}>{option.label}</li>}
           />
         )}
       </Field>
 
       <form onSubmit={handleSubmit(handleRegistration, handleError)}>
-
         <Field className="mt-4">
-          <Label>Imei/Serie</Label>
+          <Label className="block mb-2 text-sm font-medium text-gray-900">Numero de Imei/Serie</Label>
           <Controller
             name="serial"
             defaultValue=""
             control={control}
             rules={registerOptions.serial}
             render={({ field }) => (
-              <Input {...field} className="border border-gray-300 p-3 block w-full rounded-lg" />
+              <Input {...field} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" />
             )}
           />
           {errors?.serial && errors.serial.message && (
@@ -120,65 +119,67 @@ function Step3({ prevStep, device, devicesRepared, nextStep }: Props) {
           )}
         </Field>
 
-        <Field className="mt-4">
-          <Label>Selector de desbloque</Label>
-          <Controller
-            name="unlockType"
-            control={control}
-            defaultValue=""
-            rules={registerOptions.unlockType}
-            render={({ field }) => (
-              <Autocomplete
-                {...field}
-                selectOnFocus
-                handleHomeEndKeys
-                id="unlockType"
-                onChange={(event, newValue) => {
-                  setValue('unlockType', newValue?.label);
-                  setunlockType(newValue?.id as UnlockTypeEnum);
-                }}
-                options={unlockTypeOptions}
-                isOptionEqualToValue={() => true}
-                renderInput={(params) => <TextField {...params} />}
-                renderOption={(props, option) => <li {...props} key={option.id}>{option.label}</li>}
-              />
+        <div className="grid gap-6 grid-cols-2 mt-4">
+
+          <Field>
+            <Label className="block mb-2 text-sm font-medium text-gray-900">Selector de desbloque</Label>
+            <Controller
+              name="unlockType"
+              control={control}
+              defaultValue=""
+              rules={registerOptions.unlockType}
+              render={({ field }) => (
+                <Autocomplete
+                  {...field}
+                  selectOnFocus
+                  handleHomeEndKeys
+                  id="unlockType"
+                  onChange={(event, newValue) => {
+                    setValue('unlockType', newValue?.label);
+                    setunlockType(newValue?.id as UnlockTypeEnum);
+                  }}
+                  options={unlockTypeOptions}
+                  isOptionEqualToValue={() => true}
+                  renderInput={(params) => <TextField {...params} size="small" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" />}
+                  renderOption={(props, option) => <li {...props} key={option.id}>{option.label}</li>}
+                />
+              )}
+            />
+            {errors?.unlockType && errors.unlockType.message && (
+              <small className="text-danger">
+                <span>{typeof errors.unlockType.message === 'string' ? errors.unlockType.message : JSON.stringify(errors.unlockType.message)}</span>
+              </small>
             )}
-          />
-          {errors?.unlockType && errors.unlockType.message && (
-            <small className="text-danger">
-              <span>{typeof errors.unlockType.message === 'string' ? errors.unlockType.message : JSON.stringify(errors.unlockType.message)}</span>
-            </small>
-          )}
-        </Field>
+          </Field>
 
-        <Field className="mt-4">
-          <Label className="">Codigo de desbloqueo</Label>
-          <Controller
-            name="unlockCode"
-            control={control}
-            defaultValue=""
-            rules={registerOptions.unlockCode}
-            render={({ field }) => (
-              <Input  {...field} className="border border-gray-300 p-3 block w-full rounded-lg" />
+          <Field>
+            <Label className="block mb-2 text-sm font-medium text-gray-900">Codigo de desbloqueo</Label>
+            <Controller
+              name="unlockCode"
+              control={control}
+              defaultValue=""
+              rules={registerOptions.unlockCode}
+              render={({ field }) => (
+                <Input {...field} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" />
+              )}
+            />
+            {errors?.unlockCode && errors.unlockCode.message && (
+              <small className="text-danger">
+                <span>{typeof errors.unlockCode.message === 'string' ? errors.unlockCode.message : JSON.stringify(errors.unlockCode.message)}</span>
+              </small>
             )}
-          />
-          {errors?.unlockCode && errors.unlockCode.message && (
-            <small className="text-danger">
-              <span>{typeof errors.unlockCode.message === 'string' ? errors.unlockCode.message : JSON.stringify(errors.unlockCode.message)}</span>
-            </small>
-          )}
+          </Field>
+        </div>
 
-        </Field>
-
-        <Field className="mt-4">
-          <Label className="">Problema</Label>
+        <Field>
+          <Label className="block mb-2 text-sm font-medium text-gray-900">Problema</Label>
           <Controller
             name="observation"
             control={control}
             defaultValue=""
             rules={registerOptions.observation}
             render={({ field }) => (
-              <Input  {...field} className="border border-gray-300 p-3 block w-full rounded-lg" />
+              <Input  {...field} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" />
             )}
           />
           {errors?.observation && errors.observation.message && (
@@ -186,12 +187,13 @@ function Step3({ prevStep, device, devicesRepared, nextStep }: Props) {
               <span>{typeof errors.observation.message === 'string' ? errors.observation.message : JSON.stringify(errors.observation.message)}</span>
             </small>
           )}
-
         </Field>
 
-        <div onClick={prevStep} className="mt-6 rounded-md bg-sky-600 px-3 py-1.5 text-sm font-bold leading-6 text-white shadow-sm hover:bg-sky-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-600">Anterior</div>
+        <div className="flex justify-between mt-6">
+          <div onClick={prevStep} className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center w-1/4 cursor-pointer">Anterior</div>
 
-        <input type="submit" className="mt-6 rounded-md bg-sky-600 px-3 py-1.5 text-sm font-bold leading-6 text-white shadow-sm hover:bg-sky-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-600" />
+          <button type="submit" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center w-1/4">Finalizar</button>
+        </div>
 
       </form>
 

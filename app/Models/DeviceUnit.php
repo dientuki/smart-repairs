@@ -16,6 +16,6 @@ class DeviceUnit extends ModelWithTeam
 
     public static function getDeviceUnitsByTenant()
     {
-        return static::where('team_id', auth()->user()->teams()->first()->id)->get();
+        return static::where('team_id', auth()->user()->teams->first()->id)->get();
     }
 }
