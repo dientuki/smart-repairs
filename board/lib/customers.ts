@@ -5,8 +5,8 @@ export const createCustomer = async(customer: Customer) => {
     const data = await graphqlRequest(`
                         mutation {
                             addCustomer(customer: {
-                                firstName: "${customer.firstName}"
-                                lastName: "${customer.lastName}"
+                                firstname: "${customer.firstName}"
+                                lastname: "${customer.lastName}"
                                 phone: "${customer.phone}"
                                 email: "${customer.email}"
                             }) {
@@ -14,6 +14,7 @@ export const createCustomer = async(customer: Customer) => {
                             }
                         }
                     `);
+
     if (data.errors) {
         throw data.errors[0].extensions.validation;
     }

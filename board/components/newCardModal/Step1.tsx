@@ -41,8 +41,8 @@ function Step1({ nextStep, customers }: Props) {
       switch (e.constructor.name) {
         case 'Object':
           for (let i = 0, c = toValidate.length; i < c; i++) {
-            if (e.hasOwnProperty(`customer.${toValidate[i]}`)) {
-              setError(toValidate[i], {message: e[`customer.${toValidate[i]}`][0]});
+            if (e.hasOwnProperty(`customer.${toValidate[i].toLowerCase()}`)) {
+              setError(toValidate[i], {message: e[`customer.${toValidate[i].toLowerCase()}`][0]});
             }
           }
           toast.error("Error en el formulario");

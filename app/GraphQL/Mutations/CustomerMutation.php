@@ -25,8 +25,8 @@ final readonly class CustomerMutation
 
         return Customer::create([
             'id' => (string) Str::ulid(),
-            'first_name' => $args['customer']['first_name'],
-            'last_name' => $args['customer']['last_name'],
+            'first_name' => $args['customer']['firstname'],
+            'last_name' => $args['customer']['lastname'],
             'phone' => $args['customer']['phone'],
             'email' => $args['customer']['email'],
             'team_id' => auth()->user()->teams->first()->id
