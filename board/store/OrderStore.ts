@@ -23,7 +23,7 @@ interface OrderStore {
     updateCustomer: (customer: Customer) => Promise<boolean>
 
     addDevice: (device: NewDevice) => Promise<string>
-    updateDevice: (device: NewDevice) => Promise<void>
+    updateDevice: (device: NewDevice) => Promise<boolean>
 
     addDeviceUnit: (deviceUnit: DeviceUnit) => Promise<string>
     updateDeviceUnit: (deviceUnit: DeviceUnit) => Promise<void>
@@ -71,8 +71,8 @@ export const useOrderStore = create<OrderStore>((set) => ({
     return await createDevice(device);
   },
 
-  updateDevice: async (device: NewDevice): Promise<void> => {
-    await updateDevice(device);
+  updateDevice: async (device: NewDevice): Promise<boolean> => {
+    return await updateDevice(device);
   },
 
   addDeviceUnit: async (deviceUnit: DeviceUnit): Promise<string> => {

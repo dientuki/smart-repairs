@@ -32,7 +32,7 @@ interface Customer {
 interface DeviceInfo {
     id?: string;
     label?: string;
-    type?: string | null;
+    typeid?: string | null;
 }
 
 interface Device {
@@ -56,10 +56,10 @@ interface DeviceUnit {
 
 interface NewDevice {
     id: string;
-    brand: string | null;
-    type: string | null;
-    commercialName: string;
-    techName: string;
+    brandid: string | null;
+    typeid: string | null;
+    commercialname: string;
+    techname: string;
     url: string;
 }
 
