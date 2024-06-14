@@ -1,13 +1,17 @@
 export const graphqlRequest = async (query: string) => {
-    return await fetch('/graphql', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            query
-        })
-    });
+    try {
+        const response = await fetch('/graphql', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                query
+            })
+        });
 
-    //return response.json();
+        return await response.json();
+    } catch (error) {
+        throw new Error('Failed to fetch data');
+    };
 };

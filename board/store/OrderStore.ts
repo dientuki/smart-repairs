@@ -19,7 +19,7 @@ interface OrderStore {
     data: any,
     getData: (tenantId:string) => Promise<any>
 
-    addCustomer: (customer: Customer) => Promise<string>
+    addCustomer: (customer: Customer) => Promise<any>
     updateCustomer: (customer: Customer) => Promise<void>
 
     addDevice: (device: NewDevice) => Promise<string>
@@ -59,7 +59,7 @@ export const useOrderStore = create<OrderStore>((set) => ({
     const data = await getCustomersDevices(tenantId);
     set({ data });
   },
-  addCustomer: async (customer: Customer): Promise<string> => {
+  addCustomer: async (customer: Customer): Promise<any> => {
     return await createCustomer(customer);
   },
 
