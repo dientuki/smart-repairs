@@ -126,3 +126,12 @@ interface DeviceType {
     id: string;
     label: string;
 }
+
+interface GraphQLErrorExtension {
+    validation?: any;
+}
+
+interface GraphQLError {
+    message: string;
+    extensions?: GraphQLErrorExtension;
+}

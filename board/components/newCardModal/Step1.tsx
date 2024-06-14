@@ -69,8 +69,6 @@ function Step1({ nextStep, customers }: Props) {
     email: { required: false },
   };
 
-  console.log(errors)
-
   return (
     <TabPanel unmount={false}>
       <Field>
