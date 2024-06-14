@@ -4,6 +4,7 @@ import { Controller, useForm, FieldValues, FieldErrors } from "react-hook-form";
 import { useOrderStore } from "@/store/OrderStore";
 import { useState } from "react";
 import { EnvelopeIcon, PhoneIcon } from "@heroicons/react/16/solid";
+import { toast } from "react-toastify";
 
 const filter = createFilterOptions<Customer>();
 type Props = {
@@ -13,41 +14,62 @@ type Props = {
 
 function Step1({ nextStep, customers }: Props) {
   const { addCustomer, updateCustomer } = useOrderStore();
-  const { handleSubmit, control, formState: { errors }, setValue } = useForm();
+  const { handleSubmit, control, formState: { errors }, setValue, setError } = useForm();
   const [ selectedCustomer, setSelectedCustomer ] = useState<Customer | null>(null);
 
   const handleRegistration = async (data: FieldValues ) => {
     const toValidate = ['firstName', 'lastName', 'phone', 'email'];
     const customer: CustomerFullName = {};
 
-    if (selectedCustomer === null) {
-      customer.id = await addCustomer(data as Customer);
-      customer.fullName = data.firstName + ' ' + data.lastName;
-    } else {
-      customer.id = selectedCustomer.id;
-      customer.fullName = selectedCustomer.firstName + ' ' + selectedCustomer.lastName;
-      for (let i = 0, c = toValidate.length; i < c; i++) {
-        if (data[toValidate[i]] !== selectedCustomer[toValidate[i]]) {
-          await updateCustomer(data as Customer);
-          break;
+    try {
+      if (selectedCustomer === null) {
+        customer.id = await addCustomer(data as Customer);
+        customer.fullName = data.firstName + ' ' + data.lastName;
+      } else {
+        customer.id = selectedCustomer.id;
+        customer.fullName = selectedCustomer.firstName + ' ' + selectedCustomer.lastName;
+        for (let i = 0, c = toValidate.length; i < c; i++) {
+          if (data[toValidate[i]] !== selectedCustomer[toValidate[i]]) {
+            await updateCustomer(data as Customer);
+            break;
+          }
         }
       }
-    }
+      nextStep(customer);
 
-    nextStep(customer);
+    } catch (e: any) {
+      switch (e.constructor.name) {
+        case 'Object':
+          for (let i = 0, c = toValidate.length; i < c; i++) {
+            if (e.hasOwnProperty(`customer.${toValidate[i]}`)) {
+              setError(toValidate[i], {message: e[`customer.${toValidate[i]}`][0]});
+            }
+          }
+          toast.error("Error en el formulario");
+          break;
+        case 'Error':
+          toast.error(e.message);
+          break;
+        default:
+          toast.error("Error!! a los botes");
+          break;
+      }
+    }
   };
 
   const handleError = (errors: FieldErrors<FieldValues>) => {
-    console.log(errors);
+    toast.error("Error en el formulario");
   };
 
   const registerOptions = {
     id: {required: false},
-    firstName: { required: "First name is required" },
-    lastName: { required: "Last Name is required" },
-    phone: { required: "phone is required" },
-    email: { required: "email is required" },
+    firstName: { required: false },
+    lastName: { required: false },
+    phone: { required: false },
+    email: { required: false },
   };
+
+  console.log(errors)
 
   return (
     <TabPanel unmount={false}>
@@ -121,7 +143,7 @@ function Step1({ nextStep, customers }: Props) {
                 <Input {...field} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" />
               )}
             />
-            {errors?.firstName && errors.firstName.message && (
+            {errors.firstName && (
               <small className="text-danger">
                 <span>{typeof errors.firstName.message === 'string' ? errors.firstName.message : JSON.stringify(errors.firstName.message)}</span>
               </small>
