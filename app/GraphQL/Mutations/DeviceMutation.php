@@ -24,10 +24,10 @@ final readonly class DeviceMutation
 
         return Device::create([
             'id' => (string) Str::ulid(),
-            'commercial_name' => $args['device']['commercial_name'],
-            'tech_name' => $args['device']['tech_name'],
-            'brand_id' => $args['device']['brand_id'],
-            'device_type_id' => $args['device']['device_type_id'],
+            'commercial_name' => $args['device']['commercialname'],
+            'tech_name' => $args['device']['techname'],
+            'brand_id' => $args['device']['brandid'],
+            'device_type_id' => $args['device']['typeid'],
             'url' => $args['device']['url'],
         ]);
     }
@@ -35,12 +35,15 @@ final readonly class DeviceMutation
     public function update(null $root, array $args, GraphQLContext $context, ResolveInfo $resolveInfo): mixed
     {
         $device = Device::find($args['deviceId']);
-        $device->commercial_name = $args['device']['commercial_name'];
-        $device->tech_name = $args['device']['tech_name'];
-        $device->brand_id = $args['device']['brand_id'];
-        $device->device_type_id = $args['device']['device_type_id'];
-        $device->url = $args['device']['url'];
-        $device->save();
-        return $device;
+        if ($device) {
+            $device->commercial_name = $args['device']['commercialname'];
+            $device->tech_name = $args['device']['techname'];
+            $device->brand_id = $args['device']['brandid'];
+            $device->device_type_id = $args['device']['typeid'];
+            $device->url = $args['device']['url'];
+            return $device->save();
+        }
+
+        return false;
     }
 }

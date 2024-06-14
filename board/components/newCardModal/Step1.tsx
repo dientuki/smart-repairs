@@ -25,6 +25,7 @@ function Step1({ nextStep, customers }: Props) {
       if (selectedCustomer === null) {
         customer.id = await addCustomer(data as Customer);
         customer.fullName = data.firstname + ' ' + data.lastname;
+        toast.success("Cliente agregado");
       } else {
         customer.id = selectedCustomer.id;
         customer.fullName = selectedCustomer.firstname + ' ' + selectedCustomer.lastname;

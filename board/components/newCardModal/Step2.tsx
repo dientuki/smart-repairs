@@ -43,6 +43,7 @@ function Step2({ nextStep, prevStep, devices, brands, deviceTypes }: Props) {
         device.id = await addDevice(newDevice);
         device.label = newDevice.brandid + ' ' + newDevice.commercialname;
         device.typeid = newDevice.typeid;
+        toast.success("Device agregado");
       } else {
         newDevice.id = selectedDevice.id;
         device.id = selectedDevice.id;
@@ -84,6 +85,7 @@ function Step2({ nextStep, prevStep, devices, brands, deviceTypes }: Props) {
 
   const handleError = (errors: FieldErrors<FieldValues>) => {
     console.log(errors);
+    toast.error("Error en el formulario");
   };
 
   const registerOptions = {

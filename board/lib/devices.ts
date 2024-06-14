@@ -18,7 +18,7 @@ export const createDevice = async(device: NewDevice) => {
 
     handleGraphQLErrors(response.errors);
 
-    return response.addDevice.id;
+    return response.data.addDevice.id;
 }
 
 export const updateDevice = async(device: NewDevice) => {const response = await graphqlRequest(`

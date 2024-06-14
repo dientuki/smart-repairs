@@ -39,8 +39,7 @@ final readonly class CustomerMutation
             $customer->last_name = $args['customer']['lastname'];
             $customer->phone = $args['customer']['phone'];
             $customer->email = $args['customer']['email'];
-            $customer->save();
-            return true;
+            return $customer->save();
         }
 
         return false;
