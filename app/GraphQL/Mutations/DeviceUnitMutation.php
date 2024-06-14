@@ -3,7 +3,6 @@
 namespace App\GraphQL\Mutations;
 
 use App\Models\DeviceUnit;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Nuwave\Lighthouse\Execution\ResolveInfo;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;

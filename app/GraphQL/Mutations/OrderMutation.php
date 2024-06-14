@@ -5,7 +5,6 @@ namespace App\GraphQL\Mutations;
 use App\Enum\OrderStatusEnum;
 use App\Models\Order;
 use Illuminate\Support\Str;
-use Illuminate\Support\Facades\DB;
 use Nuwave\Lighthouse\Execution\ResolveInfo;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 
