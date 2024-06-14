@@ -17,32 +17,37 @@ function Step1({ nextStep, customers }: Props) {
   const { handleSubmit, control, formState: { errors }, setValue, setError } = useForm();
   const [ selectedCustomer, setSelectedCustomer ] = useState<Customer | null>(null);
 
-  const handleRegistration = async (data: FieldValues ) => {
-    const toValidate = ['firstName', 'lastName', 'phone', 'email'];
+  const handleRegistration = async(data: FieldValues ) => {
+    const toValidate = ['firstname', 'lastname', 'phone', 'email'];
     const customer: CustomerFullName = {};
 
     try {
       if (selectedCustomer === null) {
         customer.id = await addCustomer(data as Customer);
-        customer.fullName = data.firstName + ' ' + data.lastName;
+        customer.fullName = data.firstname + ' ' + data.lastname;
       } else {
         customer.id = selectedCustomer.id;
-        customer.fullName = selectedCustomer.firstName + ' ' + selectedCustomer.lastName;
+        customer.fullName = selectedCustomer.firstname + ' ' + selectedCustomer.lastname;
         for (let i = 0, c = toValidate.length; i < c; i++) {
           if (data[toValidate[i]] !== selectedCustomer[toValidate[i]]) {
-            await updateCustomer(data as Customer);
+            if (await updateCustomer(data as Customer)) {
+              toast.success("Actualizo");
+            } else {
+              toast.error("Error en actualizar");
+            };
             break;
           }
         }
       }
+
       nextStep(customer);
 
     } catch (e: any) {
       switch (e.constructor.name) {
         case 'Object':
           for (let i = 0, c = toValidate.length; i < c; i++) {
-            if (e.hasOwnProperty(`customer.${toValidate[i].toLowerCase()}`)) {
-              setError(toValidate[i], {message: e[`customer.${toValidate[i].toLowerCase()}`][0]});
+            if (e.hasOwnProperty(`customer.${toValidate[i]}`)) {
+              setError(toValidate[i], {message: e[`customer.${toValidate[i]}`][0]});
             }
           }
           toast.error("Error en el formulario");
@@ -63,8 +68,8 @@ function Step1({ nextStep, customers }: Props) {
 
   const registerOptions = {
     id: {required: false},
-    firstName: { required: false },
-    lastName: { required: false },
+    firstname: { required: false },
+    lastname: { required: false },
     phone: { required: false },
     email: { required: false },
   };
@@ -82,15 +87,15 @@ function Step1({ nextStep, customers }: Props) {
               if (newValue != null && newValue?.id !== 'new') {
                 setSelectedCustomer(newValue);
                 setValue('id', newValue.id);
-                setValue('firstName', newValue.firstName);
-                setValue('lastName', newValue.lastName);
+                setValue('firstname', newValue.firstname);
+                setValue('lastname', newValue.lastname);
                 setValue('phone', newValue.phone);
                 setValue('email', newValue.email);
               } else {
                 setSelectedCustomer(null);
                 setValue('id', '');
-                setValue('firstName', '');
-                setValue('lastName', '');
+                setValue('firstname', '');
+                setValue('lastname', '');
                 setValue('phone', '');
                 setValue('email', '');
               }
@@ -133,17 +138,17 @@ function Step1({ nextStep, customers }: Props) {
           <Field>
             <Label className="block mb-2 text-sm font-medium text-gray-900">Nombre</Label>
             <Controller
-              name="firstName"
+              name="firstname"
               defaultValue=""
               control={control}
-              rules={registerOptions.firstName}
+              rules={registerOptions.firstname}
               render={({ field }) => (
                 <Input {...field} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" />
               )}
             />
-            {errors.firstName && (
+            {errors.firstname && (
               <small className="text-danger">
-                <span>{typeof errors.firstName.message === 'string' ? errors.firstName.message : JSON.stringify(errors.firstName.message)}</span>
+                <span>{typeof errors.firstname.message === 'string' ? errors.firstname.message : JSON.stringify(errors.firstname.message)}</span>
               </small>
             )}
           </Field>
@@ -151,17 +156,17 @@ function Step1({ nextStep, customers }: Props) {
           <Field>
             <Label className="block mb-2 text-sm font-medium text-gray-900">Apellido</Label>
             <Controller
-              name="lastName"
+              name="lastname"
               control={control}
               defaultValue=""
-              rules={registerOptions.lastName}
+              rules={registerOptions.lastname}
               render={({ field }) => (
                 <Input  {...field} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" />
               )}
             />
-            {errors?.lastName && errors.lastName.message && (
+            {errors?.lastname && errors.lastname.message && (
               <small className="text-danger">
-                <span>{typeof errors.lastName.message === 'string' ? errors.lastName.message : JSON.stringify(errors.lastName.message)}</span>
+                <span>{typeof errors.lastname.message === 'string' ? errors.lastname.message : JSON.stringify(errors.lastname.message)}</span>
               </small>
             )}
           </Field>

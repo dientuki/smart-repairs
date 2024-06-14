@@ -20,8 +20,6 @@ final readonly class CustomerMutation
      */
     public function create(null $root, array $args, GraphQLContext $context, ResolveInfo $resolveInfo): mixed
     {
-        // TODO implement the resolver
-
         return Customer::create([
             'id' => (string) Str::ulid(),
             'first_name' => $args['customer']['firstname'],
@@ -32,19 +30,19 @@ final readonly class CustomerMutation
         ]);
     }
 
-    public function update(null $root, array $args, GraphQLContext $context, ResolveInfo $resolveInfo): mixed
+    public function update(null $root, array $args, GraphQLContext $context, ResolveInfo $resolveInfo): bool
     {
         $customer = Customer::find($args['customerId']);
 
         if ($customer && $customer->team_id === auth()->user()->teams->first()->id) {
-            $customer->first_name = $args['customer']['first_name'];
-            $customer->last_name = $args['customer']['last_name'];
+            $customer->first_name = $args['customer']['firstname'];
+            $customer->last_name = $args['customer']['lastname'];
             $customer->phone = $args['customer']['phone'];
             $customer->email = $args['customer']['email'];
             $customer->save();
-            return $customer;
+            return true;
         }
 
-        return null;
+        return false;
     }
 }

@@ -10,7 +10,7 @@ export const getCustomersDevices = async (tenantId: string) => {
     body: JSON.stringify({
         query: `
             query {
-              customers(team_id:"01HZJ9PYBNDCMQYHGCXMFHBFK3") {
+              customers {
                 id
                 fullName
                 first_name
@@ -60,8 +60,8 @@ export const getCustomersDevices = async (tenantId: string) => {
     acc.push({
         id: customer.id,
         label: customer.fullName,
-        firstName: customer.first_name,
-        lastName: customer.last_name,
+        firstname: customer.first_name,
+        lastname: customer.last_name,
         email: customer.email,
         phone: customer.phone,
     });

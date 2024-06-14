@@ -2,11 +2,11 @@ import { graphqlRequest, handleGraphQLErrors } from "@/helper/functions";
 
 export const createCustomer = async(customer: Customer) => {
 
-    const data = await graphqlRequest(`
+    const response = await graphqlRequest(`
                         mutation {
                             addCustomer(customer: {
-                                firstname: "${customer.firstName}"
-                                lastname: "${customer.lastName}"
+                                firstname: "${customer.firstname}"
+                                lastname: "${customer.lastname}"
                                 phone: "${customer.phone}"
                                 email: "${customer.email}"
                             }) {
@@ -15,22 +15,24 @@ export const createCustomer = async(customer: Customer) => {
                         }
                     `);
 
-    handleGraphQLErrors(data.errors);
+    handleGraphQLErrors(response.errors);
 
-    return data.addCustomer.id;
+    return response.addCustomer.id;
 }
 
-export const updateCustomer = (customer: Customer) => {
-    graphqlRequest(`
+export const updateCustomer = async(customer: Customer) => {
+    const response = await graphqlRequest(`
         mutation {
             updateCustomer(customerId: "${customer.id}", customer: {
-                first_name: "${customer.firstName}"
-                last_name: "${customer.lastName}"
+                firstname: "${customer.firstname}"
+                lastname: "${customer.lastname}"
                 phone: "${customer.phone}"
                 email: "${customer.email}"
-            }) {
-                id
-            }
+            })
         }
     `);
+
+    handleGraphQLErrors(response.errors);
+
+    return response.data.updateCustomer;
 };
