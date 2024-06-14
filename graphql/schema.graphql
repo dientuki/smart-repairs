@@ -111,8 +111,8 @@ type User {
 }
 
 input CustomerInput {
-    firstName: String! @rules(apply: ["required"])
-    lastName: String! @rules(apply: ["required"])
+    firstname: String! @rules(apply: ["required"])
+    lastname: String! @rules(apply: ["required"])
     phone: String! @rules(apply: ["required_without:email"])
     email: String! @rules(apply: ["required_without:phone","email"])
 }

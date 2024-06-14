@@ -147,8 +147,8 @@ return [
 
     'attributes' => [
         'customer' => [
-            'first name' => 'Nombre',
-            'last_name' => 'Apellido',
+            'firstname' => 'Nombre',
+            'lastname' => 'Apellido',
             'email' => 'Email',
             'phone' => 'Telefono',
         ],
