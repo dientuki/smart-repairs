@@ -1,4 +1,4 @@
-import { graphqlRequest } from "@/helper/functions";
+import { graphqlRequest, handleGraphQLErrors } from "@/helper/functions";
 
 export const createCustomer = async(customer: Customer) => {
 
@@ -15,9 +15,7 @@ export const createCustomer = async(customer: Customer) => {
                         }
                     `);
 
-    if (data.errors) {
-        throw data.errors[0].extensions.validation;
-    }
+    handleGraphQLErrors(data.errors);
 
     return data.addCustomer.id;
 }
