@@ -9,7 +9,6 @@ type Query {
         @field(resolver: "Order@getActiveOrders")
         @namespace(field: "App\\Models")
     order(id: ID @eq): Order! @find
-    devices: [Device!] @all
     devicesRepared(team_id: ID @eq): [DeviceUnit!]
         @field(resolver: "DeviceUnit@getDeviceUnitsByTenant")
         @namespace(field: "App\\Models")
@@ -31,12 +30,6 @@ type Mutation {
     addComment(orderId: String, isPublic: Boolean, comment: String): Comment!
         @field(resolver: "CommentMutation@create")
         @namespace(field: "App\\GraphQL\\Mutations")
-    addDevice(device: DeviceInput): Device!
-        @field(resolver: "DeviceMutation@create")
-        @namespace(field: "App\\GraphQL\\Mutations")
-    updateDevice(deviceId: String, device: DeviceInput): Device!
-        @field(resolver: "DeviceMutation@update")
-        @namespace(field: "App\\GraphQL\\Mutations")
     addDeviceUnit(deviceUnit: DeviceUnitInput): DeviceUnit!
         @field(resolver: "DeviceUnitMutation@create")
         @namespace(field: "App\\GraphQL\\Mutations")
@@ -49,6 +42,7 @@ type Mutation {
 }
 
 #import customer.graphql
+#import device.graphql
 
 type Brand {
     "Unique primary key."
@@ -116,23 +110,6 @@ type DeviceUnit {
     device: Device!
     unlock_type: String!
     unlock_code: String
-}
-
-input DeviceInput {
-    commercial_name: String!
-    tech_name: String!
-    brand_id: ID!
-    device_type_id: ID!
-    url: String
-}
-
-type Device {
-    id: ID!
-    commercial_name: String!
-    tech_name: String!
-    brand: Brand!
-    device_type: DeviceType!
-    url: String
 }
 
 type DeviceRepaired {

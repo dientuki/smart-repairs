@@ -1,0 +1,29 @@
+extend type Query {
+    devices: [Device!] @all
+}
+
+type Mutation {
+    addDevice(device: DeviceInput): Device!
+        @field(resolver: "DeviceMutation@create")
+        @namespace(field: "App\\GraphQL\\Mutations")
+    updateDevice(deviceId: String, device: DeviceInput): Boolean
+        @field(resolver: "DeviceMutation@update")
+        @namespace(field: "App\\GraphQL\\Mutations")
+}
+
+input DeviceInput {
+    commercialname: String! @rules(apply: ["required"])
+    techname: String! @rules(apply: ["required"])
+    brandid: ID! @rules(apply: ["required", "ulid", "exists:brands,id"])
+    typeid: ID! @rules(apply: ["required", "ulid", "exists:device_types,id"])
+    url: String @rules(apply: ["required", "url"])
+}
+
+type Device {
+    id: ID!
+    commercial_name: String!
+    tech_name: String!
+    brand: Brand!
+    device_type: DeviceType!
+    url: String
+}

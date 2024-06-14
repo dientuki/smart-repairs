@@ -146,7 +146,7 @@ function Step1({ nextStep, customers }: Props) {
                 <Input {...field} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" />
               )}
             />
-            {errors.firstname && (
+            {errors?.firstname && errors.firstname.message && (
               <small className="text-danger">
                 <span>{typeof errors.firstname.message === 'string' ? errors.firstname.message : JSON.stringify(errors.firstname.message)}</span>
               </small>
@@ -164,7 +164,7 @@ function Step1({ nextStep, customers }: Props) {
                 <Input  {...field} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" />
               )}
             />
-            {errors?.lastname && errors.lastname.message && (
+            {errors.lastname && (
               <small className="text-danger">
                 <span>{typeof errors.lastname.message === 'string' ? errors.lastname.message : JSON.stringify(errors.lastname.message)}</span>
               </small>
