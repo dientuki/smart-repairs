@@ -56,8 +56,8 @@ interface DeviceUnit {
 
 interface NewDevice {
     id: string;
-    brand: string | null;
-    type: string | null;
+    brandid: string | null;
+    typeid: string | null;
     commercialname: string;
     techname: string;
     url: string;

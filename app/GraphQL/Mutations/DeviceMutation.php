@@ -26,8 +26,8 @@ final readonly class DeviceMutation
             'id' => (string) Str::ulid(),
             'commercial_name' => $args['device']['commercialname'],
             'tech_name' => $args['device']['techname'],
-            'brand_id' => $args['device']['brand'],
-            'device_type_id' => $args['device']['type'],
+            'brand_id' => $args['device']['brandid'],
+            'device_type_id' => $args['device']['typeid'],
             'url' => $args['device']['url'],
         ]);
     }
@@ -38,8 +38,8 @@ final readonly class DeviceMutation
         if ($device) {
             $device->commercial_name = $args['device']['commercialname'];
             $device->tech_name = $args['device']['techname'];
-            $device->brand_id = $args['device']['brand'];
-            $device->device_type_id = $args['device']['type'];
+            $device->brand_id = $args['device']['brandid'];
+            $device->device_type_id = $args['device']['typeid'];
             $device->url = $args['device']['url'];
             return $device->save();
         }

@@ -14,8 +14,8 @@ extend type Mutation {
 input DeviceInput {
     commercialname: String! @rules(apply: ["required"])
     techname: String! @rules(apply: ["required"])
-    brand: ID! @rules(apply: ["required", "ulid", "exists:brands,id"])
-    type: ID! @rules(apply: ["required", "ulid", "exists:device_types,id"])
+    brandid: ID! @rules(apply: ["required", "ulid", "exists:brands,id"])
+    typeid: ID! @rules(apply: ["required", "ulid", "exists:device_types,id"])
     url: String @rules(apply: ["url"])
 }
 
