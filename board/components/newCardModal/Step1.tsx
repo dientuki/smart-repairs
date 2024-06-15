@@ -4,6 +4,7 @@ import { Controller, useForm, FieldValues, FieldErrors } from "react-hook-form";
 import { useOrderStore } from "@/store/OrderStore";
 import { useState } from "react";
 import { EnvelopeIcon, PhoneIcon } from "@heroicons/react/16/solid";
+import { toast } from "react-toastify";
 
 const filter = createFilterOptions<Customer>();
 type Props = {
@@ -13,40 +14,65 @@ type Props = {
 
 function Step1({ nextStep, customers }: Props) {
   const { addCustomer, updateCustomer } = useOrderStore();
-  const { handleSubmit, control, formState: { errors }, setValue } = useForm();
+  const { handleSubmit, control, formState: { errors }, setValue, setError, trigger } = useForm();
   const [ selectedCustomer, setSelectedCustomer ] = useState<Customer | null>(null);
 
-  const handleRegistration = async (data: FieldValues ) => {
-    const toValidate = ['firstName', 'lastName', 'phone', 'email'];
+  const handleRegistration = async(data: FieldValues ) => {
+    const toValidate = ['firstname', 'lastname', 'phone', 'email'];
     const customer: CustomerFullName = {};
 
-    if (selectedCustomer === null) {
-      customer.id = await addCustomer(data as Customer);
-      customer.fullName = data.firstName + ' ' + data.lastName;
-    } else {
-      customer.id = selectedCustomer.id;
-      customer.fullName = selectedCustomer.firstName + ' ' + selectedCustomer.lastName;
-      for (let i = 0, c = toValidate.length; i < c; i++) {
-        if (data[toValidate[i]] !== selectedCustomer[toValidate[i]]) {
-          await updateCustomer(data as Customer);
-          break;
+    try {
+      if (selectedCustomer === null) {
+        customer.id = await addCustomer(data as Customer);
+        customer.fullName = data.firstname + ' ' + data.lastname;
+        toast.success("Cliente agregado");
+      } else {
+        customer.id = selectedCustomer.id;
+        customer.fullName = selectedCustomer.firstname + ' ' + selectedCustomer.lastname;
+        for (let i = 0, c = toValidate.length; i < c; i++) {
+          if (data[toValidate[i]] !== selectedCustomer[toValidate[i]]) {
+            if (await updateCustomer(data as Customer)) {
+              toast.success("Actualizo");
+            } else {
+              toast.error("Error en actualizar");
+            };
+            break;
+          }
         }
       }
-    }
 
-    nextStep(customer);
+      nextStep(customer);
+
+    } catch (e: any) {
+      switch (e.constructor.name) {
+        case 'Object':
+          for (let i = 0, c = toValidate.length; i < c; i++) {
+            if (e.hasOwnProperty(`customer.${toValidate[i]}`)) {
+              setError(toValidate[i], {message: e[`customer.${toValidate[i]}`][0]});
+            }
+          }
+          toast.error("Error en el formulario");
+          break;
+        case 'Error':
+          toast.error(e.message);
+          break;
+        default:
+          toast.error("Error!! a los botes");
+          break;
+      }
+    }
   };
 
   const handleError = (errors: FieldErrors<FieldValues>) => {
-    console.log(errors);
+    toast.error("Error en el formulario");
   };
 
   const registerOptions = {
     id: {required: false},
-    firstName: { required: "First name is required" },
-    lastName: { required: "Last Name is required" },
-    phone: { required: "phone is required" },
-    email: { required: "email is required" },
+    firstname: { required: false },
+    lastname: { required: false },
+    phone: { required: false },
+    email: { required: false },
   };
 
   return (
@@ -62,18 +88,22 @@ function Step1({ nextStep, customers }: Props) {
               if (newValue != null && newValue?.id !== 'new') {
                 setSelectedCustomer(newValue);
                 setValue('id', newValue.id);
-                setValue('firstName', newValue.firstName);
-                setValue('lastName', newValue.lastName);
+                setValue('firstname', newValue.firstname);
+                setValue('lastname', newValue.lastname);
                 setValue('phone', newValue.phone);
                 setValue('email', newValue.email);
               } else {
                 setSelectedCustomer(null);
                 setValue('id', '');
-                setValue('firstName', '');
-                setValue('lastName', '');
+                setValue('firstname', '');
+                setValue('lastname', '');
                 setValue('phone', '');
                 setValue('email', '');
               }
+              trigger('firstname');
+              trigger('lastname');
+              trigger('phone');
+              trigger('email');
             }}
             filterOptions={(options, params) => {
               const filtered = filter(options, params);
@@ -113,17 +143,17 @@ function Step1({ nextStep, customers }: Props) {
           <Field>
             <Label className="block mb-2 text-sm font-medium text-gray-900">Nombre</Label>
             <Controller
-              name="firstName"
+              name="firstname"
               defaultValue=""
               control={control}
-              rules={registerOptions.firstName}
+              rules={registerOptions.firstname}
               render={({ field }) => (
                 <Input {...field} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" />
               )}
             />
-            {errors?.firstName && errors.firstName.message && (
+            {errors?.firstname && errors.firstname.message && (
               <small className="text-danger">
-                <span>{typeof errors.firstName.message === 'string' ? errors.firstName.message : JSON.stringify(errors.firstName.message)}</span>
+                <span>{typeof errors.firstname.message === 'string' ? errors.firstname.message : JSON.stringify(errors.firstname.message)}</span>
               </small>
             )}
           </Field>
@@ -131,17 +161,17 @@ function Step1({ nextStep, customers }: Props) {
           <Field>
             <Label className="block mb-2 text-sm font-medium text-gray-900">Apellido</Label>
             <Controller
-              name="lastName"
+              name="lastname"
               control={control}
               defaultValue=""
-              rules={registerOptions.lastName}
+              rules={registerOptions.lastname}
               render={({ field }) => (
                 <Input  {...field} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" />
               )}
             />
-            {errors?.lastName && errors.lastName.message && (
+            {errors.lastname && (
               <small className="text-danger">
-                <span>{typeof errors.lastName.message === 'string' ? errors.lastName.message : JSON.stringify(errors.lastName.message)}</span>
+                <span>{typeof errors.lastname.message === 'string' ? errors.lastname.message : JSON.stringify(errors.lastname.message)}</span>
               </small>
             )}
           </Field>

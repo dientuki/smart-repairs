@@ -1,0 +1,30 @@
+extend type Query {
+    devicesRepared(team_id: ID @eq): [DeviceUnit!]
+        @field(resolver: "DeviceUnit@getDeviceUnitsByTenant")
+        @namespace(field: "App\\Models")
+}
+
+extend type Mutation {
+    addDeviceUnit(deviceunit: DeviceUnitInput): DeviceUnit!
+        @field(resolver: "DeviceUnitMutation@create")
+        @namespace(field: "App\\GraphQL\\Mutations")
+    updateDeviceUnit(deviceUnitId: String, deviceunit: DeviceUnitInput): Boolean
+        @field(resolver: "DeviceUnitMutation@update")
+        @namespace(field: "App\\GraphQL\\Mutations")
+}
+
+input DeviceUnitInput {
+    serial: String! @rules(apply: ["required"])
+    deviceid: String! @rules(apply: ["required", "ulid", "exists:devices,id"])
+    unlocktype: String! @rules(apply: ["required", "in:code,pattern,none"])
+    unlockcode: String @rules(apply: ["required_if:unlocktype,code,unlocktype,pattern"])
+}
+
+type DeviceUnit {
+    id: ID!
+    serial: String!
+    device_id: String!
+    device: Device!
+    unlock_type: String!
+    unlock_code: String
+}

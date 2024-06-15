@@ -3,7 +3,6 @@
 namespace App\GraphQL\Mutations;
 
 use App\Models\DeviceUnit;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Nuwave\Lighthouse\Execution\ResolveInfo;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
@@ -26,26 +25,25 @@ final readonly class DeviceUnitMutation
 
         return DeviceUnit::create([
             'id' => (string) Str::upper(Str::ulid()),
-            'device_id' => $args['deviceUnit']['device_id'],
+            'device_id' => $args['deviceUnit']['deviceid'],
             'team_id' => auth()->user()->teams->first()->id,
             'serial' => $args['deviceUnit']['serial'],
-            'unlock_type' => $args['deviceUnit']['unlock_type'],
-            'unlock_code' => $args['deviceUnit']['unlock_code'],
+            'unlock_type' => $args['deviceUnit']['unlocktype'],
+            'unlock_code' => $args['deviceUnit']['unlockcode'],
         ]);
     }
 
-    public function update(null $root, array $args, GraphQLContext $context, ResolveInfo $resolveInfo): mixed
+    public function update(null $root, array $args, GraphQLContext $context, ResolveInfo $resolveInfo): bool
     {
         $deviceUnit = DeviceUnit::find($args['deviceUnitId']);
 
         if ($deviceUnit && $deviceUnit->team_id === auth()->user()->teams->first()->id) {
             $deviceUnit->serial = $args['deviceUnit']['serial'];
-            $deviceUnit->unlock_type = $args['deviceUnit']['unlock_type'];
-            $deviceUnit->unlock_code = $args['deviceUnit']['unlock_code'];
-            $deviceUnit->save();
-            return $deviceUnit;
+            $deviceUnit->unlock_type = $args['deviceUnit']['unlocktype'];
+            $deviceUnit->unlock_code = $args['deviceUnit']['unlockcode'];
+            return $deviceUnit->save();
         }
 
-        return null;
+        return false;
     }
 }

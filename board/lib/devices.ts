@@ -1,52 +1,39 @@
+import { graphqlRequest, handleGraphQLErrors } from "@/helper/functions";
+
 export const createDevice = async(device: NewDevice) => {
 
-    const data = await fetch('/graphql', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            query: `
+    const response = await graphqlRequest(`
                 mutation {
                     addDevice(device: {
-                        device_type_id: "${device.type}"
-                        brand_id: "${device.brand}"
-                        commercial_name: "${device.commercialName}"
-                        tech_name: "${device.techName}"
+                        typeid: "${device.typeid}"
+                        brandid: "${device.brandid}"
+                        commercialname: "${device.commercialname}"
+                        techname: "${device.techname}"
                         url: "${device.url}"
                     }) {
                         id
                     }
                 }
-            `
-        })
-    });
+            `);
 
-    const json = await data.json();
+    handleGraphQLErrors(response.errors);
 
-    return json.data.addDevice.id;
+    return response.data.addDevice.id;
 }
 
-export const updateDevice = async(device: NewDevice) => {
-    await fetch('/graphql', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            query: `
+export const updateDevice = async(device: NewDevice) => {const response = await graphqlRequest(`
                 mutation {
                     updateDevice(deviceId: "${device.id}", device: {
-                        device_type_id: "${device.type}"
-                        brand_id: "${device.brand}"
-                        commercial_name: "${device.commercialName}"
-                        tech_name: "${device.techName}"
+                        typeid: "${device.typeid}"
+                        brandid: "${device.brandid}"
+                        commercialname: "${device.commercialname}"
+                        techname: "${device.techname}"
                         url: "${device.url}"
-                    }) {
-                        id
-                    }
+                    })
                 }
-            `
-        })
-    });
+            `);
+
+    handleGraphQLErrors(response.errors);
+
+    return response.data.updateDevice;
 }

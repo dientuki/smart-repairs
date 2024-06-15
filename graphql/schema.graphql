@@ -9,14 +9,6 @@ type Query {
         @field(resolver: "Order@getActiveOrders")
         @namespace(field: "App\\Models")
     order(id: ID @eq): Order! @find
-    customers(team_id: ID @eq): [Customer!]! @orderBy(column: "first_name", direction: ASC)
-        @field(resolver: "Customer@getCustomers")
-        @namespace(field: "App\\Models")
-    devices: [Device!] @all
-    devicesRepared(team_id: ID @eq): [DeviceUnit!]
-        @field(resolver: "DeviceUnit@getDeviceUnitsByTenant")
-        @namespace(field: "App\\Models")
-
 }
 
 type Mutation {
@@ -35,28 +27,14 @@ type Mutation {
     addComment(orderId: String, isPublic: Boolean, comment: String): Comment!
         @field(resolver: "CommentMutation@create")
         @namespace(field: "App\\GraphQL\\Mutations")
-    addCustomer(customer: CustomerInput): Customer!
-        @field(resolver: "CustomerMutation@create")
-        @namespace(field: "App\\GraphQL\\Mutations")
-    updateCustomer(customerId: String, customer: CustomerInput): Customer!
-        @field(resolver: "CustomerMutation@update")
-        @namespace(field: "App\\GraphQL\\Mutations")
-    addDevice(device: DeviceInput): Device!
-        @field(resolver: "DeviceMutation@create")
-        @namespace(field: "App\\GraphQL\\Mutations")
-    updateDevice(deviceId: String, device: DeviceInput): Device!
-        @field(resolver: "DeviceMutation@update")
-        @namespace(field: "App\\GraphQL\\Mutations")
-    addDeviceUnit(deviceUnit: DeviceUnitInput): DeviceUnit!
-        @field(resolver: "DeviceUnitMutation@create")
-        @namespace(field: "App\\GraphQL\\Mutations")
-    updateDeviceUnit(deviceUnitId: String, deviceUnit: DeviceUnitInput): DeviceUnit!
-        @field(resolver: "DeviceUnitMutation@update")
-        @namespace(field: "App\\GraphQL\\Mutations")
     addOrder(order: OrderInput): Order!
         @field(resolver: "OrderMutation@create")
         @namespace(field: "App\\GraphQL\\Mutations")
 }
+
+#import customer.graphql
+#import device.graphql
+#import deviceUnit.graphql
 
 type Brand {
     "Unique primary key."
@@ -108,55 +86,6 @@ type User {
     id: ID!
     name: String!
     email: String!
-}
-
-input CustomerInput {
-    first_name: String!
-    last_name: String!
-    phone: String!
-    email: String!
-}
-
-type Customer {
-    id: ID!
-    first_name: String!
-    last_name: String!
-    fullName: String!
-    phone: String!
-    email: String!
-}
-
-input DeviceUnitInput {
-    serial: String!
-    device_id: String!
-    unlock_type: String!
-    unlock_code: String
-}
-
-type DeviceUnit {
-    id: ID!
-    serial: String!
-    device_id: String!
-    device: Device!
-    unlock_type: String!
-    unlock_code: String
-}
-
-input DeviceInput {
-    commercial_name: String!
-    tech_name: String!
-    brand_id: ID!
-    device_type_id: ID!
-    url: String
-}
-
-type Device {
-    id: ID!
-    commercial_name: String!
-    tech_name: String!
-    brand: Brand!
-    device_type: DeviceType!
-    url: String
 }
 
 type DeviceRepaired {

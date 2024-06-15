@@ -54,12 +54,20 @@ interface DeviceUnit {
     deviceId: string | null;
 }
 
+interface NewDeviceUnit {
+    id: string | null;
+    serial: string;
+    unlocktype: UnlockTypeEnum;
+    unlockcode?: string;
+    deviceid: string | null;
+}
+
 interface NewDevice {
     id: string;
-    brand: string | null;
-    type: string | null;
-    commercialName: string;
-    techName: string;
+    brandid: string | null;
+    typeid: string | null;
+    commercialname: string;
+    techname: string;
     url: string;
 }
 
@@ -125,4 +133,13 @@ interface Brand {
 interface DeviceType {
     id: string;
     label: string;
+}
+
+interface GraphQLErrorExtension {
+    validation?: any;
+}
+
+interface GraphQLError {
+    message: string;
+    extensions?: GraphQLErrorExtension;
 }

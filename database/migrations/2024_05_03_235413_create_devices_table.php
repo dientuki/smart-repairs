@@ -15,7 +15,7 @@ return new class extends Migration
             $table->ulid('id')->primary();
             $table->string('commercial_name');
             $table->string('tech_name');
-            $table->string('url');
+            $table->string('url')->nullable();
             $table->timestamps();
 
             $table->foreignUlid('brand_id')->constrained();

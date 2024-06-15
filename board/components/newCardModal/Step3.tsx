@@ -3,6 +3,7 @@ import { Field, Input, Label, TabPanel } from '@headlessui/react';
 import { Controller, useForm, FieldValues, FieldErrors } from "react-hook-form";
 import { useState } from "react";
 import { useOrderStore } from "@/store/OrderStore";
+import { toast } from "react-toastify";
 
 type Props = {
   prevStep: () => void,
@@ -23,14 +24,14 @@ const UnlockTypeEnumLabels: Record<string, string> = {
   [UnlockTypeEnum.PATTERN]: 'Patrón',
 };
 
-const unlockTypeOptions = Object.keys(UnlockTypeEnumLabels).map((key) => ({ id: key, label: UnlockTypeEnumLabels[key] }));
+const unlocktypeOptions = Object.keys(UnlockTypeEnumLabels).map((key) => ({ id: key, label: UnlockTypeEnumLabels[key] }));
 
 function Step3({ prevStep, device, devicesRepared, nextStep }: Props) {
-  const { handleSubmit, control, formState: { errors }, setValue } = useForm();
-  const [ unlockType, setunlockType] = useState<UnlockTypeEnum>(UnlockTypeEnum.NONE);
+  const { handleSubmit, control, formState: { errors }, setValue, setError } = useForm();
+  const [ unlocktype, setunlocktype] = useState<UnlockTypeEnum>(UnlockTypeEnum.NONE);
   const [ deviceUnitSelected, setDeviceUnitSelected ] = useState<string | null>(null);
   const { addDeviceUnit, updateDeviceUnit } = useOrderStore();
-  const autocomplete = device ? devicesRepared?.filter((d) => d.deviceId === device) : null;
+  const autocomplete = device ? devicesRepared?.filter((d) => d.deviceId === device.id) : null;
 
   if (autocomplete) {
     autocomplete.push({
@@ -41,19 +42,43 @@ function Step3({ prevStep, device, devicesRepared, nextStep }: Props) {
 
   const handleRegistration = async (data: FieldValues ) => {
     let id: string | null = deviceUnitSelected;
-    const deviceUnit: DeviceUnit = {
+    const deviceUnit: NewDeviceUnit = {
       id: id,
-      deviceId: device?.id ?? null,
+      deviceid: device?.id ?? null,
       serial: data.serial,
-      unlockType: unlockType,
-      unlockCode: data.unlockCode
+      unlocktype: data.unlockcode || 'none',
+      unlockcode: data.unlockcode
     };
 
-    if (deviceUnitSelected === null) {
-      id = await addDeviceUnit(deviceUnit);
-    } else {
-      await updateDeviceUnit(deviceUnit);
-    };
+    try {
+      if (deviceUnitSelected === null) {
+        id = await addDeviceUnit(deviceUnit);
+        toast.success("Equipo agregado");
+      } else {
+        if (await updateDeviceUnit(deviceUnit)) {
+          toast.success("Actualizo");
+        } else {
+          toast.error("Error en actualizar");
+        };
+      };
+    } catch (e: any) {
+      switch (e.constructor.name) {
+        case 'Object':
+          const toValidate = ['serial', 'unlockcode', 'unlocktype'];
+          for (let i = 0, c = toValidate.length; i < c; i++) {
+            if (e.hasOwnProperty(`deviceunit.${toValidate[i]}`)) {
+              setError(toValidate[i], {message: e[`deviceunit.${toValidate[i]}`][0]});
+            }
+          }
+          break;
+        case 'Error':
+          toast.error(e.message);
+          break;
+        default:
+          toast.error("Error!! a los botes");
+          break;
+      }
+    }
 
     nextStep({
       deviceUnitId: id as string,
@@ -63,44 +88,51 @@ function Step3({ prevStep, device, devicesRepared, nextStep }: Props) {
 
   const handleError = (errors: FieldErrors<FieldValues>) => {
     console.log(errors);
+    toast.error("Error en el formulario");
   };
 
   const registerOptions = {
-    serial: { required: "First name is required" },
-    unlockType: { required: "First name is required" },
-    unlockCode: { },
-    observation: {required: "First name is required" },
+    deviceid: { required: false },
+    serial: { required: false },
+    unlocktype: { required: false },
+    unlockcode: { required: false },
+    observation: { required: false },
   };
 
   return (
     <TabPanel unmount={false}>
-      <Field>
-      <Label className="block mb-2 text-sm font-medium text-gray-900">Devices Repared</Label>
-        {autocomplete && (
-          <Autocomplete
-            selectOnFocus
-            disablePortal
-            handleHomeEndKeys
-            id="autocomplete"
-            onKeyDown={(e) => {e.preventDefault();}}
-            onChange={(event, newValue) => {
-              if (newValue != null && newValue?.id !== 'new') {
-                setDeviceUnitSelected(newValue.id)
-                setValue('serial', newValue.serial);
-              } else {
-                setDeviceUnitSelected(null);
-                setValue('serial', '');
-              }
-            }}
-            isOptionEqualToValue={() => true}
-            options={autocomplete}
-            renderInput={(params) => <TextField {...params} size="small" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" />}
-            renderOption={(props, option) => <li {...props} key={option.id}>{option.label}</li>}
-          />
-        )}
-      </Field>
-
       <form onSubmit={handleSubmit(handleRegistration, handleError)}>
+        <Field>
+        <Label className="block mb-2 text-sm font-medium text-gray-900">Devices Repared</Label>
+          {autocomplete && (
+            <Autocomplete
+              selectOnFocus
+              disablePortal
+              handleHomeEndKeys
+              id="deviceid"
+              onKeyDown={(e) => {e.preventDefault();}}
+              onChange={(event, newValue) => {
+                if (newValue != null && newValue?.id !== 'new') {
+                  setDeviceUnitSelected(newValue.id)
+                  setValue('serial', newValue.serial);
+                } else {
+                  setDeviceUnitSelected(null);
+                  setValue('serial', '');
+                }
+              }}
+              isOptionEqualToValue={() => true}
+              options={autocomplete}
+              renderInput={(params) => <TextField {...params} size="small" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" />}
+              renderOption={(props, option) => <li {...props} key={option.id}>{option.label}</li>}
+            />
+          )}
+          {errors?.deviceid && errors.deviceid.message && (
+            <small className="text-danger">
+              <span>{typeof errors.deviceid.message === 'string' ? errors.deviceid.message : JSON.stringify(errors.deviceid.message)}</span>
+            </small>
+          )}
+        </Field>
+
         <Field className="mt-4">
           <Label className="block mb-2 text-sm font-medium text-gray-900">Numero de Imei/Serie</Label>
           <Controller
@@ -124,30 +156,30 @@ function Step3({ prevStep, device, devicesRepared, nextStep }: Props) {
           <Field>
             <Label className="block mb-2 text-sm font-medium text-gray-900">Selector de desbloque</Label>
             <Controller
-              name="unlockType"
+              name="unlocktype"
               control={control}
               defaultValue=""
-              rules={registerOptions.unlockType}
+              rules={registerOptions.unlocktype}
               render={({ field }) => (
                 <Autocomplete
                   {...field}
                   selectOnFocus
                   handleHomeEndKeys
-                  id="unlockType"
+                  id="unlocktype"
                   onChange={(event, newValue) => {
-                    setValue('unlockType', newValue?.label);
-                    setunlockType(newValue?.id as UnlockTypeEnum);
+                    setValue('unlocktype', newValue?.label);
+                    setunlocktype(newValue?.id as UnlockTypeEnum);
                   }}
-                  options={unlockTypeOptions}
+                  options={unlocktypeOptions}
                   isOptionEqualToValue={() => true}
                   renderInput={(params) => <TextField {...params} size="small" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" />}
                   renderOption={(props, option) => <li {...props} key={option.id}>{option.label}</li>}
                 />
               )}
             />
-            {errors?.unlockType && errors.unlockType.message && (
+            {errors?.unlocktype && errors.unlocktype.message && (
               <small className="text-danger">
-                <span>{typeof errors.unlockType.message === 'string' ? errors.unlockType.message : JSON.stringify(errors.unlockType.message)}</span>
+                <span>{typeof errors.unlocktype.message === 'string' ? errors.unlocktype.message : JSON.stringify(errors.unlocktype.message)}</span>
               </small>
             )}
           </Field>
@@ -155,17 +187,17 @@ function Step3({ prevStep, device, devicesRepared, nextStep }: Props) {
           <Field>
             <Label className="block mb-2 text-sm font-medium text-gray-900">Codigo de desbloqueo</Label>
             <Controller
-              name="unlockCode"
+              name="unlockcode"
               control={control}
               defaultValue=""
-              rules={registerOptions.unlockCode}
+              rules={registerOptions.unlockcode}
               render={({ field }) => (
                 <Input {...field} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" />
               )}
             />
-            {errors?.unlockCode && errors.unlockCode.message && (
+            {errors?.unlockcode && errors.unlockcode.message && (
               <small className="text-danger">
-                <span>{typeof errors.unlockCode.message === 'string' ? errors.unlockCode.message : JSON.stringify(errors.unlockCode.message)}</span>
+                <span>{typeof errors.unlockcode.message === 'string' ? errors.unlockcode.message : JSON.stringify(errors.unlockcode.message)}</span>
               </small>
             )}
           </Field>

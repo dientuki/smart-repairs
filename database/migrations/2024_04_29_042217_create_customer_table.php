@@ -16,8 +16,8 @@ return new class extends Migration
             $table->ulid('id')->primary();
             $table->string('first_name');
             $table->string('last_name');
-            $table->string('phone');
-            $table->string('email');
+            $table->string('phone')->nullable();
+            $table->string('email')->nullable();
             $table->foreignUlid('team_id')->constrained();
             $table->timestamps();
         });

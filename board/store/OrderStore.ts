@@ -17,16 +17,16 @@ interface OrderStore {
     addComment: (newComment:NewOrderComment) => Promise<OrderComment>
 
     data: any,
-    getData: (tenantId:string) => Promise<any>
+    getData: () => Promise<any>
 
     addCustomer: (customer: Customer) => Promise<string>
-    updateCustomer: (customer: Customer) => Promise<void>
+    updateCustomer: (customer: Customer) => Promise<boolean>
 
     addDevice: (device: NewDevice) => Promise<string>
-    updateDevice: (device: NewDevice) => Promise<void>
+    updateDevice: (device: NewDevice) => Promise<boolean>
 
-    addDeviceUnit: (deviceUnit: DeviceUnit) => Promise<string>
-    updateDeviceUnit: (deviceUnit: DeviceUnit) => Promise<void>
+    addDeviceUnit: (deviceUnit: NewDeviceUnit) => Promise<string>
+    updateDeviceUnit: (deviceUnit: NewDeviceUnit) => Promise<boolean>
 
     addOrder: (newOrder: NewOrder) => Promise<void>
 }
@@ -55,32 +55,32 @@ export const useOrderStore = create<OrderStore>((set) => ({
   },
 
   data: {} as any,
-  getData: async (tenantId:string) => {
-    const data = await getCustomersDevices(tenantId);
+  getData: async () => {
+    const data = await getCustomersDevices();
     set({ data });
   },
   addCustomer: async (customer: Customer): Promise<string> => {
     return await createCustomer(customer);
   },
 
-  updateCustomer: async (customer: Customer): Promise<void> => {
-    await updateCustomer(customer);
+  updateCustomer: async (customer: Customer): Promise<boolean> => {
+    return await updateCustomer(customer);
   },
 
   addDevice: async (device: NewDevice): Promise<string> => {
     return await createDevice(device);
   },
 
-  updateDevice: async (device: NewDevice): Promise<void> => {
-    await updateDevice(device);
+  updateDevice: async (device: NewDevice): Promise<boolean> => {
+    return await updateDevice(device);
   },
 
-  addDeviceUnit: async (deviceUnit: DeviceUnit): Promise<string> => {
+  addDeviceUnit: async (deviceUnit: NewDeviceUnit): Promise<string> => {
     return await createDeviceUnit(deviceUnit);
   },
 
-  updateDeviceUnit: async (deviceUnit: DeviceUnit): Promise<void> => {
-    await updateDeviceUnit(deviceUnit);
+  updateDeviceUnit: async (deviceUnit: NewDeviceUnit): Promise<boolean> => {
+    return await updateDeviceUnit(deviceUnit);
   },
 
   addOrder: async (newOrder: NewOrder): Promise<void> => {
