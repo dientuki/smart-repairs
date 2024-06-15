@@ -1,49 +1,37 @@
-export async function createDeviceUnit(deviceUnit: DeviceUnit): Promise<string> {
-    const data = await fetch('/graphql', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            query: `
+import { graphqlRequest, handleGraphQLErrors } from "@/helper/functions";
+
+export async function createDeviceUnit(deviceUnit: NewDeviceUnit): Promise<string> {
+    const response = await graphqlRequest(`
                 mutation {
-                    addDeviceUnit(deviceUnit: {
+                    addDeviceUnit(deviceunit: {
                         serial: "${deviceUnit.serial}"
-                        unlock_type: "${deviceUnit.unlockType}"
-                        unlock_code: "${deviceUnit.unlockCode}"
-                        device_id: "${deviceUnit.deviceId}"
+                        unlocktype: "code"
+                        unlockcode: "${deviceUnit.unlockcode}"
+                        deviceid: "${deviceUnit.deviceid}"
                     }) {
                         id
                     }
                 }
-            `
-        })
-    });
+            `);
 
-    const json = await data.json();
+    handleGraphQLErrors(response.errors);
 
-    return json.data.addDeviceUnit.id;
+    return response.addDeviceUnit.id;
 }
 
-export async function updateDeviceUnit(deviceUnit: DeviceUnit): Promise<void> {
-    await fetch('/graphql', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            query: `
+export async function updateDeviceUnit(deviceUnit: NewDeviceUnit): Promise<boolean> {
+    const response = await graphqlRequest(`
                 mutation {
-                    updateDeviceUnit(deviceUnitId: "${deviceUnit.id}", deviceUnit: {
+                    updateDeviceUnit(deviceUnitId: "${deviceUnit.id}", deviceunit: {
                         serial: "${deviceUnit.serial}"
-                        unlock_type: "${deviceUnit.unlockType}"
-                        unlock_code: "${deviceUnit.unlockCode}"
-                        device_id: "${deviceUnit.deviceId}"
-                    }) {
-                        id
+                        unlocktype: "${deviceUnit.unlocktype}"
+                        unlockcode: "${deviceUnit.unlockcode}"
+                        deviceid: "${deviceUnit.deviceid}"
                     }
                 }
-            `
-        })
-    });
+            `);
+
+    handleGraphQLErrors(response.errors);
+
+    return response.data.updateDeviceUnit;
 }

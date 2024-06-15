@@ -54,6 +54,14 @@ interface DeviceUnit {
     deviceId: string | null;
 }
 
+interface NewDeviceUnit {
+    id: string | null;
+    serial: string;
+    unlocktype: UnlockTypeEnum;
+    unlockcode?: string;
+    deviceid: string | null;
+}
+
 interface NewDevice {
     id: string;
     brandid: string | null;

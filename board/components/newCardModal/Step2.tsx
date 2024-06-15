@@ -67,8 +67,6 @@ function Step2({ nextStep, prevStep, devices, brands, deviceTypes }: Props) {
       nextStep(device);
 
     } catch (e: any) {
-      console.log(toValidate, e);
-
       switch (e.constructor.name) {
         case 'Object':
           for (let i = 0, c = toValidate.length; i < c; i++) {
@@ -125,7 +123,6 @@ function Step2({ nextStep, prevStep, devices, brands, deviceTypes }: Props) {
                   brand: brands.find(brand => brand?.label === newValue.brand)?.id ?? null,
                   type: deviceTypes.find(type => type?.label === newValue.type)?.id ?? null
                 });
-                console.log(comboBox, newValue);
               } else {
                 setSelectedDevice(null);
                 setValue('id', '');

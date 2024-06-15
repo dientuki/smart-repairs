@@ -25,8 +25,8 @@ interface OrderStore {
     addDevice: (device: NewDevice) => Promise<string>
     updateDevice: (device: NewDevice) => Promise<boolean>
 
-    addDeviceUnit: (deviceUnit: DeviceUnit) => Promise<string>
-    updateDeviceUnit: (deviceUnit: DeviceUnit) => Promise<void>
+    addDeviceUnit: (deviceUnit: NewDeviceUnit) => Promise<string>
+    updateDeviceUnit: (deviceUnit: NewDeviceUnit) => Promise<boolean>
 
     addOrder: (newOrder: NewOrder) => Promise<void>
 }
@@ -75,12 +75,12 @@ export const useOrderStore = create<OrderStore>((set) => ({
     return await updateDevice(device);
   },
 
-  addDeviceUnit: async (deviceUnit: DeviceUnit): Promise<string> => {
+  addDeviceUnit: async (deviceUnit: NewDeviceUnit): Promise<string> => {
     return await createDeviceUnit(deviceUnit);
   },
 
-  updateDeviceUnit: async (deviceUnit: DeviceUnit): Promise<void> => {
-    await updateDeviceUnit(deviceUnit);
+  updateDeviceUnit: async (deviceUnit: NewDeviceUnit): Promise<boolean> => {
+    return await updateDeviceUnit(deviceUnit);
   },
 
   addOrder: async (newOrder: NewOrder): Promise<void> => {

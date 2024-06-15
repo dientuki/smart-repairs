@@ -201,6 +201,12 @@ return [
             'brandid' => 'Marca',
             'typeid' => 'Tipo de equipo',
             'url' => 'Url',
+        ],
+        'deviceunit' => [
+            'serial' => 'Serial',
+            'unlocktype' => 'Tipo de desbloqueo',
+            'unlockcode' => 'Codigo de desbloqueo',
+            'deviceid' => 'Equipo',
         ]
     ],
 

@@ -32,7 +32,7 @@ final readonly class DeviceMutation
         ]);
     }
 
-    public function update(null $root, array $args, GraphQLContext $context, ResolveInfo $resolveInfo): mixed
+    public function update(null $root, array $args, GraphQLContext $context, ResolveInfo $resolveInfo): bool
     {
         $device = Device::find($args['deviceId']);
         if ($device) {
