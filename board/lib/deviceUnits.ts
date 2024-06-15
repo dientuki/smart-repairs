@@ -27,7 +27,7 @@ export async function updateDeviceUnit(deviceUnit: NewDeviceUnit): Promise<boole
                         unlocktype: "${deviceUnit.unlocktype}"
                         unlockcode: "${deviceUnit.unlockcode}"
                         deviceid: "${deviceUnit.deviceid}"
-                    }
+                    })
                 }
             `);
 
