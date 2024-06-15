@@ -14,7 +14,7 @@ type Props = {
 
 function Step1({ nextStep, customers }: Props) {
   const { addCustomer, updateCustomer } = useOrderStore();
-  const { handleSubmit, control, formState: { errors }, setValue, setError } = useForm();
+  const { handleSubmit, control, formState: { errors }, setValue, setError, trigger } = useForm();
   const [ selectedCustomer, setSelectedCustomer ] = useState<Customer | null>(null);
 
   const handleRegistration = async(data: FieldValues ) => {
@@ -100,6 +100,10 @@ function Step1({ nextStep, customers }: Props) {
                 setValue('phone', '');
                 setValue('email', '');
               }
+              trigger('firstname');
+              trigger('lastname');
+              trigger('phone');
+              trigger('email');
             }}
             filterOptions={(options, params) => {
               const filtered = filter(options, params);

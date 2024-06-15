@@ -1,4 +1,4 @@
-export const getCustomersDevices = async (tenantId: string) => {
+export const getCustomersDevices = async () => {
 
   //01HZJ9PYBNDCMQYHGCXMFHBFK3
 

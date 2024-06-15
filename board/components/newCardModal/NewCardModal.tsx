@@ -13,14 +13,14 @@ import { useModalWindow } from "react-modal-global";
 function NewCardModal() {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const { data, getData, addOrder } = useOrderStore();
-  const [customer, setCustomer] = useState<CustomerFullName | null>(null);
-  const [device, setDevice] = useState<DeviceInfo | null>(null);
+  const [ customer, setCustomer ] = useState<CustomerFullName | null>(null);
+  const [ device, setDevice ] = useState<DeviceInfo | null>(null);
   const { getBoard } = useBoardStore();
   const modal = useModalWindow();
   const date = new Date();
 
   useEffect(() => {
-    getData("01HZJ9PYBNDCMQYHGCXMFHBFK3");
+    getData();
   }, [getData]);
 
   const goToStep2 = (customer: CustomerFullName) => {

@@ -17,7 +17,7 @@ interface OrderStore {
     addComment: (newComment:NewOrderComment) => Promise<OrderComment>
 
     data: any,
-    getData: (tenantId:string) => Promise<any>
+    getData: () => Promise<any>
 
     addCustomer: (customer: Customer) => Promise<string>
     updateCustomer: (customer: Customer) => Promise<boolean>
@@ -55,8 +55,8 @@ export const useOrderStore = create<OrderStore>((set) => ({
   },
 
   data: {} as any,
-  getData: async (tenantId:string) => {
-    const data = await getCustomersDevices(tenantId);
+  getData: async () => {
+    const data = await getCustomersDevices();
     set({ data });
   },
   addCustomer: async (customer: Customer): Promise<string> => {

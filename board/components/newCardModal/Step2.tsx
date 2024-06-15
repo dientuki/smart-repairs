@@ -23,32 +23,37 @@ type ComboBox = {
 function Step2({ nextStep, prevStep, devices, brands, deviceTypes }: Props) {
   const { addDevice, updateDevice } = useOrderStore();
   const [ selectedDevice, setSelectedDevice ] = useState<Device | null>(null);
-  const { handleSubmit, control, formState: { errors }, setValue, setError } = useForm();
+  const { handleSubmit, control, formState: { errors }, setValue, setError, trigger } = useForm();
   const [comboBox, setComboBox] = useState<ComboBox>({ brand: null, type: null });
 
+  console.log(devices, brands);
+
   const handleRegistration = async (data: FieldValues ) => {
-    const toValidate = ['typeid', 'brandid', 'commercialname', 'techname', 'url'];
+    const toValidate = ['type', 'brand', 'commercialname', 'techname', 'url'];
     const newDevice: NewDevice = {
       id: '',
       commercialname: data.commercialname,
       techname: data.techname,
       url: data.url,
-      brandid: comboBox.brand || '',
-      typeid: comboBox.type || '',
+      brand: comboBox.brand || '',
+      type: comboBox.type || '',
     }
     const device: DeviceInfo = {};
 
     try {
       if (selectedDevice === null) {
-        device.id = await addDevice(newDevice);
-        device.label = newDevice.brandid + ' ' + newDevice.commercialname;
-        device.typeid = newDevice.typeid;
+        //device.id = await addDevice(newDevice);
+        device.label = newDevice.brand + ' ' + newDevice.commercialname;
+        device.type = newDevice.type;
+        console.log(device);
+        return;
         toast.success("Device agregado");
       } else {
         newDevice.id = selectedDevice.id;
         device.id = selectedDevice.id;
         device.label = selectedDevice.brand + ' ' + selectedDevice.commercialname;
-        device.typeid = selectedDevice.typeid;
+        device.type = selectedDevice.type;
+        //console.log(data, selectedDevice);
         for (let i = 0, c = toValidate.length; i < c; i++) {
           if (data[toValidate[i]] !== selectedDevice[toValidate[i]]) {
             if (await updateDevice(newDevice)) {
@@ -61,17 +66,22 @@ function Step2({ nextStep, prevStep, devices, brands, deviceTypes }: Props) {
         }
       }
 
+      //console.log(device)
+
       nextStep(device);
 
     } catch (e: any) {
+      console.log(toValidate, e);
+
       switch (e.constructor.name) {
         case 'Object':
           for (let i = 0, c = toValidate.length; i < c; i++) {
             if (e.hasOwnProperty(`device.${toValidate[i]}`)) {
+              console.log(e[`device.${toValidate[i]}`]);
               setError(toValidate[i], {message: e[`device.${toValidate[i]}`][0]});
             }
           }
-          toast.error("Error en el formulario");
+          toast.error("Error en el formulario aaa");
           break;
         case 'Error':
           toast.error(e.message);
@@ -85,12 +95,12 @@ function Step2({ nextStep, prevStep, devices, brands, deviceTypes }: Props) {
 
   const handleError = (errors: FieldErrors<FieldValues>) => {
     console.log(errors);
-    toast.error("Error en el formulario");
+    toast.error("Error en el formulario de error");
   };
 
   const registerOptions = {
     id: {required: false},
-    typeid: { required: false },
+    type: { required: false },
     brand: { required: false },
     commercialname: { required: false },
     techname: { required: false },
@@ -109,8 +119,9 @@ function Step2({ nextStep, prevStep, devices, brands, deviceTypes }: Props) {
             onChange={(event, newValue) => {
               if (newValue != null && newValue?.id !== 'new') {
                 setSelectedDevice(newValue);
-                setValue('typeid', newValue.type);
-                setValue('brandid', newValue.brand);
+                setValue('id', newValue.id);
+                setValue('type', newValue.type);
+                setValue('brand', newValue.brand);
                 setValue('commercialname', newValue.commercialname);
                 setValue('techname', newValue.techname);
                 setValue('url', newValue.url);
@@ -118,15 +129,22 @@ function Step2({ nextStep, prevStep, devices, brands, deviceTypes }: Props) {
                   brand: brands.find(brand => brand?.label === newValue.brand)?.id ?? null,
                   type: deviceTypes.find(type => type?.label === newValue.type)?.id ?? null
                 });
+                console.log(comboBox, newValue);
               } else {
                 setSelectedDevice(null);
-                setValue('typeid', '');
-                setValue('brandid', '');
+                setValue('id', '');
+                setValue('type', '');
+                setValue('brand', '');
                 setValue('commercialname', '');
                 setValue('techname', '');
                 setValue('url', '');
                 setComboBox({ brand: null, type: null });
               }
+              trigger('type');
+              trigger('brand');
+              trigger('commercialname');
+              trigger('techname');
+              trigger('url');
             }}
             filterOptions={(options, params) => {
               const filtered = filter(options, params);
@@ -165,18 +183,17 @@ function Step2({ nextStep, prevStep, devices, brands, deviceTypes }: Props) {
             <Label className="block mb-2 text-sm font-medium text-gray-900">Tipo de equipo</Label>
             { brands &&
                 <Controller
-                  name="typeid"
+                  name="type"
                   control={control}
                   defaultValue=""
-                  rules={registerOptions.typeid}
+                  rules={registerOptions.type}
                   render={({ field }) => (
                     <Autocomplete
                       {...field}
                       selectOnFocus
                       handleHomeEndKeys
-                      id="brands"
                       onChange={(event, newValue) => {
-                        setValue('typeid', newValue?.label);
+                        setValue('type', newValue?.label);
                         setComboBox({ ...comboBox, type: newValue?.id });
                       }}
                       options={deviceTypes}
@@ -186,9 +203,9 @@ function Step2({ nextStep, prevStep, devices, brands, deviceTypes }: Props) {
                   )}
                 />
             }
-            {errors?.typeid && errors.typeid.message && (
+            {errors?.type && errors.type.message && (
               <small className="text-danger">
-                <span>{typeof errors.typeid.message === 'string' ? errors.typeid.message : JSON.stringify(errors.typeid.message)}</span>
+                <span>{typeof errors.type.message === 'string' ? errors.type.message : JSON.stringify(errors.type.message)}</span>
               </small>
             )}
           </Field>
@@ -197,7 +214,7 @@ function Step2({ nextStep, prevStep, devices, brands, deviceTypes }: Props) {
             <Label className="block mb-2 text-sm font-medium text-gray-900">Marca</Label>
             { brands &&
                 <Controller
-                  name="brandid"
+                  name="brand"
                   control={control}
                   defaultValue=""
                   rules={registerOptions.brand}
@@ -206,9 +223,8 @@ function Step2({ nextStep, prevStep, devices, brands, deviceTypes }: Props) {
                       {...field}
                       selectOnFocus
                       handleHomeEndKeys
-                      id="brands"
                       onChange={(event, newValue) => {
-                        setValue('brandid', newValue?.label);
+                        setValue('brand', newValue?.label);
                         setComboBox({ ...comboBox, brand: newValue?.id });
                       }}
                       options={brands}
@@ -218,9 +234,9 @@ function Step2({ nextStep, prevStep, devices, brands, deviceTypes }: Props) {
                   )}
                 />
             }
-            {errors?.brandid && errors.brandid.message && (
+            {errors?.brand && errors.brand.message && (
               <small className="text-danger">
-                <span>{typeof errors.brandid.message === 'string' ? errors.brandid.message : JSON.stringify(errors.brandid.message)}</span>
+                <span>{typeof errors.brand.message === 'string' ? errors.brand.message : JSON.stringify(errors.brand.message)}</span>
               </small>
             )}
           </Field>

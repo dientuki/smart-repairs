@@ -4,7 +4,7 @@ extend type Query {
         @namespace(field: "App\\Models")
 }
 
-type Mutation {
+extend type Mutation {
     addCustomer(customer: CustomerInput): Customer!
         @field(resolver: "CustomerMutation@create")
         @namespace(field: "App\\GraphQL\\Mutations")
