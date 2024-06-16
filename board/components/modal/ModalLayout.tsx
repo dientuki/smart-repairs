@@ -3,14 +3,18 @@ import { DNA } from "react-loader-spinner";
 
 interface ModalLayoutProps {
   children: ReactNode;
+  width?: string;
+  height?: string;
 }
 
 function ModalLayout(props: ModalLayoutProps) {
+  const { children, width = '80vw', height = '80vh' } = props;
+  const css = `h-[${height}] w-[${width}] transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl m-auto cursor-auto`;
 
   return (
-    <div className="h-[80vh] w-[80vw] transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl m-auto cursor-auto">
-      {props.children ?
-        props.children :
+    <div className={css}>
+      {children ?
+        children :
         <DNA
         visible={true}
         height="120"

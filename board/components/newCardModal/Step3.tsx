@@ -4,6 +4,8 @@ import { Controller, useForm, FieldValues, FieldErrors } from "react-hook-form";
 import { useState } from "react";
 import { useOrderStore } from "@/store/OrderStore";
 import { toast } from "react-toastify";
+import Modal from "@/components/modal/Modal";
+import PatternLockModal from "../modal/PatternLockModal";
 
 type Props = {
   prevStep: () => void,
@@ -31,7 +33,13 @@ function Step3({ prevStep, device, devicesRepared, nextStep }: Props) {
   const [ unlocktype, setunlocktype] = useState<UnlockTypeEnum>(UnlockTypeEnum.NONE);
   const [ deviceUnitSelected, setDeviceUnitSelected ] = useState<string | null>(null);
   const { addDeviceUnit, updateDeviceUnit } = useOrderStore();
+  const [ isDisableCode, setIsDisableCode ] = useState(true);
   const autocomplete = device ? devicesRepared?.filter((d) => d.deviceId === device.id) : null;
+  const openPatternLock = () => Modal.open(PatternLockModal, {layer: 5, setPattern: setPattern});
+
+  const setPattern = (pattern: number[]) => {
+    setValue('unlockcode', pattern);
+  }
 
   if (autocomplete) {
     autocomplete.push({
@@ -46,7 +54,7 @@ function Step3({ prevStep, device, devicesRepared, nextStep }: Props) {
       id: id,
       deviceid: device?.id ?? null,
       serial: data.serial,
-      unlocktype: data.unlockcode || 'none',
+      unlocktype: unlocktype || 'none',
       unlockcode: data.unlockcode
     };
 
@@ -99,60 +107,74 @@ function Step3({ prevStep, device, devicesRepared, nextStep }: Props) {
     observation: { required: false },
   };
 
+  const handleUnlock = (unlock: UnlockTypeEnum) => {
+    switch (unlock) {
+      case UnlockTypeEnum.NONE:
+        setIsDisableCode(true);
+        break;
+      case UnlockTypeEnum.CODE:
+        setIsDisableCode(false);
+        break;
+      case UnlockTypeEnum.PATTERN:
+        setIsDisableCode(true);
+        openPatternLock();
+        break;
+    }
+  }
+
   return (
     <TabPanel unmount={false}>
       <form onSubmit={handleSubmit(handleRegistration, handleError)}>
         <Field>
-        <Label className="block mb-2 text-sm font-medium text-gray-900">Devices Repared</Label>
-          {autocomplete && (
-            <Autocomplete
-              selectOnFocus
-              disablePortal
-              handleHomeEndKeys
-              id="deviceid"
-              onKeyDown={(e) => {e.preventDefault();}}
-              onChange={(event, newValue) => {
-                if (newValue != null && newValue?.id !== 'new') {
-                  setDeviceUnitSelected(newValue.id)
-                  setValue('serial', newValue.serial);
-                } else {
-                  setDeviceUnitSelected(null);
-                  setValue('serial', '');
-                }
-              }}
-              isOptionEqualToValue={() => true}
-              options={autocomplete}
-              renderInput={(params) => <TextField {...params} size="small" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" />}
-              renderOption={(props, option) => <li {...props} key={option.id}>{option.label}</li>}
-            />
-          )}
-          {errors?.deviceid && errors.deviceid.message && (
-            <small className="text-danger">
-              <span>{typeof errors.deviceid.message === 'string' ? errors.deviceid.message : JSON.stringify(errors.deviceid.message)}</span>
-            </small>
-          )}
-        </Field>
-
-        <Field className="mt-4">
-          <Label className="block mb-2 text-sm font-medium text-gray-900">Numero de Imei/Serie</Label>
-          <Controller
-            name="serial"
-            defaultValue=""
-            control={control}
-            rules={registerOptions.serial}
-            render={({ field }) => (
-              <Input {...field} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" />
+          <Label className="block mb-2 text-sm font-medium text-gray-900">Devices Repared</Label>
+            {autocomplete && (
+              <Autocomplete
+                selectOnFocus
+                disablePortal
+                handleHomeEndKeys
+                id="deviceid"
+                onKeyDown={(e) => {e.preventDefault();}}
+                onChange={(event, newValue) => {
+                  if (newValue != null && newValue?.id !== 'new') {
+                    setDeviceUnitSelected(newValue.id)
+                    setValue('serial', newValue.serial);
+                  } else {
+                    setDeviceUnitSelected(null);
+                    setValue('serial', '');
+                  }
+                }}
+                isOptionEqualToValue={() => true}
+                options={autocomplete}
+                renderInput={(params) => <TextField {...params} size="small" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" />}
+                renderOption={(props, option) => <li {...props} key={option.id}>{option.label}</li>}
+              />
             )}
-          />
-          {errors?.serial && errors.serial.message && (
-            <small className="text-danger">
-              <span>{typeof errors.serial.message === 'string' ? errors.serial.message : JSON.stringify(errors.serial.message)}</span>
-            </small>
-          )}
-        </Field>
+            {errors?.deviceid && errors.deviceid.message && (
+              <small className="text-danger">
+                <span>{typeof errors.deviceid.message === 'string' ? errors.deviceid.message : JSON.stringify(errors.deviceid.message)}</span>
+              </small>
+            )}
+          </Field>
+
+          <Field className="mt-4">
+            <Label className="block mb-2 text-sm font-medium text-gray-900">Numero de Imei/Serie</Label>
+            <Controller
+              name="serial"
+              defaultValue=""
+              control={control}
+              rules={registerOptions.serial}
+              render={({ field }) => (
+                <Input {...field} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" />
+              )}
+            />
+            {errors?.serial && errors.serial.message && (
+              <small className="text-danger">
+                <span>{typeof errors.serial.message === 'string' ? errors.serial.message : JSON.stringify(errors.serial.message)}</span>
+              </small>
+            )}
+          </Field>
 
         <div className="grid gap-6 grid-cols-2 mt-4">
-
           <Field>
             <Label className="block mb-2 text-sm font-medium text-gray-900">Selector de desbloque</Label>
             <Controller
@@ -169,6 +191,7 @@ function Step3({ prevStep, device, devicesRepared, nextStep }: Props) {
                   onChange={(event, newValue) => {
                     setValue('unlocktype', newValue?.label);
                     setunlocktype(newValue?.id as UnlockTypeEnum);
+                    handleUnlock(newValue?.id);
                   }}
                   options={unlocktypeOptions}
                   isOptionEqualToValue={() => true}
@@ -192,7 +215,7 @@ function Step3({ prevStep, device, devicesRepared, nextStep }: Props) {
               defaultValue=""
               rules={registerOptions.unlockcode}
               render={({ field }) => (
-                <Input {...field} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" />
+                <Input {...field} readOnly={isDisableCode} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" />
               )}
             />
             {errors?.unlockcode && errors.unlockcode.message && (
