@@ -1,0 +1,52 @@
+import "react-modal-global/styles/modal.scss" // Imports essential styles for `ModalContainer`.
+//import { useModalWindow } from "react-modal-global";
+import ModalLayout from "@/components/modal/ModalLayout";
+import PatternLock from "react-pattern-lock/lib/components/PatternLock";
+import { useState } from "react";
+import { useModalWindow } from "react-modal-global";
+
+type ModalParams = {
+  setPattern: (pattern: number[]) => void
+};
+
+function PatternLockModal() {
+    const modal = useModalWindow<ModalParams>();
+    const [ pattern, setPath ] = useState<number[]>([]);
+    const [ isSuccess, setIsSuccess ] = useState(false);
+
+    const reset = () => {
+        setPath([]);
+        setIsSuccess(false);
+    }
+
+    const closeModal = () => {
+        modal.close();
+    }
+
+    return (
+        <ModalLayout width="300px" height="300px">
+            <div onPointerDown={reset}>
+              <PatternLock
+                className="bg-black"
+                success={ isSuccess }
+                width={ 280 }
+                pointSize={ 15 }
+                pointActiveSize={ 40 }
+                size={ 3 }
+                path={ pattern }
+                allowOverlapping={ true }
+                connectorThickness={5}
+                onChange={(path) => {setPath([...path] as number[])}}
+                onFinish={() => {
+                  modal.params.setPattern(pattern);
+                  setIsSuccess(true);
+                }}
+              />
+            </div>
+            <button onClick={closeModal} className="mt-4 w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Listo!</button>
+
+        </ModalLayout>
+    )
+}
+
+export default PatternLockModal
