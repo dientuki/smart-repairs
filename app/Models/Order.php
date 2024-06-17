@@ -3,14 +3,11 @@
 namespace App\Models;
 
 use App\Enum\OrderStatusEnum;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Order extends ModelWithTeam
 {
-    use HasFactory;
-
     protected $fillable = ['customer_id', 'team_id', 'user_id', 'device_unit_id', 'observation'];
 
     protected $casts = [

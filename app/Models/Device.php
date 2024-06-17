@@ -2,11 +2,8 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-
 class Device extends ModelAuditable
 {
-    use HasFactory;
     protected $fillable = ['commercial_name', 'url', 'tech_name', 'brand_id', 'device_type_id'];
 
     public function brand() {

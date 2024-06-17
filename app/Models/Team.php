@@ -2,12 +2,8 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-
 class Team extends ModelAuditable
 {
-    use HasFactory;
-
     protected $fillable = ['name'];
 
     /**
