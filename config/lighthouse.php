@@ -46,13 +46,6 @@ return [
             Illuminate\Auth\Middleware\Authenticate::class,
             Illuminate\Routing\Middleware\SubstituteBindings::class,
 
-
-
-            //Illuminate\Auth\Middleware\Authenticate::class,
-            //Illuminate\Session\Middleware\AuthenticateSession::class,
-            //Illuminate\Foundation\Http\Middleware\VerifyCsrfToken::class,
-
-
             // Logs every incoming GraphQL query.
             // Nuwave\Lighthouse\Http\Middleware\LogGraphQLQueries::class,
         ],

@@ -15,14 +15,10 @@ class DeviceTypeCheck extends ModelWithTeam
         ];
     }
 
-    public static function checkToSelect():array {
-        //@todo: improve https://www.answeroverflow.com/m/1136334340888989927#solution-1136340488786559106
-
-        return DeviceType::whereNotIn('id', function ($query) {
-            $query->select('device_type_id')
-                ->from('device_type_checks')
-                ->where('team_id', auth()->user()->teams->first()->id);
-        })->pluck('name', 'id')->toArray();
+    public static function getDeviceChecks(null $root, array $args) {
+        return self::where('device_type_id', $args['device_type_id'])
+            ->where('team_id', auth()->user()->teams->first()->id)
+            ->get();
     }
 
     public function device_type():BelongsTo {
