@@ -14,9 +14,19 @@ class TeamUserSeeder extends Seeder
     public function run(): void
     {
 
-        DB::table('team_user')->insert([
-            'user_id' => DB::table('users')->first()->id,
-            'team_id' => DB::table('teams')->first()->id
-        ]);
+        $users = DB::table('users')->get();
+        $teams = DB::table('teams')->get();
+
+        $teamUserId = 0;
+        foreach ($users as $user) {
+            $teamUserId++;
+            if ($teamUserId > count($teams)) {
+                break;
+            }
+            DB::table('team_user')->insert([
+                'user_id' => $user->id,
+                'team_id' => $teams[$teamUserId - 1]->id
+            ]);
+        }
     }
 }

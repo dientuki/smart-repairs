@@ -42,7 +42,7 @@ class DeviceUnitSeeder extends Seeder
             'team_id' => $team,
             'serial' => '456789123',
             'unlock_type' => UnlockEnum::Pattern,
-            'unlock_code' => '1235789',
+            'unlock_code' => '0,1,2,6,8',
             'created_at' => now(),
             'updated_at' => now(),
         ]);

@@ -19,5 +19,11 @@ class TeamSeeder extends Seeder
             'created_at' => now(),
             'updated_at' => now(),
         ]);
+        DB::table('teams')->insert([
+            'id' => (string) Str::ulid(),
+            'name' => 'Dientuki\'s Corp',
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
     }
 }
