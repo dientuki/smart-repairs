@@ -2,12 +2,8 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-
 class Part extends ModelAuditable
 {
-    use HasFactory;
-
     protected $fillable = ['observations', 'part_number', 'module_category_id', 'brand_id'];
 
     public function brand() {

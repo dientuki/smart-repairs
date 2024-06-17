@@ -2,12 +2,8 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-
 class OrderComment extends ModelWithTeam
 {
-    use HasFactory;
-
     protected $fillable = ['order_id', 'comment', 'team_id', 'user_id', 'is_public', 'was_edited'];
 
     public function user() {
