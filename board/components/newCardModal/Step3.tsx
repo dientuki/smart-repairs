@@ -11,7 +11,7 @@ type Props = {
   prevStep: () => void,
   device: DeviceInfo | null,
   devicesRepared: DeviceRepared[] | undefined,
-  nextStep: (data: { deviceUnitId: string; observation: string }) => void
+  nextStep: (data: Step3data) => void
 }
 
 enum UnlockTypeEnum {

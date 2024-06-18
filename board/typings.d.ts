@@ -121,19 +121,40 @@ interface Images {
 }
 
 interface NewOrder {
-    customerId?: String;
+    customerId: String | null;
     observation: String;
     deviceUnitId: String;
-    damages: [{
-            value: string;
-            checked: boolean;
-        }];
+    damages: [damage];
     damageDescription: String;
-    features: [{
-        value: string;
-        checked: boolean;
-    }];
+    features: [feature];
     featureDescription: String;
+}
+
+interface Step3data {
+    deviceUnitId: string;
+    observation: string;
+}
+
+interface Step4data {
+    damages: [damage];
+    damageDescription: String;
+    features: [feature];
+    featureDescription: String;
+}
+
+interface damage {
+    value: string;
+    checked: boolean;
+}
+
+interface feature {
+    value: string;
+    checked: boolean;
+}
+
+interface checks {
+    damages: [damage];
+    features: [feature];
 }
 
 interface Brand {

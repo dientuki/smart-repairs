@@ -18,10 +18,9 @@ function NewCardModal() {
   const [ device, setDevice ] = useState<DeviceInfo | null>(null);
   const [ checks, setChecks ] = useState(null);
   const { getBoard } = useBoardStore();
-  const [ newOrder, setNewOrder ] = useState<NewOrder | null>(null);
+  const [ newOrder, setNewOrder ] = useState<NewOrder>();
   const modal = useModalWindow();
   const date = new Date();
-  //const order = {} as NewOrder;
 
   useEffect(() => {
     getData();
@@ -29,8 +28,10 @@ function NewCardModal() {
 
   const goToStep2 = (customer: CustomerFullName) => {
     setCustomer(customer);
-    setNewOrder({ ...newOrder, customerId: customer.id });
-    console.log('step2', newOrder)
+    setNewOrder({
+      ...newOrder,
+      customerId: customer.id
+    });
     nextStep();
   };
 
@@ -39,14 +40,20 @@ function NewCardModal() {
     nextStep();
   };
 
-  const goToStep4 = (step3data: { deviceUnitId: string; observation: string }) => {
-    setNewOrder({ ...newOrder, ...step3data });
+  const goToStep4 = (step3data: Step3data) => {
+    setNewOrder({
+      ...newOrder,
+      deviceUnitId: step3data.deviceUnitId,
+      observation: step3data.observation
+    });
     const toCheck = data.devicesChecks[data.devicesChecks.findIndex((d) => d.deviceTypeId === device?.typeId)];
     setChecks(toCheck);
     nextStep();
   };
 
-  const saveOrder =  async (step4data) => {
+  const saveOrder =  async (step4data: Step4data) => {
+    console.log(step4data);
+    return;
     await addOrder({ ...newOrder, ...step4data } as NewOrder);
     await getBoard();
     modal.close();
