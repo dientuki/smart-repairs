@@ -44,12 +44,14 @@ function Step2({ nextStep, prevStep, devices, brands, deviceTypes }: Props) {
         device.id = await addDevice(newDevice);
         device.label = brands.find(b => b.id === newDevice.brandid)?.label + ' ' + newDevice.commercialname;
         device.type = deviceTypes.find(t => t.id === newDevice.typeid)?.label;
+        device.typeId = newDevice.typeid;
         toast.success("Device agregado");
       } else {
         newDevice.id = selectedDevice.id;
         device.id = selectedDevice.id;
         device.label = brands.find(b => b.id === newDevice.brandid)?.label + ' ' + newDevice.commercialname;
         device.type = deviceTypes.find(t => t.id === newDevice.typeid)?.label;
+        device.typeId = newDevice.typeid;
         selectedDevice.brandid = selectedDevice.brand;
         selectedDevice.typeid = selectedDevice.type;
         for (let i = 0, c = toValidate.length; i < c; i++) {

@@ -33,6 +33,7 @@ interface DeviceInfo {
     id?: string;
     label?: string;
     type?: string | null;
+    typeId?: string | null;
 }
 
 interface Device {
