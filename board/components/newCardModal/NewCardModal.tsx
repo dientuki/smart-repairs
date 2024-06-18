@@ -52,8 +52,6 @@ function NewCardModal() {
   };
 
   const saveOrder =  async (step4data: Step4data) => {
-    console.log(step4data);
-    return;
     await addOrder({ ...newOrder, ...step4data } as NewOrder);
     await getBoard();
     modal.close();
