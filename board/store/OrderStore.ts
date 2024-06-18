@@ -84,6 +84,6 @@ export const useOrderStore = create<OrderStore>((set) => ({
   },
 
   addOrder: async (newOrder: NewOrder): Promise<void> => {
-    await createOrder(newOrder);
+    return await createOrder(newOrder);
   },
 }));

@@ -8,6 +8,7 @@ import Step3 from "@/components/newCardModal/Step3";
 import { useOrderStore } from "@/store/OrderStore";
 import { useBoardStore } from "@/store/BoardStore";
 import { useModalWindow } from "react-modal-global";
+import Step4 from "./Step4";
 
 
 function NewCardModal() {
@@ -15,7 +16,9 @@ function NewCardModal() {
   const { data, getData, addOrder } = useOrderStore();
   const [ customer, setCustomer ] = useState<CustomerFullName | null>(null);
   const [ device, setDevice ] = useState<DeviceInfo | null>(null);
+  const [ checks, setChecks ] = useState(null);
   const { getBoard } = useBoardStore();
+  const [ newOrder, setNewOrder ] = useState<NewOrder | null>(null);
   const modal = useModalWindow();
   const date = new Date();
   //const order = {} as NewOrder;
@@ -26,6 +29,8 @@ function NewCardModal() {
 
   const goToStep2 = (customer: CustomerFullName) => {
     setCustomer(customer);
+    setNewOrder({ ...newOrder, customerId: customer.id });
+    console.log('step2', newOrder)
     nextStep();
   };
 
@@ -34,17 +39,15 @@ function NewCardModal() {
     nextStep();
   };
 
-  const goToStep4 = () => {
-    //setSelectedIndex(0);
+  const goToStep4 = (step3data: { deviceUnitId: string; observation: string }) => {
+    setNewOrder({ ...newOrder, ...step3data });
+    const toCheck = data.devicesChecks[data.devicesChecks.findIndex((d) => d.deviceTypeId === device?.typeId)];
+    setChecks(toCheck);
+    nextStep();
   };
 
-  const saveOrder =  async (partialOrder: NewOrder) => {
-    const newOrder = {
-      ...partialOrder,
-      customerId: customer?.id,
-    } as NewOrder;
-
-    await addOrder(newOrder);
+  const saveOrder =  async (step4data) => {
+    await addOrder({ ...newOrder, ...step4data } as NewOrder);
     await getBoard();
     modal.close();
   }
@@ -108,8 +111,8 @@ function NewCardModal() {
             <TabPanels className="mt-4">
               <Step1 nextStep={goToStep2} customers={data.customers} />
               <Step2 prevStep={prevStep} nextStep={goToStep3} devices={data.devices} brands={data.brands} deviceTypes={data.deviceTypes}  />
-              <Step3 prevStep={prevStep} nextStep={saveOrder} device={device} devicesRepared={data.devicesRepared} />
-
+              <Step3 prevStep={prevStep} nextStep={goToStep4} device={device} devicesRepared={data.devicesRepared} />
+              <Step4 prevStep={prevStep} nextStep={saveOrder} checks={checks} />
             </TabPanels>
 
           </TabGroup>

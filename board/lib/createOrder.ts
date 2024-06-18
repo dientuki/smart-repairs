@@ -103,11 +103,23 @@ export const getCustomersDevices = async () => {
 
   }, []);
 
+  const devicesChecks: DeviceChecks[] = json.data.deviceTypeChecks.reduce((acc: DeviceChecks[], device: any) => {
+    acc.push({
+        deviceTypeId: device.device_type_id,
+        damages: device.damages,
+        features: device.features,
+    });
+
+    return acc;
+
+  }, []);
+
   return {
     customers: customers,
     devices: devices,
     devicesRepared: devicesRepared,
     brands: json.data.brands,
-    deviceTypes: json.data.deviceTypes
+    deviceTypes: json.data.deviceTypes,
+    devicesChecks: devicesChecks
   }
 };

@@ -124,6 +124,16 @@ interface NewOrder {
     customerId?: String;
     observation: String;
     deviceUnitId: String;
+    damages: [{
+            value: string;
+            checked: boolean;
+        }];
+    damageDescription: String;
+    features: [{
+        value: string;
+        checked: boolean;
+    }];
+    featureDescription: String;
 }
 
 interface Brand {
