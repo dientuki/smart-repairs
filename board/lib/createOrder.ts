@@ -30,7 +30,7 @@ export const getCustomersDevices = async () => {
                     name
                 }
               }
-              devicesRepared(team_id:"01HZRBD546A6AE8CP91AEP1N64") {
+              devicesRepared {
                 id
                 serial
                 device {
@@ -48,6 +48,11 @@ export const getCustomersDevices = async () => {
               deviceTypes {
                 id
                 label
+              }
+              deviceTypeChecks {
+                device_type_id
+                damages
+                features
               }
             }
         `

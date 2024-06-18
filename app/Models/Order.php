@@ -27,6 +27,7 @@ class Order extends ModelWithTeam
     }
 
     public function getActiveOrders() {
+        //@todo improve https://www.answeroverflow.com/m/1136334340888989927#solution-1136340488786559106
         $team = auth()->user()->teams;
 
         $teamIds = [];

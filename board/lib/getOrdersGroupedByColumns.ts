@@ -8,7 +8,7 @@ export const getOrdersGroupedByColumns = async () => {
         body: JSON.stringify({
             query: `
                 query {
-                    orders(team_id:1) {
+                    orders {
                         id
                         status
                         created_at
