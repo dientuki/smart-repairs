@@ -9,9 +9,6 @@ type Query {
         @field(resolver: "Order@getActiveOrders")
         @namespace(field: "App\\Models")
     order(id: ID @eq): Order! @find
-    deviceTypeChecks(device_type_id: String): [DeviceTypeCheck]
-        @field(resolver: "DeviceTypeCheck@getDeviceChecks")
-        @namespace(field: "App\\Models")
 }
 
 type Mutation {
@@ -37,6 +34,7 @@ type Mutation {
 
 #import customer.graphql
 #import device.graphql
+#import deviceTypeCheck.graphql
 #import deviceUnit.graphql
 
 type Brand {
@@ -46,11 +44,6 @@ type Brand {
     name: String!
     imageUrl: String!
     label: String!
-}
-
-type DeviceTypeCheck {
-    damages: [String]
-    features: [String]
 }
 
 input OrderInput {
