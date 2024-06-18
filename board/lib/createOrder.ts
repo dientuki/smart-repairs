@@ -30,7 +30,7 @@ export const getCustomersDevices = async () => {
                     name
                 }
               }
-              devicesRepared(team_id:"01HZRBD546A6AE8CP91AEP1N64") {
+              devicesRepared {
                 id
                 serial
                 device {
@@ -48,6 +48,11 @@ export const getCustomersDevices = async () => {
               deviceTypes {
                 id
                 label
+              }
+              deviceTypeChecks {
+                device_type_id
+                damages
+                features
               }
             }
         `
@@ -98,11 +103,23 @@ export const getCustomersDevices = async () => {
 
   }, []);
 
+  const devicesChecks: DeviceChecks[] = json.data.deviceTypeChecks.reduce((acc: DeviceChecks[], device: any) => {
+    acc.push({
+        deviceTypeId: device.device_type_id,
+        damages: device.damages,
+        features: device.features,
+    });
+
+    return acc;
+
+  }, []);
+
   return {
     customers: customers,
     devices: devices,
     devicesRepared: devicesRepared,
     brands: json.data.brands,
-    deviceTypes: json.data.deviceTypes
+    deviceTypes: json.data.deviceTypes,
+    devicesChecks: devicesChecks
   }
 };

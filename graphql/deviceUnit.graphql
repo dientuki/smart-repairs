@@ -1,6 +1,6 @@
 extend type Query {
-    devicesRepared(team_id: ID @eq): [DeviceUnit!]
-        @field(resolver: "DeviceUnit@getDeviceUnitsByTenant")
+    devicesRepared: [DeviceUnit!]
+        @field(resolver: "DeviceUnit@getDeviceUnitsByTeam")
         @namespace(field: "App\\Models")
 }
 

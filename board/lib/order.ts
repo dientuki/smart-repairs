@@ -1,22 +1,23 @@
+import { graphqlRequest, arrayToString, handleGraphQLErrors } from "@/helper/functions";
+
 export const createOrder = async (newOrder: NewOrder) => {
-    console.log(newOrder)
-    await fetch('/graphql', {
-        method: 'POST',
-        headers: {
-                'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-                query: `
+
+    const response = await graphqlRequest(`
                         mutation {
                             addOrder(order: {
                                 customer_id: "${newOrder.customerId}"
                                 device_unit_id: "${newOrder.deviceUnitId}"
                                 observation: "${newOrder.observation}"
-                            }) {
-                                id
-                            }
+                                damages: ${arrayToString(newOrder.damages)}
+                                damage_description: "${newOrder.damageDescription}"
+                                features: ${arrayToString(newOrder.features)}
+                                feature_description: "${newOrder.featureDescription}"
+                            })
                     }
-                `
-        })
-    });
+                `);
+
+    handleGraphQLErrors(response.errors);
+
+    return response.data.addOrder;
+
 }

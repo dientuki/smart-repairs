@@ -15,12 +15,6 @@ class DeviceTypeCheck extends ModelWithTeam
         ];
     }
 
-    public static function getDeviceChecks(null $root, array $args) {
-        return self::where('device_type_id', $args['device_type_id'])
-            ->where('team_id', auth()->user()->teams->first()->id)
-            ->get();
-    }
-
     public function device_type():BelongsTo {
         return $this->belongsTo(DeviceType::class);
     }

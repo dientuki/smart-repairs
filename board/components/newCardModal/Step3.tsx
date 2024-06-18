@@ -11,7 +11,7 @@ type Props = {
   prevStep: () => void,
   device: DeviceInfo | null,
   devicesRepared: DeviceRepared[] | undefined,
-  nextStep: (data: NewOrder) => void
+  nextStep: (data: Step3data) => void
 }
 
 enum UnlockTypeEnum {
@@ -247,7 +247,7 @@ function Step3({ prevStep, device, devicesRepared, nextStep }: Props) {
         <div className="flex justify-between mt-6">
           <div onClick={prevStep} className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center w-1/4 cursor-pointer">Anterior</div>
 
-          <button type="submit" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center w-1/4">Finalizar</button>
+          <button type="submit" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center w-1/4">Siguiente</button>
         </div>
 
       </form>

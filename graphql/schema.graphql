@@ -5,19 +5,9 @@ scalar DateTime @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\Date
 type Query {
     brands: [Brand!] @all @orderBy(column: "name", direction: ASC)
     deviceTypes: [DeviceType!] @all @orderBy(column: "name", direction: ASC)
-    orders: [Orders!]!
-        @field(resolver: "Order@getActiveOrders")
-        @namespace(field: "App\\Models")
-    order(id: ID @eq): Order! @find
-    deviceTypeChecks(device_type_id: String): [DeviceTypeCheck]
-        @field(resolver: "DeviceTypeCheck@getDeviceChecks")
-        @namespace(field: "App\\Models")
 }
 
 type Mutation {
-    updateOrderStatus(id: String, status: String!): Boolean!
-        @field(resolver: "OrderMutation@updateStatus")
-        @namespace(field: "App\\GraphQL\\Mutations")
     updateCommentVisibility(commentId: String, isPublic: Boolean!): Boolean!
         @field(resolver: "CommentMutation@updateVisibility")
         @namespace(field: "App\\GraphQL\\Mutations")
@@ -30,14 +20,13 @@ type Mutation {
     addComment(orderId: String, isPublic: Boolean, comment: String): Comment!
         @field(resolver: "CommentMutation@create")
         @namespace(field: "App\\GraphQL\\Mutations")
-    addOrder(order: OrderInput): Order!
-        @field(resolver: "OrderMutation@create")
-        @namespace(field: "App\\GraphQL\\Mutations")
 }
 
 #import customer.graphql
 #import device.graphql
+#import deviceTypeCheck.graphql
 #import deviceUnit.graphql
+#import order.graphql
 
 type Brand {
     "Unique primary key."
@@ -46,38 +35,6 @@ type Brand {
     name: String!
     imageUrl: String!
     label: String!
-}
-
-type DeviceTypeCheck {
-    damages: [String]
-    features: [String]
-}
-
-input OrderInput {
-    customer_id: String!
-    device_unit_id: String!
-    observation: String!
-}
-
-type Order {
-    id: ID!
-    status: String!,
-    customer: Customer!
-    device_unit: DeviceUnit!
-    created_at: DateTime!
-    observation: String!
-    comments: [Comment!]
-}
-
-type Orders {
-    id: ID!
-    team_id: ID!
-    status: String!,
-    customer: Customer!
-    device_unit: DeviceUnit!
-    created_at: DateTime!
-    observation: String!
-    comments: [Comment!]
 }
 
 type Comment {

@@ -27,3 +27,13 @@ export const handleGraphQLErrors = (errors: GraphQLErrors | undefined) => {
         }
     }
 };
+
+function objectToString(obj) {
+    return `{${Object.entries(obj).map(([key, value]) => `${key}:${JSON.stringify(value)}`).join(",")}}`;
+}
+
+export const arrayToString = (arr) => {
+
+    // Stringify the object using the replacer function
+    return "[" + arr.map(obj => objectToString(obj)).join(",") + "]";
+}

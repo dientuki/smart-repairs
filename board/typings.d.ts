@@ -33,6 +33,7 @@ interface DeviceInfo {
     id?: string;
     label?: string;
     type?: string | null;
+    typeId?: string | null;
 }
 
 interface Device {
@@ -120,9 +121,40 @@ interface Images {
 }
 
 interface NewOrder {
-    customerId?: String;
+    customerId: String | null;
     observation: String;
     deviceUnitId: String;
+    damages: [damage];
+    damageDescription: String;
+    features: [feature];
+    featureDescription: String;
+}
+
+interface Step3data {
+    deviceUnitId: string;
+    observation: string;
+}
+
+interface Step4data {
+    damages: [damage];
+    damageDescription: String;
+    features: [feature];
+    featureDescription: String;
+}
+
+interface damage {
+    value: string;
+    checked: boolean;
+}
+
+interface feature {
+    value: string;
+    checked: boolean;
+}
+
+interface checks {
+    damages: [damage];
+    features: [feature];
 }
 
 interface Brand {
