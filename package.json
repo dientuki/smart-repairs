@@ -38,6 +38,7 @@
         "axios": "^1.6.4",
         "bootstrap": "^5.2.3",
         "eslint": "^9.5.0",
+        "eslint-plugin-i18next": "^6.0.3",
         "laravel-vite-plugin": "^1.0",
         "postcss": "^8.4.38",
         "sass": "^1.77.5",
