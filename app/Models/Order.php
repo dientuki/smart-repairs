@@ -26,18 +26,6 @@ class Order extends ModelWithTeam
         return $this->hasMany(OrderComment::class)->orderBy('created_at', 'asc');
     }
 
-    public function getActiveOrders() {
-        //@todo improve https://www.answeroverflow.com/m/1136334340888989927#solution-1136340488786559106
-        $team = auth()->user()->teams;
-
-        $teamIds = [];
-        foreach ($team as $t) {
-            $teamIds[] = $t->id;
-        }
-
-        return self::whereIn('team_id', $teamIds)->where('status', '!=', 'ready')->get();
-    }
-
     /**
      * Updates the status of an order.
      *

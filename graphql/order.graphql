@@ -1,7 +1,7 @@
 extend type Query {
     orders: [Orders!]!
-        @field(resolver: "Order@getActiveOrders")
-        @namespace(field: "App\\Models")
+        @field(resolver: "OrderQueries@getActiveOrders")
+        @namespace(field: "App\\GraphQL\\Queries")
     order(id: ID @eq): Order! @find
 }
 

@@ -9,9 +9,4 @@ class DeviceUnit extends ModelWithTeam
     public function device() {
         return $this->belongsTo(Device::class);
     }
-
-    public static function getDeviceUnitsByTeam()
-    {
-        return static::where('team_id', auth()->user()->teams->first()->id)->get();
-    }
 }

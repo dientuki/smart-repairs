@@ -4,10 +4,10 @@ extend type Query {
 
 extend type Mutation {
     addDevice(device: DeviceInput): Device!
-        @field(resolver: "DeviceMutation@create")
+        @field(resolver: "DeviceMutations@create")
         @namespace(field: "App\\GraphQL\\Mutations")
     updateDevice(deviceId: String, device: DeviceInput): Boolean
-        @field(resolver: "DeviceMutation@update")
+        @field(resolver: "DeviceMutations@update")
         @namespace(field: "App\\GraphQL\\Mutations")
 }
 
