@@ -57,10 +57,11 @@ interface DeviceUnit {
 
 interface NewDeviceUnit {
     id: string | null;
+    deviceid: string | null;
     serial: string;
     unlocktype: UnlockTypeEnum;
     unlockcode?: string;
-    deviceid: string | null;
+
 }
 
 interface NewDevice {
