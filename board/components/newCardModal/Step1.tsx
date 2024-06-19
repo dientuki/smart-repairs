@@ -5,6 +5,7 @@ import { useOrderStore } from "@/store/OrderStore";
 import { useState } from "react";
 import { EnvelopeIcon, PhoneIcon } from "@heroicons/react/16/solid";
 import { toast } from "react-toastify";
+import { useTranslation } from 'react-i18next';
 
 const filter = createFilterOptions<Customer>();
 type Props = {
@@ -16,6 +17,7 @@ function Step1({ nextStep, customers }: Props) {
   const { addCustomer, updateCustomer } = useOrderStore();
   const { handleSubmit, control, formState: { errors }, setValue, setError, trigger } = useForm();
   const [ selectedCustomer, setSelectedCustomer ] = useState<Customer | null>(null);
+  const { t } = useTranslation();
 
   const handleRegistration = async(data: FieldValues ) => {
     const toValidate = ['firstname', 'lastname', 'phone', 'email'];
@@ -70,7 +72,7 @@ function Step1({ nextStep, customers }: Props) {
 
   const registerOptions = {
     id: {required: false},
-    firstname: { required: false },
+    firstname: { required: t('validation.required', { field: t('field.firstname')}) },
     lastname: { required: false },
     phone: { required: false },
     email: { required: false },
@@ -142,7 +144,7 @@ function Step1({ nextStep, customers }: Props) {
 
         <div className="grid gap-6 grid-cols-2 mt-4">
           <Field>
-            <Label className="block mb-2 text-sm font-medium text-gray-900">Nombre</Label>
+            <Label className="block mb-2 text-sm font-medium text-gray-900">{t('field.firstname')}</Label>
             <Controller
               name="firstname"
               defaultValue=""

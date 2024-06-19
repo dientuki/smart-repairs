@@ -1,0 +1,15 @@
+{
+    "welcome": "Bienvenido",
+    "description": "Descripcion",
+    "search": "Buscar",
+
+
+    "field": {
+        "firstname": "Nombre"
+    },
+
+
+    "validation": {
+        "required": "El campo {{field}} es requerido"
+    }
+}
