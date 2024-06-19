@@ -7,7 +7,7 @@ use Illuminate\Support\Str;
 use Nuwave\Lighthouse\Execution\ResolveInfo;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 
-final readonly class CustomerMutation
+final readonly class CustomerMutations
 {
     /**
      * Return a value for the field.

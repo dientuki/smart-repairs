@@ -16,7 +16,7 @@ export async function createDeviceUnit(deviceUnit: NewDeviceUnit): Promise<strin
 
     handleGraphQLErrors(response.errors);
 
-    return response.addDeviceUnit.id;
+    return response.data.addDeviceUnit.id;
 }
 
 export async function updateDeviceUnit(deviceUnit: NewDeviceUnit): Promise<boolean> {
@@ -26,7 +26,6 @@ export async function updateDeviceUnit(deviceUnit: NewDeviceUnit): Promise<boole
                         serial: "${deviceUnit.serial}"
                         unlocktype: "${deviceUnit.unlocktype}"
                         unlockcode: "${deviceUnit.unlockcode}"
-                        deviceid: "${deviceUnit.deviceid}"
                     })
                 }
             `);

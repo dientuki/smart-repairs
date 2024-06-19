@@ -1,15 +1,15 @@
 extend type Query {
     customers: [Customer!]! @orderBy(column: "first_name", direction: ASC)
-        @field(resolver: "Customer@getCustomers")
-        @namespace(field: "App\\Models")
+        @field(resolver: "CustomerQueries@getCustomers")
+        @namespace(field: "App\\GraphQL\\Queries")
 }
 
 extend type Mutation {
     addCustomer(customer: CustomerInput): Customer!
-        @field(resolver: "CustomerMutation@create")
+        @field(resolver: "CustomerMutations@create")
         @namespace(field: "App\\GraphQL\\Mutations")
     updateCustomer(customerId: String, customer: CustomerInput): Boolean!
-        @field(resolver: "CustomerMutation@update")
+        @field(resolver: "CustomerMutations@update")
         @namespace(field: "App\\GraphQL\\Mutations")
 }
 

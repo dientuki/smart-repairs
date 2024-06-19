@@ -8,11 +8,6 @@ class Customer extends ModelWithTeam
 {
     protected $fillable = ['first_name', 'last_name', 'phone', 'email', 'team_id'];
 
-    public static function getCustomers()
-    {
-        return self::where('team_id', auth()->user()->teams->first()->id)->get();
-    }
-
     /**
      * Returns an Attribute object that represents the full name of a customer.
      *

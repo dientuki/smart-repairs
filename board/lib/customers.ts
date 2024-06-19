@@ -17,7 +17,7 @@ export const createCustomer = async(customer: Customer) => {
 
     handleGraphQLErrors(response.errors);
 
-    return response.addCustomer.id;
+    return response.data.addCustomer.id;
 }
 
 export const updateCustomer = async(customer: Customer) => {
