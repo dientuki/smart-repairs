@@ -5,7 +5,7 @@ export async function createDeviceUnit(deviceUnit: NewDeviceUnit): Promise<strin
                 mutation {
                     addDeviceUnit(deviceunit: {
                         serial: "${deviceUnit.serial}"
-                        unlocktype: "code"
+                        unlocktype: "${deviceUnit.unlocktype}"
                         unlockcode: "${deviceUnit.unlockcode}"
                         deviceid: "${deviceUnit.deviceid}"
                     }) {
