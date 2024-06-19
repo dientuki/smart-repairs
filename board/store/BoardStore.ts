@@ -1,4 +1,3 @@
-import { uploadTask } from "@/lib/addTask";
 import { getOrdersGroupedByColumns } from "@/lib/getOrdersGroupedByColumns";
 import { updateStatus } from "@/lib/updateStatus";
 import { create } from 'zustand'
@@ -13,10 +12,12 @@ interface BoardStore {
     newTaskInput: string,
     setNewTaskInput: (input: string) => void,
 
+    /*
     image: File | null,
     setImage: (image: File | null) => void,
 
     addTask: (order: string, columnId: TypedColumn, image?: File | null) => void
+    */
 }
 
 export const useBoardStore = create<BoardStore>((set) => ({
@@ -35,6 +36,7 @@ export const useBoardStore = create<BoardStore>((set) => ({
   newTaskInput: "",
   setNewTaskInput: (input: string) => set({ newTaskInput: input }),
 
+  /*
   image: null,
   setImage: (image: File | null) => set({ image }),
 
@@ -77,5 +79,5 @@ export const useBoardStore = create<BoardStore>((set) => ({
     });
 
   }
-
+  */
 }));
