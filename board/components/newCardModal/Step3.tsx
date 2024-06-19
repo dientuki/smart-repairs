@@ -30,16 +30,12 @@ const unlocktypeOptions = Object.keys(UnlockTypeEnumLabels).map((key) => ({ id: 
 
 function Step3({ prevStep, device, devicesRepared, nextStep }: Props) {
   const { handleSubmit, control, formState: { errors }, setValue, setError } = useForm();
-  const [ unlocktype, setunlocktype] = useState<UnlockTypeEnum>(UnlockTypeEnum.NONE);
+  const [ unlockType, setUnlockType] = useState<UnlockTypeEnum>(UnlockTypeEnum.NONE);
   const [ deviceUnitSelected, setDeviceUnitSelected ] = useState<string | null>(null);
   const { addDeviceUnit, updateDeviceUnit } = useOrderStore();
   const [ isDisableCode, setIsDisableCode ] = useState(true);
   const autocomplete = device ? devicesRepared?.filter((d) => d.deviceId === device.id) : null;
   const openPatternLock = () => Modal.open(PatternLockModal, {layer: 5, setPattern: setPattern});
-
-  const setPattern = (pattern: number[]) => {
-    setValue('unlockcode', pattern);
-  }
 
   if (autocomplete) {
     autocomplete.push({
@@ -48,13 +44,17 @@ function Step3({ prevStep, device, devicesRepared, nextStep }: Props) {
     })
   }
 
+  const setPattern = (pattern: number[]) => {
+    setValue('unlockcode', pattern.length > 0 ? pattern : null);
+  }
+
   const handleRegistration = async (data: FieldValues ) => {
     let id: string | null = deviceUnitSelected;
     const deviceUnit: NewDeviceUnit = {
       id: id,
-      deviceid: device?.id ?? null,
+      deviceid: device?.id,
       serial: data.serial,
-      unlocktype: unlocktype || 'none',
+      unlocktype: unlockType,
       unlockcode: data.unlockcode
     };
 
@@ -63,12 +63,19 @@ function Step3({ prevStep, device, devicesRepared, nextStep }: Props) {
         id = await addDeviceUnit(deviceUnit);
         toast.success("Equipo agregado");
       } else {
+        deviceUnit.deviceid = deviceUnitSelected;
         if (await updateDeviceUnit(deviceUnit)) {
           toast.success("Actualizo");
         } else {
           toast.error("Error en actualizar");
         };
       };
+
+      nextStep({
+        deviceUnitId: id as string,
+        observation: data.observation,
+      });
+
     } catch (e: any) {
       switch (e.constructor.name) {
         case 'Object':
@@ -78,6 +85,7 @@ function Step3({ prevStep, device, devicesRepared, nextStep }: Props) {
               setError(toValidate[i], {message: e[`deviceunit.${toValidate[i]}`][0]});
             }
           }
+          toast.error("Error en el formulario");
           break;
         case 'Error':
           toast.error(e.message);
@@ -87,11 +95,6 @@ function Step3({ prevStep, device, devicesRepared, nextStep }: Props) {
           break;
       }
     }
-
-    nextStep({
-      deviceUnitId: id as string,
-      observation: data.observation,
-    });
   };
 
   const handleError = (errors: FieldErrors<FieldValues>) => {
@@ -121,6 +124,12 @@ function Step3({ prevStep, device, devicesRepared, nextStep }: Props) {
         break;
     }
   }
+
+  const random = () => {
+    const number = Math.floor(Math.random() * 1000000);
+    setValue('serial', `LABO-${number}`);
+
+  };
 
   return (
     <TabPanel unmount={false}>
@@ -156,7 +165,8 @@ function Step3({ prevStep, device, devicesRepared, nextStep }: Props) {
             )}
           </Field>
 
-          <Field className="mt-4">
+        <div className="grid gap-6 grid-cols-2 mt-4">
+          <Field>
             <Label className="block mb-2 text-sm font-medium text-gray-900">Numero de Imei/Serie</Label>
             <Controller
               name="serial"
@@ -173,6 +183,8 @@ function Step3({ prevStep, device, devicesRepared, nextStep }: Props) {
               </small>
             )}
           </Field>
+          <div onClick={random} className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center w-1/4 cursor-pointer">Generar random</div>
+        </div>
 
         <div className="grid gap-6 grid-cols-2 mt-4">
           <Field>
@@ -180,17 +192,18 @@ function Step3({ prevStep, device, devicesRepared, nextStep }: Props) {
             <Controller
               name="unlocktype"
               control={control}
-              defaultValue=""
+              defaultValue={UnlockTypeEnumLabels[UnlockTypeEnum.NONE]}
               rules={registerOptions.unlocktype}
               render={({ field }) => (
                 <Autocomplete
                   {...field}
                   selectOnFocus
                   handleHomeEndKeys
+                  disableClearable
                   id="unlocktype"
                   onChange={(event, newValue) => {
                     setValue('unlocktype', newValue?.label);
-                    setunlocktype(newValue?.id as UnlockTypeEnum);
+                    setUnlockType(newValue?.id as UnlockTypeEnum);
                     handleUnlock(newValue?.id);
                   }}
                   options={unlocktypeOptions}
@@ -226,7 +239,7 @@ function Step3({ prevStep, device, devicesRepared, nextStep }: Props) {
           </Field>
         </div>
 
-        <Field>
+        <Field className="mt-4">
           <Label className="block mb-2 text-sm font-medium text-gray-900">Problema</Label>
           <Controller
             name="observation"

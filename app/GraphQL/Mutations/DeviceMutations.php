@@ -2,12 +2,12 @@
 
 namespace App\GraphQL\Mutations;
 
-use App\Models\DeviceUnit;
+use App\Models\Device;
 use Illuminate\Support\Str;
 use Nuwave\Lighthouse\Execution\ResolveInfo;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 
-final readonly class DeviceUnitMutation
+final readonly class DeviceMutations
 {
     /**
      * Return a value for the field.
@@ -21,27 +21,27 @@ final readonly class DeviceUnitMutation
     public function create(null $root, array $args, GraphQLContext $context, ResolveInfo $resolveInfo): mixed
     {
         // TODO implement the resolver
-        //$user = auth()->user();
 
-        return DeviceUnit::create([
-            'id' => (string) Str::upper(Str::ulid()),
-            'device_id' => $args['deviceunit']['deviceid'],
-            'team_id' => auth()->user()->teams->first()->id,
-            'serial' => $args['deviceunit']['serial'],
-            'unlock_type' => $args['deviceunit']['unlocktype'],
-            'unlock_code' => $args['deviceunit']['unlockcode'],
+        return Device::create([
+            'id' => (string) Str::ulid(),
+            'commercial_name' => $args['device']['commercialname'],
+            'tech_name' => $args['device']['techname'],
+            'brand_id' => $args['device']['brandid'],
+            'device_type_id' => $args['device']['typeid'],
+            'url' => $args['device']['url'],
         ]);
     }
 
     public function update(null $root, array $args, GraphQLContext $context, ResolveInfo $resolveInfo): bool
     {
-        $deviceUnit = DeviceUnit::find($args['deviceUnitId']);
-
-        if ($deviceUnit && $deviceUnit->team_id === auth()->user()->teams->first()->id) {
-            $deviceUnit->serial = $args['deviceunit']['serial'];
-            $deviceUnit->unlock_type = $args['deviceunit']['unlocktype'];
-            $deviceUnit->unlock_code = $args['deviceunit']['unlockcode'];
-            return $deviceUnit->save();
+        $device = Device::find($args['deviceId']);
+        if ($device) {
+            $device->commercial_name = $args['device']['commercialname'];
+            $device->tech_name = $args['device']['techname'];
+            $device->brand_id = $args['device']['brandid'];
+            $device->device_type_id = $args['device']['typeid'];
+            $device->url = $args['device']['url'];
+            return $device->save();
         }
 
         return false;
