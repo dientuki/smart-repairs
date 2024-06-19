@@ -28,12 +28,12 @@ export const handleGraphQLErrors = (errors: GraphQLErrors | undefined) => {
     }
 };
 
-function objectToString(obj) {
-    return `{${Object.entries(obj).map(([key, value]) => `${key}:${JSON.stringify(value)}`).join(",")}}`;
+function objectToString(object: { [key: string]: any }): string {
+    return `{${Object.entries(object).map(([key, value]) => `${key}:${JSON.stringify(value)}`).join(",")}}`;
 }
 
-export const arrayToString = (arr) => {
+export const arrayToString = (array: { [key: string]: any }[]): string => {
 
     // Stringify the object using the replacer function
-    return "[" + arr.map(obj => objectToString(obj)).join(",") + "]";
+    return "[" + array.map(object => objectToString(object)).join(",") + "]";
 }
