@@ -52,7 +52,7 @@ function Step3({ prevStep, device, devicesRepared, nextStep }: Props) {
     let id: string | null = deviceUnitSelected;
     const deviceUnit: NewDeviceUnit = {
       id: id,
-      deviceid: '',
+      deviceid: device?.id,
       serial: data.serial,
       unlocktype: unlockType,
       unlockcode: data.unlockcode
