@@ -15,7 +15,7 @@ type Props = {
 
 function Step1({ nextStep, customers }: Props) {
   const { addCustomer, updateCustomer } = useOrderStore();
-  const { handleSubmit, control, formState: { errors }, setValue, setError, trigger } = useForm();
+  const { handleSubmit, control, formState: { errors }, getValues, setValue, setError, trigger } = useForm();
   const [ selectedCustomer, setSelectedCustomer ] = useState<Customer | null>(null);
   const { t } = useTranslation();
 
@@ -70,12 +70,28 @@ function Step1({ nextStep, customers }: Props) {
     toast.error("Error en el formulario");
   };
 
+  const validateAtLeastOneField = (value: string) => {
+    return !!getValues('phone') || !!getValues('email') || value;
+  }
+
   const registerOptions = {
     id: {required: false},
     firstname: { required: t('validation.required', { field: t('field.firstname')}) },
-    lastname: { required: false },
-    phone: { required: false },
-    email: { required: false },
+    lastname: { required: t('validation.required', { field: t('field.lastname')}) },
+    email: {
+      pattern: {
+        value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+        message: t('validation.regex', { field: t('field.email')})
+      },
+      validate: () => validateAtLeastOneField(t('validation.required_without', { field: t('field.email'), another: t('field.phone')}))
+     },
+    phone: {
+      pattern: {
+        value:/^\+?\d+(-\d+)*$/,
+        message: t('validation.regex', { field: t('field.phone')})
+      },
+      validate: () => validateAtLeastOneField(t('validation.required_without', { field: t('field.phone'), another: t('field.email')}))
+     }
   };
 
   return (
@@ -144,7 +160,7 @@ function Step1({ nextStep, customers }: Props) {
 
         <div className="grid gap-6 grid-cols-2 mt-4">
           <Field>
-            <Label className="block mb-2 text-sm font-medium text-gray-900">{t('field.firstname')}</Label>
+            <Label className="first-letter:uppercase block mb-2 text-sm font-medium text-gray-900">{t('field.firstname')}</Label>
             <Controller
               name="firstname"
               defaultValue=""
@@ -162,7 +178,7 @@ function Step1({ nextStep, customers }: Props) {
           </Field>
 
           <Field>
-            <Label className="block mb-2 text-sm font-medium text-gray-900">Apellido</Label>
+            <Label className="first-letter:uppercase block mb-2 text-sm font-medium text-gray-900">{t('field.lastname')}</Label>
             <Controller
               name="lastname"
               control={control}
@@ -182,7 +198,7 @@ function Step1({ nextStep, customers }: Props) {
 
         <div className="grid gap-6 grid-cols-2 mt-4">
           <Field>
-            <Label className="block mb-2 text-sm font-medium text-gray-900">Email</Label>
+            <Label className="first-letter:uppercase block mb-2 text-sm font-medium text-gray-900">{t('field.email')}</Label>
             <div className="flex">
               <div className="inline-flex items-center px-3 text-sm text-gray-900 bg-gray-200 border rounded-e-0 border-gray-300 border-e-0 rounded-s-md">
                 <EnvelopeIcon className="w-4 h-4 text-gray-500 " aria-hidden="true" />
@@ -205,7 +221,7 @@ function Step1({ nextStep, customers }: Props) {
           </Field>
 
           <Field>
-            <Label className="block mb-2 text-sm font-medium text-gray-900">Telefono</Label>
+            <Label className="first-letter:uppercase block mb-2 text-sm font-medium text-gray-900">{t('field.phone')}</Label>
             <div className="flex">
               <div className="inline-flex items-center px-3 text-sm text-gray-900 bg-gray-200 border rounded-e-0 border-gray-300 border-e-0 rounded-s-md">
                 <PhoneIcon className="w-4 h-4 text-gray-500 " aria-hidden="true" />

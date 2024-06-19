@@ -1,15 +1,29 @@
 {
-    "welcome": "Bienvenido",
-    "description": "Descripcion",
-    "search": "Buscar",
-
+    "device": "equipo",
 
     "field": {
-        "firstname": "Nombre"
+        "brand": "marca",
+        "device": "equipo",
+        "commercial_name": "nombre comercial",
+        "email": "email",
+        "firstname": "nombre",
+        "lastname": "apellido",
+        "phone": "telefono",
+        "type": "tipo de equipo",
+        "tech_name": "nombre tecnico",
+        "url": "url"
     },
 
+    "unlock_type" : {
+        "none": "ninguno",
+        "code": "codigo de desbloqueo",
+        "pattern": "patron de desbloqueo"
+    },
 
     "validation": {
-        "required": "El campo {{field}} es requerido"
+        "regex": "El formato del campo {{field}} es inválido.",
+        "required": "El campo {{field}} es requerido",
+        "required_without": "El campo {{field}} es obligatorio cuando {{another}} no está presente.",
+        "url": "El formato del campo {{field}} es inválido."
     }
 }

@@ -49,7 +49,7 @@ function Step4({ prevStep, nextStep, checks }: Props) {
                 </label>
             ))}
             </div>
-            <Label className="block mb-2 text-sm font-medium text-gray-900">Obervaciones adicionales</Label>
+            <Label className="first-letter:uppercase block mb-2 text-sm font-medium text-gray-900">Obervaciones adicionales</Label>
             <Input name="damageDescription" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" />
           </Field>
 
@@ -64,7 +64,7 @@ function Step4({ prevStep, nextStep, checks }: Props) {
               </label>
             ))}
             </div>
-            <Label className="block mb-2 text-sm font-medium text-gray-900">Obervaciones adicionales</Label>
+            <Label className="first-letter:uppercase block mb-2 text-sm font-medium text-gray-900">Obervaciones adicionales</Label>
             <Input name="featureDescription" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" />
           </Field>
         </div>
