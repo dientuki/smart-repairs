@@ -21,6 +21,7 @@
         "laravel/sail": "^1.26",
         "mockery/mockery": "^1.6",
         "nunomaduro/collision": "^8.0",
+        "phpmd/phpmd": "^2.15",
         "phpstan/phpstan": "^1.11",
         "phpunit/phpunit": "^11.0.1",
         "povils/phpmnd": "^3.5",
@@ -56,18 +57,32 @@
             "@php -r \"file_exists('database/database.sqlite') || touch('database/database.sqlite');\"",
             "@php artisan migrate --graceful --ansi"
         ],
+        "linter": [
+            "composer phpmd",
+            "composer phpcs",
+            "composer phpstan",
+            "composer phpmnd"
+        ],
+        "phpmd": [
+            "phpmd app/,bootstrap/,config/,database/,lang/,resources/views/,routes/,tests/ text ./phpmd.xml"
+        ],
         "phpcs": [
-            "phpcs app/ config/ database/ routes/ lang/ tests/ --standard=PSR12 -e",
-            "phpcs resources/views/ --standard=PSR12 -e"
+            "phpcs --standard=phpcs.xml"
         ],
         "phpcbf": [
-            "phpcbf app/ config/ database/ routes/ resources/lang/ tests/ --standard=PSR2"
+            "phpcbf --standard=phpcs.xml"
         ],
         "phpstan": [
             "phpstan analyse -c ./phpstan.neon --memory-limit 1G"
         ],
         "phpmnd": [
-            "phpmnd app/ config/ database/ routes/ resources/views/ lang/ tests/"
+            "phpmnd app/ bootstrap/ config/ database/ lang/ resources/views/ routes/ tests/"
+        ],
+        "clear": [
+            "@php artisan route:cache",
+            "@php artisan cache:clear",
+            "@php artisan config:cache",
+            "@php artisan view:clear"
         ]
     },
     "extra": {

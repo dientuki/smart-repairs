@@ -1,20 +1,29 @@
+includes:
+    - vendor/larastan/larastan/extension.neon
+
 parameters:
 	level: 1
 	paths:
 		- app
+		- bootstrap
 		- config
 		- database
-		- routes
-		- resources/views
 		- lang
+		- resources/views
+		- routes
+		- tests
+
+
+
+	checkUnusedViews: true
+	checkModelAppends: true
+	checkModelProperties: true
+	noEnvCallsOutsideOfConfig: true
 
 	ignoreErrors:
 		-
-			message: '#Undefined variable\: \$factory#'
-			path: database/factories/*
+			message: "#Property 'id' does not exist#"
+			path: app/GraphQL/Mutations/
 		-
-			message: '#Undefined variable\: \$this#'
-			path: routes/console.php
-		-
-			message: '#Using \$this outside a class.#'
-			path: routes/console.php
+			message: "#This view is not used in the project.#"
+			path: resources/views/auth/
