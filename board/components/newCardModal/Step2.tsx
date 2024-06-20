@@ -204,9 +204,9 @@ function Step2({ nextStep, prevStep, devices, brands, deviceTypes }: Props) {
                 />
             }
             {errors?.typeid && errors.typeid.message && (
-              <small className="text-danger">
-                <span>{typeof errors.typeid.message === 'string' ? errors.typeid.message : JSON.stringify(errors.typeid.message)}</span>
-              </small>
+              <p className="mt-2 text-sm text-red-600 dark:text-red-500">
+                {typeof errors.typeid.message === 'string' ? errors.typeid.message : JSON.stringify(errors.typeid.message)}
+              </p>
             )}
           </Field>
 
@@ -235,9 +235,9 @@ function Step2({ nextStep, prevStep, devices, brands, deviceTypes }: Props) {
                 />
             }
             {errors?.brandid && errors.brandid.message && (
-              <small className="text-danger">
-                <span>{typeof errors.brandid.message === 'string' ? errors.brandid.message : JSON.stringify(errors.brandid.message)}</span>
-              </small>
+              <p className="mt-2 text-sm text-red-600 dark:text-red-500">
+                {typeof errors.brandid.message === 'string' ? errors.brandid.message : JSON.stringify(errors.brandid.message)}
+              </p>
             )}
           </Field>
         </div>
@@ -251,13 +251,13 @@ function Step2({ nextStep, prevStep, devices, brands, deviceTypes }: Props) {
               defaultValue=""
               rules={registerOptions.commercialname}
               render={({ field }) => (
-                <Input  {...field} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" />
+                <Input {...field} className={`${errors?.commercialname ? 'bg-red-50 border-red-500 text-red-900 placeholder-red-700 focus:ring-red-500 focus:border-red-500' : 'bg-gray-50 border-gray-300 text-gray-900 focus:ring-blue-500 focus:border-blue-500' } text-sm rounded-lg  block w-full p-2.5 border`} />
               )}
             />
             {errors?.commercialname && errors.commercialname.message && (
-              <small className="text-danger">
-                <span>{typeof errors.commercialname.message === 'string' ? errors.commercialname.message : JSON.stringify(errors.commercialname.message)}</span>
-              </small>
+              <p className="mt-2 text-sm text-red-600 dark:text-red-500">
+                {typeof errors.commercialname.message === 'string' ? errors.commercialname.message : JSON.stringify(errors.commercialname.message)}
+              </p>
             )}
           </Field>
 
@@ -269,13 +269,13 @@ function Step2({ nextStep, prevStep, devices, brands, deviceTypes }: Props) {
               defaultValue=""
               rules={registerOptions.techname}
               render={({ field }) => (
-                <Input  {...field} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" />
+                <Input {...field} className={`${errors?.techname ? 'bg-red-50 border-red-500 text-red-900 placeholder-red-700 focus:ring-red-500 focus:border-red-500' : 'bg-gray-50 border-gray-300 text-gray-900 focus:ring-blue-500 focus:border-blue-500' } text-sm rounded-lg  block w-full p-2.5 border`} />
               )}
             />
             {errors?.techname && errors.techname.message && (
-              <small className="text-danger">
-                <span>{typeof errors.techname.message === 'string' ? errors.techname.message : JSON.stringify(errors.techname.message)}</span>
-              </small>
+              <p className="mt-2 text-sm text-red-600 dark:text-red-500">
+                {typeof errors.techname.message === 'string' ? errors.techname.message : JSON.stringify(errors.techname.message)}
+              </p>
             )}
           </Field>
         </div>
@@ -298,9 +298,9 @@ function Step2({ nextStep, prevStep, devices, brands, deviceTypes }: Props) {
               />
             </div>
             {errors?.url && errors.url.message && (
-              <small className="text-danger">
-                <span>{typeof errors.url.message === 'string' ? errors.url.message : JSON.stringify(errors.url.message)}</span>
-              </small>
+              <p className="mt-2 text-sm text-red-600 dark:text-red-500">
+                {typeof errors.url.message === 'string' ? errors.url.message : JSON.stringify(errors.url.message)}
+              </p>
             )}
           </Field>
         </div>

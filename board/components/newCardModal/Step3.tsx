@@ -162,9 +162,9 @@ function Step3({ prevStep, device, devicesRepared, nextStep }: Props) {
               />
             )}
             {errors?.deviceid && errors.deviceid.message && (
-              <small className="text-danger">
-                <span>{typeof errors.deviceid.message === 'string' ? errors.deviceid.message : JSON.stringify(errors.deviceid.message)}</span>
-              </small>
+              <p className="mt-2 text-sm text-red-600 dark:text-red-500">
+                {typeof errors.deviceid.message === 'string' ? errors.deviceid.message : JSON.stringify(errors.deviceid.message)}
+              </p>
             )}
           </Field>
 
@@ -177,13 +177,13 @@ function Step3({ prevStep, device, devicesRepared, nextStep }: Props) {
               control={control}
               rules={registerOptions.serial}
               render={({ field }) => (
-                <Input {...field} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" />
+                <Input {...field} className={`${errors?.serial ? 'bg-red-50 border-red-500 text-red-900 placeholder-red-700 focus:ring-red-500 focus:border-red-500' : 'bg-gray-50 border-gray-300 text-gray-900 focus:ring-blue-500 focus:border-blue-500' } text-sm rounded-lg  block w-full p-2.5 border`} />
               )}
             />
             {errors?.serial && errors.serial.message && (
-              <small className="text-danger">
-                <span>{typeof errors.serial.message === 'string' ? errors.serial.message : JSON.stringify(errors.serial.message)}</span>
-              </small>
+              <p className="mt-2 text-sm text-red-600 dark:text-red-500">
+                {typeof errors.serial.message === 'string' ? errors.serial.message : JSON.stringify(errors.serial.message)}
+              </p>
             )}
           </Field>
           <div onClick={random} className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center w-1/4 cursor-pointer">Generar random</div>
@@ -217,9 +217,9 @@ function Step3({ prevStep, device, devicesRepared, nextStep }: Props) {
               )}
             />
             {errors?.unlocktype && errors.unlocktype.message && (
-              <small className="text-danger">
-                <span>{typeof errors.unlocktype.message === 'string' ? errors.unlocktype.message : JSON.stringify(errors.unlocktype.message)}</span>
-              </small>
+              <p className="mt-2 text-sm text-red-600 dark:text-red-500">
+                {typeof errors.unlocktype.message === 'string' ? errors.unlocktype.message : JSON.stringify(errors.unlocktype.message)}
+              </p>
             )}
           </Field>
 
@@ -231,13 +231,13 @@ function Step3({ prevStep, device, devicesRepared, nextStep }: Props) {
               defaultValue=""
               rules={registerOptions.unlockcode}
               render={({ field }) => (
-                <Input {...field} readOnly={isDisableCode} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" />
+                <Input {...field} readOnly={isDisableCode} className={`${errors?.unlockcode ? 'bg-red-50 border-red-500 text-red-900 placeholder-red-700 focus:ring-red-500 focus:border-red-500' : 'bg-gray-50 border-gray-300 text-gray-900 focus:ring-blue-500 focus:border-blue-500' } text-sm rounded-lg  block w-full p-2.5 border`} />
               )}
             />
             {errors?.unlockcode && errors.unlockcode.message && (
-              <small className="text-danger">
-                <span>{typeof errors.unlockcode.message === 'string' ? errors.unlockcode.message : JSON.stringify(errors.unlockcode.message)}</span>
-              </small>
+              <p className="mt-2 text-sm text-red-600 dark:text-red-500">
+                {typeof errors.unlockcode.message === 'string' ? errors.unlockcode.message : JSON.stringify(errors.unlockcode.message)}
+              </p>
             )}
           </Field>
         </div>
@@ -250,13 +250,13 @@ function Step3({ prevStep, device, devicesRepared, nextStep }: Props) {
             defaultValue=""
             rules={registerOptions.observation}
             render={({ field }) => (
-              <Input  {...field} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" />
+              <Input {...field} className={`${errors?.observation ? 'bg-red-50 border-red-500 text-red-900 placeholder-red-700 focus:ring-red-500 focus:border-red-500' : 'bg-gray-50 border-gray-300 text-gray-900 focus:ring-blue-500 focus:border-blue-500' } text-sm rounded-lg  block w-full p-2.5 border`} />
             )}
           />
           {errors?.observation && errors.observation.message && (
-            <small className="text-danger">
-              <span>{typeof errors.observation.message === 'string' ? errors.observation.message : JSON.stringify(errors.observation.message)}</span>
-            </small>
+            <p className="mt-2 text-sm text-red-600 dark:text-red-500">
+              {typeof errors.observation.message === 'string' ? errors.observation.message : JSON.stringify(errors.observation.message)}
+            </p>
           )}
         </Field>
 
