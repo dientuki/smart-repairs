@@ -23,6 +23,7 @@
         "nunomaduro/collision": "^8.0",
         "phpstan/phpstan": "^1.11",
         "phpunit/phpunit": "^11.0.1",
+        "povils/phpmnd": "^3.5",
         "spatie/laravel-ignition": "^2.4",
         "squizlabs/php_codesniffer": "*"
     },
@@ -64,6 +65,9 @@
         ],
         "phpstan": [
             "phpstan analyse -c ./phpstan.neon --memory-limit 1G"
+        ],
+        "phpmnd": [
+            "phpmnd app/ config/ database/ routes/ resources/views/ lang/ tests/"
         ]
     },
     "extra": {
