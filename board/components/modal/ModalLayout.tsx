@@ -9,10 +9,12 @@ interface ModalLayoutProps {
 
 function ModalLayout(props: ModalLayoutProps) {
   const { children, width = '80vw', height = '80vh' } = props;
-  const css = `h-[${height}] w-[${width}] transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl m-auto cursor-auto`;
 
   return (
-    <div className={css}>
+    <div
+      className="transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl m-auto cursor-auto relative"
+      style={{ width, height }}
+    >
       {children ?
         children :
         <DNA

@@ -6,6 +6,8 @@ import { useOrderStore } from "@/store/OrderStore";
 import { toast } from "react-toastify";
 import Modal from "@/components/modal/Modal";
 import PatternLockModal from "../modal/PatternLockModal";
+import { useTranslation } from "react-i18next";
+
 
 type Props = {
   prevStep: () => void,
@@ -20,14 +22,6 @@ enum UnlockTypeEnum {
   PATTERN = 'pattern',
 }
 
-const UnlockTypeEnumLabels: Record<string, string> = {
-  [UnlockTypeEnum.NONE]: 'Ninguno',
-  [UnlockTypeEnum.CODE]: 'Código',
-  [UnlockTypeEnum.PATTERN]: 'Patrón',
-};
-
-const unlocktypeOptions = Object.keys(UnlockTypeEnumLabels).map((key) => ({ id: key, label: UnlockTypeEnumLabels[key] }));
-
 function Step3({ prevStep, device, devicesRepared, nextStep }: Props) {
   const { handleSubmit, control, formState: { errors }, setValue, setError } = useForm();
   const [ unlockType, setUnlockType] = useState<UnlockTypeEnum>(UnlockTypeEnum.NONE);
@@ -36,6 +30,15 @@ function Step3({ prevStep, device, devicesRepared, nextStep }: Props) {
   const [ isDisableCode, setIsDisableCode ] = useState(true);
   const autocomplete = device ? devicesRepared?.filter((d) => d.deviceId === device.id) : null;
   const openPatternLock = () => Modal.open(PatternLockModal, {layer: 5, setPattern: setPattern});
+  const { t } = useTranslation();
+
+  const UnlockTypeEnumLabels: Record<string, string> = {
+    [UnlockTypeEnum.NONE]: t('unlock_type.none'),
+    [UnlockTypeEnum.CODE]: t('unlock_type.code'),
+    [UnlockTypeEnum.PATTERN]: t('unlock_type.pattern'),
+  };
+
+  const unlocktypeOptions = Object.keys(UnlockTypeEnumLabels).map((key) => ({ id: key, label: UnlockTypeEnumLabels[key] }));
 
   if (autocomplete) {
     autocomplete.push({
@@ -104,10 +107,10 @@ function Step3({ prevStep, device, devicesRepared, nextStep }: Props) {
 
   const registerOptions = {
     deviceid: { required: false },
-    serial: { required: false },
-    unlocktype: { required: false },
+    serial: { required: t('validation.required', { field: t('field.serial')}) },
+    unlocktype: { required: t('validation.required', { field: t('field.unlock_type')}) },
     unlockcode: { required: false },
-    observation: { required: false },
+    observation: { required: t('validation.required', { field: t('field.observation')}) },
   };
 
   const handleUnlock = (unlock: UnlockTypeEnum) => {
@@ -135,7 +138,7 @@ function Step3({ prevStep, device, devicesRepared, nextStep }: Props) {
     <TabPanel unmount={false}>
       <form onSubmit={handleSubmit(handleRegistration, handleError)}>
         <Field>
-          <Label className="block mb-2 text-sm font-medium text-gray-900">Devices Repared</Label>
+          <Label className="first-letter:uppercase block mb-2 text-sm font-medium text-gray-900">Devices Repared</Label>
             {autocomplete && (
               <Autocomplete
                 selectOnFocus
@@ -167,7 +170,7 @@ function Step3({ prevStep, device, devicesRepared, nextStep }: Props) {
 
         <div className="grid gap-6 grid-cols-2 mt-4">
           <Field>
-            <Label className="block mb-2 text-sm font-medium text-gray-900">Numero de Imei/Serie</Label>
+            <Label className="first-letter:uppercase block mb-2 text-sm font-medium text-gray-900">{t('field.serial')}</Label>
             <Controller
               name="serial"
               defaultValue=""
@@ -188,7 +191,7 @@ function Step3({ prevStep, device, devicesRepared, nextStep }: Props) {
 
         <div className="grid gap-6 grid-cols-2 mt-4">
           <Field>
-            <Label className="block mb-2 text-sm font-medium text-gray-900">Selector de desbloque</Label>
+            <Label className="first-letter:uppercase block mb-2 text-sm font-medium text-gray-900">{t('field.unlock_type')}</Label>
             <Controller
               name="unlocktype"
               control={control}
@@ -221,7 +224,7 @@ function Step3({ prevStep, device, devicesRepared, nextStep }: Props) {
           </Field>
 
           <Field>
-            <Label className="block mb-2 text-sm font-medium text-gray-900">Codigo de desbloqueo</Label>
+            <Label className="first-letter:uppercase block mb-2 text-sm font-medium text-gray-900">{t('field.unlock_code')}</Label>
             <Controller
               name="unlockcode"
               control={control}
@@ -240,7 +243,7 @@ function Step3({ prevStep, device, devicesRepared, nextStep }: Props) {
         </div>
 
         <Field className="mt-4">
-          <Label className="block mb-2 text-sm font-medium text-gray-900">Problema</Label>
+          <Label className="first-letter:uppercase block mb-2 text-sm font-medium text-gray-900">{t('field.observation')}</Label>
           <Controller
             name="observation"
             control={control}

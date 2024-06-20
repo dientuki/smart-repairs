@@ -5,6 +5,7 @@ import { useOrderStore } from "@/store/OrderStore";
 import { useState } from "react";
 import { GlobeAltIcon } from "@heroicons/react/16/solid";
 import { toast } from "react-toastify";
+import { useTranslation } from "react-i18next";
 
 const filter = createFilterOptions<Device>();
 type Props = {
@@ -25,7 +26,7 @@ function Step2({ nextStep, prevStep, devices, brands, deviceTypes }: Props) {
   const [ selectedDevice, setSelectedDevice ] = useState<Device | null>(null);
   const { handleSubmit, control, formState: { errors }, setValue, setError, trigger } = useForm();
   const [comboBox, setComboBox] = useState<ComboBox>({ brand: null, type: null });
-
+  const { t } = useTranslation();
   const handleRegistration = async (data: FieldValues ) => {
 
     const toValidate = ['typeid', 'brandid', 'commercialname', 'techname', 'url'];
@@ -90,23 +91,27 @@ function Step2({ nextStep, prevStep, devices, brands, deviceTypes }: Props) {
   };
 
   const handleError = (errors: FieldErrors<FieldValues>) => {
-    console.log(errors);
-    toast.error("Error en el formulario de error");
+    toast.error("Error en el formulario de error react");
   };
 
   const registerOptions = {
     id: {required: false},
-    typeid: { required: false },
-    brandid: { required: false },
-    commercialname: { required: false },
-    techname: { required: false },
-    url: { required: false },
+    typeid: { required: t('validation.required', { field: t('field.type')}) },
+    brandid: { required: t('validation.required', { field: t('field.brand')}) },
+    commercialname: { required: t('validation.required', { field: t('field.commercial_name')}) },
+    techname: { required: t('validation.required', { field: t('field.tech_name')}) },
+    url: {
+      pattern: {
+        value: /^https?:\/\//,
+        message: t('validation.url', { field: t('field.url')})
+      }
+    }
   };
 
   return (
     <TabPanel unmount={false}>
       <Field>
-        <Label className="block mb-2 text-sm font-medium text-gray-900">Equipo</Label>
+        <Label className="first-letter:uppercase block mb-2 text-sm font-medium text-gray-900">{t('field.device')}</Label>
         {devices && (
           <Autocomplete
             selectOnFocus
@@ -175,7 +180,7 @@ function Step2({ nextStep, prevStep, devices, brands, deviceTypes }: Props) {
 
         <div className="grid gap-6 grid-cols-2 mt-4">
           <Field>
-            <Label className="block mb-2 text-sm font-medium text-gray-900">Tipo de equipo</Label>
+            <Label className="first-letter:uppercase block mb-2 text-sm font-medium text-gray-900">{t('field.type')}</Label>
             { brands &&
                 <Controller
                   name="typeid"
@@ -206,7 +211,7 @@ function Step2({ nextStep, prevStep, devices, brands, deviceTypes }: Props) {
           </Field>
 
           <Field>
-            <Label className="block mb-2 text-sm font-medium text-gray-900">Marca</Label>
+            <Label className="first-letter:uppercase block mb-2 text-sm font-medium text-gray-900">{t('field.brand')}</Label>
             { brands &&
                 <Controller
                   name="brandid"
@@ -239,7 +244,7 @@ function Step2({ nextStep, prevStep, devices, brands, deviceTypes }: Props) {
 
         <div className="grid gap-6 grid-cols-2 mt-4">
           <Field>
-            <Label className="block mb-2 text-sm font-medium text-gray-900">Nombre comercial</Label>
+            <Label className="first-letter:uppercase block mb-2 text-sm font-medium text-gray-900">{t('field.commercial_name')}</Label>
             <Controller
               name="commercialname"
               control={control}
@@ -257,7 +262,7 @@ function Step2({ nextStep, prevStep, devices, brands, deviceTypes }: Props) {
           </Field>
 
           <Field>
-            <Label className="block mb-2 text-sm font-medium text-gray-900">Nombre tecnico</Label>
+            <Label className="first-letter:uppercase block mb-2 text-sm font-medium text-gray-900">{t('field.tech_name')}</Label>
             <Controller
               name="techname"
               control={control}
@@ -277,7 +282,7 @@ function Step2({ nextStep, prevStep, devices, brands, deviceTypes }: Props) {
 
         <div className="grid gap-6 grid-cols-1 mt-4">
           <Field>
-            <Label className="block mb-2 text-sm font-medium text-gray-900">Url</Label>
+            <Label className="first-letter:uppercase block mb-2 text-sm font-medium text-gray-900">{t('field.url')}</Label>
             <div className="flex">
               <div className="inline-flex items-center px-3 text-sm text-gray-900 bg-gray-200 border rounded-e-0 border-gray-300 border-e-0 rounded-s-md">
                 <GlobeAltIcon className="w-4 h-4 text-gray-500 " aria-hidden="true" />

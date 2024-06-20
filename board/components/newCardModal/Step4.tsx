@@ -1,4 +1,5 @@
 import { Field, Input, Label, TabPanel } from '@headlessui/react';
+import { useTranslation } from "react-i18next";
 
 type Props = {
   prevStep: () => void,
@@ -10,6 +11,8 @@ type Props = {
 }
 
 function Step4({ prevStep, nextStep, checks }: Props) {
+  const { t } = useTranslation();
+
   const handleSubmit: React.FormEventHandler<HTMLFormElement> = (event) => {
     event.preventDefault()
 
@@ -39,7 +42,7 @@ function Step4({ prevStep, nextStep, checks }: Props) {
 
       <div className="grid gap-6 grid-cols-2 mt-4">
           <Field>
-            <div className="block mb-2 text-sm font-medium text-gray-900">Presenta daños</div>
+            <div className="block mb-2 text-sm font-medium text-gray-900">{t('field.any_damage')}</div>
             <div className="grid grid-cols-2 mt-4">
             {checks && checks.damages.map((damage: damage, index) => (
                 <label key={index} className="flex items-center mb-5 cursor-pointer">
@@ -49,12 +52,12 @@ function Step4({ prevStep, nextStep, checks }: Props) {
                 </label>
             ))}
             </div>
-            <Label className="block mb-2 text-sm font-medium text-gray-900">Obervaciones adicionales</Label>
+            <Label className="first-letter:uppercase block mb-2 text-sm font-medium text-gray-900">{t('field.additional_damage')}</Label>
             <Input name="damageDescription" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" />
           </Field>
 
           <Field>
-            <div className="block mb-2 text-sm font-medium text-gray-900">Caracteristicas</div>
+            <div className="block mb-2 text-sm font-medium text-gray-900">{t('field.characteristics')}</div>
             <div className="grid grid-cols-2 mt-4">
             {checks && checks.features.map((feature: feature, index) => (
                 <label key={index} className="flex items-center mb-5 cursor-pointer">
@@ -64,7 +67,7 @@ function Step4({ prevStep, nextStep, checks }: Props) {
               </label>
             ))}
             </div>
-            <Label className="block mb-2 text-sm font-medium text-gray-900">Obervaciones adicionales</Label>
+            <Label className="first-letter:uppercase block mb-2 text-sm font-medium text-gray-900">{t('field.additional_characteristics')}</Label>
             <Input name="featureDescription" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" />
           </Field>
         </div>
