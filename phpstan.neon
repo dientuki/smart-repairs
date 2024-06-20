@@ -5,11 +5,15 @@ parameters:
 	level: 1
 	paths:
 		- app
+		- bootstrap
 		- config
 		- database
-		- routes
-		- resources/views
 		- lang
+		- resources/views
+		- routes
+		- tests
+
+
 
 	checkUnusedViews: true
 	checkModelAppends: true
