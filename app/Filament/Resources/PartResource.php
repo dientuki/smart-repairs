@@ -20,13 +20,13 @@ class PartResource extends Resource
 {
     protected static ?string $model = Part::class;
 
-    protected static bool $isScopedToTenant = false;   
-    
+    protected static bool $isScopedToTenant = false;
+
     protected static ?int $navigationSort = 50;
 
     protected static ?string $navigationGroup = 'Devices';
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';  
+    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     public static function form(Form $form): Form
     {
@@ -41,9 +41,9 @@ class PartResource extends Resource
                     ->required()
                     ->preload(),
                 TextInput::make('part_number')
-                    ->required(),                    
+                    ->required(),
                 TextInput::make('observations')
-                    ->required(),                    
+                    ->required(),
             ]);
     }
 
@@ -74,7 +74,7 @@ class PartResource extends Resource
             RelationManagers\DevicesRelationManager::class,
             RelationManagers\AttachmentsRelationManager::class,
         ];
-    }  
+    }
 
     public static function getPages(): array
     {

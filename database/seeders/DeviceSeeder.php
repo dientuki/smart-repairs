@@ -22,7 +22,7 @@ class DeviceSeeder extends Seeder
             'tech_name' => 'motorola-one-hyper',
             'brand_id' => $brands[1]->id,
             'device_type_id' => $deviceType,
-            'url'=> 'www.gsmarena.com/motorola_one_hyper-9944.php',
+            'url' => 'www.gsmarena.com/motorola_one_hyper-9944.php',
             'created_at' => now(),
             'updated_at' => now(),
         ]);
@@ -33,7 +33,7 @@ class DeviceSeeder extends Seeder
             'tech_name' => 'SM-F700F/DS',
             'brand_id' => $brands[2]->id,
             'device_type_id' => $deviceType,
-            'url'=> 'www.gsmarena.com/samsung_galaxy_z_flip-10054.php',
+            'url' => 'www.gsmarena.com/samsung_galaxy_z_flip-10054.php',
             'created_at' => now(),
             'updated_at' => now(),
         ]);

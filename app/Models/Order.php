@@ -14,15 +14,18 @@ class Order extends ModelWithTeam
         'was_edited' => 0,
     ];
 
-    public function customer():BelongsTo {
+    public function customer(): BelongsTo
+    {
         return $this->belongsTo(Customer::class);
     }
 
-    public function device_unit():BelongsTo {
+    public function device_unit(): BelongsTo
+    {
         return $this->belongsTo(DeviceUnit::class);
     }
 
-    public function comments(): HasMany {
+    public function comments(): HasMany
+    {
         return $this->hasMany(OrderComment::class)->orderBy('created_at', 'asc');
     }
 
@@ -33,7 +36,8 @@ class Order extends ModelWithTeam
      * @param string $status The new status of the order.
      * @return bool Returns true if the status was successfully updated, false otherwise.
      */
-    public static function updateStatus(string $orderId, string $status): bool {
+    public static function updateStatus(string $orderId, string $status): bool
+    {
         if (OrderStatusEnum::isValid($status)) {
             $order = self::find($orderId);
             $order->status = $status;

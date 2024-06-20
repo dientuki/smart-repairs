@@ -6,19 +6,23 @@ class Device extends ModelAuditable
 {
     protected $fillable = ['commercial_name', 'url', 'tech_name', 'brand_id', 'device_type_id'];
 
-    public function brand() {
+    public function brand()
+    {
         return $this->belongsTo(Brand::class);
     }
 
-    public function device_type() {
+    public function device_type()
+    {
         return $this->belongsTo(DeviceType::class);
     }
 
-    public function attachments() {
+    public function attachments()
+    {
         return $this->hasMany(DeviceAttachment::class);
     }
 
-    public function parts() {
+    public function parts()
+    {
         return $this->belongsToMany(Part::class, 'device_parts');
     }
 }

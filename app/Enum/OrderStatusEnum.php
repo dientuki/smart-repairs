@@ -17,7 +17,8 @@ enum OrderStatusEnum: string implements HasLabel
 
     use EnumAsArrayTrait;
 
-    public function getLabel(): string {
+    public function getLabel(): string
+    {
         return match ($this) {
             self::ForBudgeting => __('For budgeting'),
             self::Budgeting => __('Budgeting'),
@@ -29,7 +30,8 @@ enum OrderStatusEnum: string implements HasLabel
         };
     }
 
-    public static function isValid(string $value): bool {
+    public static function isValid(string $value): bool
+    {
         return in_array($value, array_column(self::cases(), 'value'), true);
     }
 }

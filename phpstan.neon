@@ -1,0 +1,20 @@
+parameters:
+	level: 1
+	paths:
+		- app
+		- config
+		- database
+		- routes
+		- resources/views
+		- lang
+
+	ignoreErrors:
+		-
+			message: '#Undefined variable\: \$factory#'
+			path: database/factories/*
+		-
+			message: '#Undefined variable\: \$this#'
+			path: routes/console.php
+		-
+			message: '#Using \$this outside a class.#'
+			path: routes/console.php

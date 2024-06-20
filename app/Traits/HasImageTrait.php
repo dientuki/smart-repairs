@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Traits;
 
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -6,7 +7,6 @@ use Illuminate\Support\Facades\Storage;
 
 trait HasImageTrait
 {
-
     /**
      * Retrieves the URL of the image associated with the current object.
      *

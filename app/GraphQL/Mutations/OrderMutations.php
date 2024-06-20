@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\GraphQL\Mutations;
 
@@ -30,7 +32,6 @@ final readonly class OrderMutations
         $order = Order::find($args['id']);
 
         if ($order && $order->team_id === auth()->user()->teams->first()->id) {
-
             return Order::updateStatus($args['id'], $args['status']);
         }
 
@@ -71,7 +72,4 @@ final readonly class OrderMutations
             return false;
         };
     }
-
-
-
 }
