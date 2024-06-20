@@ -167,13 +167,13 @@ function Step1({ nextStep, customers }: Props) {
               control={control}
               rules={registerOptions.firstname}
               render={({ field }) => (
-                <Input {...field} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" />
+                <Input {...field} className={`${errors?.firstname ? 'bg-red-50 border-red-500 text-red-900 placeholder-red-700 focus:ring-red-500 focus:border-red-500' : 'bg-gray-50 border-gray-300 text-gray-900 focus:ring-blue-500 focus:border-blue-500' } text-sm rounded-lg  block w-full p-2.5 border`} />
               )}
             />
             {errors?.firstname && errors.firstname.message && (
-              <small className="text-danger">
-                <span>{typeof errors.firstname.message === 'string' ? errors.firstname.message : JSON.stringify(errors.firstname.message)}</span>
-              </small>
+              <p className="mt-2 text-sm text-red-600 dark:text-red-500">
+                {typeof errors.firstname.message === 'string' ? errors.firstname.message : JSON.stringify(errors.firstname.message)}
+              </p>
             )}
           </Field>
 
@@ -185,13 +185,14 @@ function Step1({ nextStep, customers }: Props) {
               defaultValue=""
               rules={registerOptions.lastname}
               render={({ field }) => (
-                <Input  {...field} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" />
+                <Input {...field} className={`${errors?.lastname ? 'bg-red-50 border-red-500 text-red-900 placeholder-red-700 focus:ring-red-500 focus:border-red-500' : 'bg-gray-50 border-gray-300 text-gray-900 focus:ring-blue-500 focus:border-blue-500' } text-sm rounded-lg  block w-full p-2.5 border`} />
+
               )}
             />
             {errors.lastname && (
-              <small className="text-danger">
-                <span>{typeof errors.lastname.message === 'string' ? errors.lastname.message : JSON.stringify(errors.lastname.message)}</span>
-              </small>
+              <p className="mt-2 text-sm text-red-600 dark:text-red-500">
+                {typeof errors.lastname.message === 'string' ? errors.lastname.message : JSON.stringify(errors.lastname.message)}
+              </p>
             )}
           </Field>
         </div>
@@ -214,9 +215,9 @@ function Step1({ nextStep, customers }: Props) {
               />
             </div>
             {errors?.email && errors.email.message && (
-              <small className="text-danger">
-                <span>{typeof errors.email.message === 'string' ? errors.email.message : JSON.stringify(errors.email.message)}</span>
-              </small>
+              <p className="mt-2 text-sm text-red-600 dark:text-red-500">
+                {typeof errors.email.message === 'string' ? errors.email.message : JSON.stringify(errors.email.message)}
+              </p>
             )}
           </Field>
 
@@ -238,9 +239,9 @@ function Step1({ nextStep, customers }: Props) {
             </div>
             <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">Completar con el codigo de pais correspondiente.</p>
             {errors?.phone && errors.phone.message && (
-              <small className="text-danger">
-                <span>{typeof errors.phone.message === 'string' ? errors.phone.message : JSON.stringify(errors.phone.message)}</span>
-              </small>
+              <p className="mt-2 text-sm text-red-600 dark:text-red-500">
+                {typeof errors.phone.message === 'string' ? errors.phone.message : JSON.stringify(errors.phone.message)}
+              </p>
             )}
           </Field>
         </div>
