@@ -67,10 +67,10 @@
             "phpmd app/,bootstrap/,config/,database/,lang/,resources/views/,routes/,tests/ text ./phpmd.xml"
         ],
         "phpcs": [
-            "phpcs app/ bootstrap/ config/ database/ lang/ resources/views/ routes/ tests/  --standard=PSR12 --report=summary"
+            "phpcs --standard=phpcs.xml"
         ],
         "phpcbf": [
-            "phpcbf app/ bootstrap/ config/ database/ lang/ resources/views/ routes/ tests/ --standard=PSR12"
+            "phpcbf --standard=phpcs.xml"
         ],
         "phpstan": [
             "phpstan analyse -c ./phpstan.neon --memory-limit 1G"
