@@ -119,7 +119,6 @@ function Step2({ nextStep, prevStep, devices, brands, deviceTypes }: Props) {
             id="devices"
             onChange={(event, newValue) => {
               if (newValue != null && newValue?.id !== 'new') {
-                console.log(newValue);
                 setSelectedDevice(newValue);
                 setValue('id', newValue.id);
                 setValue('typeid', newValue.type);

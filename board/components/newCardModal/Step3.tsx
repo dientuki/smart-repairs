@@ -110,7 +110,7 @@ function Step3({ prevStep, device, devicesRepared, nextStep }: Props) {
     serial: { required: t('validation.required', { field: t('field.serial')}) },
     unlocktype: { required: t('validation.required', { field: t('field.unlock_type')}) },
     unlockcode: { required: false },
-    observation: { required: t('validation.required', { field: t('field.description')}) },
+    observation: { required: t('validation.required', { field: t('field.observation')}) },
   };
 
   const handleUnlock = (unlock: UnlockTypeEnum) => {
@@ -170,7 +170,7 @@ function Step3({ prevStep, device, devicesRepared, nextStep }: Props) {
 
         <div className="grid gap-6 grid-cols-2 mt-4">
           <Field>
-            <Label className="first-letter:uppercase block mb-2 text-sm font-medium text-gray-900">Numero de Imei/Serie</Label>
+            <Label className="first-letter:uppercase block mb-2 text-sm font-medium text-gray-900">{t('field.serial')}</Label>
             <Controller
               name="serial"
               defaultValue=""
@@ -191,7 +191,7 @@ function Step3({ prevStep, device, devicesRepared, nextStep }: Props) {
 
         <div className="grid gap-6 grid-cols-2 mt-4">
           <Field>
-            <Label className="first-letter:uppercase block mb-2 text-sm font-medium text-gray-900">Selector de desbloque</Label>
+            <Label className="first-letter:uppercase block mb-2 text-sm font-medium text-gray-900">{t('field.unlock_type')}</Label>
             <Controller
               name="unlocktype"
               control={control}
@@ -211,7 +211,7 @@ function Step3({ prevStep, device, devicesRepared, nextStep }: Props) {
                   }}
                   options={unlocktypeOptions}
                   isOptionEqualToValue={() => true}
-                  renderInput={(params) => <TextField {...params} size="small" className="first-letter:uppercase bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" />}
+                  renderInput={(params) => <TextField {...params} size="small" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" />}
                   renderOption={(props, option) => <li {...props} key={option.id}>{option.label}</li>}
                 />
               )}
@@ -224,7 +224,7 @@ function Step3({ prevStep, device, devicesRepared, nextStep }: Props) {
           </Field>
 
           <Field>
-            <Label className="first-letter:uppercase block mb-2 text-sm font-medium text-gray-900">Codigo de desbloqueo</Label>
+            <Label className="first-letter:uppercase block mb-2 text-sm font-medium text-gray-900">{t('field.unlock_code')}</Label>
             <Controller
               name="unlockcode"
               control={control}
@@ -243,7 +243,7 @@ function Step3({ prevStep, device, devicesRepared, nextStep }: Props) {
         </div>
 
         <Field className="mt-4">
-          <Label className="first-letter:uppercase block mb-2 text-sm font-medium text-gray-900">Problema</Label>
+          <Label className="first-letter:uppercase block mb-2 text-sm font-medium text-gray-900">{t('field.observation')}</Label>
           <Controller
             name="observation"
             control={control}

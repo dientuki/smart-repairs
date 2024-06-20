@@ -2,15 +2,23 @@
     "device": "equipo",
 
     "field": {
+        "additional_characteristics": "características adicionales",
+        "additional_damage": "daños adicionales",
+        "any_damage": "¿presenta daños?",
         "brand": "marca",
+        "characteristics": "características",
         "device": "equipo",
         "commercial_name": "nombre comercial",
         "email": "email",
         "firstname": "nombre",
         "lastname": "apellido",
+        "observation": "observación",
         "phone": "telefono",
+        "serial": "numero de imei\/serie",
         "type": "tipo de equipo",
         "tech_name": "nombre tecnico",
+        "unlock_code": "codigo de desbloqueo",
+        "unlock_type": "tipo de desbloqueo",
         "url": "url"
     },
 
