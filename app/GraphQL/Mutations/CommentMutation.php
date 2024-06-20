@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\GraphQL\Mutations;
 
@@ -9,7 +11,8 @@ use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 
 final readonly class CommentMutation
 {
-    private function isMyComment(string $commentId): bool {
+    private function isMyComment(string $commentId): bool
+    {
         $user = auth()->user();
         $comment = OrderComment::find($commentId);
 
@@ -69,5 +72,4 @@ final readonly class CommentMutation
             'is_public' => $args['isPublic'],
         ]);
     }
-
 }

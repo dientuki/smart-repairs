@@ -22,5 +22,4 @@ class Brand extends ModelAuditable
             get: fn ($value) => $this->name
         );
     }
-
 }

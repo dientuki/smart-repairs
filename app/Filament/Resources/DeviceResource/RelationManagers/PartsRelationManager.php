@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Filament\Resources\DeviceResource\RelationManagers;
 
 use Filament\Forms\Components\Select;

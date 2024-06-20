@@ -39,7 +39,7 @@ class OrderResource extends Resource
 
     public static function canCreate(): bool
     {
-       return false;
+        return false;
     }
 
     public static function table(Table $table): Table
@@ -48,7 +48,7 @@ class OrderResource extends Resource
             ->columns([
                 TextColumn::make('status'),
                 TextColumn::make('customer.first_name')
-                    ->formatStateUsing(fn (Order $record): string => "{$record->customer->first_name} {$record->customer->last_name}" ),
+                    ->formatStateUsing(fn (Order $record): string => "{$record->customer->first_name} {$record->customer->last_name}"),
             ])
             ->filters([
                 //

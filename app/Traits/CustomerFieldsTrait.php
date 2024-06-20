@@ -12,13 +12,13 @@ trait CustomerFieldsTrait
             TextInput::make('first_name')
                 ->required(),
             TextInput::make('last_name')
-                ->required(),                
+                ->required(),
             TextInput::make('email')
                 ->email()
                 ->required(),
             TextInput::make('phone')
                 ->tel()
-                ->required(), 
+                ->required(),
         ];
     }
 }

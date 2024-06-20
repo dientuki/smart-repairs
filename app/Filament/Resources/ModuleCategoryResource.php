@@ -19,11 +19,11 @@ class ModuleCategoryResource extends Resource
 {
     protected static ?string $model = ModuleCategory::class;
 
-    protected static bool $isScopedToTenant = false;   
-    
+    protected static bool $isScopedToTenant = false;
+
     protected static ?int $navigationSort = 30;
 
-    protected static ?string $navigationGroup = 'Devices';    
+    protected static ?string $navigationGroup = 'Devices';
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 

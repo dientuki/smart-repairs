@@ -8,14 +8,16 @@ class DeviceTypeCheck extends ModelWithTeam
 {
     protected $fillable = ['device_type_id', 'team_id', 'damages', 'features'];
 
-    protected function casts():array {
+    protected function casts(): array
+    {
         return [
             'damages' => 'array',
             'features' => 'array',
         ];
     }
 
-    public function device_type():BelongsTo {
+    public function device_type(): BelongsTo
+    {
         return $this->belongsTo(DeviceType::class);
     }
 }

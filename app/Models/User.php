@@ -18,7 +18,8 @@ use OwenIt\Auditing\Contracts\Auditable;
 
 class User extends Authenticatable implements FilamentUser, HasTenants, Auditable
 {
-    use HasFactory, Notifiable;
+    use HasFactory;
+    use Notifiable;
     use \OwenIt\Auditing\Auditable;
     use HasUlids;
 

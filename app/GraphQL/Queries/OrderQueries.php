@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\GraphQL\Queries;
 
@@ -6,7 +8,8 @@ use App\Models\Order;
 
 final readonly class OrderQueries
 {
-    public function getActiveOrders() {
+    public function getActiveOrders()
+    {
         //@todo improve https://www.answeroverflow.com/m/1136334340888989927#solution-1136340488786559106
         $team = auth()->user()->teams;
 

@@ -11,7 +11,8 @@ class Team extends ModelAuditable
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
-    public function members() {
+    public function members()
+    {
         return $this->belongsToMany(User::class, 'team_user', 'user_id');
     }
 
@@ -20,9 +21,8 @@ class Team extends ModelAuditable
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function customers() {
+    public function customers()
+    {
         return $this->hasMany(Customer::class);
     }
-
-
 }

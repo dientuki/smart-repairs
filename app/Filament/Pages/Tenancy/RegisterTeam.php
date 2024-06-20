@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Filament\Pages\Tenancy;
 
 use App\Models\Team;
@@ -8,7 +9,6 @@ use Filament\Pages\Tenancy\RegisterTenant;
 
 class RegisterTeam extends RegisterTenant
 {
-
     /**
      * Retrieves the label for the team.
      *
@@ -18,7 +18,7 @@ class RegisterTeam extends RegisterTenant
     {
         // Implement the logic for getting the label here
         return 'Team name';
-    }    
+    }
 
     public function form(Form $form): Form
     {
@@ -32,7 +32,7 @@ class RegisterTeam extends RegisterTenant
                     ->autofocus(),
             ]);
     }
-    
+
     /**
      * Handles the registration process.
      *
@@ -48,4 +48,3 @@ class RegisterTeam extends RegisterTenant
         return $team;
     }
 }
-
