@@ -31,7 +31,7 @@ export const getOrdersGroupedByColumns = async () => {
                                 name
                                 imageUrl
                             }
-                            device_type {
+                            deviceType {
                                 name
                                 imageUrl
                             }
@@ -64,8 +64,8 @@ export const getOrdersGroupedByColumns = async () => {
             status: order.status,
             brand: order.device_unit.device.brand.name,
             brandImage: order.device_unit.device.brand.imageUrl,
-            deviceType: order.device_unit.device.device_type.name,
-            deviceTypeImage: order.device_unit.device.device_type.imageUrl,
+            deviceType: order.device_unit.device.deviceType.name,
+            deviceTypeImage: order.device_unit.device.deviceType.imageUrl,
             deviceCommercialName: order.device_unit.device.commercial_name,
             deviceTechName: order.device_unit.device.tech_name,
             deviceSerial: order.device_unit.serial,

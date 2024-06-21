@@ -26,7 +26,7 @@ export const getCustomersDevices = async () => {
                 brand {
                     name
                 }
-                device_type {
+                deviceType {
                     name
                 }
               }
@@ -82,7 +82,7 @@ export const getCustomersDevices = async () => {
         commercialname: device.commercial_name,
         techname: device.tech_name,
         brand: device.brand.name,
-        type: device.device_type.name,
+        type: device.deviceType.name,
         url: device.url
     });
 

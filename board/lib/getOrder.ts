@@ -39,7 +39,7 @@ export const getOrder = async (id: string) => {
                                 brand {
                                     name
                                 }
-                                device_type {
+                                deviceType {
                                     name
                                 }
                             }
@@ -76,8 +76,8 @@ export const getOrder = async (id: string) => {
         status: json.data.order.status,
         brand: json.data.order.device_unit.device.brand.name,
         brandImage: json.data.order.device_unit.device.brand.imageUrl,
-        deviceType: json.data.order.device_unit.device.device_type.name,
-        deviceTypeImage: json.data.order.device_unit.device.device_type.imageUrl,
+        deviceType: json.data.order.device_unit.device.deviceType.name,
+        deviceTypeImage: json.data.order.device_unit.device.deviceType.imageUrl,
         deviceCommercialName: json.data.order.device_unit.device.commercial_name,
         deviceTechName: json.data.order.device_unit.device.tech_name,
         deviceSerial: json.data.order.device_unit.serial,

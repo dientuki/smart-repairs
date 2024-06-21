@@ -7,11 +7,11 @@ use App\Traits\EnumAsArrayTrait;
 
 enum UnlockEnum: string implements HasLabel
 {
+    use EnumAsArrayTrait;
+
     case None = 'none';
     case Code = 'code';
     case Pattern = 'pattern';
-
-    use EnumAsArrayTrait;
 
     public function getLabel(): string
     {

@@ -34,7 +34,7 @@ type DeviceRepaired {
     commercial_name: String!
     tech_name: String!
     brand: Brand!
-    device_type: DeviceType!
+    deviceType: DeviceType!
     deviceUnit: DeviceUnit!
 }
 
