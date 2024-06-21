@@ -5,8 +5,6 @@
     <!-- Include the PSR12 standard -->
     <rule ref="PSR12"/>
 
-
-
     <!-- Specify the directories to include -->
     <file>app/</file>
     <file>bootstrap/</file>
@@ -17,12 +15,12 @@
     <file>routes/</file>
     <file>tests/</file>
 
-        <!-- Exclude specific errors or warnings -->
+    <!-- Exclude specific errors or warnings -->
     <rule ref="Internal.NoCodeFound">
         <exclude-pattern>resources/views/*\.php$</exclude-pattern>
     </rule>
-
-    <arg value="s" />
-    <arg value="-report=source" />
+    <rule ref="Generic.Files.LineLength.TooLong">
+        <exclude-pattern>lang/*\.php$</exclude-pattern>
+    </rule>
 
 </ruleset>

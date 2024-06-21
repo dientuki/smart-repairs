@@ -250,9 +250,9 @@ return [
     | 15 => RETHROW_UNSAFE_EXCEPTIONS | RETHROW_INTERNAL_EXCEPTIONS | INCLUDE_TRACE | INCLUDE_DEBUG_MESSAGE
     |
     */
-
+    // phpcs:disable Generic.Files.LineLength.TooLong
     'debug' => env('LIGHTHOUSE_DEBUG', GraphQL\Error\DebugFlag::INCLUDE_DEBUG_MESSAGE | GraphQL\Error\DebugFlag::INCLUDE_TRACE),
-
+    // phpcs:enable
     /*
     |--------------------------------------------------------------------------
     | Error Handlers
@@ -497,7 +497,8 @@ return [
          * - Nuwave\Lighthouse\Tracing\ApolloTracing\ApolloTracing::class
          * - Nuwave\Lighthouse\Tracing\FederatedTracing\FederatedTracing::class
          *
-         * In Lighthouse v7 the default will be changed to 'Nuwave\Lighthouse\Tracing\FederatedTracing\FederatedTracing::class'.
+         * In Lighthouse v7 the default will be changed to
+         *      'Nuwave\Lighthouse\Tracing\FederatedTracing\FederatedTracing::class'.
          */
         'driver' => Nuwave\Lighthouse\Tracing\ApolloTracing\ApolloTracing::class,
     ],
