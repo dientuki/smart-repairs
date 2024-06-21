@@ -21,7 +21,7 @@ class Part extends ModelAuditable
         return $this->belongsToMany(Device::class, 'device_parts');
     }
 
-    public function module_category()
+    public function moduleCategory()
     {
         return $this->belongsTo(ModuleCategory::class);
     }

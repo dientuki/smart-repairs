@@ -17,7 +17,7 @@ class DeviceType extends ModelAuditable
         'hash_filename',
     ];
 
-    public function device_type_check(): HasMany
+    public function deviceTypeCheck(): HasMany
     {
         return $this->hasMany(DeviceTypeCheck::class);
     }

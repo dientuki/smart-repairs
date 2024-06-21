@@ -30,7 +30,7 @@ class PartsRelationManager extends RelationManager
         return $table
             ->recordTitleAttribute('part_number')
             ->columns([
-                TextColumn::make('module_category.name'),
+                TextColumn::make('moduleCategory.name'),
                 TextColumn::make('brand.name'),
                 TextColumn::make('part_number'),
             ])
@@ -44,7 +44,7 @@ class PartsRelationManager extends RelationManager
                 ViewAction::make()
                     ->form([
                         Select::make('module_category_id')
-                            ->relationship('module_category', 'name')->columns(1),
+                            ->relationship('moduleCategory', 'name')->columns(1),
                         Select::make('brand_id')
                             ->relationship('brand', 'name')->columns(1),
                         TextInput::make('part_number')->columns(1),

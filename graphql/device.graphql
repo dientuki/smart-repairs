@@ -24,6 +24,6 @@ type Device {
     commercial_name: String!
     tech_name: String!
     brand: Brand!
-    device_type: DeviceType!
+    deviceType: DeviceType!
     url: String
 }

@@ -33,7 +33,7 @@ class PartResource extends Resource
         return $form
             ->schema([
                 Select::make('module_category_id')
-                    ->relationship('module_category', 'name')
+                    ->relationship('moduleCategory', 'name')
                     ->required()
                     ->preload(),
                 Select::make('brand_id')
@@ -51,7 +51,7 @@ class PartResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('module_category.name'),
+                TextColumn::make('moduleCategory.name'),
                 TextColumn::make('brand.name'),
                 TextColumn::make('part_number'),
             ])

@@ -13,8 +13,6 @@ parameters:
 		- routes
 		- tests
 
-
-
 	checkUnusedViews: true
 	checkModelAppends: true
 	checkModelProperties: true

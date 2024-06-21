@@ -19,7 +19,7 @@ class Order extends ModelWithTeam
         return $this->belongsTo(Customer::class);
     }
 
-    public function device_unit(): BelongsTo
+    public function deviceUnit(): BelongsTo
     {
         return $this->belongsTo(DeviceUnit::class);
     }

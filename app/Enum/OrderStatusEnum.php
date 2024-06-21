@@ -7,6 +7,8 @@ use App\Traits\EnumAsArrayTrait;
 
 enum OrderStatusEnum: string implements HasLabel
 {
+    use EnumAsArrayTrait;
+
     case ForBudgeting = 'for budgeting';
     case Budgeting = 'budgeting';
     case Budgeted = 'budgeted';
@@ -14,8 +16,6 @@ enum OrderStatusEnum: string implements HasLabel
     case Repairing = 'repairing';
     case Repaired = 'repaired';
     case Ready = 'ready';
-
-    use EnumAsArrayTrait;
 
     public function getLabel(): string
     {

@@ -16,7 +16,7 @@ class DeviceTypeCheck extends ModelWithTeam
         ];
     }
 
-    public function device_type(): BelongsTo
+    public function deviceType(): BelongsTo
     {
         return $this->belongsTo(DeviceType::class);
     }

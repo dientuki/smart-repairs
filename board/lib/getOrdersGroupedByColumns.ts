@@ -22,7 +22,7 @@ export const getOrdersGroupedByColumns = async () => {
                             id
                         }
 
-                        device_unit {
+                        deviceUnit {
                             serial
                             device {
                                 commercial_name
@@ -31,7 +31,7 @@ export const getOrdersGroupedByColumns = async () => {
                                 name
                                 imageUrl
                             }
-                            device_type {
+                            deviceType {
                                 name
                                 imageUrl
                             }
@@ -62,13 +62,13 @@ export const getOrdersGroupedByColumns = async () => {
             createdAt: order.created_at,
             createdAtDate: new Date(order.created_at),
             status: order.status,
-            brand: order.device_unit.device.brand.name,
-            brandImage: order.device_unit.device.brand.imageUrl,
-            deviceType: order.device_unit.device.device_type.name,
-            deviceTypeImage: order.device_unit.device.device_type.imageUrl,
-            deviceCommercialName: order.device_unit.device.commercial_name,
-            deviceTechName: order.device_unit.device.tech_name,
-            deviceSerial: order.device_unit.serial,
+            brand: order.deviceUnit.device.brand.name,
+            brandImage: order.deviceUnit.device.brand.imageUrl,
+            deviceType: order.deviceUnit.device.deviceType.name,
+            deviceTypeImage: order.deviceUnit.device.deviceType.imageUrl,
+            deviceCommercialName: order.deviceUnit.device.commercial_name,
+            deviceTechName: order.deviceUnit.device.tech_name,
+            deviceSerial: order.deviceUnit.serial,
             customerFullName: `${order.customer.first_name} ${order.customer.last_name}`,
             observation: order.observation,
             commentsQuantity: order.comments?.length

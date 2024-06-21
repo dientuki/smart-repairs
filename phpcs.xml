@@ -15,6 +15,9 @@
     <file>routes/</file>
     <file>tests/</file>
 
+    <!-- Ignore specific files or patterns -->
+    <exclude-pattern>bootstrap/cache/*\.php$</exclude-pattern>
+
     <!-- Exclude specific errors or warnings -->
     <rule ref="Internal.NoCodeFound">
         <exclude-pattern>resources/views/*\.php$</exclude-pattern>
@@ -22,5 +25,10 @@
     <rule ref="Generic.Files.LineLength.TooLong">
         <exclude-pattern>lang/*\.php$</exclude-pattern>
     </rule>
+    <rule ref="PSR1.Methods.CamelCapsMethodName.NotCamelCaps">
+        <exclude-pattern>tests/*\.php$</exclude-pattern>
+    </rule>
 
+    <arg value="s" />
+    <arg value="-report=source" />
 </ruleset>

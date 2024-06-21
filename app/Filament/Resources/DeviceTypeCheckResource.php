@@ -31,7 +31,7 @@ class DeviceTypeCheckResource extends Resource
             ->schema([
                 Select::make('device_type_id')
                     ->relationship(
-                        name: 'device_type',
+                        name: 'deviceType',
                         titleAttribute: 'name',
                         modifyQueryUsing: function (Builder $query, string $operation) {
                             if ($operation === 'create') {
@@ -66,7 +66,7 @@ class DeviceTypeCheckResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('device_type.name'),
+                TextColumn::make('deviceType.name'),
                 TextColumn::make('damages'),
                 TextColumn::make('features'),
             ])

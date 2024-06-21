@@ -11,7 +11,7 @@ class Device extends ModelAuditable
         return $this->belongsTo(Brand::class);
     }
 
-    public function device_type()
+    public function deviceType()
     {
         return $this->belongsTo(DeviceType::class);
     }

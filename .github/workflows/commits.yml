@@ -45,3 +45,6 @@ jobs:
 
       - name: Check PHP Stan
         run: composer phpstan
+
+      - name: Check PHP Code Sniffer
+        run: composer phpcs

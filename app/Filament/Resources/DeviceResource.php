@@ -33,7 +33,7 @@ class DeviceResource extends Resource
         return $form
             ->schema([
                 Select::make('device_type_id')
-                    ->relationship('device_type', 'name')
+                    ->relationship('deviceType', 'name')
                     ->preload(),
                 Select::make('brand_id')
                     ->relationship('brand', 'name')
@@ -43,8 +43,7 @@ class DeviceResource extends Resource
                 TextInput::make('tech_name')
                     ->required(),
                 TextInput::make('url')
-                    ->suffixIcon('heroicon-m-globe-alt')
-                    ->required(),
+                    ->suffixIcon('heroicon-m-globe-alt'),
             ]);
     }
 
@@ -52,15 +51,16 @@ class DeviceResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('device_type.name'),
+                TextColumn::make('deviceType.name'),
                 TextColumn::make('brand.name'),
                 TextColumn::make('commercial_name'),
                 TextColumn::make('tech_name'),
                 TextColumn::make('url')
-                    ->url(fn ($record) => $record->url, true)
+                    ->url(fn ($record) => $record->url ?? '#', true)
                     ->icon('heroicon-m-globe-alt')
-                    ->formatStateUsing(fn (string $state): string => __("Link"))
-                    ->tooltip(fn (Device $record): string => $record->url)
+                    ->formatStateUsing(fn (?string $state): string => $state ? __("Link") : __("No Link"))
+                    ->tooltip(fn (Device $record): string => $record->url ?? __("No URL"))
+
             ])
             ->filters([
                 //
