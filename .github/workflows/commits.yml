@@ -1,7 +1,12 @@
-on: [push]
+name: Syntax
+
+on:
+  push:
+    branches:
+      - 'SM-*'
 
 jobs:
-  merge_conflict_job:
+  find_merge_conflicts:
     runs-on: ubuntu-latest
     name: Find merge conflicts
     steps:
@@ -10,3 +15,33 @@ jobs:
       # Run the actual merge conflict finder
       - name: Merge Conflict finder
         uses: olivernybroe/action-conflict-finder@v4.0
+  php_syntax_check:
+    runs-on: ubuntu-latest
+    name: PHP Syntax
+    needs: [find_merge_conflicts]
+    steps:
+      # Checkout the source code so there are some files to look at.
+      - uses: actions/checkout@v4
+
+      - name: Validate composer.json and composer.lock
+        run: composer validate --strict
+
+      - name: Cache Composer dependencies
+        uses: actions/cache@v4
+        with:
+          path: ./vendor
+          key: composer-${{ runner.os }}-${{ hashFiles('**/composer.lock') }}
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+
+      - name: Install dependencies
+        run: composer install --prefer-dist --no-progress
+
+      - name: Check magic numbers
+        run: composer phpmnd
+
+      - name: Check PHP Stan
+        run: composer phpstan
