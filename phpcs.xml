@@ -15,6 +15,9 @@
     <file>routes/</file>
     <file>tests/</file>
 
+    <!-- Ignore specific files or patterns -->
+    <exclude-pattern>bootstrap/cache/*\.php$</exclude-pattern>
+
     <!-- Exclude specific errors or warnings -->
     <rule ref="Internal.NoCodeFound">
         <exclude-pattern>resources/views/*\.php$</exclude-pattern>
@@ -26,4 +29,6 @@
         <exclude-pattern>tests/*\.php$</exclude-pattern>
     </rule>
 
+    <arg value="s" />
+    <arg value="-report=source" />
 </ruleset>
