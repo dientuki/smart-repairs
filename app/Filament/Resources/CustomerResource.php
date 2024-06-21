@@ -18,13 +18,13 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class CustomerResource extends Resource
 {
+    use CustomerFieldsTrait;
+
     protected static ?string $model = Customer::class;
 
     protected static ?string $tenantRelationshipName = 'customers';
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
-
-    use CustomerFieldsTrait;
 
     public static function form(Form $form): Form
     {

@@ -22,13 +22,13 @@ use App\Traits\CustomerFieldsTrait;
 
 class OrderResource extends Resource
 {
+    use CustomerFieldsTrait;
+
     protected static ?string $model = Order::class;
 
     protected static ?string $tenantRelationshipName = 'customers';
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
-
-    use CustomerFieldsTrait;
 
     public static function form(Form $form): Form
     {
@@ -48,7 +48,8 @@ class OrderResource extends Resource
             ->columns([
                 TextColumn::make('status'),
                 TextColumn::make('customer.first_name')
-                    ->formatStateUsing(fn (Order $record): string => "{$record->customer->first_name} {$record->customer->last_name}"),
+                    ->formatStateUsing(fn (Order $record): string =>
+                        "{$record->customer->first_name} {$record->customer->last_name}"),
             ])
             ->filters([
                 //

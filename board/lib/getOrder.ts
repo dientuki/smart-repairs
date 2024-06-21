@@ -29,7 +29,7 @@ export const getOrder = async (id: string) => {
                             }
                         }
                         observation
-                        device_unit {
+                        deviceUnit {
                             serial
                             unlock_type
                             unlock_code
@@ -74,13 +74,13 @@ export const getOrder = async (id: string) => {
         createdAt: json.data.order.created_at,
         createdAtDate: new Date(json.data.order.created_at),
         status: json.data.order.status,
-        brand: json.data.order.device_unit.device.brand.name,
-        brandImage: json.data.order.device_unit.device.brand.imageUrl,
-        deviceType: json.data.order.device_unit.device.deviceType.name,
-        deviceTypeImage: json.data.order.device_unit.device.deviceType.imageUrl,
-        deviceCommercialName: json.data.order.device_unit.device.commercial_name,
-        deviceTechName: json.data.order.device_unit.device.tech_name,
-        deviceSerial: json.data.order.device_unit.serial,
+        brand: json.data.order.deviceUnit.device.brand.name,
+        brandImage: json.data.order.deviceUnit.device.brand.imageUrl,
+        deviceType: json.data.order.deviceUnit.device.deviceType.name,
+        deviceTypeImage: json.data.order.deviceUnit.device.deviceType.imageUrl,
+        deviceCommercialName: json.data.order.deviceUnit.device.commercial_name,
+        deviceTechName: json.data.order.deviceUnit.device.tech_name,
+        deviceSerial: json.data.order.deviceUnit.serial,
         customerFullName: `${json.data.order.customer.first_name} ${json.data.order.customer.last_name}`,
         customerPhone: json.data.order.customer.phone,
         observation: json.data.order.observation,
