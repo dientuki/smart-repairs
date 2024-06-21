@@ -23,4 +23,9 @@
         <exclude-pattern>lang/*\.php$</exclude-pattern>
     </rule>
 
+<!--
+    <arg value="s" />
+    <arg value="-report=source" />
+-->
+
 </ruleset>
