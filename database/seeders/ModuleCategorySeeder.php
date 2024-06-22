@@ -25,5 +25,11 @@ class ModuleCategorySeeder extends Seeder
             'created_at' => now(),
             'updated_at' => now(),
         ]);
+        DB::table('module_categories')->insert([
+            'id' => (string) Str::ulid(),
+            'name' => 'Piezas electrónicas',
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
     }
 }

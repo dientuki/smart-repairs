@@ -25,6 +25,7 @@ class DatabaseSeeder extends Seeder
             ModuleCategorySeeder::class,
             PartSeeder::class,
             DeviceSeeder::class,
+            DevicePartSeeder::class,
             CustomerSeeder::class,
             DeviceUnitSeeder::class,
             OrderSeeder::class,
