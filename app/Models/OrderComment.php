@@ -2,11 +2,13 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+
 class OrderComment extends ModelWithTeam
 {
     protected $fillable = ['order_id', 'comment', 'team_id', 'user_id', 'is_public', 'was_edited'];
 
-    public function user()
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }

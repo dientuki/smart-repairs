@@ -62,6 +62,11 @@ class User extends Authenticatable implements FilamentUser, HasTenants, Auditabl
         return $this->teams;
     }
 
+    /**
+     * Retrieve the teams associated with the user.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
     public function teams(): BelongsToMany
     {
         return $this->belongsToMany(Team::class);
