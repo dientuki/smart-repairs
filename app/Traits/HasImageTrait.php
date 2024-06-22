@@ -7,7 +7,6 @@ use Illuminate\Support\Facades\Storage;
 
 trait HasImageTrait
 {
-
     protected string $imageField = 'hash_filename';
 
     /**
