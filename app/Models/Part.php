@@ -9,7 +9,14 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Part extends ModelAuditable
 {
-    protected $fillable = ['observations', 'part_number', 'module_category_id', 'brand_id'];
+    protected $fillable = [
+        'observations',
+        'part_number',
+        'module_category_id',
+        'brand_id',
+        'screen_printing',
+        'hash_filename'
+    ];
 
     /**
      * Returns the brand that the part belongs to.

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\GraphQL\Mutations;
 
 use App\Models\Customer;
-use Illuminate\Support\Str;
 use Nuwave\Lighthouse\Execution\ResolveInfo;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 
@@ -23,7 +22,6 @@ final readonly class CustomerMutations
     public function create(null $root, array $args, GraphQLContext $context, ResolveInfo $resolveInfo): mixed
     {
         return Customer::create([
-            'id' => (string) Str::ulid(),
             'first_name' => $args['customer']['firstname'],
             'last_name' => $args['customer']['lastname'],
             'phone' => $args['customer']['phone'],

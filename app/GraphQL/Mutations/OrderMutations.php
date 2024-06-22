@@ -8,7 +8,6 @@ use App\Enum\OrderStatusEnum;
 use App\Models\Order;
 use App\Models\OrderCheck;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Str;
 use Nuwave\Lighthouse\Execution\ResolveInfo;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 
@@ -45,7 +44,6 @@ final readonly class OrderMutations
             DB::beginTransaction();
 
             $order = Order::create([
-                'id' => (string) Str::ulid(),
                 'status' => OrderStatusEnum::ForBudgeting,
                 'observation' => $args['order']['observation'],
                 'customer_id' => $args['order']['customer_id'],
@@ -55,7 +53,6 @@ final readonly class OrderMutations
             ]);
 
             OrderCheck::create([
-                'id' => (string) Str::ulid(),
                 'order_id' => $order->id,
                 'damages' => json_encode($args['order']['damages']),
                 'damages_description' => $args['order']['damage_description'],

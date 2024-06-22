@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\GraphQL\Mutations;
 
 use App\Models\OrderComment;
-use Illuminate\Support\Str;
 use Nuwave\Lighthouse\Execution\ResolveInfo;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 
@@ -64,7 +63,6 @@ final readonly class CommentMutation
         // TODO implement the resolver
 
         return OrderComment::create([
-            'id' => (string) Str::ulid(),
             'order_id' => $args['orderId'],
             'team_id' => auth()->user()->teams->first()->id,
             'comment' => strip_tags($args['comment']),
