@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Team;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class ModelWithTeam extends ModelAuditable
 {
@@ -11,7 +12,7 @@ class ModelWithTeam extends ModelAuditable
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function team()
+    public function team(): BelongsTo
     {
         return $this->belongsTo(Team::class);
     }

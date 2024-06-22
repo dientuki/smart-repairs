@@ -32,7 +32,7 @@ class Order extends ModelWithTeam
     /**
      * Updates the status of an order.
      *
-     * @param int $orderId The ID of the order.
+     * @param string $orderId The ID of the order.
      * @param string $status The new status of the order.
      * @return bool Returns true if the status was successfully updated, false otherwise.
      */

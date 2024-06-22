@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\GraphQL\Mutations;
 
 use App\Models\DeviceUnit;
-use Illuminate\Support\Str;
 use Nuwave\Lighthouse\Execution\ResolveInfo;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 
@@ -26,7 +25,6 @@ final readonly class DeviceUnitMutations
         //$user = auth()->user();
 
         return DeviceUnit::create([
-            'id' => (string) Str::upper(Str::ulid()),
             'device_id' => $args['deviceunit']['deviceid'],
             'team_id' => auth()->user()->teams->first()->id,
             'serial' => $args['deviceunit']['serial'],

@@ -2,6 +2,9 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+
 class Team extends ModelAuditable
 {
     protected $fillable = ['name'];
@@ -11,7 +14,7 @@ class Team extends ModelAuditable
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
-    public function members()
+    public function members(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'team_user', 'user_id');
     }
@@ -21,7 +24,7 @@ class Team extends ModelAuditable
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function customers()
+    public function customers(): HasMany
     {
         return $this->hasMany(Customer::class);
     }

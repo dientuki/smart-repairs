@@ -15,10 +15,14 @@ class ModelAuditable extends Model implements Auditable
 
     use \OwenIt\Auditing\Auditable;
 
-    protected function id(): Attribute
+    /**
+     * Set the ID attribute to uppercase when setting.
+     *
+     * @param  string  $value
+     * @return void
+     */
+    public function setIdAttribute($value)
     {
-        return Attribute::make(
-            set: fn (string $value) => strtoupper($value),
-        );
+        $this->attributes['id'] = strtoupper($value);
     }
 }

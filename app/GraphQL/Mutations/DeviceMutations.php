@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\GraphQL\Mutations;
 
 use App\Models\Device;
-use Illuminate\Support\Str;
 use Nuwave\Lighthouse\Execution\ResolveInfo;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 
@@ -25,7 +24,6 @@ final readonly class DeviceMutations
         // TODO implement the resolver
 
         return Device::create([
-            'id' => (string) Str::ulid(),
             'commercial_name' => $args['device']['commercialname'],
             'tech_name' => $args['device']['techname'],
             'brand_id' => $args['device']['brandid'],

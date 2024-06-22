@@ -20,8 +20,5 @@ parameters:
 
 	ignoreErrors:
 		-
-			message: "#Property 'id' does not exist#"
-			path: app/GraphQL/Mutations/
-		-
 			message: "#This view is not used in the project.#"
 			path: resources/views/auth/

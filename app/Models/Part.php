@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Traits\HasImageTrait;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -9,7 +10,16 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Part extends ModelAuditable
 {
-    protected $fillable = ['observations', 'part_number', 'module_category_id', 'brand_id'];
+    use HasImageTrait;
+
+    protected $fillable = [
+        'observations',
+        'part_number',
+        'module_category_id',
+        'brand_id',
+        'screen_printing',
+        'hash_filename'
+    ];
 
     /**
      * Returns the brand that the part belongs to.

@@ -14,11 +14,13 @@ return new class extends Migration
         Schema::create('parts', function (Blueprint $table) {
             $table->ulid('id')->primary();
 
-            $table->string('part_number');
-            $table->string('observations');
+            $table->string('screen_printing')->nullable();
+            $table->string('part_number')->nullable();
+            $table->string('observations')->nullable();
+            $table->string('hash_filename')->nullable();
+
             $table->foreignUlid('brand_id')->constrained();
             $table->foreignUlid('module_category_id')->constrained();
-
             $table->timestamps();
         });
     }
