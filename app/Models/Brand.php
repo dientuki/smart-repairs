@@ -9,8 +9,6 @@ class Brand extends ModelAuditable
 {
     use HasImageTrait;
 
-    protected string $imageField = 'hash_filename';
-
     protected $fillable = [
         'name',
         'hash_filename',
