@@ -29,7 +29,5 @@ class StockSeeder extends Seeder
                 'updated_at' => now(),
             ]);
         }
-
-
     }
 }
