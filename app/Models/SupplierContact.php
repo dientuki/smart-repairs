@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Filament\Facades\Filament;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class SupplierContact extends ModelWithTeam
@@ -19,13 +20,15 @@ class SupplierContact extends ModelWithTeam
     {
         static::creating(function ($contact) {
             if (auth()->check()) {
-                $contact->team_id = auth()->user()->teams->first()->id;
+                $tenant = Filament::getTenant();
+                $contact->team_id = $tenant->id;
             }
         });
 
         static::updating(function ($contact) {
             if (auth()->check()) {
-                $contact->team_id = auth()->user()->teams->first()->id;
+                $tenant = Filament::getTenant();
+                $contact->team_id = $tenant->id;
             }
         });
     }

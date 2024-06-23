@@ -5,11 +5,14 @@ declare(strict_types=1);
 namespace App\GraphQL\Mutations;
 
 use App\Models\DeviceUnit;
+use App\Traits\TeamContextTrait;
 use Nuwave\Lighthouse\Execution\ResolveInfo;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 
 final readonly class DeviceUnitMutations
 {
+    use TeamContextTrait;
+
     /**
      * Return a value for the field.
      *
@@ -22,11 +25,11 @@ final readonly class DeviceUnitMutations
     public function create(null $root, array $args, GraphQLContext $context, ResolveInfo $resolveInfo): mixed
     {
         // TODO implement the resolver
-        //$user = auth()->user();
+        $team_id = $this->getTeamIdFromContext($context);
 
         return DeviceUnit::create([
             'device_id' => $args['deviceunit']['deviceid'],
-            'team_id' => auth()->user()->teams->first()->id,
+            'team_id' => $team_id,
             'serial' => $args['deviceunit']['serial'],
             'unlock_type' => $args['deviceunit']['unlocktype'],
             'unlock_code' => $args['deviceunit']['unlockcode'],
@@ -36,8 +39,9 @@ final readonly class DeviceUnitMutations
     public function update(null $root, array $args, GraphQLContext $context, ResolveInfo $resolveInfo): bool
     {
         $deviceUnit = DeviceUnit::find($args['deviceUnitId']);
+        $team_id = $this->getTeamIdFromContext($context);
 
-        if ($deviceUnit && $deviceUnit->team_id === auth()->user()->teams->first()->id) {
+        if ($deviceUnit && $deviceUnit->team_id === $team_id) {
             $deviceUnit->serial = $args['deviceunit']['serial'];
             $deviceUnit->unlock_type = $args['deviceunit']['unlocktype'];
             $deviceUnit->unlock_code = $args['deviceunit']['unlockcode'];

@@ -7,6 +7,7 @@ use App\Filament\Resources\StockResource\RelationManagers;
 use App\Filament\Resources\StockResource\RelationManagers\DevicesRelationManager;
 use App\Models\Part;
 use App\Models\Stock;
+use Filament\Facades\Filament;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms;
@@ -37,9 +38,10 @@ class StockResource extends Resource
                         modifyQueryUsing: function (Builder $query, string $operation) {
                             if ($operation === 'create') {
                                 $query->whereNotIn('id', function ($query) {
+                                    $tenant = Filament::getTenant();
                                     $query->select('part_id')
                                         ->from('stocks')
-                                        ->where('team_id', auth()->user()->teams->first()->id);
+                                        ->where('team_id', $tenant->id);
                                 });
                             }
                         }

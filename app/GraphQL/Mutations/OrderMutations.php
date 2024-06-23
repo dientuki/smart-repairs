@@ -7,12 +7,15 @@ namespace App\GraphQL\Mutations;
 use App\Enum\OrderStatusEnum;
 use App\Models\Order;
 use App\Models\OrderCheck;
+use App\Traits\TeamContextTrait;
 use Illuminate\Support\Facades\DB;
 use Nuwave\Lighthouse\Execution\ResolveInfo;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 
 final readonly class OrderMutations
 {
+    use TeamContextTrait;
+
     /**
      * Return a value for the field.
      *
@@ -29,8 +32,9 @@ final readonly class OrderMutations
         //$phone = $args['phone'];
 
         $order = Order::find($args['id']);
+        $team_id = $this->getTeamIdFromContext($context);
 
-        if ($order && $order->team_id === auth()->user()->teams->first()->id) {
+        if ($order && $order->team_id === $team_id) {
             return Order::updateStatus($args['id'], $args['status']);
         }
 
@@ -40,6 +44,8 @@ final readonly class OrderMutations
 
     public function create(null $root, array $args, GraphQLContext $context, ResolveInfo $resolveInfo): bool
     {
+        $team_id = $this->getTeamIdFromContext($context);
+
         try {
             DB::beginTransaction();
 
@@ -47,7 +53,7 @@ final readonly class OrderMutations
                 'status' => OrderStatusEnum::ForBudgeting,
                 'observation' => $args['order']['observation'],
                 'customer_id' => $args['order']['customer_id'],
-                'team_id' => auth()->user()->teams->first()->id,
+                'team_id' => $team_id,
                 'user_id' => auth()->user()->id,
                 'device_unit_id' => $args['order']['device_unit_id'],
             ]);
