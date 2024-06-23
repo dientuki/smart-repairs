@@ -17,8 +17,9 @@ class StockSeeder extends Seeder
     {
         $team = DB::table('teams')->first()->id;
         $parts = DB::table('parts')->get();
+        $l = count($parts);
 
-        for ($i = 0; $i < 4; $i++) {
+        for ($i = 0; $i < $l; $i++) {
             DB::table('stocks')->insert([
                 'id' => (string) Str::ulid(),
                 'part_id' => $parts[$i]->id,
