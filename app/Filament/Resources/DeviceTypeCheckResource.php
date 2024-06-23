@@ -5,6 +5,7 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\DeviceTypeCheckResource\Pages;
 use App\Filament\Resources\DeviceTypeCheckResource\RelationManagers;
 use App\Models\DeviceTypeCheck;
+use Filament\Facades\Filament;
 use Filament\Forms;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Select;
@@ -34,11 +35,13 @@ class DeviceTypeCheckResource extends Resource
                         name: 'deviceType',
                         titleAttribute: 'name',
                         modifyQueryUsing: function (Builder $query, string $operation) {
+
                             if ($operation === 'create') {
                                 $query->whereNotIn('id', function ($query) {
+                                    $tenant = Filament::getTenant();
                                     $query->select('device_type_id')
                                         ->from('device_type_checks')
-                                        ->where('team_id', auth()->user()->teams->first()->id);
+                                        ->where('team_id', $tenant->id);
                                 });
                             }
                         }
