@@ -40,8 +40,6 @@ class DeviceResource extends Resource
                     ->preload(),
                 TextInput::make('commercial_name')
                     ->required(),
-                TextInput::make('tech_name')
-                    ->required(),
                 TextInput::make('url')
                     ->suffixIcon('heroicon-m-globe-alt'),
             ]);
@@ -54,7 +52,6 @@ class DeviceResource extends Resource
                 TextColumn::make('deviceType.name'),
                 TextColumn::make('brand.name'),
                 TextColumn::make('commercial_name'),
-                TextColumn::make('tech_name'),
                 TextColumn::make('url')
                     ->url(fn ($record) => $record->url ?? '#', true)
                     ->icon('heroicon-m-globe-alt')
@@ -78,7 +75,8 @@ class DeviceResource extends Resource
     public static function getRelations(): array
     {
         return [
-            RelationManagers\PartsRelationManager::class,
+            //RelationManagers\PartsRelationManager::class,
+            RelationManagers\VersionsRelationManager::class,
             RelationManagers\AttachmentsRelationManager::class,
 
         ];

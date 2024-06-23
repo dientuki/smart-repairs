@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('unlock_code')->nullable();
 
             $table->foreignUlid('team_id')->constrained();
-            $table->foreignUlid('device_id')->constrained();
+            $table->foreignUlid('device_version_id')->constrained();
 
             $table->timestamps();
         });
