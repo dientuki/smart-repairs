@@ -2,9 +2,6 @@
 
 namespace Database\Seeders;
 
-use App\Models\Order;
-use App\Models\OrderComment;
-use App\Models\User;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -25,10 +22,14 @@ class DatabaseSeeder extends Seeder
             ModuleCategorySeeder::class,
             PartSeeder::class,
             DeviceSeeder::class,
+            DevicePartSeeder::class,
             CustomerSeeder::class,
             DeviceUnitSeeder::class,
             OrderSeeder::class,
             OrderCommentSeeder::class,
+            SupplierSeeder::class,
+            SupplierContactSeeder::class,
+            StockSeeder::class
         ]);
     }
 }

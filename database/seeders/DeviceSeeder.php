@@ -37,5 +37,45 @@ class DeviceSeeder extends Seeder
             'created_at' => now(),
             'updated_at' => now(),
         ]);
+
+        DB::table('devices')->insert([
+            'id' => (string) Str::ulid(),
+            'commercial_name' => 'J2 Prime',
+            'tech_name' => 'SM-G532',
+            'brand_id' => $brands[2]->id,
+            'device_type_id' => $deviceType,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+        DB::table('devices')->insert([
+            'id' => (string) Str::ulid(),
+            'commercial_name' => 'A20',
+            'tech_name' => 'SM-A205',
+            'brand_id' => $brands[2]->id,
+            'device_type_id' => $deviceType,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+        DB::table('devices')->insert([
+            'id' => (string) Str::ulid(),
+            'commercial_name' => 'S02S',
+            'tech_name' => 'SM-A027',
+            'brand_id' => $brands[2]->id,
+            'device_type_id' => $deviceType,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+        DB::table('devices')->insert([
+            'id' => (string) Str::ulid(),
+            'commercial_name' => 'A03',
+            'tech_name' => 'SM-A035',
+            'brand_id' => $brands[2]->id,
+            'device_type_id' => $deviceType,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
     }
 }
