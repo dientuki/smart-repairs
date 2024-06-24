@@ -2,9 +2,11 @@
 
 namespace App\Models;
 
+use Database\Seeders\DevicePartSeeder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facades\DB;
 
 class Device extends ModelAuditable
 {
@@ -25,8 +27,20 @@ class Device extends ModelAuditable
         return $this->hasMany(DeviceAttachment::class);
     }
 
-    public function parts(): BelongsToMany
+    public function versions()
     {
-        return $this->belongsToMany(Part::class, 'device_parts');
+        return $this->hasMany(DeviceVersion::class);
     }
+
+    public function parts()
+    {
+        return $this
+            ->hasMany(DeviceVersion::class)
+            ->join('device_versions_parts', 'parts.id', '=', 'device_versions_parts.part_id')
+            ->join('device_versions', 'device_versions.id', '=', 'device_versions_parts.device_version_id')
+            ->join('module_categories', 'module_categories.id', '=', 'parts.module_category_id')
+            ->from('parts')
+            ->select('parts.*', 'device_versions.version as version' , 'module_categories.name as category');
+    }
+
 }
