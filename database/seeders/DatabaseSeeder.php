@@ -19,9 +19,10 @@ class DatabaseSeeder extends Seeder
             BrandSeeder::class,
             ModuleCategorySeeder::class,
             PartSeeder::class,
-            /*
             DeviceSeeder::class,
-            DevicePartSeeder::class,
+            DeviceVersionSeeder::class,
+            DeviceVersionPartSeeder::class,
+            /*
             CustomerSeeder::class,
             DeviceUnitSeeder::class,
             OrderSeeder::class,
