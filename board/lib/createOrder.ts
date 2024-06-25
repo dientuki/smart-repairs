@@ -21,7 +21,6 @@ export const getCustomersDevices = async () => {
               devices {
                 id
                 commercial_name
-                tech_name
                 url
                 brand {
                     name
@@ -80,7 +79,6 @@ export const getCustomersDevices = async () => {
         id: device.id,
         label: `${device.brand.name} ${device.commercial_name}`,
         commercialname: device.commercial_name,
-        techname: device.tech_name,
         brand: device.brand.name,
         type: device.deviceType.name,
         url: device.url

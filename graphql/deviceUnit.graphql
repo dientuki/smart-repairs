@@ -24,7 +24,14 @@ type DeviceUnit {
     id: ID!
     serial: String!
     device_version_id: String!
-    device: Device!
+    deviceVersion: DeviceVersion!
     unlock_type: String!
     unlock_code: String
+}
+
+type DeviceVersion {
+    id: ID!
+    version: String!
+    description: String!
+    device: Device!
 }

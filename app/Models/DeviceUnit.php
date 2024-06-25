@@ -14,4 +14,8 @@ class DeviceUnit extends ModelWithTeam
         return $this->belongsTo(DeviceVersion::class);
     }
         */
+
+    public function deviceVersion(): BelongsTo {
+        return $this->belongsTo(DeviceVersion::class);
+    }
 }

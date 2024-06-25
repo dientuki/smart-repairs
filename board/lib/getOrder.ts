@@ -35,7 +35,6 @@ export const getOrder = async (id: string) => {
                             unlock_code
                             device {
                                 commercial_name
-                                tech_name
                                 brand {
                                     name
                                 }
@@ -79,7 +78,6 @@ export const getOrder = async (id: string) => {
         deviceType: json.data.order.deviceUnit.device.deviceType.name,
         deviceTypeImage: json.data.order.deviceUnit.device.deviceType.imageUrl,
         deviceCommercialName: json.data.order.deviceUnit.device.commercial_name,
-        deviceTechName: json.data.order.deviceUnit.device.tech_name,
         deviceSerial: json.data.order.deviceUnit.serial,
         customerFullName: `${json.data.order.customer.first_name} ${json.data.order.customer.last_name}`,
         customerPhone: json.data.order.customer.phone,

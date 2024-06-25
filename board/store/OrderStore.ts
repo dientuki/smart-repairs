@@ -5,7 +5,7 @@ import { addComment, updateCommentVisibility, updateComment, deleteComment } fro
 import { createCustomer, updateCustomer } from "@/lib/customers";
 import { createDevice, updateDevice } from "@/lib/devices";
 import { createDeviceUnit, updateDeviceUnit } from "@/lib/deviceUnits";
-import { createOrder } from "@/lib/order";
+import { createOrder } from "@/lib/orders";
 
 interface OrderStore {
     order: Order,
