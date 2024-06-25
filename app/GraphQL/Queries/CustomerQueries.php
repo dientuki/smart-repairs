@@ -16,6 +16,6 @@ final readonly class CustomerQueries
     {
         $team_id = $this->getTeamIdFromContext($context);
 
-        return Customer::where('team_id',)->get();
+        return Customer::where('team_id',$team_id)->get();
     }
 }
