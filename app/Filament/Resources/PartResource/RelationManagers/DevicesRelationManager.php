@@ -43,6 +43,7 @@ class DevicesRelationManager extends RelationManager
                 //
             ])
             ->headerActions([
+                // phpcs:disable Generic.Files.LineLength.TooLong
                 AttachAction::make()
                     ->preloadRecordSelect()
                     ->recordSelect(
@@ -53,6 +54,7 @@ class DevicesRelationManager extends RelationManager
                     ->form(fn (AttachAction $action): array => [
                         $action->getRecordSelect(),
                     ]),
+                // phpcs:enable
             ])
             ->actions([
                 Tables\Actions\DetachAction::make(),

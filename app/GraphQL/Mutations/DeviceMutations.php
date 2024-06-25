@@ -25,7 +25,6 @@ final readonly class DeviceMutations
 
         return Device::create([
             'commercial_name' => $args['device']['commercialname'],
-            'tech_name' => $args['device']['techname'],
             'brand_id' => $args['device']['brandid'],
             'device_type_id' => $args['device']['typeid'],
             'url' => $args['device']['url'],

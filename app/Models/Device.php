@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\DB;
 
 class Device extends ModelAuditable
 {
-    protected $fillable = ['commercial_name', 'url', 'tech_name', 'brand_id', 'device_type_id'];
+    protected $fillable = ['commercial_name', 'url', 'brand_id', 'device_type_id'];
 
     public function brand(): BelongsTo
     {
@@ -40,7 +40,6 @@ class Device extends ModelAuditable
             ->join('device_versions', 'device_versions.id', '=', 'device_versions_parts.device_version_id')
             ->join('module_categories', 'module_categories.id', '=', 'parts.module_category_id')
             ->from('parts')
-            ->select('parts.*', 'device_versions.version as version' , 'module_categories.name as category');
+            ->select('parts.*', 'device_versions.version as version', 'module_categories.name as category');
     }
-
 }

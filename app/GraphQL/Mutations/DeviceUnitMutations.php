@@ -28,7 +28,7 @@ final readonly class DeviceUnitMutations
         $team_id = $this->getTeamIdFromContext($context);
 
         return DeviceUnit::create([
-            'device_id' => $args['deviceunit']['deviceid'],
+            'device_version_id' => $args['deviceunit']['deviceVersionId'],
             'team_id' => $team_id,
             'serial' => $args['deviceunit']['serial'],
             'unlock_type' => $args['deviceunit']['unlocktype'],
