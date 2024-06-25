@@ -17,7 +17,8 @@ class DeviceVersionSeeder extends Seeder
 
         DB::table('device_versions')->insert([
             'id' => (string) Str::ulid(),
-            'version' => 'v1',
+            'version' => 'SM-F700F/DS',
+            'description' => 'International',
             'device_id' => $device[0]->id,
             'created_at' => now(),
             'updated_at' => now(),
@@ -25,7 +26,8 @@ class DeviceVersionSeeder extends Seeder
 
         DB::table('device_versions')->insert([
             'id' => (string) Str::ulid(),
-            'version' => 'v2',
+            'version' => 'SM-F700U/DS',
+            'description' => 'USA',
             'device_id' => $device[0]->id,
             'created_at' => now(),
             'updated_at' => now(),
@@ -33,7 +35,15 @@ class DeviceVersionSeeder extends Seeder
 
         DB::table('device_versions')->insert([
             'id' => (string) Str::ulid(),
-            'version' => 'only me',
+            'version' => 'XT2027-1',
+            'device_id' => $device[1]->id,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+        DB::table('device_versions')->insert([
+            'id' => (string) Str::ulid(),
+            'version' => 'XT2027-1/SS',
             'device_id' => $device[1]->id,
             'created_at' => now(),
             'updated_at' => now(),

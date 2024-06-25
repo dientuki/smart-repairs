@@ -40,5 +40,15 @@ class DeviceVersionPartSeeder extends Seeder
             'device_version_id' => $devices[2]->id,
             'part_id' => $parts[2]->id,
         ]);
+
+        DB::table('device_versions_parts')->insert([
+            'device_version_id' => $devices[2]->id,
+            'part_id' => $parts[4]->id,
+        ]);
+
+        DB::table('device_versions_parts')->insert([
+            'device_version_id' => $devices[3]->id,
+            'part_id' => $parts[4]->id,
+        ]);
     }
 }
