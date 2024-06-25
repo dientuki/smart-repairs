@@ -58,37 +58,8 @@ class Part extends ModelAuditable
         );
     }
 
-    /** this is test */
-
     public function deviceVersions()
     {
-        return $this->belongsToMany(DeviceVersion::class, 'device_versions_parts', 'part_id', 'device_version_id');
+        return $this->belongsToMany(DeviceVersion::class, 'device_versions_parts');
     }
-
-
-
-
-
-
-
-
-
-
-    /**
-     * Returns the devices that the part belongs to.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
-     */
-    /*
-    public function devices(): BelongsToMany
-    {
-        return $this->belongsToMany(Device::class, 'device_parts');
-    }
-    */
-
-
-
-
-
-
 }

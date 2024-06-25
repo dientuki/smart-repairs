@@ -16,7 +16,7 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class DevicesRelationManager extends RelationManager
 {
-    protected static string $relationship = 'devices';
+    protected static string $relationship = 'deviceVersions';
 
     public function form(Form $form): Form
     {
@@ -33,10 +33,10 @@ class DevicesRelationManager extends RelationManager
         return $table
             ->recordTitleAttribute('commercial_name')
             ->columns([
-                TextColumn::make('deviceType.name'),
-                TextColumn::make('brand.name'),
-                TextColumn::make('commercial_name'),
-                TextColumn::make('tech_name'),
+                TextColumn::make('device.brand.name'),
+                TextColumn::make('device.commercial_name'),
+                TextColumn::make('version'),
+                TextColumn::make('description'),
             ])
             ->filters([
                 //
