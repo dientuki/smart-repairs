@@ -4,7 +4,7 @@ import { create } from 'zustand'
 
 interface BoardStore {
     board: Board,
-    getBoard: () => void,
+    getBoard: () => Promise<void>,
     setBoardState: (board: Board) => void,
 
     updateStatus: (taskId: string, columnId: TypedColumn) => void,
