@@ -22,7 +22,6 @@ class DatabaseSeeder extends Seeder
             DeviceSeeder::class,
             DeviceVersionSeeder::class,
             DeviceVersionPartSeeder::class,
-            /*
             CustomerSeeder::class,
             DeviceUnitSeeder::class,
             OrderSeeder::class,
@@ -30,7 +29,6 @@ class DatabaseSeeder extends Seeder
             SupplierSeeder::class,
             SupplierContactSeeder::class,
             StockSeeder::class
-            */
         ]);
     }
 }

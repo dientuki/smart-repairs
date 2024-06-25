@@ -29,6 +29,7 @@ class OrderSeeder extends Seeder
             'created_at' => now(),
             'updated_at' => now(),
         ]);
+
         DB::table('orders')->insert([
             'id' => (string) Str::ulid(),
             'observation' => 'creo que es error de usuario',
@@ -39,6 +40,7 @@ class OrderSeeder extends Seeder
             'created_at' => now(),
             'updated_at' => now(),
         ]);
+
         DB::table('orders')->insert([
             'id' => (string) Str::ulid(),
             'observation' => 'Sali a comprar el pan, se metio dentro de uno y le di un mordisco',
