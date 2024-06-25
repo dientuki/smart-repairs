@@ -13,7 +13,6 @@ extend type Mutation {
 
 input DeviceInput {
     commercialname: String! @rules(apply: ["required"])
-    techname: String! @rules(apply: ["required"])
     brandid: ID! @rules(apply: ["required", "ulid", "exists:brands,id"])
     typeid: ID! @rules(apply: ["required", "ulid", "exists:device_types,id"])
     url: String @rules(apply: ["url"])
@@ -22,7 +21,6 @@ input DeviceInput {
 type Device {
     id: ID!
     commercial_name: String!
-    tech_name: String!
     brand: Brand!
     deviceType: DeviceType!
     url: String
