@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\DeviceResource\RelationManagers;
 
+use App\Models\Device;
 use App\Models\Part;
 use Filament\Forms\Components\Select;
 use Filament\Tables\Actions\ViewAction;
@@ -21,9 +22,7 @@ class PartsRelationManager extends RelationManager
     {
         return $form
             ->schema([
-                TextInput::make('part_number')
-                    ->required()
-                    ->maxLength(255),
+
             ]);
     }
 
@@ -40,11 +39,7 @@ class PartsRelationManager extends RelationManager
                 //
             ])
             ->headerActions([
-                AttachAction::make()
-                    ->preloadRecordSelect()
-                    ->recordSelect(
-                        fn (Select $select) => $select->placeholder('Select a post'),
-                    )
+
             ])
             ->actions([
                 ViewAction::make()

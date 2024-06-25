@@ -15,8 +15,23 @@ class Stock extends ModelWithTeam
         return $this->belongsTo(Part::class);
     }
 
+    public function devicesVersions()
+    {
+        //return $this->belongsToMany(DeviceVersion::class, 'device_versions_parts');
+        //dd($this->part->deviceVersions()->toSql());
+        return $this->part->deviceVersions();
+    }
+
+    /*
+
     public function devices(): BelongsToMany
     {
         return $this->part->devices();
     }
+
+    public function deviceVersions()
+    {
+        return $this->belongsToMany(DeviceVersion::class, 'device_versions_parts');
+    }
+        */
 }
