@@ -8,7 +8,6 @@ export const createDevice = async(device: NewDevice) => {
                         typeid: "${device.typeid}"
                         brandid: "${device.brandid}"
                         commercialname: "${device.commercialname}"
-                        techname: "${device.techname}"
                         url: "${device.url}"
                     }) {
                         id
@@ -27,7 +26,6 @@ export const updateDevice = async(device: NewDevice) => {const response = await 
                         typeid: "${device.typeid}"
                         brandid: "${device.brandid}"
                         commercialname: "${device.commercialname}"
-                        techname: "${device.techname}"
                         url: "${device.url}"
                     })
                 }

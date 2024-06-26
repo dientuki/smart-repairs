@@ -29,11 +29,10 @@ function Step2({ nextStep, prevStep, devices, brands, deviceTypes }: Props) {
   const { t } = useTranslation();
   const handleRegistration = async (data: FieldValues ) => {
 
-    const toValidate = ['typeid', 'brandid', 'commercialname', 'techname', 'url'];
+    const toValidate = ['typeid', 'brandid', 'commercialname', 'url'];
     const newDevice: NewDevice = {
       id: '',
       commercialname: data.commercialname,
-      techname: data.techname,
       url: data.url,
       brandid: comboBox.brand || '',
       typeid: comboBox.type || '',
@@ -99,7 +98,6 @@ function Step2({ nextStep, prevStep, devices, brands, deviceTypes }: Props) {
     typeid: { required: t('validation.required', { field: t('field.type')}) },
     brandid: { required: t('validation.required', { field: t('field.brand')}) },
     commercialname: { required: t('validation.required', { field: t('field.commercial_name')}) },
-    techname: { required: t('validation.required', { field: t('field.tech_name')}) },
     url: {
       pattern: {
         value: /^https?:\/\//,
@@ -124,7 +122,6 @@ function Step2({ nextStep, prevStep, devices, brands, deviceTypes }: Props) {
                 setValue('typeid', newValue.type);
                 setValue('brandid', newValue.brand);
                 setValue('commercialname', newValue.commercialname);
-                setValue('techname', newValue.techname);
                 setValue('url', newValue.url);
                 setComboBox({
                   brand: brands.find(brand => brand?.label === newValue.brand)?.id ?? null,
@@ -136,14 +133,12 @@ function Step2({ nextStep, prevStep, devices, brands, deviceTypes }: Props) {
                 setValue('typeid', '');
                 setValue('brandid', '');
                 setValue('commercialname', '');
-                setValue('techname', '');
                 setValue('url', '');
                 setComboBox({ brand: null, type: null });
               }
               trigger('typeid');
               trigger('brandid');
               trigger('commercialname');
-              trigger('techname');
               trigger('url');
             }}
             filterOptions={(options, params) => {
@@ -260,27 +255,6 @@ function Step2({ nextStep, prevStep, devices, brands, deviceTypes }: Props) {
               </p>
             )}
           </Field>
-
-          <Field>
-            <Label className="first-letter:uppercase block mb-2 text-sm font-medium text-gray-900">{t('field.tech_name')}</Label>
-            <Controller
-              name="techname"
-              control={control}
-              defaultValue=""
-              rules={registerOptions.techname}
-              render={({ field }) => (
-                <Input {...field} className={`${errors?.techname ? 'bg-red-50 border-red-500 text-red-900 placeholder-red-700 focus:ring-red-500 focus:border-red-500' : 'bg-gray-50 border-gray-300 text-gray-900 focus:ring-blue-500 focus:border-blue-500' } text-sm rounded-lg  block w-full p-2.5 border`} />
-              )}
-            />
-            {errors?.techname && errors.techname.message && (
-              <p className="mt-2 text-sm text-red-600 dark:text-red-500">
-                {typeof errors.techname.message === 'string' ? errors.techname.message : JSON.stringify(errors.techname.message)}
-              </p>
-            )}
-          </Field>
-        </div>
-
-        <div className="grid gap-6 grid-cols-1 mt-4">
           <Field>
             <Label className="first-letter:uppercase block mb-2 text-sm font-medium text-gray-900">{t('field.url')}</Label>
             <div className="flex">
@@ -304,6 +278,8 @@ function Step2({ nextStep, prevStep, devices, brands, deviceTypes }: Props) {
             )}
           </Field>
         </div>
+
+
 
         <div className="flex justify-between mt-6">
           <div onClick={prevStep} className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center w-1/4 cursor-pointer">Anterior</div>

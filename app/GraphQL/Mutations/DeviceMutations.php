@@ -36,7 +36,6 @@ final readonly class DeviceMutations
         $device = Device::find($args['deviceId']);
         if ($device) {
             $device->commercial_name = $args['device']['commercialname'];
-            $device->tech_name = $args['device']['techname'];
             $device->brand_id = $args['device']['brandid'];
             $device->device_type_id = $args['device']['typeid'];
             $device->url = $args['device']['url'];

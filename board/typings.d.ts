@@ -40,7 +40,6 @@ interface Device {
     id: string;
     label: string;
     commercialName?: string;
-    techName?: string;
     brand?: string;
     type?: string;
     url?: string;
@@ -69,7 +68,6 @@ interface NewDevice {
     brandid: string | null;
     typeid: string | null;
     commercialname: string;
-    techname: string;
     url: string;
 }
 
