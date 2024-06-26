@@ -9,11 +9,13 @@ import { useOrderStore } from "@/store/OrderStore";
 import { useBoardStore } from "@/store/BoardStore";
 import { useModalWindow } from "react-modal-global";
 import Step4 from "./Step4";
+import { toast } from "react-toastify";
+import { useTranslation } from "react-i18next";
 
 
 function NewCardModal() {
   const [ selectedIndex, setSelectedIndex ] = useState(0);
-  const { data, getData, addOrder } = useOrderStore();
+  const { data, getOrderCreationData, addOrder } = useOrderStore();
   const [ customer, setCustomer ] = useState<CustomerFullName | null>(null);
   const [ device, setDevice ] = useState<DeviceInfo | null>(null);
   const [ checks, setChecks ] = useState(null);
@@ -21,10 +23,14 @@ function NewCardModal() {
   const [ newOrder, setNewOrder ] = useState<NewOrder>();
   const modal = useModalWindow();
   const date = new Date();
+  const { t } = useTranslation();
 
   useEffect(() => {
-    getData();
-  }, [getData]);
+    getOrderCreationData().catch((e: any) => {
+      console.log(e.message);
+      toast.error(t(`toast.error.${e.message}`));
+    });;
+  }, [getOrderCreationData]);
 
   const goToStep2 = (customer: CustomerFullName) => {
     setCustomer(customer);

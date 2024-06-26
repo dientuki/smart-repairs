@@ -4,6 +4,8 @@ import { useOrderStore } from "@/store/OrderStore";
 import Comments from "@/components/Comments";
 import { useEffect } from "react";
 import ModalLayout from "@/components/modal/ModalLayout";
+import { toast } from "react-toastify";
+import { useTranslation } from "react-i18next";
 
 type ModalParams = {
   order: string;
@@ -12,9 +14,13 @@ type ModalParams = {
 function ViewCardModal() {
   const modal = useModalWindow<ModalParams>();
   const { order, getOrder } = useOrderStore();
+  const { t } = useTranslation();
 
   useEffect(() => {
-    getOrder(modal.params.order);
+    getOrder(modal.params.order).catch((e: any) => {
+      console.log(e.message);
+      toast.error(t(`toast.error.${e.message}`));
+    });
   }, [getOrder]);
 
   return (

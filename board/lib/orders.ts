@@ -199,3 +199,126 @@ export const getOrders = async () => {
 
     return board;
 }
+
+export const getOrderCreationData = async () => {
+    const response = await graphqlRequest(`
+            query {
+              customers {
+                id
+                fullName
+                first_name
+                last_name
+                phone
+                email
+              }
+
+              devices {
+                id
+                commercial_name
+                url
+                brand {
+                    name
+                }
+                deviceType {
+                    name
+                }
+              }
+
+              devicesRepared {
+                id
+                serial
+                deviceVersion {
+                    id
+                    version
+                    device {
+                        id
+                        commercial_name
+                        brand {
+                            name
+                        }
+                    }
+                }
+              }
+
+              brands {
+                id
+                label
+              }
+              deviceTypes {
+                id
+                label
+              }
+
+              deviceTypeChecks {
+                device_type_id
+                damages
+                features
+              }
+
+            }
+        `);
+
+    handleGraphQLErrors(response.errors);
+
+    const customers: Customer[] = response.data.customers.reduce((acc: Customer[], customer: any) => {
+        acc.push({
+            id: customer.id,
+            label: customer.fullName,
+            firstname: customer.first_name,
+            lastname: customer.last_name,
+            email: customer.email,
+            phone: customer.phone,
+        });
+
+        return acc;
+
+      }, []);
+
+    const devices: Device[] = response.data.devices.reduce((acc: Device[], device: any) => {
+    acc.push({
+        id: device.id,
+        label: `${device.brand.name} ${device.commercial_name}`,
+        commercialname: device.commercial_name,
+        brand: device.brand.name,
+        type: device.deviceType.name,
+        url: device.url
+    });
+
+    return acc;
+
+    }, []);
+
+
+    const devicesChecks: DeviceChecks[] = response.data.deviceTypeChecks.reduce((acc: DeviceChecks[], device: any) => {
+        acc.push({
+            deviceTypeId: device.device_type_id,
+            damages: device.damages,
+            features: device.features,
+        });
+
+        return acc;
+
+      }, []);
+
+    const devicesRepared: DeviceRepared[] = response.data.devicesRepared.reduce((acc: DeviceRepared[], device: any) => {
+        acc.push({
+            id: device.id,
+            label: `${device.deviceVersion.device.brand.name} ${device.deviceVersion.device.commercial_name} - ${device.serial}`,
+            deviceId: device.deviceVersion.device.id,
+            serial: device.serial,
+
+        });
+
+        return acc;
+
+    }, []);
+
+    return {
+        customers: customers,
+        devices: devices,
+        devicesRepared: devicesRepared,
+        brands: response.data.brands,
+        deviceTypes: response.data.deviceTypes,
+        devicesChecks: devicesChecks
+    }
+}

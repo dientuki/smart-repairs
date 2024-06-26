@@ -1,4 +1,4 @@
-export const getCustomersDevices = async () => {
+export const getOrderCreationData = async () => {
 
   //01HZJ9PYBNDCMQYHGCXMFHBFK3
 
