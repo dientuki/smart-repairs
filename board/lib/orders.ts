@@ -22,6 +22,90 @@ export const createOrder = async (newOrder: NewOrder) => {
 
 }
 
+export const getOrder = async (id: string) => {
+
+    const response = await graphqlRequest(`
+        query {
+            order(id: "${id}") {
+                id
+                status
+                created_at
+                observation
+
+                customer {
+                    first_name
+                    last_name
+                    phone
+                }
+                comments {
+                    id
+                    comment
+                    created_at
+                    is_public
+                    user_id
+                    was_edited
+                    user {
+                        name
+                    }
+                }
+                deviceUnit {
+                    serial
+                    unlock_type
+                    unlock_code
+                    deviceVersion {
+                        version
+                        device {
+                            commercial_name
+                            brand {
+                                name
+                            }
+                            deviceType {
+                                name
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    `);
+
+    handleGraphQLErrors(response.errors);
+
+    const comments: OrderComment[] = response.data.order.comments.reduce((acc: OrderComment[], comment: any) => {
+        acc.push({
+            id: comment.id,
+            comment: comment.comment,
+            createdAt: comment.created_at,
+            createdAtDate: new Date(comment.created_at),
+            isPublic: comment.is_public,
+            userId: comment.user_id,
+            userName: comment.user.name,
+            wasEdited: comment.was_edited
+        });
+
+        return acc;
+
+    }, []);
+
+    return {
+        $id: response.data.order.id,
+        createdAt: response.data.order.created_at,
+        createdAtDate: new Date(response.data.order.created_at),
+        status: response.data.order.status,
+        brand: response.data.order.deviceUnit.deviceVersion.device.brand.name,
+        brandImage: response.data.order.deviceUnit.deviceVersion.device.brand.imageUrl,
+        deviceType: response.data.order.deviceUnit.deviceVersion.device.deviceType.name,
+        deviceTypeImage: response.data.order.deviceUnit.deviceVersion.device.deviceType.imageUrl,
+        deviceCommercialName: response.data.order.deviceUnit.deviceVersion.device.commercial_name,
+        deviceSerial: response.data.order.deviceUnit.deviceVersion.serial,
+        customerFullName: `${response.data.order.customer.first_name} ${response.data.order.customer.last_name}`,
+        customerPhone: response.data.order.customer.phone,
+        observation: response.data.order.observation,
+        comments: comments
+    } as Order;
+
+}
+
 export const getOrders = async () => {
     const response = await graphqlRequest(`
         query {
@@ -41,9 +125,7 @@ export const getOrders = async () => {
 
                 deviceUnit {
                     serial
-                    device_version_id
                     deviceVersion {
-                        id
                         version
                         device {
                             commercial_name

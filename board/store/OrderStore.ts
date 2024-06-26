@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import { getOrder } from "@/lib/getOrder";
+import { getOrder } from "@/lib/orders";
 import { getCustomersDevices } from "@/lib/createOrder";
 import { addComment, updateCommentVisibility, updateComment, deleteComment } from "@/lib/comments";
 import { createCustomer, updateCustomer } from "@/lib/customers";
@@ -9,7 +9,7 @@ import { createOrder } from "@/lib/orders";
 
 interface OrderStore {
     order: Order,
-    getOrder: (id: string) => void,
+    getOrder: (id: string) => Promise<void>,
 
     updateCommentVisibility: (commentId: string, isPublic: boolean) => void
     updateComment: (commentId: string, text: string) => void,
