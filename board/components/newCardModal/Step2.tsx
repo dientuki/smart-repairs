@@ -6,6 +6,8 @@ import { useState } from "react";
 import { GlobeAltIcon } from "@heroicons/react/16/solid";
 import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
+import Modal from "@/components/modal/Modal";
+import PatternLockModal from "../modal/PatternLockModal";
 
 const filter = createFilterOptions<Device>();
 type Props = {
@@ -14,6 +16,13 @@ type Props = {
   devices: Device[],
   brands: Brand[],
   deviceTypes: DeviceType[]
+  devicesRepared: DeviceRepared[]
+}
+
+enum UnlockTypeEnum {
+  NONE = 'none',
+  CODE = 'code',
+  PATTERN = 'pattern',
 }
 
 type ComboBox = {
@@ -21,54 +30,71 @@ type ComboBox = {
   type: string | null;
 };
 
-function Step2({ nextStep, prevStep, devices, brands, deviceTypes }: Props) {
+function Step2({ nextStep, prevStep, devices, brands, deviceTypes, devicesRepared }: Props) {
   const { addDevice, updateDevice } = useOrderStore();
+  const deviceReparedComboEmpty = [{id: 'new', label: 'Agregar nuevo equipo'}];
   const [ selectedDevice, setSelectedDevice ] = useState<Device | null>(null);
   const { handleSubmit, control, formState: { errors }, setValue, setError, trigger } = useForm();
   const [comboBox, setComboBox] = useState<ComboBox>({ brand: null, type: null });
+  const [ isDisableCode, setIsDisableCode ] = useState(true);
+  const openPatternLock = () => Modal.open(PatternLockModal, {layer: 5, setPattern: setPattern});
   const { t } = useTranslation();
-  const handleRegistration = async (data: FieldValues ) => {
+  const [ unlockType, setUnlockType] = useState<UnlockTypeEnum>(UnlockTypeEnum.NONE);
+  const [ deviceReparedCombo, setDeviceReparedCombo ] = useState<DeviceRepared[]>(deviceReparedComboEmpty);
+  const [ deviceUnitSelected, setDeviceUnitSelected ] = useState<string | null>(null);
 
-    const toValidate = ['typeid', 'brandid', 'commercialname', 'url'];
-    const newDevice: NewDevice = {
-      id: '',
+  const UnlockTypeEnumLabels: Record<string, string> = {
+    [UnlockTypeEnum.NONE]: t('unlock_type.none'),
+    [UnlockTypeEnum.CODE]: t('unlock_type.code'),
+    [UnlockTypeEnum.PATTERN]: t('unlock_type.pattern'),
+  };
+  const unlocktypeOptions = Object.keys(UnlockTypeEnumLabels).map((key) => ({ id: key, label: UnlockTypeEnumLabels[key] }));
+
+  const setPattern = (pattern: number[]) => {
+    setValue('unlockcode', pattern.length > 0 ? pattern : null);
+  }
+
+  const handleUnlock = (unlock: UnlockTypeEnum) => {
+    switch (unlock) {
+      case UnlockTypeEnum.NONE:
+        setIsDisableCode(true);
+        break;
+      case UnlockTypeEnum.CODE:
+        setIsDisableCode(false);
+        break;
+      case UnlockTypeEnum.PATTERN:
+        setIsDisableCode(true);
+        openPatternLock();
+        break;
+    }
+  }
+
+  const handleRegistration = async (data: FieldValues ) => {
+    console.log(data);
+    return;
+
+
+    const step2: Step2 = {
+      deviceid: data.deviceid,
       commercialname: data.commercialname,
       url: data.url,
       brandid: comboBox.brand || '',
       typeid: comboBox.type || '',
+      deviceunitid: data.deviceunitid,
+      unlocktype: unlockType,
+      unlockcode: data.unlockcode,
+      deviceversionid: data.deviceversionid,
+      serial: data.serial
     }
-    const device: DeviceInfo = {};
 
     try {
-      if (selectedDevice === null) {
-        device.id = await addDevice(newDevice);
-        device.label = brands.find(b => b.id === newDevice.brandid)?.label + ' ' + newDevice.commercialname;
-        device.type = deviceTypes.find(t => t.id === newDevice.typeid)?.label;
-        device.typeId = newDevice.typeid;
-        toast.success("Device agregado");
-      } else {
-        newDevice.id = selectedDevice.id;
-        device.id = selectedDevice.id;
-        device.label = brands.find(b => b.id === newDevice.brandid)?.label + ' ' + newDevice.commercialname;
-        device.type = deviceTypes.find(t => t.id === newDevice.typeid)?.label;
-        device.typeId = newDevice.typeid;
-        selectedDevice.brandid = selectedDevice.brand;
-        selectedDevice.typeid = selectedDevice.type;
-        for (let i = 0, c = toValidate.length; i < c; i++) {
-          if (data[toValidate[i]] !== selectedDevice[toValidate[i]]) {
-            if (await updateDevice(newDevice)) {
-              toast.success("Actualizo");
-            } else {
-              toast.error("Error en actualizar");
-            };
-            break;
-          }
-        }
-      }
+      const someVar = await step2(step2);
 
       nextStep(device);
 
     } catch (e: any) {
+      const toValidate = ['typeid', 'brandid', 'commercialname', 'url'];
+
       switch (e.constructor.name) {
         case 'Object':
           for (let i = 0, c = toValidate.length; i < c; i++) {
@@ -94,7 +120,7 @@ function Step2({ nextStep, prevStep, devices, brands, deviceTypes }: Props) {
   };
 
   const registerOptions = {
-    id: {required: false},
+    deviceid: {required: false},
     typeid: { required: t('validation.required', { field: t('field.type')}) },
     brandid: { required: t('validation.required', { field: t('field.brand')}) },
     commercialname: { required: t('validation.required', { field: t('field.commercial_name')}) },
@@ -103,7 +129,12 @@ function Step2({ nextStep, prevStep, devices, brands, deviceTypes }: Props) {
         value: /^https?:\/\//,
         message: t('validation.url', { field: t('field.url')})
       }
-    }
+    },
+    deviceunitid: {required: false},
+    unlocktype: { required: t('validation.required', { field: t('field.unlock_type')}) },
+    unlockcode: { required: false },
+    serial:{required: false},
+    deviceversionid: {required: false},
   };
 
   return (
@@ -117,8 +148,9 @@ function Step2({ nextStep, prevStep, devices, brands, deviceTypes }: Props) {
             id="devices"
             onChange={(event, newValue) => {
               if (newValue != null && newValue?.id !== 'new') {
+                //const autocomplete = device ? devicesRepared?.filter((d) => d.deviceId === device.id) : null;
                 setSelectedDevice(newValue);
-                setValue('id', newValue.id);
+                setValue('deviceid', newValue.id);
                 setValue('typeid', newValue.type);
                 setValue('brandid', newValue.brand);
                 setValue('commercialname', newValue.commercialname);
@@ -127,14 +159,16 @@ function Step2({ nextStep, prevStep, devices, brands, deviceTypes }: Props) {
                   brand: brands.find(brand => brand?.label === newValue.brand)?.id ?? null,
                   type: deviceTypes.find(type => type?.label === newValue.type)?.id ?? null
                 });
+                setDeviceReparedCombo(devicesRepared?.filter((d) => d.deviceId === newValue.id) ?? deviceReparedComboEmpty);
               } else {
                 setSelectedDevice(null);
-                setValue('id', '');
+                setValue('deviceid', '');
                 setValue('typeid', '');
                 setValue('brandid', '');
                 setValue('commercialname', '');
                 setValue('url', '');
                 setComboBox({ brand: null, type: null });
+                setDeviceReparedCombo(deviceReparedComboEmpty);
               }
               trigger('typeid');
               trigger('brandid');
@@ -164,10 +198,10 @@ function Step2({ nextStep, prevStep, devices, brands, deviceTypes }: Props) {
 
       <form onSubmit={handleSubmit(handleRegistration, handleError)}>
         <Controller
-          name="id"
+          name="deviceid"
           defaultValue=""
           control={control}
-          rules={registerOptions.id}
+          rules={registerOptions.deviceid}
           render={({ field }) => (
             <Input {...field} type="hidden"/>
           )}
@@ -278,6 +312,89 @@ function Step2({ nextStep, prevStep, devices, brands, deviceTypes }: Props) {
             )}
           </Field>
         </div>
+
+        <Field className="mt-4">
+          <Label className="first-letter:uppercase block mb-2 text-sm font-medium text-gray-900">Devices Repared</Label>
+            <Autocomplete
+              selectOnFocus
+              disablePortal
+              handleHomeEndKeys
+              id="deviceid"
+              onKeyDown={(e) => {e.preventDefault();}}
+              onChange={(event, newValue) => {
+                if (newValue != null && newValue?.id !== 'new') {
+                  setDeviceUnitSelected(newValue.id)
+                  setValue('deviceunitid', newValue.id);
+                } else {
+                  setDeviceUnitSelected(null);
+                  setValue('deviceunitid', '');
+                }
+              }}
+              isOptionEqualToValue={() => true}
+              options={deviceReparedCombo}
+              renderInput={(params) => <TextField {...params} size="small" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" />}
+              renderOption={(props, option) => <li {...props} key={option.id}>{option.label}</li>}
+            />
+            {errors?.deviceid && errors.deviceid.message && (
+              <p className="mt-2 text-sm text-red-600 dark:text-red-500">
+                {typeof errors.deviceid.message === 'string' ? errors.deviceid.message : JSON.stringify(errors.deviceid.message)}
+              </p>
+            )}
+        </Field>
+
+        <div className="grid gap-6 grid-cols-2 mt-4">
+          <Field>
+            <Label className="first-letter:uppercase block mb-2 text-sm font-medium text-gray-900">{t('field.unlock_type')}</Label>
+            <Controller
+              name="unlocktype"
+              control={control}
+              defaultValue={UnlockTypeEnumLabels[UnlockTypeEnum.NONE]}
+              rules={registerOptions.unlocktype}
+              render={({ field }) => (
+                <Autocomplete
+                  {...field}
+                  selectOnFocus
+                  handleHomeEndKeys
+                  disableClearable
+                  id="unlocktype"
+                  onChange={(event, newValue) => {
+                    setValue('unlocktype', newValue?.label);
+                    setUnlockType(newValue?.id as UnlockTypeEnum);
+                    handleUnlock(newValue?.id);
+                  }}
+                  options={unlocktypeOptions}
+                  isOptionEqualToValue={() => true}
+                  renderInput={(params) => <TextField {...params} size="small" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" />}
+                  renderOption={(props, option) => <li {...props} key={option.id}>{option.label}</li>}
+                />
+              )}
+            />
+            {errors?.unlocktype && errors.unlocktype.message && (
+              <p className="mt-2 text-sm text-red-600 dark:text-red-500">
+                {typeof errors.unlocktype.message === 'string' ? errors.unlocktype.message : JSON.stringify(errors.unlocktype.message)}
+              </p>
+            )}
+          </Field>
+
+          <Field>
+            <Label className="first-letter:uppercase block mb-2 text-sm font-medium text-gray-900">{t('field.unlock_code')}</Label>
+            <Controller
+              name="unlockcode"
+              control={control}
+              defaultValue=""
+              rules={registerOptions.unlockcode}
+              render={({ field }) => (
+                <Input {...field} readOnly={isDisableCode} className={`${errors?.unlockcode ? 'bg-red-50 border-red-500 text-red-900 placeholder-red-700 focus:ring-red-500 focus:border-red-500' : 'bg-gray-50 border-gray-300 text-gray-900 focus:ring-blue-500 focus:border-blue-500' } text-sm rounded-lg  block w-full p-2.5 border`} />
+              )}
+            />
+            {errors?.unlockcode && errors.unlockcode.message && (
+              <p className="mt-2 text-sm text-red-600 dark:text-red-500">
+                {typeof errors.unlockcode.message === 'string' ? errors.unlockcode.message : JSON.stringify(errors.unlockcode.message)}
+              </p>
+            )}
+          </Field>
+        </div>
+
 
 
 

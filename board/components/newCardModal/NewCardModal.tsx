@@ -108,20 +108,11 @@ function NewCardModal() {
                     <p className="text-sm">Detalle del problema a resolver</p>
                 </span>
               </Tab>
-              <Tab className="flex items-center data-[selected]:text-blue-600 text-gray-500 space-x-2.5 p-2 grow">
-                <span className="flex items-center justify-center w-8 h-8 border border-gray-500 rounded-full  ">
-                    4
-                </span>
-                <span>
-                    <h3 className="font-medium leading-tight">Revision</h3>
-                    <p className="text-sm">Revision general del equipo</p>
-                </span>
-              </Tab>
             </TabList>
 
             <TabPanels className="mt-4">
               <Step1 nextStep={goToStep2} customers={data.customers} />
-              <Step2 prevStep={prevStep} nextStep={goToStep3} devices={data.devices} brands={data.brands} deviceTypes={data.deviceTypes}  />
+              <Step2 prevStep={prevStep} nextStep={goToStep3} devices={data.devices} brands={data.brands} deviceTypes={data.deviceTypes} devicesRepared={data.devicesRepared}  />
               <Step3 prevStep={prevStep} nextStep={goToStep4} device={device} devicesRepared={data.devicesRepared} />
               <Step4 prevStep={prevStep} nextStep={saveOrder} checks={checks} />
             </TabPanels>
