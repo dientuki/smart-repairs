@@ -20,7 +20,7 @@
         "react-avatar": "^5.0.3",
         "react-beautiful-dnd": "^13.1.1",
         "react-dom": "^18.3.1",
-        "react-hook-form": "^7.52.0",
+        "react-hook-form": "^7.52.1",
         "react-i18next": "^14.1.2",
         "react-loader-spinner": "^6.1.6",
         "react-modal-global": "^2.3.7",
