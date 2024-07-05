@@ -10,7 +10,7 @@
         "@emotion/styled": "^11.11.5",
         "@headlessui/react": "^2.1.0",
         "@heroicons/react": "^2.1.4",
-        "@mui/material": "^5.15.20",
+        "@mui/material": "^5.16.0",
         "@vitejs/plugin-react": "^4.2.1",
         "dotenv": "^16.4.5",
         "i18next": "^23.11.5",
