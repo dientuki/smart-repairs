@@ -174,3 +174,16 @@ interface GraphQLError {
     message: string;
     extensions?: GraphQLErrorExtension;
 }
+
+interface CustomerDevice {
+    deviceid: string;
+    commercialname: string;
+    url: string;
+    brandid: string | '';
+    typeid: string | '';
+    deviceunitid: string | '';
+    unlocktype: UnlockTypeEnum;
+    unlockcode: number[] | null;
+    deviceversionid: string | null;
+    serial: string;
+  }

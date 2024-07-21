@@ -36,7 +36,7 @@ function PatternLockModal() {
     }
 
     return (
-        <ModalLayout width="300px" height="300px">
+        <ModalLayout width="328px" height="384px">
             <div onPointerDown={reset}>
               <PatternLock
                 className="bg-black"

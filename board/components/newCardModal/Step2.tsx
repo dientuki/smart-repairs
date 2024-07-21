@@ -8,6 +8,7 @@ import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
 import Modal from "@/components/modal/Modal";
 import PatternLockModal from "../modal/PatternLockModal";
+import { useCallback, useMemo } from 'react';
 
 const filter = createFilterOptions<Device>();
 type Props = {
@@ -28,27 +29,25 @@ enum UnlockTypeEnum {
 type ComboBox = {
   brand: string | null;
   type: string | null;
+  deviceRepared: string | null;
 };
 
 function Step2({ nextStep, prevStep, devices, brands, deviceTypes, devicesRepared }: Props) {
-  const { addDevice, updateDevice } = useOrderStore();
   const deviceReparedComboEmpty = [{id: 'new', label: 'Agregar nuevo equipo'}];
   const [ selectedDevice, setSelectedDevice ] = useState<Device | null>(null);
   const { handleSubmit, control, formState: { errors }, setValue, setError, trigger } = useForm();
-  const [comboBox, setComboBox] = useState<ComboBox>({ brand: null, type: null });
+  const [comboBox, setComboBox] = useState<ComboBox>({ brand: null, type: null, deviceRepared: null });
   const [ isDisableCode, setIsDisableCode ] = useState(true);
-  const openPatternLock = () => Modal.open(PatternLockModal, {layer: 5, setPattern: setPattern});
   const { t } = useTranslation();
   const [ unlockType, setUnlockType] = useState<UnlockTypeEnum>(UnlockTypeEnum.NONE);
   const [ deviceReparedCombo, setDeviceReparedCombo ] = useState<DeviceRepared[]>(deviceReparedComboEmpty);
-  const [ deviceUnitSelected, setDeviceUnitSelected ] = useState<string | null>(null);
-
   const UnlockTypeEnumLabels: Record<string, string> = {
     [UnlockTypeEnum.NONE]: t('unlock_type.none'),
     [UnlockTypeEnum.CODE]: t('unlock_type.code'),
     [UnlockTypeEnum.PATTERN]: t('unlock_type.pattern'),
   };
   const unlocktypeOptions = Object.keys(UnlockTypeEnumLabels).map((key) => ({ id: key, label: UnlockTypeEnumLabels[key] }));
+  const openPatternLock = () => Modal.open(PatternLockModal, {layer: 5, setPattern: setPattern});
 
   const setPattern = (pattern: number[]) => {
     setValue('unlockcode', pattern.length > 0 ? pattern : null);
@@ -69,12 +68,32 @@ function Step2({ nextStep, prevStep, devices, brands, deviceTypes, devicesRepare
     }
   }
 
+  const handleDeviceChange = useCallback((newValue, reason) => {
+    if ((newValue != null && newValue?.id !== 'new') && reason !== 'clear') {
+      const { id, type, brand, commercialname, url } = newValue;
+      const brandId = brands.find(b => b?.label === brand)?.id ?? null;
+      const typeId = deviceTypes.find(t => t?.label === type)?.id ?? null;
+
+      setSelectedDevice(newValue);
+      setValue('deviceid', id);
+      setValue('typeid', type);
+      setValue('brandid', brand);
+      setValue('commercialname', commercialname);
+      setValue('url', url);
+      setComboBox({ brand: brandId, type: typeId, deviceRepared: null });
+      setDeviceReparedCombo(devicesRepared?.filter(d => d.deviceId === id) ?? deviceReparedComboEmpty);
+
+      ['typeid', 'brandid', 'commercialname', 'url'].forEach(field => trigger(field));
+    } else {
+      setSelectedDevice(null);
+      ['deviceid', 'typeid', 'brandid', 'commercialname', 'url'].forEach(field => setValue(field, ''));
+      setComboBox({ brand: null, type: null, deviceRepared: null });
+      setDeviceReparedCombo(deviceReparedComboEmpty);
+    }
+  }, [brands, deviceTypes, devicesRepared, setComboBox, setDeviceReparedCombo, setSelectedDevice, setValue, trigger]);
+
   const handleRegistration = async (data: FieldValues ) => {
-    console.log(data);
-    return;
-
-
-    const step2: Step2 = {
+    const rawData: CustomerDevice = {
       deviceid: data.deviceid,
       commercialname: data.commercialname,
       url: data.url,
@@ -86,9 +105,11 @@ function Step2({ nextStep, prevStep, devices, brands, deviceTypes, devicesRepare
       deviceversionid: data.deviceversionid,
       serial: data.serial
     }
+    console.log(rawData);
+    return;
 
     try {
-      const someVar = await step2(step2);
+      const customerDevice = await setCustomerDevice(rawData);
 
       nextStep(device);
 
@@ -146,35 +167,7 @@ function Step2({ nextStep, prevStep, devices, brands, deviceTypes, devicesRepare
             selectOnFocus
             handleHomeEndKeys
             id="devices"
-            onChange={(event, newValue) => {
-              if (newValue != null && newValue?.id !== 'new') {
-                //const autocomplete = device ? devicesRepared?.filter((d) => d.deviceId === device.id) : null;
-                setSelectedDevice(newValue);
-                setValue('deviceid', newValue.id);
-                setValue('typeid', newValue.type);
-                setValue('brandid', newValue.brand);
-                setValue('commercialname', newValue.commercialname);
-                setValue('url', newValue.url);
-                setComboBox({
-                  brand: brands.find(brand => brand?.label === newValue.brand)?.id ?? null,
-                  type: deviceTypes.find(type => type?.label === newValue.type)?.id ?? null
-                });
-                setDeviceReparedCombo(devicesRepared?.filter((d) => d.deviceId === newValue.id) ?? deviceReparedComboEmpty);
-              } else {
-                setSelectedDevice(null);
-                setValue('deviceid', '');
-                setValue('typeid', '');
-                setValue('brandid', '');
-                setValue('commercialname', '');
-                setValue('url', '');
-                setComboBox({ brand: null, type: null });
-                setDeviceReparedCombo(deviceReparedComboEmpty);
-              }
-              trigger('typeid');
-              trigger('brandid');
-              trigger('commercialname');
-              trigger('url');
-            }}
+            onChange={(_, newValue, reason) => handleDeviceChange(newValue, reason)}
             filterOptions={(options, params) => {
               const filtered = filter(options, params);
 
@@ -210,7 +203,7 @@ function Step2({ nextStep, prevStep, devices, brands, deviceTypes, devicesRepare
         <div className="grid gap-6 grid-cols-2 mt-4">
           <Field>
             <Label className="first-letter:uppercase block mb-2 text-sm font-medium text-gray-900">{t('field.type')}</Label>
-            { brands &&
+            { deviceTypes &&
                 <Controller
                   name="typeid"
                   control={control}
@@ -313,34 +306,41 @@ function Step2({ nextStep, prevStep, devices, brands, deviceTypes, devicesRepare
           </Field>
         </div>
 
-        <Field className="mt-4">
-          <Label className="first-letter:uppercase block mb-2 text-sm font-medium text-gray-900">Devices Repared</Label>
-            <Autocomplete
-              selectOnFocus
-              disablePortal
-              handleHomeEndKeys
-              id="deviceid"
-              onKeyDown={(e) => {e.preventDefault();}}
-              onChange={(event, newValue) => {
-                if (newValue != null && newValue?.id !== 'new') {
-                  setDeviceUnitSelected(newValue.id)
-                  setValue('deviceunitid', newValue.id);
-                } else {
-                  setDeviceUnitSelected(null);
-                  setValue('deviceunitid', '');
-                }
-              }}
-              isOptionEqualToValue={() => true}
-              options={deviceReparedCombo}
-              renderInput={(params) => <TextField {...params} size="small" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" />}
-              renderOption={(props, option) => <li {...props} key={option.id}>{option.label}</li>}
-            />
-            {errors?.deviceid && errors.deviceid.message && (
-              <p className="mt-2 text-sm text-red-600 dark:text-red-500">
-                {typeof errors.deviceid.message === 'string' ? errors.deviceid.message : JSON.stringify(errors.deviceid.message)}
-              </p>
-            )}
-        </Field>
+        <div className="grid gap-6 grid-cols-4 mt-4">
+          <Field className="col-span-3">
+            <Label className="first-letter:uppercase block mb-2 text-sm font-medium text-gray-900">Devices Repared</Label>
+              <Autocomplete
+                selectOnFocus
+                disablePortal
+                handleHomeEndKeys
+                id="deviceid"
+                onKeyDown={(e) => {e.preventDefault();}}
+                onChange={(event, newValue) => {
+                  if (newValue != null && newValue?.id !== 'new') {
+                    setValue('deviceunitid', newValue.id);
+                    setComboBox({ ...comboBox, deviceRepared: newValue.id });
+                  } else {
+                    setValue('deviceunitid', '');
+                    setComboBox({ ...comboBox, deviceRepared: null });
+                  }
+                }}
+                isOptionEqualToValue={() => true}
+                options={deviceReparedCombo}
+                renderInput={(params) => <TextField {...params} size="small" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" />}
+                renderOption={(props, option) => <li {...props} key={option.id}>{option.label}</li>}
+              />
+              {errors?.deviceid && errors.deviceid.message && (
+                <p className="mt-2 text-sm text-red-600 dark:text-red-500">
+                  {typeof errors.deviceid.message === 'string' ? errors.deviceid.message : JSON.stringify(errors.deviceid.message)}
+                </p>
+              )}
+          </Field>
+
+          <div className="relative">
+            <button type="button" className="absolute bottom-0 right-0 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center cursor-pointer w-full">Nuevo</button>
+          </div>
+
+        </div>
 
         <div className="grid gap-6 grid-cols-2 mt-4">
           <Field>
