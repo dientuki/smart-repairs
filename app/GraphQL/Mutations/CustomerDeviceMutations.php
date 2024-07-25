@@ -5,17 +5,19 @@ declare(strict_types=1);
 namespace App\GraphQL\Mutations;
 
 use Exception;
-use App\Models\Device;
 use App\Models\TemporaryDeviceUnit;
+use App\Models\Device;
+use App\Models\DeviceUnit;
 use Illuminate\Support\Facades\DB;
 use Nuwave\Lighthouse\Execution\ResolveInfo;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 
 final readonly class CustomerDeviceMutations
 {
-    private function removeEmptyStrings(array $array): array {
+    private function removeEmptyStrings(array $array): array
+    {
         // Filter out elements with an empty string value
-        return array_filter($array, function($value) {
+        return array_filter($array, function ($value) {
             return $value !== "";
         });
     }
@@ -30,7 +32,13 @@ final readonly class CustomerDeviceMutations
      */
     public function create(null $root, array $args, GraphQLContext $context, ResolveInfo $resolveInfo): mixed
     {
-        //dd($args);
+        if( isset($args['deviceunit']['deviceversionid']) && ($args['deviceunit']['deviceversionid'] === '') ) {
+            $deviceVersionId = DeviceUnit::where('id', $args['deviceunit']['deviceunitid'])->value('device_version_id');
+            if ($deviceVersionId) {
+                $args['deviceunit']['deviceversionid'] = $deviceVersionId;
+            }
+        }
+
         try {
             DB::beginTransaction();
 

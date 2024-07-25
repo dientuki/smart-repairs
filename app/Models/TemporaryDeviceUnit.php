@@ -11,5 +11,13 @@ class TemporaryDeviceUnit extends Model
     use HasUlids;
     use RemoveEmptyStringsTrait;
 
-    protected $fillable = ['order_id', 'device_id', 'device_version_id', 'device_unit_id', 'serial', 'unlock_type', 'unlock_code'];
+    protected $fillable = [
+        'order_id',
+        'device_id',
+        'device_version_id',
+        'device_unit_id',
+        'serial',
+        'unlock_type',
+        'unlock_code'
+    ];
 }

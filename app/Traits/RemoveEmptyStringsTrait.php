@@ -2,8 +2,8 @@
 
 namespace App\Traits;
 
-trait RemoveEmptyStringsTrait {
-
+trait RemoveEmptyStringsTrait
+{
     // Use the `creating` and `updating` events to clean data
     protected static function boot()
     {
@@ -26,7 +26,7 @@ trait RemoveEmptyStringsTrait {
      */
     protected static function removeEmptyStrings(array $attributes): array
     {
-        return array_filter($attributes, function($value) {
+        return array_filter($attributes, function ($value) {
             return $value !== "";
         });
     }
