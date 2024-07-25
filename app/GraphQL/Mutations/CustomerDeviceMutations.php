@@ -32,7 +32,11 @@ final readonly class CustomerDeviceMutations
      */
     public function create(null $root, array $args, GraphQLContext $context, ResolveInfo $resolveInfo): mixed
     {
-        if( isset($args['deviceunit']['deviceversionid']) && ($args['deviceunit']['deviceversionid'] === '') ) {
+        if (
+            isset($args['deviceunit'])
+            && isset($args['deviceunit']['deviceversionid'])
+            && ($args['deviceunit']['deviceversionid'] === '')
+        ) {
             $deviceVersionId = DeviceUnit::where('id', $args['deviceunit']['deviceunitid'])->value('device_version_id');
             if ($deviceVersionId) {
                 $args['deviceunit']['deviceversionid'] = $deviceVersionId;
