@@ -60,5 +60,5 @@ export async function setCustomerDeviceUnit(customerDeviceUnit: CustomerDeviceUn
 
     handleGraphQLErrors(response.errors);
 
-    return response.data.addDeviceUnit.id;
+    return response.data.addCustomerDeviceUnit;
 }

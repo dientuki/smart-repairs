@@ -8,7 +8,7 @@ import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
 import Modal from "@/components/modal/Modal";
 import PatternLockModal from "../modal/PatternLockModal";
-import { useCallback, useMemo } from 'react';
+import { useCallback } from 'react';
 
 const filter = createFilterOptions<Device>();
 type Props = {
@@ -35,7 +35,7 @@ type ComboBox = {
 function Step2({ nextStep, prevStep, devices, brands, deviceTypes, devicesRepared }: Props) {
   const { setCustomerDeviceUnit } = useOrderStore();
   const deviceReparedComboEmpty = [{id: 'new', label: 'Agregar nuevo equipo'}];
-  const [ selectedDevice, setSelectedDevice ] = useState<Device | null>(null);
+  //const [ selectedDevice, setSelectedDevice ] = useState<Device | null>(null);
   const { handleSubmit, control, formState: { errors }, setValue, setError, trigger } = useForm();
   const [comboBox, setComboBox] = useState<ComboBox>({ brand: null, type: null, deviceRepared: null });
   const [ isDisableCode, setIsDisableCode ] = useState(true);
@@ -75,7 +75,7 @@ function Step2({ nextStep, prevStep, devices, brands, deviceTypes, devicesRepare
       const brandId = brands.find(b => b?.label === brand)?.id ?? null;
       const typeId = deviceTypes.find(t => t?.label === type)?.id ?? null;
 
-      setSelectedDevice(newValue);
+      //setSelectedDevice(newValue);
       setValue('deviceid', id);
       setValue('typeid', type);
       setValue('brandid', brand);
@@ -83,15 +83,17 @@ function Step2({ nextStep, prevStep, devices, brands, deviceTypes, devicesRepare
       setValue('url', url);
       setComboBox({ brand: brandId, type: typeId, deviceRepared: null });
       setDeviceReparedCombo(devicesRepared?.filter(d => d.deviceId === id) ?? deviceReparedComboEmpty);
-
       ['typeid', 'brandid', 'commercialname', 'url'].forEach(field => trigger(field));
+
     } else {
-      setSelectedDevice(null);
-      ['deviceid', 'typeid', 'brandid', 'commercialname', 'url'].forEach(field => setValue(field, ''));
+      //setSelectedDevice(null);
+      ['deviceid', 'typeid', 'brandid', 'commercialname', 'url', 'unlockcode', 'deviceunitid'].forEach(field => setValue(field, ''));
       setComboBox({ brand: null, type: null, deviceRepared: null });
       setDeviceReparedCombo(deviceReparedComboEmpty);
+      setUnlockType(UnlockTypeEnum.NONE);
+      setValue('unlocktype', UnlockTypeEnumLabels[UnlockTypeEnum.NONE]);
     }
-  }, [brands, deviceTypes, devicesRepared, setComboBox, setDeviceReparedCombo, setSelectedDevice, setValue, trigger]);
+  }, [brands, deviceTypes, devicesRepared, setComboBox, setDeviceReparedCombo, setValue, setUnlockType, trigger]);
 
   const handleRegistration = async (data: FieldValues ) => {
     const rawData: CustomerDeviceUnit = {
@@ -100,7 +102,7 @@ function Step2({ nextStep, prevStep, devices, brands, deviceTypes, devicesRepare
       url: data.url,
       brandid: comboBox.brand || '',
       typeid: comboBox.type || '',
-      deviceunitid: data.deviceunitid,
+      deviceunitid: comboBox.deviceRepared || '',
       unlocktype: unlockType,
       unlockcode: data.unlockcode,
       deviceversionid: data.deviceversionid,
@@ -108,13 +110,11 @@ function Step2({ nextStep, prevStep, devices, brands, deviceTypes, devicesRepare
     }
 
     try {
-      const customerDevice = await setCustomerDeviceUnit(rawData);
+      const tempDeviceId = await setCustomerDeviceUnit(rawData);
 
       //nextStep(device);
 
     } catch (e: any) {
-      console.log(e)
-      /*
       const toValidate = ['typeid', 'brandid', 'commercialname', 'url'];
 
       switch (e.constructor.name) {
@@ -134,7 +134,6 @@ function Step2({ nextStep, prevStep, devices, brands, deviceTypes, devicesRepare
           toast.error("Error!! a los botes");
           break;
       }
-          */
     };
   };
 
@@ -311,31 +310,39 @@ function Step2({ nextStep, prevStep, devices, brands, deviceTypes, devicesRepare
         <div className="grid gap-6 grid-cols-4 mt-4">
           <Field className="col-span-3">
             <Label className="first-letter:uppercase block mb-2 text-sm font-medium text-gray-900">Devices Repared</Label>
-              <Autocomplete
-                selectOnFocus
-                disablePortal
-                handleHomeEndKeys
-                id="deviceid"
-                onKeyDown={(e) => {e.preventDefault();}}
-                onChange={(event, newValue) => {
-                  if (newValue != null && newValue?.id !== 'new') {
-                    setValue('deviceunitid', newValue.id);
-                    setComboBox({ ...comboBox, deviceRepared: newValue.id });
-                  } else {
-                    setValue('deviceunitid', '');
-                    setComboBox({ ...comboBox, deviceRepared: null });
-                  }
-                }}
-                isOptionEqualToValue={() => true}
-                options={deviceReparedCombo}
-                renderInput={(params) => <TextField {...params} size="small" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" />}
-                renderOption={(props, option) => <li {...props} key={option.id}>{option.label}</li>}
-              />
-              {errors?.deviceid && errors.deviceid.message && (
-                <p className="mt-2 text-sm text-red-600 dark:text-red-500">
-                  {typeof errors.deviceid.message === 'string' ? errors.deviceid.message : JSON.stringify(errors.deviceid.message)}
-                </p>
-              )}
+            <Controller
+              name="deviceunitid"
+              control={control}
+              defaultValue=""
+              rules={registerOptions.deviceunitid}
+              render={({ field }) => (
+                <Autocomplete
+                  { ...field }
+                  selectOnFocus
+                  handleHomeEndKeys
+                  onKeyDown={(e) => {e.preventDefault();}}
+                  onChange={(event, newValue) => {
+                    console.log('on change here')
+                    if (newValue != null && newValue?.id !== 'new') {
+                      setValue('deviceunitid', newValue.label);
+                      setComboBox({ ...comboBox, deviceRepared: newValue.id });
+                    } else {
+                      setValue('deviceunitid', '');
+                      setComboBox({ ...comboBox, deviceRepared: null });
+                    }
+                  }}
+                  isOptionEqualToValue={() => true}
+                  options={deviceReparedCombo}
+                  renderInput={(params) => <TextField {...params} size="small" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" />}
+                  renderOption={(props, option) => <li {...props} key={option.id}>{option.label}</li>}
+                />
+            )}/>
+
+            {errors?.deviceunitid && errors.deviceunitid.message && (
+              <p className="mt-2 text-sm text-red-600 dark:text-red-500">
+                {typeof errors.deviceunitid.message === 'string' ? errors.deviceunitid.message : JSON.stringify(errors.deviceunitid.message)}
+              </p>
+            )}
           </Field>
 
           <div className="relative">
