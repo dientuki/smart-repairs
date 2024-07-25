@@ -33,6 +33,7 @@ type ComboBox = {
 };
 
 function Step2({ nextStep, prevStep, devices, brands, deviceTypes, devicesRepared }: Props) {
+  const { setCustomerDeviceUnit } = useOrderStore();
   const deviceReparedComboEmpty = [{id: 'new', label: 'Agregar nuevo equipo'}];
   const [ selectedDevice, setSelectedDevice ] = useState<Device | null>(null);
   const { handleSubmit, control, formState: { errors }, setValue, setError, trigger } = useForm();
@@ -68,7 +69,7 @@ function Step2({ nextStep, prevStep, devices, brands, deviceTypes, devicesRepare
     }
   }
 
-  const handleDeviceChange = useCallback((newValue, reason) => {
+  const handleDeviceChange = useCallback((newValue: Device | null, reason: string) => {
     if ((newValue != null && newValue?.id !== 'new') && reason !== 'clear') {
       const { id, type, brand, commercialname, url } = newValue;
       const brandId = brands.find(b => b?.label === brand)?.id ?? null;
@@ -93,7 +94,7 @@ function Step2({ nextStep, prevStep, devices, brands, deviceTypes, devicesRepare
   }, [brands, deviceTypes, devicesRepared, setComboBox, setDeviceReparedCombo, setSelectedDevice, setValue, trigger]);
 
   const handleRegistration = async (data: FieldValues ) => {
-    const rawData: CustomerDevice = {
+    const rawData: CustomerDeviceUnit = {
       deviceid: data.deviceid,
       commercialname: data.commercialname,
       url: data.url,
@@ -105,15 +106,15 @@ function Step2({ nextStep, prevStep, devices, brands, deviceTypes, devicesRepare
       deviceversionid: data.deviceversionid,
       serial: data.serial
     }
-    console.log(rawData);
-    return;
 
     try {
-      const customerDevice = await setCustomerDevice(rawData);
+      const customerDevice = await setCustomerDeviceUnit(rawData);
 
-      nextStep(device);
+      //nextStep(device);
 
     } catch (e: any) {
+      console.log(e)
+      /*
       const toValidate = ['typeid', 'brandid', 'commercialname', 'url'];
 
       switch (e.constructor.name) {
@@ -133,6 +134,7 @@ function Step2({ nextStep, prevStep, devices, brands, deviceTypes, devicesRepare
           toast.error("Error!! a los botes");
           break;
       }
+          */
     };
   };
 

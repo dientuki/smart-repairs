@@ -39,3 +39,7 @@ export const arrayToString = (array: { [key: string]: any }[]): string => {
     // Stringify the object using the replacer function
     return "[" + array.map(object => objectToString(object)).join(",") + "]";
 }
+
+export const handleUndefined = (value: string | undefined | null): string => {
+    return value === undefined || value === null || value === 'undefined' ? '' : value;
+}

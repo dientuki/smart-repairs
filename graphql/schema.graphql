@@ -7,12 +7,26 @@ type Query {
     deviceTypes: [DeviceType!] @all @orderBy(column: "name", direction: ASC)
 }
 
+type Mutation {
+    addCustomerDeviceUnit(device: DeviceInput, deviceunit: CustomerDeviceUnitInput): ID
+        @field(resolver: "CustomerDeviceMutations@create")
+        @namespace(field: "App\\GraphQL\\Mutations")
+}
+
 #import customer.graphql
 #import comment.graphql
 #import device.graphql
 #import deviceTypeCheck.graphql
 #import deviceUnit.graphql
 #import order.graphql
+
+input CustomerDeviceUnitInput {
+    deviceunitid: String @rules(apply: ["nullable", "ulid", "exists:device_units,id"])
+    deviceversionid: String @rules(apply: ["nullable", "ulid", "exists:device_versions,id"])
+    serial: String @rules(apply: ["nullable"])
+    unlocktype: String! @rules(apply: ["required", "in:code,pattern,none"])
+    unlockcode: String @rules(apply: ["required_if:unlocktype,code,unlocktype,pattern"])
+}
 
 type Brand {
     "Unique primary key."

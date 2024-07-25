@@ -46,7 +46,6 @@ function Step1({ nextStep, customers }: Props) {
       nextStep(customer);
 
     } catch (e: any) {
-      console.log(e);
       switch (e.constructor.name) {
         case 'Object':
           for (let i = 0, c = toValidate.length; i < c; i++) {

@@ -6,12 +6,13 @@ extend type Mutation {
     addDevice(device: DeviceInput): Device!
         @field(resolver: "DeviceMutations@create")
         @namespace(field: "App\\GraphQL\\Mutations")
-    updateDevice(deviceId: String, device: DeviceInput): Boolean
+    updateDevice(device: DeviceInput): Boolean
         @field(resolver: "DeviceMutations@update")
         @namespace(field: "App\\GraphQL\\Mutations")
 }
 
 input DeviceInput {
+    id: ID @rules(apply: ["nullable", "ulid"])
     commercialname: String! @rules(apply: ["required"])
     brandid: ID! @rules(apply: ["required", "ulid", "exists:brands,id"])
     typeid: ID! @rules(apply: ["required", "ulid", "exists:device_types,id"])

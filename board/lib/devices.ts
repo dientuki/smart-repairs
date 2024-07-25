@@ -22,7 +22,8 @@ export const createDevice = async(device: NewDevice) => {
 
 export const updateDevice = async(device: NewDevice) => {const response = await graphqlRequest(`
                 mutation {
-                    updateDevice(deviceId: "${device.id}", device: {
+                    updateDevice(device: {
+                        id: "${device.id}"
                         typeid: "${device.typeid}"
                         brandid: "${device.brandid}"
                         commercialname: "${device.commercialname}"

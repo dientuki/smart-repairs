@@ -9,6 +9,7 @@ enum UnlockTypeEnum {
     CODE = 'code',
     PATTERN = 'pattern',
 }
+
 interface Column {
     id: TypedColumn;
     orders: Order[];
@@ -175,7 +176,7 @@ interface GraphQLError {
     extensions?: GraphQLErrorExtension;
 }
 
-interface CustomerDevice {
+interface CustomerDeviceUnit {
     deviceid: string;
     commercialname: string;
     url: string;

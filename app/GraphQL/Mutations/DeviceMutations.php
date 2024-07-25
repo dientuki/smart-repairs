@@ -33,7 +33,7 @@ final readonly class DeviceMutations
 
     public function update(null $root, array $args, GraphQLContext $context, ResolveInfo $resolveInfo): bool
     {
-        $device = Device::find($args['deviceId']);
+        $device = Device::find($args['device']['id']);
         if ($device) {
             $device->commercial_name = $args['device']['commercialname'];
             $device->brand_id = $args['device']['brandid'];
