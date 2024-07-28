@@ -37,6 +37,11 @@ interface DeviceInfo {
     typeId?: string | null;
 }
 
+interface DeviceVersion {
+    id: string;
+    label: string;
+}
+
 interface Device {
     id: string;
     label: string;

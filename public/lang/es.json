@@ -8,6 +8,7 @@
         "brand": "marca",
         "characteristics": "características",
         "device": "equipo",
+        "device_version": "version del equipo",
         "commercial_name": "nombre comercial",
         "email": "email",
         "firstname": "nombre",

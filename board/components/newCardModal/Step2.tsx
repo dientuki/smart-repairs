@@ -7,7 +7,8 @@ import { GlobeAltIcon } from "@heroicons/react/16/solid";
 import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
 import Modal from "@/components/modal/Modal";
-import PatternLockModal from "../modal/PatternLockModal";
+import PatternLockModal from "@/components/modal/PatternLockModal";
+import NewDeviceUnitModal from '@/components/modal/NewDeviceUnitModal';
 import { useCallback } from 'react';
 
 const filter = createFilterOptions<Device>();
@@ -33,11 +34,12 @@ type ComboBox = {
 };
 
 function Step2({ nextStep, prevStep, devices, brands, deviceTypes, devicesRepared }: Props) {
-  const { setCustomerDeviceUnit } = useOrderStore();
+  const { setCustomerDeviceUnit, getDeviceVersions } = useOrderStore();
   const deviceReparedComboEmpty = [{id: 'new', label: 'Agregar nuevo equipo'}];
-  //const [ selectedDevice, setSelectedDevice ] = useState<Device | null>(null);
   const { handleSubmit, control, formState: { errors }, setValue, setError, trigger } = useForm();
-  const [comboBox, setComboBox] = useState<ComboBox>({ brand: null, type: null, deviceRepared: null });
+  const [ comboBox, setComboBox ] = useState<ComboBox>({ brand: null, type: null, deviceRepared: null });
+  const [ deviceVersions, setDeviceVersions] = useState<DeviceVersion[]>([]);
+  const [ allowNewDeviceRepared, setAllowNewDeviceRepared ] = useState(false);
   const [ isDisableCode, setIsDisableCode ] = useState(true);
   const { t } = useTranslation();
   const [ unlockType, setUnlockType] = useState<UnlockTypeEnum>(UnlockTypeEnum.NONE);
@@ -69,8 +71,18 @@ function Step2({ nextStep, prevStep, devices, brands, deviceTypes, devicesRepare
     }
   }
 
-  const handleDeviceChange = useCallback((newValue: Device | null, reason: string) => {
+  const handleDeviceVersion = () => {
+    Modal.open(NewDeviceUnitModal, {layer: 5, deviceVersion: deviceVersions, setDeviceUnit: setDeviceUnit });
+  }
+
+  const setDeviceUnit = (deviceversionid: string, serial: string) => {
+    setValue('serial', serial);
+    setValue('deviceversionid', deviceversionid);
+  }
+
+  const handleDeviceChange = useCallback(async(newValue: Device | null, reason: string) => {
     if ((newValue != null && newValue?.id !== 'new') && reason !== 'clear') {
+      setAllowNewDeviceRepared(false);
       const { id, type, brand, commercialname, url } = newValue;
       const brandId = brands.find(b => b?.label === brand)?.id ?? null;
       const typeId = deviceTypes.find(t => t?.label === type)?.id ?? null;
@@ -84,16 +96,34 @@ function Step2({ nextStep, prevStep, devices, brands, deviceTypes, devicesRepare
       setComboBox({ brand: brandId, type: typeId, deviceRepared: null });
       setDeviceReparedCombo(devicesRepared?.filter(d => d.deviceId === id) ?? deviceReparedComboEmpty);
       ['typeid', 'brandid', 'commercialname', 'url'].forEach(field => trigger(field));
+      ['serial','deviceversionid'].forEach(field => setValue(field, ''));
+
+      try {
+        const tmp = await getDeviceVersions(id);
+        setDeviceVersions(tmp);
+        setAllowNewDeviceRepared(true);
+      } catch (error) {}
 
     } else {
       //setSelectedDevice(null);
-      ['deviceid', 'typeid', 'brandid', 'commercialname', 'url', 'unlockcode', 'deviceunitid'].forEach(field => setValue(field, ''));
+      [
+        'deviceid',
+        'typeid',
+        'brandid',
+        'commercialname',
+        'url',
+        'unlockcode',
+        'deviceunitid',
+        'serial',
+        'deviceversionid'].forEach(field => setValue(field, ''));
       setComboBox({ brand: null, type: null, deviceRepared: null });
       setDeviceReparedCombo(deviceReparedComboEmpty);
       setUnlockType(UnlockTypeEnum.NONE);
       setValue('unlocktype', UnlockTypeEnumLabels[UnlockTypeEnum.NONE]);
     }
   }, [brands, deviceTypes, devicesRepared, setComboBox, setDeviceReparedCombo, setValue, setUnlockType, trigger]);
+
+
 
   const handleRegistration = async (data: FieldValues ) => {
     const rawData: CustomerDeviceUnit = {
@@ -346,7 +376,7 @@ function Step2({ nextStep, prevStep, devices, brands, deviceTypes, devicesRepare
           </Field>
 
           <div className="relative">
-            <button type="button" className="absolute bottom-0 right-0 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center cursor-pointer w-full">Nuevo</button>
+            <button type="button" className="absolute bottom-0 right-0 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center cursor-pointer w-full" disabled={!allowNewDeviceRepared} onClick={handleDeviceVersion}>Nuevo</button>
           </div>
 
         </div>

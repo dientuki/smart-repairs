@@ -32,6 +32,6 @@ type DeviceUnit {
 type DeviceVersion {
     id: ID!
     version: String!
-    description: String!
+    description: String
     device: Device!
 }

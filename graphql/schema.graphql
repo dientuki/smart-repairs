@@ -13,11 +13,12 @@ type Mutation {
         @namespace(field: "App\\GraphQL\\Mutations")
 }
 
-#import customer.graphql
 #import comment.graphql
+#import customer.graphql
 #import device.graphql
 #import deviceTypeCheck.graphql
 #import deviceUnit.graphql
+#import deviceVersion.graphql
 #import order.graphql
 
 input CustomerDeviceUnitInput {
@@ -37,12 +38,6 @@ type Brand {
     label: String!
 }
 
-type User {
-    id: ID!
-    name: String!
-    email: String!
-}
-
 type DeviceRepaired {
     id: ID!
     commercial_name: String!
@@ -57,4 +52,10 @@ type DeviceType {
     name: String!
     imageUrl: String!
     label: String!
+}
+
+type User {
+    id: ID!
+    name: String!
+    email: String!
 }
