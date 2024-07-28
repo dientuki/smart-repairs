@@ -36,7 +36,7 @@ function NewCardModal() {
     setNewOrder({
       ...newOrder,
       customerId: customer.id
-    });
+    } as NewOrder);
     nextStep();
   };
 
@@ -50,19 +50,17 @@ function NewCardModal() {
   const goToStep3 = (device: DeviceInfo, tempDeviceUnitId: String) => {
     const toCheck = data.devicesChecks[data.devicesChecks.findIndex((d: DeviceChecks) => d.deviceTypeId === device.typeId)];
 
-    console.log(device, tempDeviceUnitId, toCheck)
-
     setDevice(device);
     setNewOrder({
       ...newOrder,
       tempDeviceUnitId: tempDeviceUnitId
-    });
+    } as NewOrder );
     setChecks(toCheck);
     nextStep();
   };
 
-  const saveOrder =  async (step4data: Step4data) => {
-    await addOrder({ ...newOrder, ...step4data } as NewOrder);
+  const saveOrder =  async (step3data: Step3data) => {
+    await addOrder({ ...newOrder, ...step3data } as NewOrder);
     await getBoard();
     modal.close();
   }

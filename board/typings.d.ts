@@ -127,7 +127,6 @@ interface Images {
 interface NewOrder {
     customerId: String | null | undefined;
     observation: String;
-    deviceUnitId: String;
     damages: [damage];
     damageDescription: String;
     features: [feature];
@@ -136,15 +135,11 @@ interface NewOrder {
 }
 
 interface Step3data {
-    deviceUnitId: string;
-    observation: string;
-}
-
-interface Step4data {
     damages: [damage];
     damageDescription: String;
     features: [feature];
     featureDescription: String;
+    observation: String;
 }
 
 interface damage {

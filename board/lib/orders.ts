@@ -5,13 +5,13 @@ export const createOrder = async (newOrder: NewOrder) => {
     const response = await graphqlRequest(`
                         mutation {
                             addOrder(order: {
-                                customer_id: "${newOrder.customerId}"
-                                device_unit_id: "${newOrder.deviceUnitId}"
+                                customerid: "${newOrder.customerId}"
                                 observation: "${newOrder.observation}"
                                 damages: ${arrayToString(newOrder.damages)}
-                                damage_description: "${newOrder.damageDescription}"
+                                damagedescription: "${newOrder.damageDescription}"
                                 features: ${arrayToString(newOrder.features)}
-                                feature_description: "${newOrder.featureDescription}"
+                                featuredescription: "${newOrder.featureDescription}"
+                                tempdeviceunitid: "${newOrder.tempDeviceUnitId}"
                             })
                     }
                 `);

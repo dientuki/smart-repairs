@@ -7,7 +7,7 @@ type Props = {
     damages: damage[],
     features: feature[]
   } | null,
-  nextStep: (step4data: Step4data) => void
+  nextStep: (step3data: Step3data) => void
 }
 
 function Step3({ prevStep, nextStep, checks }: Props) {
@@ -33,16 +33,21 @@ function Step3({ prevStep, nextStep, checks }: Props) {
       featureDescription: formElement.featureDescription.value,
       damages: damages as [damage],
       features: features as [feature],
-    } as Step4data);
+      observation: formElement.observation.value
+    } as Step3data);
   };
 
   return (
     <TabPanel unmount={false}>
       <form onSubmit={handleSubmit}>
+        <Field className="mt-4">
+          <Label className="first-letter:uppercase block mb-2 text-sm font-medium text-gray-900">{t('field.observation')}</Label>
+            <Input name="observation" className="bg-gray-50 border-gray-300 text-gray-900 focus:ring-blue-500 focus:border-blue-500' } text-sm rounded-lg  block w-full p-2.5 border" />
+        </Field>
 
-      <div className="grid gap-6 grid-cols-2 mt-4">
+        <div className="grid gap-6 grid-cols-2 mt-4">
           <Field>
-            <div className="block mb-2 text-sm font-medium text-gray-900">{t('field.any_damage')}</div>
+            <div className="first-letter:uppercase block mb-2 text-sm font-medium text-gray-900">{t('field.any_damage')}</div>
             <div className="grid grid-cols-2 mt-4">
             {checks && checks.damages.map((damage: damage, index) => (
                 <label key={index} className="flex items-center mb-5 cursor-pointer">
@@ -57,7 +62,7 @@ function Step3({ prevStep, nextStep, checks }: Props) {
           </Field>
 
           <Field>
-            <div className="block mb-2 text-sm font-medium text-gray-900">{t('field.characteristics')}</div>
+            <div className="first-letter:uppercase block mb-2 text-sm font-medium text-gray-900">{t('field.characteristics')}</div>
             <div className="grid grid-cols-2 mt-4">
             {checks && checks.features.map((feature: feature, index) => (
                 <label key={index} className="flex items-center mb-5 cursor-pointer">
