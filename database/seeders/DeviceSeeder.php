@@ -21,7 +21,7 @@ class DeviceSeeder extends Seeder
             'commercial_name' => 'Galaxy Z Flip',
             'brand_id' => $brands[2]->id,
             'device_type_id' => $deviceType,
-            'url' => 'www.gsmarena.com/samsung_galaxy_z_flip-10054.php',
+            'url' => 'https://www.gsmarena.com/samsung_galaxy_z_flip-10054.php',
             'created_at' => now(),
             'updated_at' => now(),
         ]);
@@ -31,7 +31,7 @@ class DeviceSeeder extends Seeder
             'commercial_name' => 'One Hyper',
             'brand_id' => $brands[1]->id,
             'device_type_id' => $deviceType,
-            'url' => 'www.gsmarena.com/motorola_one_hyper-9944.php',
+            'url' => 'https://www.gsmarena.com/motorola_one_hyper-9944.php',
             'created_at' => now(),
             'updated_at' => now(),
         ]);
