@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Device;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -22,8 +23,9 @@ class DatabaseSeeder extends Seeder
             DeviceSeeder::class,
             DeviceVersionSeeder::class,
             DeviceVersionPartSeeder::class,
-            CustomerSeeder::class,
+            DeviceTypeCheckSeeder::class,
             DeviceUnitSeeder::class,
+            CustomerSeeder::class,
             OrderSeeder::class,
             OrderCommentSeeder::class,
             SupplierSeeder::class,

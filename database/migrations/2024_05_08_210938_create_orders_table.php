@@ -22,7 +22,7 @@ return new class extends Migration
             $table->foreignUlid('customer_id')->constrained();
             $table->foreignUlid('team_id')->constrained();
             $table->foreignUlid('user_id')->constrained();
-            $table->foreignUlid('device_unit_id')->constrained()->nullable();
+            $table->foreignUlid('device_unit_id')->nullable()->constrained();
 
             $table->timestamps();
         });
