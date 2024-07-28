@@ -13,7 +13,7 @@ import { useCallback } from 'react';
 
 const filter = createFilterOptions<Device>();
 type Props = {
-  nextStep: (device: DeviceInfo) => void,
+  nextStep: (device: DeviceInfo, tempDeviceUnitId: string) => void,
   prevStep: () => void,
   devices: Device[],
   brands: Brand[],
@@ -138,11 +138,16 @@ function Step2({ nextStep, prevStep, devices, brands, deviceTypes, devicesRepare
       deviceversionid: data.deviceversionid,
       serial: data.serial
     }
+    const device: DeviceInfo = {
+      label: data.commercialname ,
+      type: data.typeid,
+      typeId: rawData.typeid
+    }
 
     try {
-      const tempDeviceId = await setCustomerDeviceUnit(rawData);
+      //const tempDeviceUnitId = await setCustomerDeviceUnit(rawData);
 
-      //nextStep(device);
+      nextStep(device, 'tempDeviceUnitId');
 
     } catch (e: any) {
       const toValidate = ['typeid', 'brandid', 'commercialname', 'url'];
@@ -352,7 +357,6 @@ function Step2({ nextStep, prevStep, devices, brands, deviceTypes, devicesRepare
                   handleHomeEndKeys
                   onKeyDown={(e) => {e.preventDefault();}}
                   onChange={(event, newValue) => {
-                    console.log('on change here')
                     if (newValue != null && newValue?.id !== 'new') {
                       setValue('deviceunitid', newValue.label);
                       setComboBox({ ...comboBox, deviceRepared: newValue.id });

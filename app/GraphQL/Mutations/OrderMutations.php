@@ -7,6 +7,7 @@ namespace App\GraphQL\Mutations;
 use App\Enum\OrderStatusEnum;
 use App\Models\Order;
 use App\Models\OrderCheck;
+use App\Models\TemporaryDeviceUnit;
 use App\Traits\TeamContextTrait;
 use Illuminate\Support\Facades\DB;
 use Nuwave\Lighthouse\Execution\ResolveInfo;
@@ -64,6 +65,10 @@ final readonly class OrderMutations
                 'damages_description' => $args['order']['damage_description'],
                 'features' => json_encode($args['order']['features']),
                 'features_description' => $args['order']['feature_description'],
+            ]);
+
+            TemporaryDeviceUnit::where('order_id', $order->id)->update([
+                'device_unit_id' => $args['order']['device_unit_id'],
             ]);
 
             DB::commit();

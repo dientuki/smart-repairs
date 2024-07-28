@@ -31,10 +31,9 @@ interface Customer {
 }
 
 interface DeviceInfo {
-    id?: string;
-    label?: string;
-    type?: string | null;
-    typeId?: string | null;
+    label: string;
+    type: string;
+    typeId: string;
 }
 
 interface DeviceVersion {
@@ -126,13 +125,14 @@ interface Images {
 }
 
 interface NewOrder {
-    customerId: String | null;
+    customerId: String | null | undefined;
     observation: String;
     deviceUnitId: String;
     damages: [damage];
     damageDescription: String;
     features: [feature];
     featureDescription: String;
+    tempDeviceUnitId: String;
 }
 
 interface Step3data {
@@ -170,6 +170,12 @@ interface Brand {
 interface DeviceType {
     id: string;
     label: string;
+}
+
+interface DeviceChecks {
+    deviceTypeId: String,
+    damages: [damage];
+    features: [feature];
 }
 
 interface GraphQLErrorExtension {

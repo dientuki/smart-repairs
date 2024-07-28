@@ -1,7 +1,6 @@
 import "react-modal-global/styles/modal.scss" // Imports essential styles for `ModalContainer`.
 import { useModalWindow } from "react-modal-global";
 import ModalLayout from "@/components/modal/ModalLayout";
-import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
 import { Controller, useForm, FieldValues, FieldErrors } from "react-hook-form";
 import { Field, Input, Label } from '@headlessui/react';

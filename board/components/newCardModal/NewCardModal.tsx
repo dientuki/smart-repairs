@@ -8,7 +8,6 @@ import Step3 from "@/components/newCardModal/Step3";
 import { useOrderStore } from "@/store/OrderStore";
 import { useBoardStore } from "@/store/BoardStore";
 import { useModalWindow } from "react-modal-global";
-import Step4 from "./Step4";
 import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
 
@@ -41,18 +40,23 @@ function NewCardModal() {
     nextStep();
   };
 
+  /*
   const goToStep3 = (device: DeviceInfo) => {
     setDevice(device);
     nextStep();
   };
+  */
 
-  const goToStep4 = (step3data: Step3data) => {
+  const goToStep3 = (device: DeviceInfo, tempDeviceUnitId: String) => {
+    const toCheck = data.devicesChecks[data.devicesChecks.findIndex((d: DeviceChecks) => d.deviceTypeId === device.typeId)];
+
+    console.log(device, tempDeviceUnitId, toCheck)
+
+    setDevice(device);
     setNewOrder({
       ...newOrder,
-      deviceUnitId: step3data.deviceUnitId,
-      observation: step3data.observation
+      tempDeviceUnitId: tempDeviceUnitId
     });
-    const toCheck = data.devicesChecks[data.devicesChecks.findIndex((d) => d.deviceTypeId === device?.typeId)];
     setChecks(toCheck);
     nextStep();
   };
@@ -96,7 +100,7 @@ function NewCardModal() {
                 </span>
                 <span>
                     <h3 className="font-medium leading-tight">Equipo</h3>
-                    <p className="text-sm">Informacion general del equipo</p>
+                    <p className="text-sm">Informacion del equipo</p>
                 </span>
               </Tab>
               <Tab className="flex items-center data-[selected]:text-blue-600 text-gray-500 space-x-2.5 p-2 grow">
@@ -112,9 +116,9 @@ function NewCardModal() {
 
             <TabPanels className="mt-4">
               <Step1 nextStep={goToStep2} customers={data.customers} />
-              <Step2 prevStep={prevStep} nextStep={goToStep3} devices={data.devices} brands={data.brands} deviceTypes={data.deviceTypes} devicesRepared={data.devicesRepared}  />
-              <Step3 prevStep={prevStep} nextStep={goToStep4} device={device} devicesRepared={data.devicesRepared} />
-              <Step4 prevStep={prevStep} nextStep={saveOrder} checks={checks} />
+              <Step2 prevStep={prevStep} nextStep={goToStep3}
+                devices={data.devices} brands={data.brands} deviceTypes={data.deviceTypes} devicesRepared={data.devicesRepared} />
+              <Step3 prevStep={prevStep} nextStep={saveOrder} checks={checks} />
             </TabPanels>
 
           </TabGroup>
