@@ -22,6 +22,7 @@ input OrderInput {
     features: [FeatureInput!]
     featuredescription: String
     tempdeviceunitid: String!
+    deviceid: String!
 }
 
 input DamageInput {
@@ -49,6 +50,7 @@ type Orders {
     team_id: ID!
     status: String!,
     customer: Customer!
+    device: Device!
     deviceUnit: DeviceUnit
     created_at: DateTime!
     observation: String!

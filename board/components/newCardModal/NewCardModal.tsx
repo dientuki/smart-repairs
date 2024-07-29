@@ -40,20 +40,14 @@ function NewCardModal() {
     nextStep();
   };
 
-  /*
-  const goToStep3 = (device: DeviceInfo) => {
-    setDevice(device);
-    nextStep();
-  };
-  */
-
   const goToStep3 = (device: DeviceInfo, tempDeviceUnitId: String) => {
     const toCheck = data.devicesChecks[data.devicesChecks.findIndex((d: DeviceChecks) => d.deviceTypeId === device.typeId)];
 
     setDevice(device);
     setNewOrder({
       ...newOrder,
-      tempDeviceUnitId: tempDeviceUnitId
+      tempDeviceUnitId: tempDeviceUnitId,
+      deviceid: device.id
     } as NewOrder );
     setChecks(toCheck);
     nextStep();

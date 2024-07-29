@@ -12,6 +12,7 @@ export const createOrder = async (newOrder: NewOrder) => {
                                 features: ${arrayToString(newOrder.features)}
                                 featuredescription: "${newOrder.featureDescription}"
                                 tempdeviceunitid: "${newOrder.tempDeviceUnitId}"
+                                deviceid: "${newOrder.deviceid}"
                             })
                     }
                 `);
@@ -123,21 +124,22 @@ export const getOrders = async () => {
                     id
                 }
 
+                device {
+                    commercial_name
+                    brand {
+                        name
+                        imageUrl
+                    }
+                    deviceType {
+                        name
+                        imageUrl
+                    }
+                }
+
                 deviceUnit {
                     serial
                     deviceVersion {
                         version
-                        device {
-                            commercial_name
-                            brand {
-                                name
-                                imageUrl
-                            }
-                            deviceType {
-                                name
-                                imageUrl
-                            }
-                        }
                     }
                 }
             }
@@ -145,6 +147,8 @@ export const getOrders = async () => {
     `);
 
     handleGraphQLErrors(response.errors);
+
+    console.log(response.data.orders)
 
     const columns = response.data.orders.reduce((acc: Map<TypedColumn, Column>, order: any ) => {
 
@@ -160,13 +164,13 @@ export const getOrders = async () => {
             createdAt: order.created_at,
             createdAtDate: new Date(order.created_at),
             status: order.status,
-            brand: order.deviceUnit.deviceVersion.device.brand.name,
-            brandImage: order.deviceUnit.deviceVersion.device.brand.imageUrl,
-            deviceType: order.deviceUnit.deviceVersion.device.deviceType.name,
-            deviceTypeImage: order.deviceUnit.deviceVersion.device.deviceType.imageUrl,
-            deviceCommercialName: order.deviceUnit.deviceVersion.device.commercial_name,
-            deviceTechName: order.deviceUnit.deviceVersion.version,
-            deviceSerial: order.deviceUnit.serial,
+            brand: order.device.brand.name,
+            brandImage: order.device.brand.imageUrl,
+            deviceType: order.device.deviceType.name,
+            deviceTypeImage: order.device.deviceType.imageUrl,
+            deviceCommercialName: order.device.commercial_name,
+            deviceTechName: order.deviceUnit?.deviceVersion.version,
+            deviceSerial: order.deviceUnit?.serial,
             customerFullName: `${order.customer.first_name} ${order.customer.last_name}`,
             observation: order.observation,
             commentsQuantity: order.comments?.length

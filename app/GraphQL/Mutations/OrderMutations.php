@@ -55,7 +55,8 @@ final readonly class OrderMutations
                 'observation' => $args['order']['observation'],
                 'customer_id' => $args['order']['customerid'],
                 'team_id' => $team_id,
-                'user_id' => auth()->user()->id
+                'user_id' => auth()->user()->id,
+                'device_id' => $args['order']['deviceid']
             ]);
 
             OrderCheck::create([
@@ -75,6 +76,7 @@ final readonly class OrderMutations
             return true;
         } catch (\Exception $e) {
             DB::rollBack();
+            dd($e);
 
             return false;
         };

@@ -139,6 +139,7 @@ function Step2({ nextStep, prevStep, devices, brands, deviceTypes, devicesRepare
       serial: data.serial
     }
     const device: DeviceInfo = {
+      id: data.deviceid,
       label: data.commercialname ,
       type: data.typeid,
       typeId: rawData.typeid

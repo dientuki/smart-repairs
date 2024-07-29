@@ -31,6 +31,7 @@ interface Customer {
 }
 
 interface DeviceInfo {
+    id: string;
     label: string;
     type: string;
     typeId: string;
@@ -93,8 +94,8 @@ interface Order {
     deviceType: string,
     deviceTypeImage?: string,
     deviceCommercialName: string,
-    deviceTechName: string,
-    deviceSerial: string,
+    deviceTechName?: string,
+    deviceSerial?: string,
     customerFullName: string,
     customerPhone?: string,
     observation: string,
@@ -132,6 +133,7 @@ interface NewOrder {
     features: [feature];
     featureDescription: String;
     tempDeviceUnitId: String;
+    deviceid: String;
 }
 
 interface Step3data {
