@@ -42,16 +42,6 @@ class Part extends ModelAuditable
     }
 
     /**
-     * Returns the devices that the part belongs to.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
-     */
-    public function devices(): BelongsToMany
-    {
-        return $this->belongsToMany(Device::class, 'device_parts');
-    }
-
-    /**
      * Returns the module category that the part belongs to.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
@@ -66,5 +56,10 @@ class Part extends ModelAuditable
         return Attribute::make(
             get: fn () => $this->moduleCategory->name . ' ' . $this->brand->name . ' ' . $this->part_number
         );
+    }
+
+    public function deviceVersions()
+    {
+        return $this->belongsToMany(DeviceVersion::class, 'device_versions_parts');
     }
 }

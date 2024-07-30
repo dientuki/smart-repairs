@@ -15,7 +15,7 @@ extend type Mutation {
 
 input DeviceUnitInput {
     serial: String! @rules(apply: ["required"])
-    deviceid: String @rules(apply: ["nullable", "ulid", "exists:devices,id"])
+    deviceversionid: String @rules(apply: ["nullable", "ulid", "exists:device_versions,id"])
     unlocktype: String! @rules(apply: ["required", "in:code,pattern,none"])
     unlockcode: String @rules(apply: ["required_if:unlocktype,code,unlocktype,pattern"])
 }
@@ -23,8 +23,15 @@ input DeviceUnitInput {
 type DeviceUnit {
     id: ID!
     serial: String!
-    device_id: String!
-    device: Device!
+    device_version_id: String!
+    deviceVersion: DeviceVersion!
     unlock_type: String!
     unlock_code: String
+}
+
+type DeviceVersion {
+    id: ID!
+    version: String!
+    description: String
+    device: Device!
 }

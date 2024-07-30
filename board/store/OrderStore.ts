@@ -1,15 +1,15 @@
 import { create } from 'zustand'
-import { getOrder } from "@/lib/getOrder";
-import { getCustomersDevices } from "@/lib/createOrder";
+import { getOrder, getOrderCreationData } from "@/lib/orders";
 import { addComment, updateCommentVisibility, updateComment, deleteComment } from "@/lib/comments";
 import { createCustomer, updateCustomer } from "@/lib/customers";
 import { createDevice, updateDevice } from "@/lib/devices";
-import { createDeviceUnit, updateDeviceUnit } from "@/lib/deviceUnits";
-import { createOrder } from "@/lib/order";
+import { createDeviceUnit, updateDeviceUnit, setCustomerDeviceUnit } from "@/lib/deviceUnits";
+import { createOrder } from "@/lib/orders";
+import { getDeviceVersions } from "@/lib/deviceVersions";
 
 interface OrderStore {
     order: Order,
-    getOrder: (id: string) => void,
+    getOrder: (id: string) => Promise<void>,
 
     updateCommentVisibility: (commentId: string, isPublic: boolean) => void
     updateComment: (commentId: string, text: string) => void,
@@ -17,16 +17,20 @@ interface OrderStore {
     addComment: (newComment:NewOrderComment) => Promise<OrderComment>
 
     data: any,
-    getData: () => Promise<any>
+    getOrderCreationData: () => Promise<void>
 
     addCustomer: (customer: Customer) => Promise<string>
     updateCustomer: (customer: Customer) => Promise<boolean>
+
+    setCustomerDeviceUnit: (customerDevice: CustomerDeviceUnit) => Promise<any>
 
     addDevice: (device: NewDevice) => Promise<string>
     updateDevice: (device: NewDevice) => Promise<boolean>
 
     addDeviceUnit: (deviceUnit: NewDeviceUnit) => Promise<string>
     updateDeviceUnit: (deviceUnit: NewDeviceUnit) => Promise<boolean>
+
+    getDeviceVersions: (device: String) => Promise<DeviceVersion[]>
 
     addOrder: (newOrder: NewOrder) => Promise<void>
 }
@@ -55,8 +59,8 @@ export const useOrderStore = create<OrderStore>((set) => ({
   },
 
   data: {} as any,
-  getData: async () => {
-    const data = await getCustomersDevices();
+  getOrderCreationData: async () => {
+    const data = await getOrderCreationData();
     set({ data });
   },
   addCustomer: async (customer: Customer): Promise<string> => {
@@ -65,6 +69,10 @@ export const useOrderStore = create<OrderStore>((set) => ({
 
   updateCustomer: async (customer: Customer): Promise<boolean> => {
     return await updateCustomer(customer);
+  },
+
+  setCustomerDeviceUnit: async (customerDevice: CustomerDeviceUnit): Promise<any> => {
+    return await setCustomerDeviceUnit(customerDevice);
   },
 
   addDevice: async (device: NewDevice): Promise<string> => {
@@ -81,6 +89,10 @@ export const useOrderStore = create<OrderStore>((set) => ({
 
   updateDeviceUnit: async (deviceUnit: NewDeviceUnit): Promise<boolean> => {
     return await updateDeviceUnit(deviceUnit);
+  },
+
+  getDeviceVersions: async (device: String): Promise<DeviceVersion[]> => {
+    return await getDeviceVersions(device);
   },
 
   addOrder: async (newOrder: NewOrder): Promise<void> => {

@@ -11,11 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('device_parts', function (Blueprint $table) {
+        Schema::create('device_versions', function (Blueprint $table) {
+            $table->ulid('id')->primary();
+            $table->string('version');
+            $table->string('description')->nullable();
             $table->foreignUlid('device_id')->constrained();
-            $table->foreignUlid('part_id')->constrained();
-
-            $table->unique(['device_id', 'part_id']);
+            $table->timestamps();
         });
     }
 
@@ -24,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('device_parts');
+        Schema::dropIfExists('device_versions');
     }
 };

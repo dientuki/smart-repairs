@@ -8,6 +8,7 @@
         "brand": "marca",
         "characteristics": "características",
         "device": "equipo",
+        "device_version": "version del equipo",
         "commercial_name": "nombre comercial",
         "email": "email",
         "firstname": "nombre",
@@ -20,6 +21,13 @@
         "unlock_code": "codigo de desbloqueo",
         "unlock_type": "tipo de desbloqueo",
         "url": "url"
+    },
+
+    "toast": {
+        "error": {
+            "data": "Error de datos",
+            "network": "Error de red"
+        }
     },
 
     "unlock_type" : {

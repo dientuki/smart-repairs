@@ -15,13 +15,14 @@ extend type Mutation {
 }
 
 input OrderInput {
-    customer_id: String!
-    device_unit_id: String!
+    customerid: String!
     observation: String!
     damages: [DamageInput!]
-    damage_description: String
+    damagedescription: String
     features: [FeatureInput!]
-    feature_description: String
+    featuredescription: String
+    tempdeviceunitid: String!
+    deviceid: String!
 }
 
 input DamageInput {
@@ -38,7 +39,8 @@ type Order {
     id: ID!
     status: String!,
     customer: Customer!
-    deviceUnit: DeviceUnit!
+    device: Device!
+    deviceUnit: DeviceUnit
     created_at: DateTime!
     observation: String!
     comments: [Comment!]
@@ -49,7 +51,8 @@ type Orders {
     team_id: ID!
     status: String!,
     customer: Customer!
-    deviceUnit: DeviceUnit!
+    device: Device!
+    deviceUnit: DeviceUnit
     created_at: DateTime!
     observation: String!
     comments: [Comment!]

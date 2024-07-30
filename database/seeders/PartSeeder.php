@@ -52,5 +52,13 @@ class PartSeeder extends Seeder
             'created_at' => now(),
             'updated_at' => now(),
         ]);
+        DB::table('parts')->insert([
+            'id' => (string) Str::ulid(),
+            'part_number' => 'Sin numero',
+            'module_category_id' => $moduleCategory[1]->id,
+            'brand_id' => $brands[0]->id,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
     }
 }

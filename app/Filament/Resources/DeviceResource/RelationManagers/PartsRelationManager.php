@@ -2,11 +2,14 @@
 
 namespace App\Filament\Resources\DeviceResource\RelationManagers;
 
+use App\Models\Device;
+use App\Models\Part;
 use Filament\Forms\Components\Select;
 use Filament\Tables\Actions\ViewAction;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
+use Filament\Tables\Actions\AttachAction;
 use Filament\Tables\Actions\DetachAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
@@ -19,9 +22,7 @@ class PartsRelationManager extends RelationManager
     {
         return $form
             ->schema([
-                TextInput::make('part_number')
-                    ->required()
-                    ->maxLength(255),
+
             ]);
     }
 
@@ -30,8 +31,8 @@ class PartsRelationManager extends RelationManager
         return $table
             ->recordTitleAttribute('part_number')
             ->columns([
-                TextColumn::make('moduleCategory.name'),
-                TextColumn::make('brand.name'),
+                TextColumn::make('version'),
+                TextColumn::make('category'),
                 TextColumn::make('part_number'),
             ])
             ->filters([

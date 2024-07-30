@@ -6,70 +6,154 @@ import { useState } from "react";
 import { GlobeAltIcon } from "@heroicons/react/16/solid";
 import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
+import Modal from "@/components/modal/Modal";
+import PatternLockModal from "@/components/modal/PatternLockModal";
+import NewDeviceUnitModal from '@/components/modal/NewDeviceUnitModal';
+import { useCallback } from 'react';
 
 const filter = createFilterOptions<Device>();
 type Props = {
-  nextStep: (device: DeviceInfo) => void,
+  nextStep: (device: DeviceInfo, tempDeviceUnitId: string) => void,
   prevStep: () => void,
   devices: Device[],
   brands: Brand[],
   deviceTypes: DeviceType[]
+  devicesRepared: DeviceRepared[]
+}
+
+enum UnlockTypeEnum {
+  NONE = 'none',
+  CODE = 'code',
+  PATTERN = 'pattern',
 }
 
 type ComboBox = {
   brand: string | null;
   type: string | null;
+  deviceRepared: string | null;
 };
 
-function Step2({ nextStep, prevStep, devices, brands, deviceTypes }: Props) {
-  const { addDevice, updateDevice } = useOrderStore();
-  const [ selectedDevice, setSelectedDevice ] = useState<Device | null>(null);
+function Step2({ nextStep, prevStep, devices, brands, deviceTypes, devicesRepared }: Props) {
+  const { setCustomerDeviceUnit, getDeviceVersions } = useOrderStore();
+  const deviceReparedComboEmpty = [{id: 'new', label: 'Agregar nuevo equipo'}];
   const { handleSubmit, control, formState: { errors }, setValue, setError, trigger } = useForm();
-  const [comboBox, setComboBox] = useState<ComboBox>({ brand: null, type: null });
+  const [ comboBox, setComboBox ] = useState<ComboBox>({ brand: null, type: null, deviceRepared: null });
+  const [ deviceVersions, setDeviceVersions] = useState<DeviceVersion[]>([]);
+  const [ allowNewDeviceRepared, setAllowNewDeviceRepared ] = useState(false);
+  const [ isDisableCode, setIsDisableCode ] = useState(true);
   const { t } = useTranslation();
-  const handleRegistration = async (data: FieldValues ) => {
+  const [ unlockType, setUnlockType] = useState<UnlockTypeEnum>(UnlockTypeEnum.NONE);
+  const [ deviceReparedCombo, setDeviceReparedCombo ] = useState<DeviceRepared[]>(deviceReparedComboEmpty);
+  const UnlockTypeEnumLabels: Record<string, string> = {
+    [UnlockTypeEnum.NONE]: t('unlock_type.none'),
+    [UnlockTypeEnum.CODE]: t('unlock_type.code'),
+    [UnlockTypeEnum.PATTERN]: t('unlock_type.pattern'),
+  };
+  const unlocktypeOptions = Object.keys(UnlockTypeEnumLabels).map((key) => ({ id: key, label: UnlockTypeEnumLabels[key] }));
+  const openPatternLock = () => Modal.open(PatternLockModal, {layer: 5, setPattern: setPattern});
 
-    const toValidate = ['typeid', 'brandid', 'commercialname', 'techname', 'url'];
-    const newDevice: NewDevice = {
-      id: '',
+  const setPattern = (pattern: number[]) => {
+    setValue('unlockcode', pattern.length > 0 ? pattern : null);
+  }
+
+  const handleUnlock = (unlock: UnlockTypeEnum) => {
+    switch (unlock) {
+      case UnlockTypeEnum.NONE:
+        setIsDisableCode(true);
+        break;
+      case UnlockTypeEnum.CODE:
+        setIsDisableCode(false);
+        break;
+      case UnlockTypeEnum.PATTERN:
+        setIsDisableCode(true);
+        openPatternLock();
+        break;
+    }
+  }
+
+  const handleDeviceVersion = () => {
+    Modal.open(NewDeviceUnitModal, {layer: 5, deviceVersion: deviceVersions, setDeviceUnit: setDeviceUnit });
+  }
+
+  const setDeviceUnit = (deviceversionid: string, serial: string) => {
+    setValue('serial', serial);
+    setValue('deviceversionid', deviceversionid);
+  }
+
+  const handleDeviceChange = useCallback(async(newValue: Device | null, reason: string) => {
+    if ((newValue != null && newValue?.id !== 'new') && reason !== 'clear') {
+      setAllowNewDeviceRepared(false);
+      const { id, type, brand, commercialname, url } = newValue;
+      const brandId = brands.find(b => b?.label === brand)?.id ?? null;
+      const typeId = deviceTypes.find(t => t?.label === type)?.id ?? null;
+
+      //setSelectedDevice(newValue);
+      setValue('deviceid', id);
+      setValue('typeid', type);
+      setValue('brandid', brand);
+      setValue('commercialname', commercialname);
+      setValue('url', url);
+      setComboBox({ brand: brandId, type: typeId, deviceRepared: null });
+      setDeviceReparedCombo(devicesRepared?.filter(d => d.deviceId === id) ?? deviceReparedComboEmpty);
+      ['typeid', 'brandid', 'commercialname', 'url'].forEach(field => trigger(field));
+      ['serial','deviceversionid'].forEach(field => setValue(field, ''));
+
+      try {
+        const tmp = await getDeviceVersions(id);
+        setDeviceVersions(tmp);
+        setAllowNewDeviceRepared(true);
+      } catch (error) {}
+
+    } else {
+      //setSelectedDevice(null);
+      [
+        'deviceid',
+        'typeid',
+        'brandid',
+        'commercialname',
+        'url',
+        'unlockcode',
+        'deviceunitid',
+        'serial',
+        'deviceversionid'].forEach(field => setValue(field, ''));
+      setComboBox({ brand: null, type: null, deviceRepared: null });
+      setDeviceReparedCombo(deviceReparedComboEmpty);
+      setUnlockType(UnlockTypeEnum.NONE);
+      setValue('unlocktype', UnlockTypeEnumLabels[UnlockTypeEnum.NONE]);
+    }
+  }, [brands, deviceTypes, devicesRepared, setComboBox, setDeviceReparedCombo, setValue, setUnlockType, trigger]);
+
+
+
+  const handleRegistration = async (data: FieldValues ) => {
+    const rawData: CustomerDeviceUnit = {
+      deviceid: data.deviceid,
       commercialname: data.commercialname,
-      techname: data.techname,
       url: data.url,
       brandid: comboBox.brand || '',
       typeid: comboBox.type || '',
+      deviceunitid: comboBox.deviceRepared || '',
+      unlocktype: unlockType,
+      unlockcode: data.unlockcode,
+      deviceversionid: data.deviceversionid,
+      serial: data.serial
     }
-    const device: DeviceInfo = {};
+    const device: DeviceInfo = {
+      id: data.deviceid,
+      label: data.commercialname ,
+      type: data.typeid,
+      typeId: rawData.typeid
+    }
 
     try {
-      if (selectedDevice === null) {
-        device.id = await addDevice(newDevice);
-        device.label = brands.find(b => b.id === newDevice.brandid)?.label + ' ' + newDevice.commercialname;
-        device.type = deviceTypes.find(t => t.id === newDevice.typeid)?.label;
-        device.typeId = newDevice.typeid;
-        toast.success("Device agregado");
-      } else {
-        newDevice.id = selectedDevice.id;
-        device.id = selectedDevice.id;
-        device.label = brands.find(b => b.id === newDevice.brandid)?.label + ' ' + newDevice.commercialname;
-        device.type = deviceTypes.find(t => t.id === newDevice.typeid)?.label;
-        device.typeId = newDevice.typeid;
-        selectedDevice.brandid = selectedDevice.brand;
-        selectedDevice.typeid = selectedDevice.type;
-        for (let i = 0, c = toValidate.length; i < c; i++) {
-          if (data[toValidate[i]] !== selectedDevice[toValidate[i]]) {
-            if (await updateDevice(newDevice)) {
-              toast.success("Actualizo");
-            } else {
-              toast.error("Error en actualizar");
-            };
-            break;
-          }
-        }
-      }
+      const tempDeviceUnitId = await setCustomerDeviceUnit(rawData);
+      device.id = tempDeviceUnitId.deviceid;
 
-      nextStep(device);
+      nextStep(device, tempDeviceUnitId.temporarydeviceunit);
 
     } catch (e: any) {
+      const toValidate = ['typeid', 'brandid', 'commercialname', 'url'];
+
       switch (e.constructor.name) {
         case 'Object':
           for (let i = 0, c = toValidate.length; i < c; i++) {
@@ -95,17 +179,21 @@ function Step2({ nextStep, prevStep, devices, brands, deviceTypes }: Props) {
   };
 
   const registerOptions = {
-    id: {required: false},
+    deviceid: {required: false},
     typeid: { required: t('validation.required', { field: t('field.type')}) },
     brandid: { required: t('validation.required', { field: t('field.brand')}) },
     commercialname: { required: t('validation.required', { field: t('field.commercial_name')}) },
-    techname: { required: t('validation.required', { field: t('field.tech_name')}) },
     url: {
       pattern: {
         value: /^https?:\/\//,
         message: t('validation.url', { field: t('field.url')})
       }
-    }
+    },
+    deviceunitid: {required: false},
+    unlocktype: { required: t('validation.required', { field: t('field.unlock_type')}) },
+    unlockcode: { required: false },
+    serial:{required: false},
+    deviceversionid: {required: false},
   };
 
   return (
@@ -117,35 +205,7 @@ function Step2({ nextStep, prevStep, devices, brands, deviceTypes }: Props) {
             selectOnFocus
             handleHomeEndKeys
             id="devices"
-            onChange={(event, newValue) => {
-              if (newValue != null && newValue?.id !== 'new') {
-                setSelectedDevice(newValue);
-                setValue('id', newValue.id);
-                setValue('typeid', newValue.type);
-                setValue('brandid', newValue.brand);
-                setValue('commercialname', newValue.commercialname);
-                setValue('techname', newValue.techname);
-                setValue('url', newValue.url);
-                setComboBox({
-                  brand: brands.find(brand => brand?.label === newValue.brand)?.id ?? null,
-                  type: deviceTypes.find(type => type?.label === newValue.type)?.id ?? null
-                });
-              } else {
-                setSelectedDevice(null);
-                setValue('id', '');
-                setValue('typeid', '');
-                setValue('brandid', '');
-                setValue('commercialname', '');
-                setValue('techname', '');
-                setValue('url', '');
-                setComboBox({ brand: null, type: null });
-              }
-              trigger('typeid');
-              trigger('brandid');
-              trigger('commercialname');
-              trigger('techname');
-              trigger('url');
-            }}
+            onChange={(_, newValue, reason) => handleDeviceChange(newValue, reason)}
             filterOptions={(options, params) => {
               const filtered = filter(options, params);
 
@@ -169,10 +229,10 @@ function Step2({ nextStep, prevStep, devices, brands, deviceTypes }: Props) {
 
       <form onSubmit={handleSubmit(handleRegistration, handleError)}>
         <Controller
-          name="id"
+          name="deviceid"
           defaultValue=""
           control={control}
-          rules={registerOptions.id}
+          rules={registerOptions.deviceid}
           render={({ field }) => (
             <Input {...field} type="hidden"/>
           )}
@@ -181,7 +241,7 @@ function Step2({ nextStep, prevStep, devices, brands, deviceTypes }: Props) {
         <div className="grid gap-6 grid-cols-2 mt-4">
           <Field>
             <Label className="first-letter:uppercase block mb-2 text-sm font-medium text-gray-900">{t('field.type')}</Label>
-            { brands &&
+            { deviceTypes &&
                 <Controller
                   name="typeid"
                   control={control}
@@ -260,27 +320,6 @@ function Step2({ nextStep, prevStep, devices, brands, deviceTypes }: Props) {
               </p>
             )}
           </Field>
-
-          <Field>
-            <Label className="first-letter:uppercase block mb-2 text-sm font-medium text-gray-900">{t('field.tech_name')}</Label>
-            <Controller
-              name="techname"
-              control={control}
-              defaultValue=""
-              rules={registerOptions.techname}
-              render={({ field }) => (
-                <Input {...field} className={`${errors?.techname ? 'bg-red-50 border-red-500 text-red-900 placeholder-red-700 focus:ring-red-500 focus:border-red-500' : 'bg-gray-50 border-gray-300 text-gray-900 focus:ring-blue-500 focus:border-blue-500' } text-sm rounded-lg  block w-full p-2.5 border`} />
-              )}
-            />
-            {errors?.techname && errors.techname.message && (
-              <p className="mt-2 text-sm text-red-600 dark:text-red-500">
-                {typeof errors.techname.message === 'string' ? errors.techname.message : JSON.stringify(errors.techname.message)}
-              </p>
-            )}
-          </Field>
-        </div>
-
-        <div className="grid gap-6 grid-cols-1 mt-4">
           <Field>
             <Label className="first-letter:uppercase block mb-2 text-sm font-medium text-gray-900">{t('field.url')}</Label>
             <div className="flex">
@@ -304,6 +343,105 @@ function Step2({ nextStep, prevStep, devices, brands, deviceTypes }: Props) {
             )}
           </Field>
         </div>
+
+        <div className="grid gap-6 grid-cols-4 mt-4">
+          <Field className="col-span-3">
+            <Label className="first-letter:uppercase block mb-2 text-sm font-medium text-gray-900">Devices Repared</Label>
+            <Controller
+              name="deviceunitid"
+              control={control}
+              defaultValue=""
+              rules={registerOptions.deviceunitid}
+              render={({ field }) => (
+                <Autocomplete
+                  { ...field }
+                  selectOnFocus
+                  handleHomeEndKeys
+                  onKeyDown={(e) => {e.preventDefault();}}
+                  onChange={(event, newValue) => {
+                    if (newValue != null && newValue?.id !== 'new') {
+                      setValue('deviceunitid', newValue.label);
+                      setComboBox({ ...comboBox, deviceRepared: newValue.id });
+                    } else {
+                      setValue('deviceunitid', '');
+                      setComboBox({ ...comboBox, deviceRepared: null });
+                    }
+                  }}
+                  isOptionEqualToValue={() => true}
+                  options={deviceReparedCombo}
+                  renderInput={(params) => <TextField {...params} size="small" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" />}
+                  renderOption={(props, option) => <li {...props} key={option.id}>{option.label}</li>}
+                />
+            )}/>
+
+            {errors?.deviceunitid && errors.deviceunitid.message && (
+              <p className="mt-2 text-sm text-red-600 dark:text-red-500">
+                {typeof errors.deviceunitid.message === 'string' ? errors.deviceunitid.message : JSON.stringify(errors.deviceunitid.message)}
+              </p>
+            )}
+          </Field>
+
+          <div className="relative">
+            <button type="button" className="absolute bottom-0 right-0 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center cursor-pointer w-full" disabled={!allowNewDeviceRepared} onClick={handleDeviceVersion}>Nuevo</button>
+          </div>
+
+        </div>
+
+        <div className="grid gap-6 grid-cols-2 mt-4">
+          <Field>
+            <Label className="first-letter:uppercase block mb-2 text-sm font-medium text-gray-900">{t('field.unlock_type')}</Label>
+            <Controller
+              name="unlocktype"
+              control={control}
+              defaultValue={UnlockTypeEnumLabels[UnlockTypeEnum.NONE]}
+              rules={registerOptions.unlocktype}
+              render={({ field }) => (
+                <Autocomplete
+                  {...field}
+                  selectOnFocus
+                  handleHomeEndKeys
+                  disableClearable
+                  id="unlocktype"
+                  onChange={(event, newValue) => {
+                    setValue('unlocktype', newValue?.label);
+                    setUnlockType(newValue?.id as UnlockTypeEnum);
+                    handleUnlock(newValue?.id);
+                  }}
+                  options={unlocktypeOptions}
+                  isOptionEqualToValue={() => true}
+                  renderInput={(params) => <TextField {...params} size="small" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" />}
+                  renderOption={(props, option) => <li {...props} key={option.id}>{option.label}</li>}
+                />
+              )}
+            />
+            {errors?.unlocktype && errors.unlocktype.message && (
+              <p className="mt-2 text-sm text-red-600 dark:text-red-500">
+                {typeof errors.unlocktype.message === 'string' ? errors.unlocktype.message : JSON.stringify(errors.unlocktype.message)}
+              </p>
+            )}
+          </Field>
+
+          <Field>
+            <Label className="first-letter:uppercase block mb-2 text-sm font-medium text-gray-900">{t('field.unlock_code')}</Label>
+            <Controller
+              name="unlockcode"
+              control={control}
+              defaultValue=""
+              rules={registerOptions.unlockcode}
+              render={({ field }) => (
+                <Input {...field} readOnly={isDisableCode} className={`${errors?.unlockcode ? 'bg-red-50 border-red-500 text-red-900 placeholder-red-700 focus:ring-red-500 focus:border-red-500' : 'bg-gray-50 border-gray-300 text-gray-900 focus:ring-blue-500 focus:border-blue-500' } text-sm rounded-lg  block w-full p-2.5 border`} />
+              )}
+            />
+            {errors?.unlockcode && errors.unlockcode.message && (
+              <p className="mt-2 text-sm text-red-600 dark:text-red-500">
+                {typeof errors.unlockcode.message === 'string' ? errors.unlockcode.message : JSON.stringify(errors.unlockcode.message)}
+              </p>
+            )}
+          </Field>
+        </div>
+
+
+
 
         <div className="flex justify-between mt-6">
           <div onClick={prevStep} className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center w-1/4 cursor-pointer">Anterior</div>

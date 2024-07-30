@@ -1,0 +1,21 @@
+union CustomerDeviceUnitResult = CustomerDeviceUnitPayload | ErrorPayload
+
+extend type Mutation {
+    addCustomerDeviceUnit(device: DeviceInput, deviceunit: CustomerDeviceUnitInput): CustomerDeviceUnitResult
+        @field(resolver: "CustomerDeviceMutations@create")
+        @namespace(field: "App\\GraphQL\\Mutations")
+}
+
+input CustomerDeviceUnitInput {
+    deviceunitid: String @rules(apply: ["nullable", "ulid", "exists:device_units,id"])
+    deviceversionid: String @rules(apply: ["nullable", "ulid", "exists:device_versions,id"])
+    serial: String @rules(apply: ["nullable"])
+    unlocktype: String! @rules(apply: ["required", "in:code,pattern,none"])
+    unlockcode: String @rules(apply: ["required_if:unlocktype,code,unlocktype,pattern"])
+}
+
+type CustomerDeviceUnitPayload {
+    temporarydeviceunit: ID!
+    deviceid: ID!
+    status: Boolean
+}

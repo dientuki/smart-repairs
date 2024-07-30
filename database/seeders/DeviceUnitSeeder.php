@@ -15,20 +15,21 @@ class DeviceUnitSeeder extends Seeder
     public function run(): void
     {
         $team = DB::table('teams')->first()->id;
-        $devices = DB::table('devices')->get();
+        $devices = DB::table('device_versions')->get();
 
         DB::table('device_units')->insert([
             'id' => (string) Str::ulid(),
-            'device_id' => $devices[0]->id,
+            'device_version_id' => $devices[0]->id,
             'team_id' => $team,
             'serial' => '123456789',
             'unlock_type' => UnlockEnum::None,
             'created_at' => now(),
             'updated_at' => now(),
         ]);
+
         DB::table('device_units')->insert([
             'id' => (string) Str::ulid(),
-            'device_id' => $devices[1]->id,
+            'device_version_id' => $devices[1]->id,
             'team_id' => $team,
             'serial' => '123456789',
             'unlock_type' => UnlockEnum::Code,
@@ -36,9 +37,10 @@ class DeviceUnitSeeder extends Seeder
             'created_at' => now(),
             'updated_at' => now(),
         ]);
+
         DB::table('device_units')->insert([
             'id' => (string) Str::ulid(),
-            'device_id' => $devices[0]->id,
+            'device_version_id' => $devices[2]->id,
             'team_id' => $team,
             'serial' => '456789123',
             'unlock_type' => UnlockEnum::Pattern,

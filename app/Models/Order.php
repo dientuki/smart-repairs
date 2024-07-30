@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Order extends ModelWithTeam
 {
-    protected $fillable = ['customer_id', 'team_id', 'user_id', 'device_unit_id', 'observation'];
+    protected $fillable = ['customer_id', 'team_id', 'user_id', 'device_unit_id', 'device_id', 'observation'];
 
     protected $casts = [
         'was_edited' => 0,
@@ -17,6 +17,11 @@ class Order extends ModelWithTeam
     public function customer(): BelongsTo
     {
         return $this->belongsTo(Customer::class);
+    }
+
+    public function device(): BelongsTo
+    {
+        return $this->belongsTo(Device::class);
     }
 
     public function deviceUnit(): BelongsTo

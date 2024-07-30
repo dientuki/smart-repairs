@@ -7,6 +7,7 @@ namespace App\GraphQL\Mutations;
 use App\Enum\OrderStatusEnum;
 use App\Models\Order;
 use App\Models\OrderCheck;
+use App\Models\TemporaryDeviceUnit;
 use App\Traits\TeamContextTrait;
 use Illuminate\Support\Facades\DB;
 use Nuwave\Lighthouse\Execution\ResolveInfo;
@@ -52,18 +53,22 @@ final readonly class OrderMutations
             $order = Order::create([
                 'status' => OrderStatusEnum::ForBudgeting,
                 'observation' => $args['order']['observation'],
-                'customer_id' => $args['order']['customer_id'],
+                'customer_id' => $args['order']['customerid'],
                 'team_id' => $team_id,
                 'user_id' => auth()->user()->id,
-                'device_unit_id' => $args['order']['device_unit_id'],
+                'device_id' => $args['order']['deviceid']
             ]);
 
             OrderCheck::create([
                 'order_id' => $order->id,
                 'damages' => json_encode($args['order']['damages']),
-                'damages_description' => $args['order']['damage_description'],
+                'damages_description' => $args['order']['damagedescription'],
                 'features' => json_encode($args['order']['features']),
-                'features_description' => $args['order']['feature_description'],
+                'features_description' => $args['order']['featuredescription'],
+            ]);
+
+            TemporaryDeviceUnit::where('id', $args['order']['tempdeviceunitid'])->update([
+                'order_id' => $order->id,
             ]);
 
             DB::commit();
@@ -71,6 +76,7 @@ final readonly class OrderMutations
             return true;
         } catch (\Exception $e) {
             DB::rollBack();
+            dd($e);
 
             return false;
         };

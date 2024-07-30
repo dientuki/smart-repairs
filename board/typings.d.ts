@@ -9,6 +9,7 @@ enum UnlockTypeEnum {
     CODE = 'code',
     PATTERN = 'pattern',
 }
+
 interface Column {
     id: TypedColumn;
     orders: Order[];
@@ -30,17 +31,21 @@ interface Customer {
 }
 
 interface DeviceInfo {
-    id?: string;
-    label?: string;
-    type?: string | null;
-    typeId?: string | null;
+    id: string;
+    label: string;
+    type: string;
+    typeId: string;
+}
+
+interface DeviceVersion {
+    id: string;
+    label: string;
 }
 
 interface Device {
     id: string;
     label: string;
     commercialName?: string;
-    techName?: string;
     brand?: string;
     type?: string;
     url?: string;
@@ -69,7 +74,6 @@ interface NewDevice {
     brandid: string | null;
     typeid: string | null;
     commercialname: string;
-    techname: string;
     url: string;
 }
 
@@ -90,8 +94,8 @@ interface Order {
     deviceType: string,
     deviceTypeImage?: string,
     deviceCommercialName: string,
-    deviceTechName: string,
-    deviceSerial: string,
+    deviceTechName?: string,
+    deviceSerial?: string,
     customerFullName: string,
     customerPhone?: string,
     observation: string,
@@ -122,25 +126,22 @@ interface Images {
 }
 
 interface NewOrder {
-    customerId: String | null;
+    customerId: String | null | undefined;
     observation: String;
-    deviceUnitId: String;
     damages: [damage];
     damageDescription: String;
     features: [feature];
     featureDescription: String;
+    tempDeviceUnitId: String;
+    deviceid: String;
 }
 
 interface Step3data {
-    deviceUnitId: string;
-    observation: string;
-}
-
-interface Step4data {
     damages: [damage];
     damageDescription: String;
     features: [feature];
     featureDescription: String;
+    observation: String;
 }
 
 interface damage {
@@ -168,6 +169,12 @@ interface DeviceType {
     label: string;
 }
 
+interface DeviceChecks {
+    deviceTypeId: String,
+    damages: [damage];
+    features: [feature];
+}
+
 interface GraphQLErrorExtension {
     validation?: any;
 }
@@ -176,3 +183,16 @@ interface GraphQLError {
     message: string;
     extensions?: GraphQLErrorExtension;
 }
+
+interface CustomerDeviceUnit {
+    deviceid: string;
+    commercialname: string;
+    url: string;
+    brandid: string | '';
+    typeid: string | '';
+    deviceunitid: string | '';
+    unlocktype: UnlockTypeEnum;
+    unlockcode: number[] | null;
+    deviceversionid: string | null;
+    serial: string;
+  }

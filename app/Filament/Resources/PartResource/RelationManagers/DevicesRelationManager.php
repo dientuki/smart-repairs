@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\PartResource\RelationManagers;
 
 use App\Models\Device;
+use App\Models\DeviceVersion;
 use Filament\Forms;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Form;
@@ -16,13 +17,13 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class DevicesRelationManager extends RelationManager
 {
-    protected static string $relationship = 'devices';
+    protected static string $relationship = 'deviceVersions';
 
     public function form(Form $form): Form
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('commercial_name')
+                Forms\Components\TextInput::make('version')
                     ->required()
                     ->maxLength(255),
             ]);
@@ -33,25 +34,27 @@ class DevicesRelationManager extends RelationManager
         return $table
             ->recordTitleAttribute('commercial_name')
             ->columns([
-                TextColumn::make('deviceType.name'),
-                TextColumn::make('brand.name'),
-                TextColumn::make('commercial_name'),
-                TextColumn::make('tech_name'),
+                TextColumn::make('device.brand.name'),
+                TextColumn::make('device.commercial_name'),
+                TextColumn::make('version'),
+                TextColumn::make('description'),
             ])
             ->filters([
                 //
             ])
             ->headerActions([
+                // phpcs:disable Generic.Files.LineLength.TooLong
                 AttachAction::make()
                     ->preloadRecordSelect()
                     ->recordSelect(
                         fn (Select $select) => $select->placeholder('Select a post'),
                     )
-                    ->recordSelectSearchColumns(['tech_name', 'commercial_name'])
-                    ->recordTitle(fn (Device $record): string => "{$record->brand->name} {$record->commercial_name}")
+                    ->recordSelectSearchColumns(['version'])
+                    ->recordTitle(fn (DeviceVersion $record): string => "{$record->device->brand->name} {$record->device->commercial_name} {$record->version} ({$record->description})")
                     ->form(fn (AttachAction $action): array => [
                         $action->getRecordSelect(),
                     ]),
+                // phpcs:enable
             ])
             ->actions([
                 Tables\Actions\DetachAction::make(),

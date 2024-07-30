@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Device;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -11,8 +12,6 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
-
         $this->call([
             UserSeeder::class,
             TeamSeeder::class,
@@ -22,9 +21,11 @@ class DatabaseSeeder extends Seeder
             ModuleCategorySeeder::class,
             PartSeeder::class,
             DeviceSeeder::class,
-            DevicePartSeeder::class,
-            CustomerSeeder::class,
+            DeviceVersionSeeder::class,
+            DeviceVersionPartSeeder::class,
+            DeviceTypeCheckSeeder::class,
             DeviceUnitSeeder::class,
+            CustomerSeeder::class,
             OrderSeeder::class,
             OrderCommentSeeder::class,
             SupplierSeeder::class,

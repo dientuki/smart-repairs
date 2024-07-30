@@ -1,5 +1,11 @@
 type GraphQLErrors = GraphQLError[];
 
+type PayloadErrors = {
+    status: boolean;
+    message: string;
+    code: string;
+}
+
 export const graphqlRequest = async (query: string) => {
     try {
         const response = await fetch('/graphql', {
@@ -14,7 +20,7 @@ export const graphqlRequest = async (query: string) => {
 
         return await response.json();
     } catch (error) {
-        throw new Error('Failed to fetch data');
+        throw new Error('network');
     };
 };
 
@@ -23,8 +29,16 @@ export const handleGraphQLErrors = (errors: GraphQLErrors | undefined) => {
         if (errors[0].extensions && errors[0].extensions.validation) {
             throw errors[0].extensions.validation;
         } else {
-            throw new Error(errors[0].message);
+            //throw new Error(errors[0].message);
+            //console.log(errors[0].message);
+            throw new Error('data');
         }
+    }
+};
+
+export const handlePayloadErrors = (errors: PayloadErrors) => {
+    if (errors.status === false) {
+        throw new Error(errors.message);
     }
 };
 
@@ -36,4 +50,8 @@ export const arrayToString = (array: { [key: string]: any }[]): string => {
 
     // Stringify the object using the replacer function
     return "[" + array.map(object => objectToString(object)).join(",") + "]";
+}
+
+export const handleUndefined = (value: string | undefined | null): string => {
+    return value === undefined || value === null || value === 'undefined' ? '' : value;
 }

@@ -1,0 +1,10 @@
+extend type Query {
+    deviceVersions(device_id: String @eq): [DeviceVersion!] @all
+}
+
+type DeviceVersion {
+    id: ID!
+    version: String!
+    description: String
+    device: Device!
+}

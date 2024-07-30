@@ -7,11 +7,19 @@ type Query {
     deviceTypes: [DeviceType!] @all @orderBy(column: "name", direction: ASC)
 }
 
-#import customer.graphql
+type ErrorPayload {
+    status: Boolean
+    message: String
+    code: String
+}
+
 #import comment.graphql
+#import customer.graphql
+#import customerDeviceUnit.graphql
 #import device.graphql
 #import deviceTypeCheck.graphql
 #import deviceUnit.graphql
+#import deviceVersion.graphql
 #import order.graphql
 
 type Brand {
@@ -21,12 +29,6 @@ type Brand {
     name: String!
     imageUrl: String!
     label: String!
-}
-
-type User {
-    id: ID!
-    name: String!
-    email: String!
 }
 
 type DeviceRepaired {
@@ -43,4 +45,10 @@ type DeviceType {
     name: String!
     imageUrl: String!
     label: String!
+}
+
+type User {
+    id: ID!
+    name: String!
+    email: String!
 }

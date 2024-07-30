@@ -12,15 +12,18 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('device_units', function (Blueprint $table) {
+        Schema::create('temporary_device_units', function (Blueprint $table) {
             $table->ulid('id')->primary();
 
-            $table->string('serial');
+            $table->string('serial')->nullable();
             $table->enum('unlock_type', UnlockEnum::getAllCasesAsArray()); //Enum
             $table->string('unlock_code')->nullable();
 
-            $table->foreignUlid('team_id')->constrained();
-            $table->foreignUlid('device_version_id')->constrained();
+            $table->foreignUlid('device_id')->constrained();
+            $table->foreignUlid('device_version_id')->nullable()->constrained()->onDelete('set null');
+            $table->foreignUlid('device_unit_id')->nullable()->constrained()->onDelete('set null');
+            $table->foreignUlid('order_id')->nullable()->constrained()->onDelete('set null');
+
 
             $table->timestamps();
         });
@@ -31,6 +34,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('device_units');
+        Schema::dropIfExists('temporary_device_units');
     }
 };
