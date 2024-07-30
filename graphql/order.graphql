@@ -39,7 +39,8 @@ type Order {
     id: ID!
     status: String!,
     customer: Customer!
-    deviceUnit: DeviceUnit!
+    device: Device!
+    deviceUnit: DeviceUnit
     created_at: DateTime!
     observation: String!
     comments: [Comment!]

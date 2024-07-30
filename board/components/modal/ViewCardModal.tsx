@@ -29,9 +29,11 @@ function ViewCardModal() {
           <div className="flex flex-row h-full">
             <div className="basis-3/4 pr-6 overflow-y-scroll mr-3">
               <h2 className="text-2xl font-medium leading-6 text-gray-900">
-                {order.brand} {order.deviceCommercialName} ({order.deviceTechName})
+                {order.brand} {order.deviceCommercialName}{order.deviceTechName && ` (${order.deviceTechName})`}
               </h2>
-              <p className="my-2"><b>Serie:</b> {order.deviceSerial}</p>
+              <p className="my-2">
+                <b>Serie:</b> {order.deviceSerial ? order.deviceSerial : "Serial number not available"}
+              </p>
               <div>
                 <p><b>Descripcion inicial del problema:</b></p>
                 <p className="border border-gray-300 p-3 rounded min-h-20">{order.observation}</p>

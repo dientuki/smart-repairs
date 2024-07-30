@@ -49,21 +49,25 @@ export const getOrder = async (id: string) => {
                         name
                     }
                 }
+
+                device {
+                    commercial_name
+                    brand {
+                        name
+                        imageUrl
+                    }
+                    deviceType {
+                        name
+                        imageUrl
+                    }
+                }
+
                 deviceUnit {
                     serial
                     unlock_type
                     unlock_code
                     deviceVersion {
                         version
-                        device {
-                            commercial_name
-                            brand {
-                                name
-                            }
-                            deviceType {
-                                name
-                            }
-                        }
                     }
                 }
             }
@@ -93,12 +97,13 @@ export const getOrder = async (id: string) => {
         createdAt: response.data.order.created_at,
         createdAtDate: new Date(response.data.order.created_at),
         status: response.data.order.status,
-        brand: response.data.order.deviceUnit.deviceVersion.device.brand.name,
-        brandImage: response.data.order.deviceUnit.deviceVersion.device.brand.imageUrl,
-        deviceType: response.data.order.deviceUnit.deviceVersion.device.deviceType.name,
-        deviceTypeImage: response.data.order.deviceUnit.deviceVersion.device.deviceType.imageUrl,
-        deviceCommercialName: response.data.order.deviceUnit.deviceVersion.device.commercial_name,
-        deviceSerial: response.data.order.deviceUnit.deviceVersion.serial,
+        brand: response.data.order.device.brand.name,
+        brandImage: response.data.order.device.brand.imageUrl,
+        deviceType: response.data.order.device.deviceType.name,
+        deviceTypeImage: response.data.order.device.deviceType.imageUrl,
+        deviceCommercialName: response.data.order.device.commercial_name,
+        deviceTechName: response.data.order.deviceUnit?.deviceVersion.version,
+        deviceSerial: response.data.order.deviceUnit?.serial,
         customerFullName: `${response.data.order.customer.first_name} ${response.data.order.customer.last_name}`,
         customerPhone: response.data.order.customer.phone,
         observation: response.data.order.observation,
