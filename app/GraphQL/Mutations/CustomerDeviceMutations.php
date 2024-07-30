@@ -66,13 +66,21 @@ final readonly class CustomerDeviceMutations
             ]);
             DB::commit();
 
-            return $temporaryDeviceUnit->id;
+            return [
+                '__typename' => 'CustomerDeviceUnitPayload',
+                'status' => true,
+                'temporarydeviceunit' => $temporaryDeviceUnit->id,
+                'deviceid' => $device->id
+            ];
         } catch (Exception $e) {
             DB::rollBack();
 
-            dd($e);
-
-            return false;
+            return [
+                '__typename' => 'ErrorPayload',
+                'status' => false,
+                'message' => $e->getMessage(),
+                'code' => $e->getCode(),
+            ];
         };
     }
 }

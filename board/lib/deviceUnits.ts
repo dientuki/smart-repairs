@@ -54,7 +54,19 @@ export async function setCustomerDeviceUnit(customerDeviceUnit: CustomerDeviceUn
                     deviceversionid: "${handleUndefined(customerDeviceUnit.deviceversionid)}"
 
                 }
-            )
+            ) {
+                __typename
+                ... on CustomerDeviceUnitPayload {
+                    temporarydeviceunit
+                    deviceid
+                    status
+                }
+                ... on ErrorPayload {
+                    message
+                    code
+                    status
+                }
+            }
         }
     `);
 
