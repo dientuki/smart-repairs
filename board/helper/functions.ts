@@ -1,5 +1,11 @@
 type GraphQLErrors = GraphQLError[];
 
+type PayloadErrors = {
+    status: boolean;
+    message: string;
+    code: string;
+}
+
 export const graphqlRequest = async (query: string) => {
     try {
         const response = await fetch('/graphql', {
@@ -24,9 +30,15 @@ export const handleGraphQLErrors = (errors: GraphQLErrors | undefined) => {
             throw errors[0].extensions.validation;
         } else {
             //throw new Error(errors[0].message);
-            console.log(errors[0].message);
+            //console.log(errors[0].message);
             throw new Error('data');
         }
+    }
+};
+
+export const handlePayloadErrors = (errors: PayloadErrors) => {
+    if (errors.status === false) {
+        throw new Error(errors.message);
     }
 };
 

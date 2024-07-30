@@ -148,8 +148,6 @@ export const getOrders = async () => {
 
     handleGraphQLErrors(response.errors);
 
-    console.log(response.data.orders)
-
     const columns = response.data.orders.reduce((acc: Map<TypedColumn, Column>, order: any ) => {
 
         if (!acc.get(order.status)) {

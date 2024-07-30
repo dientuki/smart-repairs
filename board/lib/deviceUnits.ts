@@ -1,4 +1,4 @@
-import { graphqlRequest, handleGraphQLErrors, handleUndefined } from "@/helper/functions";
+import { graphqlRequest, handleGraphQLErrors, handleErrors, handleUndefined } from "@/helper/functions";
 
 export async function createDeviceUnit(deviceUnit: NewDeviceUnit): Promise<string> {
     const response = await graphqlRequest(`
@@ -71,6 +71,7 @@ export async function setCustomerDeviceUnit(customerDeviceUnit: CustomerDeviceUn
     `);
 
     handleGraphQLErrors(response.errors);
+    handlePayloadErrors(response.data.addCustomerDeviceUnit);
 
     return response.data.addCustomerDeviceUnit;
 }

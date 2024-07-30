@@ -147,8 +147,9 @@ function Step2({ nextStep, prevStep, devices, brands, deviceTypes, devicesRepare
 
     try {
       const tempDeviceUnitId = await setCustomerDeviceUnit(rawData);
+      device.id = tempDeviceUnitId.deviceid;
 
-      nextStep(device, tempDeviceUnitId);
+      nextStep(device, tempDeviceUnitId.temporarydeviceunit);
 
     } catch (e: any) {
       const toValidate = ['typeid', 'brandid', 'commercialname', 'url'];
