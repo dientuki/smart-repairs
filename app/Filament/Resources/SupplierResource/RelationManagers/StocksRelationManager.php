@@ -48,7 +48,9 @@ class StocksRelationManager extends RelationManager
             ->headerActions([
                 AttachAction::make()
                     ->preloadRecordSelect()
-                    ->recordTitle(fn (Stock $record): string => "{$record->part->moduleCategory->name} {$record->part->brand->name} {$record->part->part_number}")
+                    ->recordTitle(fn (Stock $record): string =>
+                        "{$record->part->moduleCategory->name}"
+                        . " {$record->part->brand->name} {$record->part->part_number}")
                     ->form(fn (AttachAction $action): array => [
                         $action->getRecordSelect(),
                         Hidden::make('team_id')->default(Filament::getTenant()->id),
