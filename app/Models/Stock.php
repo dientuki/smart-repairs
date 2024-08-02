@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Filament\Facades\Filament;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
@@ -20,6 +21,11 @@ class Stock extends ModelWithTeam
         //return $this->belongsToMany(DeviceVersion::class, 'device_versions_parts');
         //dd($this->part->deviceVersions()->toSql());
         return $this->part->deviceVersions();
+    }
+
+    public function suppliers(): BelongsToMany
+    {
+        return $this->BelongsToMany(Supplier::class, 'stock_suppliers')->withPivot('team_id');
     }
 
     /*
