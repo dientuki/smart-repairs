@@ -2,7 +2,6 @@
 
 namespace App\Filament\Resources\PartResource\RelationManagers;
 
-use App\Models\Device;
 use App\Models\DeviceVersion;
 use Filament\Forms;
 use Filament\Forms\Components\Select;
@@ -12,8 +11,6 @@ use Filament\Tables;
 use Filament\Tables\Actions\AttachAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class DevicesRelationManager extends RelationManager
 {
@@ -23,9 +20,7 @@ class DevicesRelationManager extends RelationManager
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('version')
-                    ->required()
-                    ->maxLength(255),
+
             ]);
     }
 
@@ -61,7 +56,7 @@ class DevicesRelationManager extends RelationManager
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                    Tables\Actions\DetachBulkAction::make(),
                 ]),
             ]);
     }

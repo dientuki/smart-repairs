@@ -5,6 +5,7 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\StockResource\Pages;
 use App\Filament\Resources\StockResource\RelationManagers;
 use App\Filament\Resources\StockResource\RelationManagers\DevicesRelationManager;
+use App\Filament\Resources\StockResource\RelationManagers\SuppliersRelationManager;
 use App\Models\Part;
 use App\Models\Stock;
 use Filament\Facades\Filament;
@@ -90,7 +91,8 @@ class StockResource extends Resource
     public static function getRelations(): array
     {
         return [
-            DevicesRelationManager::class
+            DevicesRelationManager::class,
+            SuppliersRelationManager::class
         ];
     }
 

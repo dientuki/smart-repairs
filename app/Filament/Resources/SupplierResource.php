@@ -2,9 +2,11 @@
 
 namespace App\Filament\Resources;
 
+use App\Filament\Resources\StockResource\RelationManagers\SuppliersRelationManager;
 use App\Filament\Resources\SupplierResource\Pages;
 use App\Filament\Resources\SupplierResource\RelationManagers;
 use App\Filament\Resources\SupplierResource\RelationManagers\ContactsRelationManager;
+use App\Filament\Resources\SupplierResource\RelationManagers\StocksRelationManager;
 use App\Models\Supplier;
 use Filament\Facades\Filament;
 use Filament\Forms;
@@ -63,7 +65,8 @@ class SupplierResource extends Resource
     public static function getRelations(): array
     {
         return [
-            ContactsRelationManager::class
+            ContactsRelationManager::class,
+            StocksRelationManager::class
         ];
     }
 

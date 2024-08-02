@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Supplier extends ModelWithTeam
@@ -11,5 +12,10 @@ class Supplier extends ModelWithTeam
     public function contacts(): HasMany
     {
         return $this->hasMany(SupplierContact::class);
+    }
+
+    public function stocks(): BelongsToMany
+    {
+        return $this->belongsToMany(Stock::class, 'stock_suppliers')->withPivot('team_id');
     }
 }
