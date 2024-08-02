@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Filament\Resources\StockResource\RelationManagers;
+namespace App\Filament\Resources\SupplierResource\RelationManagers;
 
 use App\Models\Stock;
 use Filament\Facades\Filament;
@@ -13,9 +13,9 @@ use Filament\Tables\Actions\AttachAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 
-class SuppliersRelationManager extends RelationManager
+class StocksRelationManager extends RelationManager
 {
-    protected static string $relationship = 'suppliers';
+    protected static string $relationship = 'stocks';
 
     public function form(Form $form): Form
     {
@@ -28,11 +28,19 @@ class SuppliersRelationManager extends RelationManager
     public function table(Table $table): Table
     {
         return $table
-            ->recordTitleAttribute('name')
+            ->recordTitleAttribute('quantity')
             ->columns([
-                TextColumn::make('name'),
-                TextColumn::make('email'),
-                TextColumn::make('phone'),
+                TextColumn::make('part.moduleCategory.name'),
+                TextColumn::make('part.brand.name'),
+                TextColumn::make('part.part_number'),
+                TextColumn::make('quantity')
+                    ->badge()
+                    ->color(fn ($state, $record) => match (true) {
+                        $state == 0 => 'danger',
+                        $state < $record->warning => 'warning',
+                        default => 'success',
+                    }),
+                TextColumn::make('warning'),
             ])
             ->filters([
                 //
@@ -40,6 +48,7 @@ class SuppliersRelationManager extends RelationManager
             ->headerActions([
                 AttachAction::make()
                     ->preloadRecordSelect()
+                    ->recordTitle(fn (Stock $record): string => "{$record->part->moduleCategory->name} {$record->part->brand->name} {$record->part->part_number}")
                     ->form(fn (AttachAction $action): array => [
                         $action->getRecordSelect(),
                         Hidden::make('team_id')->default(Filament::getTenant()->id),
@@ -50,7 +59,7 @@ class SuppliersRelationManager extends RelationManager
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                    Tables\Actions\DetachBulkAction::make(),
                 ]),
             ]);
     }
