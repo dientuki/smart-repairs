@@ -6,6 +6,7 @@ use App\Models\Stock;
 use Filament\Facades\Filament;
 use Filament\Forms;
 use Filament\Forms\Components\Hidden;
+use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
@@ -41,6 +42,7 @@ class StocksRelationManager extends RelationManager
                         default => 'success',
                     }),
                 TextColumn::make('warning'),
+                TextColumn::make('price'),
             ])
             ->filters([
                 //
@@ -53,7 +55,7 @@ class StocksRelationManager extends RelationManager
                         . " {$record->part->brand->name} {$record->part->part_number}")
                     ->form(fn (AttachAction $action): array => [
                         $action->getRecordSelect(),
-                        Hidden::make('team_id')->default(Filament::getTenant()->id),
+                        TextInput::make('price'),
                     ]),
             ])
             ->actions([

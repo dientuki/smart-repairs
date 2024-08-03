@@ -6,6 +6,7 @@ use App\Models\Stock;
 use Filament\Facades\Filament;
 use Filament\Forms;
 use Filament\Forms\Components\Hidden;
+use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
@@ -33,6 +34,7 @@ class SuppliersRelationManager extends RelationManager
                 TextColumn::make('name'),
                 TextColumn::make('email'),
                 TextColumn::make('phone'),
+                TextColumn::make('price'),
             ])
             ->filters([
                 //
@@ -42,7 +44,7 @@ class SuppliersRelationManager extends RelationManager
                     ->preloadRecordSelect()
                     ->form(fn (AttachAction $action): array => [
                         $action->getRecordSelect(),
-                        Hidden::make('team_id')->default(Filament::getTenant()->id),
+                        TextInput::make('price'),
                     ]),
             ])
             ->actions([
