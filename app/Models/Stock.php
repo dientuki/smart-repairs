@@ -25,7 +25,7 @@ class Stock extends ModelWithTeam
 
     public function suppliers(): BelongsToMany
     {
-        return $this->BelongsToMany(Supplier::class, 'stock_suppliers')->withPivot('team_id');
+        return $this->BelongsToMany(Supplier::class, 'stock_suppliers')->withPivot('price');
     }
 
     /*

@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('stock_suppliers', function (Blueprint $table) {
             $table->foreignUlid('stock_id')->constrained();
             $table->foreignUlid('supplier_id')->constrained();
-            $table->foreignUlid('team_id')->constrained();
+            $table->decimal('price', 12, 2);
 
             $table->unique(['stock_id', 'supplier_id']);
         });
