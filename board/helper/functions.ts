@@ -6,16 +6,32 @@ type PayloadErrors = {
     code: string;
 }
 
-export const graphqlRequest = async (query: string) => {
+export const graphqlRequest = async (query: string, attachment?: File) => {
+    let body;
+    let headers = { };
+
+    body = JSON.stringify({ query });
+    headers = { 'Content-Type': 'application/json' };
+
+    if (attachment) {
+        body = new FormData();
+        body.append('operations', JSON.stringify({
+            query,
+            attachment,
+        }));
+
+        body.append('map', JSON.stringify({ '0': ['variables.file'] }));
+        body.append('0', attachment);
+        headers = {};
+    }
+
+    console.log(headers, body);
+
     try {
         const response = await fetch('/graphql', {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                query
-            })
+            headers,
+            body,
         });
 
         return await response.json();

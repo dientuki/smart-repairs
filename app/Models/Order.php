@@ -34,6 +34,11 @@ class Order extends ModelWithTeam
         return $this->hasMany(OrderComment::class)->orderBy('created_at', 'asc');
     }
 
+    public function attachments()
+    {
+        return $this->hasMany(OrderAttachments::class);
+    }
+
     /**
      * Updates the status of an order.
      *

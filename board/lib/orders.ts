@@ -329,3 +329,30 @@ export const getOrderCreationData = async () => {
         devicesChecks: devicesChecks
     }
 }
+
+export const uploadAttachment = async (orderId: string, attachment: File) => {
+    console.log(orderId, attachment);
+
+    const response = await graphqlRequest(`
+        mutation {
+            uploadAttachment(orderAttachment: {
+                orderid: "${orderId}"
+                file: $attachment,
+            }) {
+                url
+            }
+        }`,
+        attachment
+    );
+    /*
+    handleGraphQLErrors(response.errors);
+
+    return response.data.uploadAttachment;
+}
+    const response = await graphqlRequest();
+
+    handleGraphQLErrors(response.errors);
+
+    return response.data.updateDevice;
+    */
+}

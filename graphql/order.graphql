@@ -12,6 +12,19 @@ extend type Mutation {
     updateOrderStatus(id: String, status: String!): Boolean!
         @field(resolver: "OrderMutations@updateStatus")
         @namespace(field: "App\\GraphQL\\Mutations")
+    uploadFile(orderAttachment: OrderAttachmentUpload!): FileResponse
+        @field(resolver: "OrderMutations@upload")
+        @namespace(field: "App\\GraphQL\\Mutations")
+}
+
+type OrderAttachmentUpload {
+    orderid: ID!
+    file: Upload!
+}
+
+type FileResponse {
+  url: String
+  filename: String
 }
 
 input OrderInput {

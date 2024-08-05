@@ -1,10 +1,9 @@
 import { create } from 'zustand'
-import { getOrder, getOrderCreationData } from "@/lib/orders";
+import { createOrder, getOrder, getOrderCreationData, uploadAttachment } from "@/lib/orders";
 import { addComment, updateCommentVisibility, updateComment, deleteComment } from "@/lib/comments";
 import { createCustomer, updateCustomer } from "@/lib/customers";
 import { createDevice, updateDevice } from "@/lib/devices";
 import { createDeviceUnit, updateDeviceUnit, setCustomerDeviceUnit } from "@/lib/deviceUnits";
-import { createOrder } from "@/lib/orders";
 import { getDeviceVersions } from "@/lib/deviceVersions";
 
 interface OrderStore {
@@ -32,7 +31,8 @@ interface OrderStore {
 
     getDeviceVersions: (device: String) => Promise<DeviceVersion[]>
 
-    addOrder: (newOrder: NewOrder) => Promise<void>
+    addOrder: (newOrder: NewOrder) => Promise<void>,
+    uploadAttachment: (orderId:string, attachment: File) => Promise<void>,
 }
 
 export const useOrderStore = create<OrderStore>((set) => ({
@@ -98,4 +98,8 @@ export const useOrderStore = create<OrderStore>((set) => ({
   addOrder: async (newOrder: NewOrder): Promise<void> => {
     return await createOrder(newOrder);
   },
+
+  uploadAttachment: async (orderId: string, attachment: File): Promise<void> => {
+    return await uploadAttachment(orderId, attachment);
+  }
 }));

@@ -6,6 +6,7 @@ import { useEffect } from "react";
 import ModalLayout from "@/components/modal/ModalLayout";
 import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
+import FileUpload from "../FileUpload";
 
 type ModalParams = {
   order: string;
@@ -38,7 +39,9 @@ function ViewCardModal() {
                 <p><b>Descripcion inicial del problema:</b></p>
                 <p className="border border-gray-300 p-3 rounded min-h-20">{order.observation}</p>
               </div>
-              <div className="my-2">attachments</div>
+              <div className="my-2">
+                <FileUpload orderId={order.$id}/>
+              </div>
               <div className="my-2">presupuesto</div>
               <Comments orderId={order.$id} comments={order.comments?.length ? order.comments : []}/>
             </div>
