@@ -5,8 +5,8 @@ interface InputFieldProps {
   name: string;
   label: string;
   control: Control<FieldValues>;
-  rules?: RegisterOptions;  // Cambié el tipo de 'rules' a 'RegisterOptions' para mayor precisión
-  errors: FieldErrors<FieldValues>;
+  rules?: RegisterOptions;
+  errors?: FieldErrors<FieldValues>;
   icon?: React.ComponentType<React.SVGProps<SVGSVGElement>>;
   defaultValue?: string;
 }
