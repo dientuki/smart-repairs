@@ -6,6 +6,9 @@ import { useEffect } from "react";
 import ModalLayout from "@/components/modal/ModalLayout";
 import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
+import ValidateDeviceUnitModal from "./ValidateDeviceUnitModal";
+import Modal from "./Modal";
+
 
 type ModalParams = {
   order: string;
@@ -22,6 +25,10 @@ function ViewCardModal() {
       toast.error(t(`toast.error.${e.message}`));
     });
   }, [getOrder]);
+
+  const handleValidate = () => {
+    Modal.open(ValidateDeviceUnitModal, {layer: 5, order: order.$id});
+  }
 
   return (
     <ModalLayout>
@@ -49,12 +56,15 @@ function ViewCardModal() {
                 <p className="my-2">Cliente: {order.customerFullName}</p>
                 <p className="my-2">Whatsap: <a target="_blank" href={`https://wa.me/${order.customerPhone}`}>whatsap</a></p>
                 <p className="my-2">Tecnico: Usuario</p>
-                <p className="my-2">Vendedor: Usuario</p>
+                <p className="my-2">Vendedor: {order.author}</p>
               </div>
               <div className="border border-gray-300 p-3 rounded mt-4">
                 <p className="my-2">Desbloqueo: Codigo/patron</p>
                 <p className="my-2">Validaciones: Usuario</p>
               </div>
+              {!order.deviceSerial &&
+                <button className="rounded-md bg-sky-600 px-3 py-1.5 text-sm font-bold leading-6 text-white shadow-sm hover:bg-sky-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-600" onClick={handleValidate}>Validar</button>
+              }
             </div>
           </div>
       }

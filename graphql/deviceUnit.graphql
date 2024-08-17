@@ -2,6 +2,9 @@ extend type Query {
     devicesRepared: [DeviceUnit!]
         @field(resolver: "DeviceUnitQueries@getDeviceUnits")
         @namespace(field: "App\\GraphQL\\Queries")
+    temporaryDeviceUnit(orderId: String!): TemporaryDeviceUnit
+        @field(resolver: "DeviceUnitQueries@getTemporaryDeviceUnit")
+        @namespace(field: "App\\GraphQL\\Queries")
 }
 
 extend type Mutation {
@@ -27,6 +30,14 @@ type DeviceUnit {
     deviceVersion: DeviceVersion!
     unlock_type: String!
     unlock_code: String
+}
+
+type TemporaryDeviceUnit {
+    id: ID!
+    serial: String
+    device: Device
+    deviceVersion: DeviceVersion
+    device_unit_id: String
 }
 
 type DeviceVersion {

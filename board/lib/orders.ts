@@ -33,11 +33,16 @@ export const getOrder = async (id: string) => {
                 created_at
                 observation
 
+                author {
+                    name
+                }
+
                 customer {
                     first_name
                     last_name
                     phone
                 }
+
                 comments {
                     id
                     comment
@@ -96,6 +101,7 @@ export const getOrder = async (id: string) => {
         $id: response.data.order.id,
         createdAt: response.data.order.created_at,
         createdAtDate: new Date(response.data.order.created_at),
+        author: response.data.order.author.name,
         status: response.data.order.status,
         brand: response.data.order.device.brand.name,
         brandImage: response.data.order.device.brand.imageUrl,

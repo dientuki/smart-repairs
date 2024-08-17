@@ -60,6 +60,15 @@ interface DeviceUnit {
     deviceId: string | null;
 }
 
+interface temporaryDeviceUnit {
+    serial: string;
+    deviceBrand: string;
+    deviceType: string
+    commercialName: string;
+    deviceVersion: DeviceVersion;
+    device_unit_id: string;
+}
+
 interface NewDeviceUnit {
     id: string | null;
     deviceid?: string;
@@ -88,6 +97,7 @@ interface Order {
     $id: string;
     createdAt: timestamp;
     createdAtDate: Date;
+    author: string;
     status: TypedColumn;
     brand: string,
     brandImage: string,
