@@ -10,12 +10,12 @@ import InputField from "@/components/form/InputField";
 import SimpleAutocomplete from "@/components/form/SimpleAutocomplete";
 
 const filter = createFilterOptions<Customer>();
-type Props = {
+type Step1Props = {
   nextStep: (customer: CustomerFullName) => void,
   customers: Customer[],
 }
 
-function Step1({ nextStep, customers }: Props) {
+function Step1({ nextStep, customers }: Step1Props) {
   const { addCustomer, updateCustomer } = useOrderStore();
   const { handleSubmit, control, formState: { errors }, getValues, setValue, setError, trigger } = useForm();
   const [ selectedCustomer, setSelectedCustomer ] = useState<Customer | null>(null);
@@ -118,7 +118,7 @@ function Step1({ nextStep, customers }: Props) {
     trigger('email');
   };
 
-  const customFilterOptions = (options: any, params: any) => {
+  const customerFilterOptions = (options: any, params: any) => {
     const filtered = filter(options, params);
 
     if (params.inputValue !== '') {
@@ -139,7 +139,7 @@ function Step1({ nextStep, customers }: Props) {
         options={customers}
         isLoading={!customers}
         onChange={(_, newValue) => handleCustomerChange(newValue)}
-        filterOptions={customFilterOptions}
+        filterOptions={customerFilterOptions}
       />
 
       <form onSubmit={handleSubmit(handleRegistration, handleError)}>

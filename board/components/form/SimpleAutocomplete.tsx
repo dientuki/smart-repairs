@@ -4,7 +4,7 @@ import { Field, Label } from "@headlessui/react";
 interface SimpleAutocompleteProps {
   id: string;
   options: OptionType[];
-  onChange?: (event: React.SyntheticEvent, newValue: OptionType | null) => void;
+  onChange?: (event: React.SyntheticEvent, newValue: OptionType | null, reason: string) => void;
   label: string;
   isLoading: boolean;
   filterOptions?: (options: any, params: any) => OptionType[];
