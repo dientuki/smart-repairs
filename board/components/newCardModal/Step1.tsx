@@ -6,6 +6,7 @@ import { useState } from "react";
 import { EnvelopeIcon, PhoneIcon } from "@heroicons/react/16/solid";
 import { toast } from "react-toastify";
 import { useTranslation } from 'react-i18next';
+import InputField from "../form/InputField";
 
 const filter = createFilterOptions<Customer>();
 type Props = {
@@ -158,91 +159,41 @@ function Step1({ nextStep, customers }: Props) {
         />
 
         <div className="grid gap-6 grid-cols-2 mt-4">
-          <Field>
-            <Label className="first-letter:uppercase block mb-2 text-sm font-medium text-gray-900">{t('field.firstname')}</Label>
-            <Controller
-              name="firstname"
-              defaultValue=""
-              control={control}
-              rules={registerOptions.firstname}
-              render={({ field }) => (
-                <Input {...field} className={`${errors?.firstname ? 'bg-red-50 border-red-500 text-red-900 placeholder-red-700 focus:ring-red-500 focus:border-red-500' : 'bg-gray-50 border-gray-300 text-gray-900 focus:ring-blue-500 focus:border-blue-500' } text-sm rounded-lg  block w-full p-2.5 border`} />
-              )}
-            />
-            {errors?.firstname && errors.firstname.message && (
-              <p className="mt-2 text-sm text-red-600 dark:text-red-500">
-                {typeof errors.firstname.message === 'string' ? errors.firstname.message : JSON.stringify(errors.firstname.message)}
-              </p>
-            )}
-          </Field>
+          <InputField
+            name="firstname"
+            label={t('field.firstname')}
+            control={control}
+            rules={registerOptions.firstname}
+            errors={errors}
+          />
 
-          <Field>
-            <Label className="first-letter:uppercase block mb-2 text-sm font-medium text-gray-900">{t('field.lastname')}</Label>
-            <Controller
-              name="lastname"
-              control={control}
-              defaultValue=""
-              rules={registerOptions.lastname}
-              render={({ field }) => (
-                <Input {...field} className={`${errors?.lastname ? 'bg-red-50 border-red-500 text-red-900 placeholder-red-700 focus:ring-red-500 focus:border-red-500' : 'bg-gray-50 border-gray-300 text-gray-900 focus:ring-blue-500 focus:border-blue-500' } text-sm rounded-lg  block w-full p-2.5 border`} />
-
-              )}
-            />
-            {errors.lastname && (
-              <p className="mt-2 text-sm text-red-600 dark:text-red-500">
-                {typeof errors.lastname.message === 'string' ? errors.lastname.message : JSON.stringify(errors.lastname.message)}
-              </p>
-            )}
-          </Field>
+          <InputField
+            name="lastname"
+            label={t('field.lastname')}
+            control={control}
+            rules={registerOptions.lastname}
+            errors={errors}
+          />
         </div>
 
         <div className="grid gap-6 grid-cols-2 mt-4">
-          <Field>
-            <Label className="first-letter:uppercase block mb-2 text-sm font-medium text-gray-900">{t('field.email')}</Label>
-            <div className="flex">
-              <div className="inline-flex items-center px-3 text-sm text-gray-900 bg-gray-200 border rounded-e-0 border-gray-300 border-e-0 rounded-s-md">
-                <EnvelopeIcon className="w-4 h-4 text-gray-500 " aria-hidden="true" />
-              </div>
-              <Controller
-                name="email"
-                control={control}
-                defaultValue=""
-                rules={registerOptions.email}
-                render={({ field }) => (
-                  <Input  {...field} className="rounded-none rounded-e-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5 " />
-                )}
-              />
-            </div>
-            {errors?.email && errors.email.message && (
-              <p className="mt-2 text-sm text-red-600 dark:text-red-500">
-                {typeof errors.email.message === 'string' ? errors.email.message : JSON.stringify(errors.email.message)}
-              </p>
-            )}
-          </Field>
+          <InputField
+            name="email"
+            label={t('field.email')}
+            control={control}
+            rules={registerOptions.email}
+            errors={errors}
+            icon={EnvelopeIcon}
+          />
 
-          <Field>
-            <Label className="first-letter:uppercase block mb-2 text-sm font-medium text-gray-900">{t('field.phone')}</Label>
-            <div className="flex">
-              <div className="inline-flex items-center px-3 text-sm text-gray-900 bg-gray-200 border rounded-e-0 border-gray-300 border-e-0 rounded-s-md">
-                <PhoneIcon className="w-4 h-4 text-gray-500 " aria-hidden="true" />
-              </div>
-              <Controller
-                name="phone"
-                control={control}
-                defaultValue=""
-                rules={registerOptions.phone}
-                render={({ field }) => (
-                  <Input  {...field} className="rounded-none rounded-e-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5 " />
-                )}
-              />
-            </div>
-            <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">Completar con el codigo de pais correspondiente.</p>
-            {errors?.phone && errors.phone.message && (
-              <p className="mt-2 text-sm text-red-600 dark:text-red-500">
-                {typeof errors.phone.message === 'string' ? errors.phone.message : JSON.stringify(errors.phone.message)}
-              </p>
-            )}
-          </Field>
+          <InputField
+            name="phone"
+            label={t('field.phone')}
+            control={control}
+            rules={registerOptions.phone}
+            errors={errors}
+            icon={PhoneIcon}
+          />
         </div>
 
         <div className="flex justify-end mt-6">

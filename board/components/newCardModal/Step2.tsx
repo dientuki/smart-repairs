@@ -10,6 +10,7 @@ import Modal from "@/components/modal/Modal";
 import PatternLockModal from "@/components/modal/PatternLockModal";
 import NewDeviceUnitModal from '@/components/modal/NewDeviceUnitModal';
 import { useCallback } from 'react';
+import InputField from "../form/InputField";
 
 const filter = createFilterOptions<Device>();
 type Props = {
@@ -303,45 +304,23 @@ function Step2({ nextStep, prevStep, devices, brands, deviceTypes, devicesRepare
         </div>
 
         <div className="grid gap-6 grid-cols-2 mt-4">
-          <Field>
-            <Label className="first-letter:uppercase block mb-2 text-sm font-medium text-gray-900">{t('field.commercial_name')}</Label>
-            <Controller
-              name="commercialname"
-              control={control}
-              defaultValue=""
-              rules={registerOptions.commercialname}
-              render={({ field }) => (
-                <Input {...field} className={`${errors?.commercialname ? 'bg-red-50 border-red-500 text-red-900 placeholder-red-700 focus:ring-red-500 focus:border-red-500' : 'bg-gray-50 border-gray-300 text-gray-900 focus:ring-blue-500 focus:border-blue-500' } text-sm rounded-lg  block w-full p-2.5 border`} />
-              )}
-            />
-            {errors?.commercialname && errors.commercialname.message && (
-              <p className="mt-2 text-sm text-red-600 dark:text-red-500">
-                {typeof errors.commercialname.message === 'string' ? errors.commercialname.message : JSON.stringify(errors.commercialname.message)}
-              </p>
-            )}
-          </Field>
-          <Field>
-            <Label className="first-letter:uppercase block mb-2 text-sm font-medium text-gray-900">{t('field.url')}</Label>
-            <div className="flex">
-              <div className="inline-flex items-center px-3 text-sm text-gray-900 bg-gray-200 border rounded-e-0 border-gray-300 border-e-0 rounded-s-md">
-                <GlobeAltIcon className="w-4 h-4 text-gray-500 " aria-hidden="true" />
-              </div>
-              <Controller
-                name="url"
-                control={control}
-                defaultValue=""
-                rules={registerOptions.url}
-                render={({ field }) => (
-                  <Input  {...field} className="rounded-none rounded-e-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5" />
-                )}
-              />
-            </div>
-            {errors?.url && errors.url.message && (
-              <p className="mt-2 text-sm text-red-600 dark:text-red-500">
-                {typeof errors.url.message === 'string' ? errors.url.message : JSON.stringify(errors.url.message)}
-              </p>
-            )}
-          </Field>
+          <InputField
+            name="commercialname"
+            label={t('field.commercial_name')}
+            control={control}
+            rules={registerOptions.commercialname}
+            errors={errors}
+          />
+
+          <InputField
+            name="url"
+            label={t('field.url')}
+            control={control}
+            rules={registerOptions.url}
+            errors={errors}
+            icon={GlobeAltIcon}
+          />
+
         </div>
 
         <div className="grid gap-6 grid-cols-4 mt-4">
