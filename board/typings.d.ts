@@ -195,4 +195,9 @@ interface CustomerDeviceUnit {
     unlockcode: number[] | null;
     deviceversionid: string | null;
     serial: string;
-  }
+}
+
+interface OptionType {
+    id: string;
+    label: string;
+}
