@@ -1,20 +1,21 @@
-import { Autocomplete, Skeleton, TextField, createFilterOptions } from "@mui/material";
-import { Field, Input, Label, TabPanel } from '@headlessui/react';
+import { createFilterOptions } from "@mui/material";
+import { Input, TabPanel } from '@headlessui/react';
 import { Controller, useForm, FieldValues, FieldErrors } from "react-hook-form";
 import { useOrderStore } from "@/store/OrderStore";
 import { useState } from "react";
 import { EnvelopeIcon, PhoneIcon } from "@heroicons/react/16/solid";
 import { toast } from "react-toastify";
 import { useTranslation } from 'react-i18next';
-import InputField from "../form/InputField";
+import InputField from "@/components/form/InputField";
+import SimpleAutocomplete from "@/components/form/SimpleAutocomplete";
 
 const filter = createFilterOptions<Customer>();
-type Props = {
+type Step1Props = {
   nextStep: (customer: CustomerFullName) => void,
   customers: Customer[],
 }
 
-function Step1({ nextStep, customers }: Props) {
+function Step1({ nextStep, customers }: Step1Props) {
   const { addCustomer, updateCustomer } = useOrderStore();
   const { handleSubmit, control, formState: { errors }, getValues, setValue, setError, trigger } = useForm();
   const [ selectedCustomer, setSelectedCustomer ] = useState<Customer | null>(null);
@@ -94,58 +95,52 @@ function Step1({ nextStep, customers }: Props) {
      }
   };
 
+  const handleCustomerChange = (newValue: OptionType | null) => {
+    if (newValue != null && newValue?.id !== 'new') {
+      const customer = newValue as Customer
+      setSelectedCustomer(customer);
+      setValue('id', customer.id);
+      setValue('firstname', customer.firstname);
+      setValue('lastname', customer.lastname);
+      setValue('phone', customer.phone);
+      setValue('email', customer.email);
+    } else {
+      setSelectedCustomer(null);
+      setValue('id', '');
+      setValue('firstname', '');
+      setValue('lastname', '');
+      setValue('phone', '');
+      setValue('email', '');
+    }
+    trigger('firstname');
+    trigger('lastname');
+    trigger('phone');
+    trigger('email');
+  };
+
+  const customerFilterOptions = (options: any, params: any) => {
+    const filtered = filter(options, params);
+
+    if (params.inputValue !== '') {
+      filtered.push({
+        id: 'new',
+        label: 'Agregar nuevo cliente',
+      });
+    }
+
+    return filtered;
+  };
+
   return (
     <TabPanel unmount={false}>
-      <Field>
-        <Label className="block mb-2 text-sm font-medium text-gray-900">Cliente</Label>
-        {customers ? (
-          <Autocomplete
-            selectOnFocus
-            handleHomeEndKeys
-            id="customer"
-            onChange={(event, newValue) => {
-              if (newValue != null && newValue?.id !== 'new') {
-                setSelectedCustomer(newValue);
-                setValue('id', newValue.id);
-                setValue('firstname', newValue.firstname);
-                setValue('lastname', newValue.lastname);
-                setValue('phone', newValue.phone);
-                setValue('email', newValue.email);
-              } else {
-                setSelectedCustomer(null);
-                setValue('id', '');
-                setValue('firstname', '');
-                setValue('lastname', '');
-                setValue('phone', '');
-                setValue('email', '');
-              }
-              trigger('firstname');
-              trigger('lastname');
-              trigger('phone');
-              trigger('email');
-            }}
-            filterOptions={(options, params) => {
-              const filtered = filter(options, params);
-
-              if (params.inputValue !== '') {
-                filtered.push({
-                  id: 'new',
-                  label: 'Agregar nuevo cliente',
-                });
-              }
-
-              return filtered;
-            }}
-            isOptionEqualToValue={() => true}
-            options={customers}
-            renderInput={(params) => <TextField {...params} size="small" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" />}
-            renderOption={(props, option) => <li {...props} key={option.id}>{option.label}</li>}
-          />
-        ) : (
-          <Skeleton variant="rectangular" width={210} height={32} />
-        )}
-      </Field>
-
+      <SimpleAutocomplete
+        id="customer"
+        label="Cliente"
+        options={customers}
+        isLoading={!customers}
+        onChange={(_, newValue) => handleCustomerChange(newValue)}
+        filterOptions={customerFilterOptions}
+      />
 
       <form onSubmit={handleSubmit(handleRegistration, handleError)}>
         <Controller

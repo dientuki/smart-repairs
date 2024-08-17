@@ -1,5 +1,7 @@
+import { Field, Label } from "@headlessui/react";
 import React from 'react';
 import { Controller, Control, FieldValues, FieldErrors, RegisterOptions } from 'react-hook-form';
+import ErrorMessage from "./ErrorMessage";
 
 interface InputFieldProps {
   name: string;
@@ -21,10 +23,8 @@ const InputField: React.FC<InputFieldProps> = ({
   defaultValue = '',
 }) => {
   return (
-    <div className="field">
-      <label className="first-letter:uppercase block mb-2 text-sm font-medium text-gray-900">
-        {label}
-      </label>
+    <Field>
+      <Label className="first-letter:uppercase block mb-2 text-sm font-medium text-gray-900">{label}</Label>
       <div className={Icon ? 'flex' : ''}>
         {Icon && (
           <div className="inline-flex items-center px-3 text-sm text-gray-900 bg-gray-200 border rounded-e-0 border-gray-300 border-e-0 rounded-s-md">
@@ -46,12 +46,8 @@ const InputField: React.FC<InputFieldProps> = ({
           )}
         />
       </div>
-      {errors?.[name]?.message && (
-        <p className="mt-2 text-sm text-red-600 dark:text-red-500">
-          {typeof errors[name].message === 'string' ? errors[name].message : JSON.stringify(errors[name].message)}
-        </p>
-      )}
-    </div>
+      <ErrorMessage message={errors?.[name]?.message} />
+    </Field>
   );
 };
 

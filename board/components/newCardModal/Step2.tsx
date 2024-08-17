@@ -11,6 +11,8 @@ import PatternLockModal from "@/components/modal/PatternLockModal";
 import NewDeviceUnitModal from '@/components/modal/NewDeviceUnitModal';
 import { useCallback } from 'react';
 import InputField from "../form/InputField";
+import SimpleAutocomplete from "../form/SimpleAutocomplete";
+import ValidatedAutocomplete from "../form/ValidatedAutocomplete";
 
 const filter = createFilterOptions<Device>();
 type Props = {
@@ -81,10 +83,10 @@ function Step2({ nextStep, prevStep, devices, brands, deviceTypes, devicesRepare
     setValue('deviceversionid', deviceversionid);
   }
 
-  const handleDeviceChange = useCallback(async(newValue: Device | null, reason: string) => {
+  const handleDeviceChange = useCallback(async(newValue: OptionType | null, reason?: string) => {
     if ((newValue != null && newValue?.id !== 'new') && reason !== 'clear') {
       setAllowNewDeviceRepared(false);
-      const { id, type, brand, commercialname, url } = newValue;
+      const { id, type, brand, commercialname, url } = newValue as Device;
       const brandId = brands.find(b => b?.label === brand)?.id ?? null;
       const typeId = deviceTypes.find(t => t?.label === type)?.id ?? null;
 
@@ -124,7 +126,15 @@ function Step2({ nextStep, prevStep, devices, brands, deviceTypes, devicesRepare
     }
   }, [brands, deviceTypes, devicesRepared, setComboBox, setDeviceReparedCombo, setValue, setUnlockType, trigger]);
 
+  const handleDeviceTypesChange = (newValue: OptionType | null) => {
+    setValue('typeid', newValue?.label);
+    setComboBox({ ...comboBox, type: newValue?.id ?? null});
+  }
 
+  const handleBrandsChange = (newValue: OptionType | null) => {
+    setValue('brandid', newValue?.label);
+    setComboBox({ ...comboBox, brand: newValue?.id ?? null });
+  }
 
   const handleRegistration = async (data: FieldValues ) => {
     const rawData: CustomerDeviceUnit = {
@@ -197,36 +207,29 @@ function Step2({ nextStep, prevStep, devices, brands, deviceTypes, devicesRepare
     deviceversionid: {required: false},
   };
 
+  const deviceFilterOptions = (options: any, params: any) => {
+    const filtered = filter(options, params);
+
+    if (params.inputValue !== '') {
+      filtered.push({
+        id: 'new',
+        label: 'Agregar equipo nuevo',
+      });
+    }
+
+    return filtered;
+  };
+
   return (
     <TabPanel unmount={false}>
-      <Field>
-        <Label className="first-letter:uppercase block mb-2 text-sm font-medium text-gray-900">{t('field.device')}</Label>
-        {devices && (
-          <Autocomplete
-            selectOnFocus
-            handleHomeEndKeys
-            id="devices"
-            onChange={(_, newValue, reason) => handleDeviceChange(newValue, reason)}
-            filterOptions={(options, params) => {
-              const filtered = filter(options, params);
-
-              if (params.inputValue !== '') {
-                filtered.push({
-                  id: 'new',
-                  label: 'Agregar equipo nuevo',
-                });
-              }
-
-              return filtered;
-            }}
-            options={devices}
-            isOptionEqualToValue={() => true}
-            renderInput={(params) => <TextField {...params} size="small" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" />}
-            renderOption={(props, option) => <li {...props} key={option.id}>{option.label}</li>}
-          />
-        )}
-      </Field>
-
+      <SimpleAutocomplete
+        id="devices"
+        label={t('field.device')}
+        options={devices}
+        isLoading={!devices}
+        onChange={(_, newValue, reason) => handleDeviceChange(newValue, reason)}
+        filterOptions={deviceFilterOptions}
+      />
 
       <form onSubmit={handleSubmit(handleRegistration, handleError)}>
         <Controller
@@ -240,67 +243,27 @@ function Step2({ nextStep, prevStep, devices, brands, deviceTypes, devicesRepare
         />
 
         <div className="grid gap-6 grid-cols-2 mt-4">
-          <Field>
-            <Label className="first-letter:uppercase block mb-2 text-sm font-medium text-gray-900">{t('field.type')}</Label>
-            { deviceTypes &&
-                <Controller
-                  name="typeid"
-                  control={control}
-                  defaultValue=""
-                  rules={registerOptions.typeid}
-                  render={({ field }) => (
-                    <Autocomplete
-                      {...field}
-                      selectOnFocus
-                      handleHomeEndKeys
-                      onChange={(event, newValue) => {
-                        setValue('typeid', newValue?.label);
-                        setComboBox({ ...comboBox, type: newValue?.id });
-                      }}
-                      options={deviceTypes}
-                      isOptionEqualToValue={() => true}
-                      renderInput={(params) => <TextField {...params} size="small" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" />}
-                    />
-                  )}
-                />
-            }
-            {errors?.typeid && errors.typeid.message && (
-              <p className="mt-2 text-sm text-red-600 dark:text-red-500">
-                {typeof errors.typeid.message === 'string' ? errors.typeid.message : JSON.stringify(errors.typeid.message)}
-              </p>
-            )}
-          </Field>
+          <ValidatedAutocomplete
+            name="typeid"
+            label={t('field.type')}
+            options={deviceTypes}
+            isLoading={!deviceTypes}
+            control={control}
+            rules={registerOptions.typeid}
+            errors={errors}
+            onChange={(_, newValue) => handleDeviceTypesChange(newValue)}
+          />
 
-          <Field>
-            <Label className="first-letter:uppercase block mb-2 text-sm font-medium text-gray-900">{t('field.brand')}</Label>
-            { brands &&
-                <Controller
-                  name="brandid"
-                  control={control}
-                  defaultValue=""
-                  rules={registerOptions.brandid}
-                  render={({ field }) => (
-                    <Autocomplete
-                      {...field}
-                      selectOnFocus
-                      handleHomeEndKeys
-                      onChange={(event, newValue) => {
-                        setValue('brandid', newValue?.label);
-                        setComboBox({ ...comboBox, brand: newValue?.id });
-                      }}
-                      options={brands}
-                      isOptionEqualToValue={() => true}
-                      renderInput={(params) => <TextField {...params} size="small" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" />}
-                    />
-                  )}
-                />
-            }
-            {errors?.brandid && errors.brandid.message && (
-              <p className="mt-2 text-sm text-red-600 dark:text-red-500">
-                {typeof errors.brandid.message === 'string' ? errors.brandid.message : JSON.stringify(errors.brandid.message)}
-              </p>
-            )}
-          </Field>
+          <ValidatedAutocomplete
+            name="brandid"
+            label={t('field.brand')}
+            options={brands}
+            isLoading={!brands}
+            control={control}
+            rules={registerOptions.brandid}
+            errors={errors}
+            onChange={(_, newValue) => handleBrandsChange(newValue)}
+          />
         </div>
 
         <div className="grid gap-6 grid-cols-2 mt-4">
