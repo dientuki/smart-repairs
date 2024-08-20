@@ -34,7 +34,8 @@ class Order extends ModelWithTeam
         return $this->hasMany(OrderComment::class)->orderBy('created_at', 'asc');
     }
 
-    public function author(): BelongsTo {
+    public function author(): BelongsTo
+    {
         return $this->belongsTo(User::class, 'user_id', 'id');
     }
 

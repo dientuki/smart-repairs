@@ -65,8 +65,9 @@ interface temporaryDeviceUnit {
     deviceBrand: string;
     deviceType: string
     commercialName: string;
-    deviceVersion: DeviceVersion;
+    deviceVersion: string | null;
     device_unit_id: string;
+    url: string;
 }
 
 interface NewDeviceUnit {

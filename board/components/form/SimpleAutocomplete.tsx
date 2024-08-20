@@ -21,7 +21,7 @@ const SimpleAutocomplete: React.FC<SimpleAutocompleteProps> = ({
 }) => {
   return (
     <Field>
-      <Label className="block mb-2 text-sm font-medium text-gray-900">{label}</Label>
+      <Label className="first-letter:uppercase block mb-2 text-sm font-medium text-gray-900">{label}</Label>
       {isLoading ? (
         <Skeleton variant="rectangular" width={210} height={32} />
       ) : (

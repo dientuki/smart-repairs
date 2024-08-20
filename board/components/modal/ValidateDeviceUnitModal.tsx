@@ -2,14 +2,14 @@ import "react-modal-global/styles/modal.scss" // Imports essential styles for `M
 import { useModalWindow } from "react-modal-global";
 import ModalLayout from "@/components/modal/ModalLayout";
 import { useTranslation } from "react-i18next";
-import { Controller, useForm, FieldValues, FieldErrors } from "react-hook-form";
-import { Field, Input, Label } from '@headlessui/react';
-import { Autocomplete, createFilterOptions, TextField } from "@mui/material";
+import { useForm, FieldValues, FieldErrors } from "react-hook-form";
+import { Autocomplete, createFilterOptions, TextField} from "@mui/material";
 import { useCallback, useEffect, useState } from 'react';
 import { useOrderStore } from "@/store/OrderStore";
 import { toast } from "react-toastify";
 import { GlobeAltIcon } from "@heroicons/react/16/solid";
-import { useShallow } from 'zustand/react/shallow'
+import InputField from "../form/InputField";
+import ValidatedAutocomplete from "../form/ValidatedAutocomplete";
 
 const filter = createFilterOptions<Device>();
 type ModalParams = {
@@ -19,180 +19,205 @@ type ModalParams = {
 function ValidateDeviceUnitModal() {
   const modal = useModalWindow<ModalParams>();
   const { t } = useTranslation();
-  const { deviceUnitValidate, getDeviceUnitValidate} = useOrderStore();
-  const { handleSubmit, control, formState: { errors }, setValue, setError, trigger } = useForm();
-
-  /*
-  const { versiones } = useOrderStore(
-    useShallow((data) => ({ nuts: state.nuts, honey: state.honey })),
-  )
-  */
-
-  /*
-  const { handleSubmit, control, formState: { errors }, setValue} = useForm();
-  const [ deviceVersionId, setDeviceVersionId ] = useState<string>('');
-  */
-
+  const { getDeviceUnitValidate} = useOrderStore();
+  const { handleSubmit, control, formState: { errors }, getValues, setValue, setError, trigger } = useForm();
+  const [isLoading, setIsLoading] = useState(true);
+  const [data, setData] = useState<any | null>(null);
+  const [devices, setDevices] = useState<Device[] | false>(false);
+  const [values, setValues] = useState(null);
 
   useEffect(() => {
-    getDeviceUnitValidate(modal.params.order).catch((e: any) => {
-      console.log(e.message);
-      toast.error(t(`toast.error.${e.message}`));
+    setValues({
+      label: 'asdf',
     });
-  }, [getDeviceUnitValidate]);
+    getDeviceUnitValidate(modal.params.order)
+      .then((queryData) => {
+        setData(queryData);
+        setValue('typeid', queryData.temporaryDeviceUnit.deviceType);
+        setValue('brandid', queryData.temporaryDeviceUnit.deviceBrand);
+        setValue('commercialname', queryData.temporaryDeviceUnit.commercialName);
+        setValue('url', queryData.temporaryDeviceUnit.url);
+        setValue('deviceversionid', queryData.temporaryDeviceUnit.deviceVersion);
+        setValue('serial', queryData.temporaryDeviceUnit.serial);
+        setDevices(queryData.devices);
+      })
+      .catch((e: any) => {
+        toast.error(t(`toast.error.${e.message}`));
+      }).finally(() => {
+        setIsLoading(false);
+      });
+  }, []);
 
   const handleRegistration = (data: FieldValues ) => {
-    modal.close();
+    console.log('data')
+    //modal.close();
   }
 
   const handleError = (errors: FieldErrors<FieldValues>) => {
+    console.log('error')
     toast.error("Error en el formulario de error react");
   };
 
   const registerOptions = {
-    serial: {required: false},
-    deviceversion: {required: false},
-  }
+    typeid: { required: t('validation.required', { field: t('field.type')}) },
+    brandid: { required: t('validation.required', { field: t('field.brand')}) },
+    deviceversionid: { required: t('validation.required', { field: t('field.brand')}) },
+    commercialname: { required: t('validation.required', { field: t('field.commercial_name')}) },
+    url: {
+      pattern: {
+        value: /^https?:\/\//,
+        message: t('validation.url', { field: t('field.url')})
+      }
+    },
+    serial: { required: t('validation.required', { field: t('field.serial')}) },
+  };
 
   const handleDeviceChange = useCallback(async(newValue: Device | null, reason: string) => {
     console.log('here')
   }, []);
 
+  const handleDeviceTypesChange = (newValue: OptionType | null, reason: string) => {
+    console.log('0', getValues('serial'), newValue, reason);
+    setValue('typeid', newValue?.label);
+    //setComboBox({ ...comboBox, type: newValue?.id ?? null});
+  }
+
+  const handleBrandsChange = (newValue: OptionType | null) => {
+    setValue('brandid', newValue?.label);
+    //setComboBox({ ...comboBox, brand: newValue?.id ?? null });
+  }
+
+  const handleCommercialNameChange = (newValue: OptionType | null) => {
+    //setValue('brandid', newValue?.label);
+    console.log('change url')
+    //setComboBox({ ...comboBox, brand: newValue?.id ?? null });
+  }
+
+
+
+  const deviceFilterOptions = (options: any, params: any) => {
+    const filtered = filter(options, params);
+
+    if (params.inputValue !== '') {
+      filtered.push({
+        id: 'new',
+        label: 'Agregar equipo nuevo',
+      });
+    }
+
+    return filtered;
+  };
+
   return (
-    <ModalLayout width="528px" height="460px">
-      {deviceUnitValidate &&
-        <form onSubmit={handleSubmit(handleRegistration, handleError)}>
-          <Field>
-            <Label className="first-letter:uppercase block mb-2 text-sm font-medium text-gray-900">{t('field.device')}</Label>
-            {deviceUnitValidate.devices && (
-              <Autocomplete
-                selectOnFocus
-                handleHomeEndKeys
-                id="devices"
+    <ModalLayout width="728px" height="460px">
+      <h2>Validar equipo</h2>
+      {!isLoading &&
+        <>
+          <form onSubmit={handleSubmit(handleRegistration, handleError)}>
+
+            <div className="grid gap-6 grid-cols-2 mt-4">
+              <ValidatedAutocomplete
+                name="typeid"
+                label={t('field.type')}
+                options={data.deviceTypes}
+                isLoading={!data.deviceTypes}
+                control={control}
+                rules={registerOptions.typeid}
+                errors={errors}
+                value={values}
+                disableClearable
+                onChange={(event, newValue) => {
+                  if (typeof newValue === 'string') {
+                    setValues({
+                      label: newValue,
+                    });
+                  } else if (newValue && newValue.inputValue) {
+                    // Create a new value from the user input
+                    setValues({
+                      label: newValue.inputValue,
+                    });
+                  } else {
+                    setValues(newValue);
+                  }
+                }}
                 filterOptions={(options, params) => {
                   const filtered = filter(options, params);
 
-                  if (params.inputValue !== '') {
+                  const { inputValue } = params;
+                  // Suggest the creation of a new value
+                  const isExisting = options.some((option) => inputValue === option.label);
+                  if (inputValue !== '' && !isExisting) {
                     filtered.push({
-                      id: 'new',
-                      label: 'Agregar equipo nuevo',
+                      inputValue,
+                      label: `Add "${inputValue}"`,
                     });
                   }
 
                   return filtered;
                 }}
-                options={deviceUnitValidate.devices}
-                isOptionEqualToValue={() => true}
-                renderInput={(params) => <TextField {...params} size="small" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" />}
-                renderOption={(props, option) => <li {...props} key={option.id}>{option.label}</li>}
               />
-            )}
-          </Field>
 
-          <div className="grid gap-6 grid-cols-2 mt-4">
-            <Field>
-              <Label className="first-letter:uppercase block mb-2 text-sm font-medium text-gray-900">{t('field.type')}</Label>
-              { deviceUnitValidate.deviceTypes &&
-                  <Controller
-                    name="typeid"
-                    control={control}
-                    defaultValue=""
-                    rules={registerOptions.typeid}
-                    render={({ field }) => (
-                      <Autocomplete
-                        {...field}
-                        selectOnFocus
-                        handleHomeEndKeys
-                        onChange={(event, newValue) => {
-                          setValue('typeid', newValue?.label);
-                          setComboBox({ ...comboBox, type: newValue?.id });
-                        }}
-                        options={deviceUnitValidate.deviceTypes}
-                        isOptionEqualToValue={() => true}
-                        renderInput={(params) => <TextField {...params} size="small" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" />}
-                      />
-                    )}
-                  />
-              }
-              {errors?.typeid && errors.typeid.message && (
-                <p className="mt-2 text-sm text-red-600 dark:text-red-500">
-                  {typeof errors.typeid.message === 'string' ? errors.typeid.message : JSON.stringify(errors.typeid.message)}
-                </p>
-              )}
-            </Field>
-
-            <Field>
-              <Label className="first-letter:uppercase block mb-2 text-sm font-medium text-gray-900">{t('field.brand')}</Label>
-              { deviceUnitValidate.brands &&
-                  <Controller
-                    name="brandid"
-                    control={control}
-                    defaultValue=""
-                    rules={registerOptions.brandid}
-                    render={({ field }) => (
-                      <Autocomplete
-                        {...field}
-                        selectOnFocus
-                        handleHomeEndKeys
-                        onChange={(event, newValue) => {
-                          setValue('brandid', newValue?.label);
-                          setComboBox({ ...comboBox, brand: newValue?.id });
-                        }}
-                        options={deviceUnitValidate.brands}
-                        isOptionEqualToValue={() => true}
-                        renderInput={(params) => <TextField {...params} size="small" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" />}
-                      />
-                    )}
-                  />
-              }
-              {errors?.brandid && errors.brandid.message && (
-                <p className="mt-2 text-sm text-red-600 dark:text-red-500">
-                  {typeof errors.brandid.message === 'string' ? errors.brandid.message : JSON.stringify(errors.brandid.message)}
-                </p>
-              )}
-            </Field>
-          </div>
-          <Field>
-            <Label className="first-letter:uppercase block mb-2 text-sm font-medium text-gray-900">{t('field.commercial_name')}</Label>
-            <Controller
-              name="commercialname"
-              control={control}
-              defaultValue=""
-              rules={registerOptions.commercialname}
-              render={({ field }) => (
-                <Input {...field} className={`${errors?.commercialname ? 'bg-red-50 border-red-500 text-red-900 placeholder-red-700 focus:ring-red-500 focus:border-red-500' : 'bg-gray-50 border-gray-300 text-gray-900 focus:ring-blue-500 focus:border-blue-500' } text-sm rounded-lg  block w-full p-2.5 border`} />
-              )}
-            />
-            {errors?.commercialname && errors.commercialname.message && (
-              <p className="mt-2 text-sm text-red-600 dark:text-red-500">
-                {typeof errors.commercialname.message === 'string' ? errors.commercialname.message : JSON.stringify(errors.commercialname.message)}
-              </p>
-            )}
-          </Field>
-          <Field>
-            <Label className="first-letter:uppercase block mb-2 text-sm font-medium text-gray-900">{t('field.url')}</Label>
-            <div className="flex">
-              <div className="inline-flex items-center px-3 text-sm text-gray-900 bg-gray-200 border rounded-e-0 border-gray-300 border-e-0 rounded-s-md">
-                <GlobeAltIcon className="w-4 h-4 text-gray-500 " aria-hidden="true" />
-              </div>
-              <Controller
-                name="url"
+              <ValidatedAutocomplete
+                name="brandid"
+                label={t('field.brand')}
+                options={data.brands}
+                isLoading={!data.brands}
                 control={control}
-                defaultValue=""
-                rules={registerOptions.url}
-                render={({ field }) => (
-                  <Input  {...field} className="rounded-none rounded-e-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5" />
-                )}
+                rules={registerOptions.brandid}
+                errors={errors}
+                disableClearable
+                onChange={(_, newValue) => handleBrandsChange(newValue)}
               />
             </div>
-            {errors?.url && errors.url.message && (
-              <p className="mt-2 text-sm text-red-600 dark:text-red-500">
-                {typeof errors.url.message === 'string' ? errors.url.message : JSON.stringify(errors.url.message)}
-              </p>
-            )}
-          </Field>
 
-        </form>
+            <div className="grid gap-6 grid-cols-2 mt-4">
+              <ValidatedAutocomplete
+                name="commercialname"
+                label={t('field.commercial_name')}
+                options={devices}
+                isLoading={!devices}
+                control={control}
+                rules={registerOptions.commercialname}
+                errors={errors}
+                disableClearable
+                onChange={(_, newValue) => handleCommercialNameChange(newValue)}
+              />
+
+              <ValidatedAutocomplete
+                name="deviceversionid"
+                label={t('field.device_version')}
+                options={data.deviceVersions}
+                isLoading={!data.deviceVersions}
+                control={control}
+                disableClearable
+                rules={registerOptions.deviceversionid}
+                errors={errors}
+              />
+            </div>
+
+            <div className="mt-4">
+              <InputField
+                name="url"
+                label={t('field.url')}
+                control={control}
+                rules={registerOptions.url}
+                errors={errors}
+                icon={GlobeAltIcon}
+              />
+            </div>
+
+            <div className="mt-4">
+              <InputField
+                name="serial"
+                label={t('field.serial')}
+                control={control}
+                rules={registerOptions.serial}
+                errors={errors}
+              />
+            </div>
+            <button type="submit" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center w-1/4">Siguiente</button>
+          </form>
+        </>
       }
     </ModalLayout>
   )

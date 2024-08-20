@@ -13,11 +13,14 @@ interface ValidatedAutocompleteProps {
   name: string;
   control: Control<FieldValues>;
   rules?: RegisterOptions;
-  options: OptionType[];
+  options: OptionType[] | boolean;
   onChange?: (event: React.SyntheticEvent, newValue: OptionType | null, reason?: string) => void;
   label: string;
+  value?: any,
   isLoading: boolean;
   errors?: FieldErrors<FieldValues>;
+  disableClearable?: boolean;
+  filterOptions?: (options: any, params: any) => OptionType[];
 }
 
 // Componente ValidatedAutocomplete
@@ -29,10 +32,13 @@ const ValidatedAutocomplete: React.FC<ValidatedAutocompleteProps> = ({
   onChange,
   label,
   isLoading,
+  disableClearable = false,
+  filterOptions,
+  value,
   errors }) => {
   return (
     <Field>
-      <Label className="block mb-2 text-sm font-medium text-gray-900">{label}</Label>
+      <Label className="first-letter:uppercase block mb-2 text-sm font-medium text-gray-900">{label}</Label>
       {isLoading ? (
         <Skeleton variant="rectangular" width={210} height={32} />
       ) : (
@@ -43,12 +49,14 @@ const ValidatedAutocomplete: React.FC<ValidatedAutocompleteProps> = ({
           rules={rules}
           render={({ field }) => (
             <Autocomplete
-              {...field}
+              onChange={onChange}
+              filterOptions={filterOptions}
               selectOnFocus
               handleHomeEndKeys
-              onChange={onChange}
+              value={value}
               options={options}
-              isOptionEqualToValue={() => true}
+              disableClearable={disableClearable}
+              isOptionEqualToValue={(option, value) => option.label === value.label}
               renderInput={(params) => (
                 <TextField
                   {...params}

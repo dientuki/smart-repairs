@@ -1,4 +1,5 @@
 import { graphqlRequest, handleGraphQLErrors, handleUndefined, handlePayloadErrors } from "@/helper/functions";
+import { deviceVersion } from "@/helper/reduce";
 
 export async function createDeviceUnit(deviceUnit: NewDeviceUnit): Promise<string> {
     const response = await graphqlRequest(`
@@ -77,6 +78,7 @@ export async function setCustomerDeviceUnit(customerDeviceUnit: CustomerDeviceUn
 }
 
 export async function getTemporaryDeviceUnit(orderId: String): Promise<any> {
+    let dv = null;
     const response = await graphqlRequest(`
         query {
             temporaryDeviceUnit(orderId: "${orderId}") {
@@ -89,6 +91,7 @@ export async function getTemporaryDeviceUnit(orderId: String): Promise<any> {
                         name
                     }
                     commercial_name
+                    url
                 }
                 deviceVersion {
                     version
@@ -96,24 +99,15 @@ export async function getTemporaryDeviceUnit(orderId: String): Promise<any> {
                 }
                 device_unit_id
             }
-            temporaryVersions(orderId: "${orderId}") {
-                deviceVersions {
-                    id
-                    name
-                }
-            }
-            devices {
+            temporaryDeviceVersions(orderId: "${orderId}") {
                 id
-                commercial_name
+                version
+                description
+            }
+            devicesByBrandWithTmpOrder(orderId: "${orderId}") {
+                id
+                label
                 url
-                brand {
-                    id
-                    name
-                }
-                deviceType {
-                    id
-                    name
-                }
             }
             brands {
                 id
@@ -126,23 +120,14 @@ export async function getTemporaryDeviceUnit(orderId: String): Promise<any> {
         }
     `);
 
-    console.log(response);
-
     handleGraphQLErrors(response.errors);
 
-    const devices: Device[] = response.data.devices.reduce((acc: Device[], device: any) => {
-        acc.push({
-            id: device.id,
-            label: `${device.brand.name} ${device.commercial_name}`,
-            commercialname: device.commercial_name,
-            brand: device.brand.name,
-            type: device.deviceType.name,
-            url: device.url
-        });
 
-        return acc;
 
-      }, []);
+    if (response.data.temporaryDeviceUnit.deviceVersion) {
+        const desc = response.data.temporaryDeviceUnit.deviceVersion.description? ` (${response.data.temporaryDeviceUnit.deviceVersion.description})` : '';
+        dv = response.data.temporaryDeviceUnit.deviceVersion.version + desc;
+    }
 
     return {
         temporaryDeviceUnit: {
@@ -151,9 +136,12 @@ export async function getTemporaryDeviceUnit(orderId: String): Promise<any> {
             deviceBrand: response.data.temporaryDeviceUnit.device.brand.name,
             deviceType: response.data.temporaryDeviceUnit.device.deviceType.name,
             commercialName: response.data.temporaryDeviceUnit.device.commercial_name,
+            url: response.data.temporaryDeviceUnit.device.url,
+            deviceVersion: dv
         } as temporaryDeviceUnit,
-        devices: devices,
         brands: response.data.brands,
+        devices: response.data.devicesByBrandWithTmpOrder,
         deviceTypes: response.data.deviceTypes,
+        deviceVersions: deviceVersion(response.data.temporaryDeviceVersions)
     }
 }

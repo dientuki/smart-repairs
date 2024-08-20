@@ -35,7 +35,7 @@ interface OrderStore {
     addOrder: (newOrder: NewOrder) => Promise<void>,
 
     deviceUnitValidate: any,
-    getDeviceUnitValidate: (orderId: String) => Promise<boolean>,
+    getDeviceUnitValidate: (orderId: String) => Promise<any>,
 }
 
 export const useOrderStore = create<OrderStore>((set) => ({
@@ -104,7 +104,6 @@ export const useOrderStore = create<OrderStore>((set) => ({
 
   deviceUnitValidate: false as any,
   getDeviceUnitValidate: async (orderId: String): Promise<any> => {
-    const deviceUnitValidate = await getTemporaryDeviceUnit(orderId);
-    set({ deviceUnitValidate });
+    return await getTemporaryDeviceUnit(orderId);
   }
 }));
