@@ -86,7 +86,7 @@ export async function getDevicesUnitsByVersionId(versionId: String): Promise<Opt
             }
         }
     `);
-        console.log(response)
+
     handleGraphQLErrors(response.errors);
 
     return response.data.deviceUnitsByVersionId;

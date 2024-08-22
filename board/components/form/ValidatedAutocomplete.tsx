@@ -10,17 +10,17 @@ const filter = createFilterOptions<OptionType>();
 interface ValidatedAutocompleteProps {
   name: string;
   control: Control<FieldValues>;
-  rules?: RegisterOptions;
-  options: OptionType[] | boolean;
-  onChange?: (event: React.SyntheticEvent, newValue: OptionType | null, reason?: string) => void;
   label: string;
-  value?: OptionType | null,
   isLoading: boolean;
+
+  options: OptionType[] | null;
+  rules?: RegisterOptions;
   errors?: FieldErrors<FieldValues>;
+  value?: OptionType | null,
   disableClearable?: boolean;
   disabled?: boolean;
+  onChange?: (event: React.SyntheticEvent, newValue: OptionType | null, reason?: string) => void;
   filterOptions?: (options: any, params: any) => OptionType[];
-  key?: any;
 }
 
 const defaultFilterOptions = (options: OptionType[], params: any) => {
@@ -52,7 +52,6 @@ const ValidatedAutocomplete: React.FC<ValidatedAutocompleteProps> = ({
   filterOptions = defaultFilterOptions,
   value,
   disabled = false,
-  key,
   errors }) => {
   return (
     <Field>
@@ -67,17 +66,18 @@ const ValidatedAutocomplete: React.FC<ValidatedAutocompleteProps> = ({
           rules={rules}
           render={() => (
             <Autocomplete
-              onChange={onChange}
-              filterOptions={filterOptions}
+              autoHighlight
+              autoSelect
               selectOnFocus
               handleHomeEndKeys
               clearOnEscape
+              onChange={onChange}
+              filterOptions={filterOptions}
               value={value}
               options={Array.isArray(options) ? options : []}
               disableClearable={disableClearable}
               isOptionEqualToValue={() => true}
               disabled={disabled}
-              key={key}
               renderInput={(params) => (
                 <TextField
                   {...params}

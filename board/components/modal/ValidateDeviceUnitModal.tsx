@@ -31,13 +31,29 @@ type DataState = {
   temporaryDeviceUnit: temporaryDeviceUnit[] | null;
 }
 
+type DisableState = {
+  version: boolean;
+  serial: boolean;
+}
+
 function ValidateDeviceUnitModal() {
   const modal = useModalWindow<ModalParams>();
   const { t } = useTranslation();
   const { getDeviceUnitValidate, getDevicesByTypeAndBrand, getDeviceVersions, getDevicesUnitsByVersionId} = useOrderStore();
   const { handleSubmit, control, formState: { errors }, getValues, setValue, setError, trigger } = useForm();
   const [isLoading, setIsLoading] = useState(true);
-  const [data, setData] = useState<DataState | null>(null);
+  const [isDisableState, setIsDisableState] = useState<DisableState>({
+    version: true,
+    serial: true
+  });
+  const [data, setData] = useState<DataState>({
+    types: null,
+    brands: null,
+    devices: null,
+    versions: null,
+    serials: null,
+    temporaryDeviceUnit: null,
+  });
   const [selection, setSelection] = useState<SelectionState>({
     type: null,
     brand: null,
@@ -76,7 +92,6 @@ function ValidateDeviceUnitModal() {
   };
 
   useEffect(() => {
-    console.log('modal.params.order', modal.params.order)
     getDeviceUnitValidate(modal.params.order)
       .then((queryData) => {
         setData(queryData);
@@ -87,6 +102,11 @@ function ValidateDeviceUnitModal() {
         setValue('url', queryData.temporaryDeviceUnit.url);
         findAndSet(queryData.versions, queryData.temporaryDeviceUnit.device_version_id, setVersion, 'version');
         findAndSet(queryData.serials, queryData.temporaryDeviceUnit.serial, setSerial, 'serial');
+        setIsDisableState({
+          version: false,
+          serial: false
+        })
+
 
       })
       .catch((e: any) => {
@@ -140,8 +160,14 @@ function ValidateDeviceUnitModal() {
     setData((prevState) => ({
       ...prevState,
       devices: null,
-      versions: null
-    }) as DataState | null);
+      versions: [],
+      serials: [],
+    }) as DataState);
+
+    setDevice(null);
+    setVersion(null);
+    setSerial(null);
+    setValue('url', '')
 
     try {
 
@@ -150,16 +176,13 @@ function ValidateDeviceUnitModal() {
       setData((prevState) => ({
         ...prevState,
         devices: devices,
-      }) as DataState | null);
-
-      if (devices) {
-        findAndSet(devices, getValues('deviceid'), setDevice, 'device');
-      }
+      }) as DataState);
 
     } catch (e) {}
   }
 
   const handleDeviceChange = async (newValue: OptionType | null) => {
+    console.log(typeof newValue, newValue)
     setDevice(newValue);
     setValue('deviceid', newValue?.id);
     setValue('devicelabel', newValue?.label);
@@ -168,17 +191,16 @@ function ValidateDeviceUnitModal() {
     setData((prevState) => ({
       ...prevState,
       versions: null
-    }) as DataState | null);
+    }) as DataState);
 
     try {
 
       const versions = await getDeviceVersions(getValues('deviceid'));
-      console.log('versions', versions)
 
       setData((prevState) => ({
         ...prevState,
         versions: versions,
-      }) as DataState | null);
+      }) as DataState);
 
       if (versions) {
         findAndSet(versions, getValues('versionid'), setVersion, 'version');
@@ -196,17 +218,16 @@ function ValidateDeviceUnitModal() {
     setData((prevState) => ({
       ...prevState,
       serials: null
-    }) as DataState | null);
+    }) as DataState);
 
     try {
 
       const serials = await getDevicesUnitsByVersionId(getValues('versionid'));
-      console.log('serials', serials)
 
       setData((prevState) => ({
         ...prevState,
         serials: serials,
-      }) as DataState | null);
+      }) as DataState);
 
       if (serials) {
         findAndSet(serials, getValues('serialid'), setSerial, 'serial');
@@ -226,7 +247,7 @@ function ValidateDeviceUnitModal() {
       <h2>Validar equipo</h2>
       {!isLoading &&
         <>
-          <form onSubmit={handleSubmit(handleRegistration, handleError)}>
+          <form onSubmit={handleSubmit(handleRegistration, handleError)} >
 
             <div className="grid gap-6 grid-cols-2 mt-4">
               <ValidatedAutocomplete
