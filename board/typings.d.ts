@@ -62,10 +62,10 @@ interface DeviceUnit {
 
 interface temporaryDeviceUnit {
     serial: string;
-    deviceBrand: string;
-    deviceType: string
-    commercialName: string;
-    deviceVersion: string | null;
+    brand_id: string;
+    type_id: string
+    device_id: string;
+    device_version_id: string | null;
     device_unit_id: string;
     url: string;
 }
@@ -211,4 +211,5 @@ interface CustomerDeviceUnit {
 interface OptionType {
     id: string;
     label: string;
+    info?: string | null | Record<string, any>;
 }

@@ -2,8 +2,8 @@ import { create } from 'zustand'
 import { getOrder, getOrderCreationData } from "@/lib/orders";
 import { addComment, updateCommentVisibility, updateComment, deleteComment } from "@/lib/comments";
 import { createCustomer, updateCustomer } from "@/lib/customers";
-import { createDevice, updateDevice } from "@/lib/devices";
-import { createDeviceUnit, updateDeviceUnit, setCustomerDeviceUnit, getTemporaryDeviceUnit } from "@/lib/deviceUnits";
+import { createDevice, getDevicesByTypeAndBrand, updateDevice } from "@/lib/devices";
+import { createDeviceUnit, updateDeviceUnit, setCustomerDeviceUnit, getTemporaryDeviceUnit, getDevicesUnitsByVersionId } from "@/lib/deviceUnits";
 import { createOrder } from "@/lib/orders";
 import { getDeviceVersions } from "@/lib/deviceVersions";
 
@@ -30,12 +30,15 @@ interface OrderStore {
     addDeviceUnit: (deviceUnit: NewDeviceUnit) => Promise<string>
     updateDeviceUnit: (deviceUnit: NewDeviceUnit) => Promise<boolean>
 
-    getDeviceVersions: (device: String) => Promise<DeviceVersion[]>
+    getDeviceVersions: (device: String) => Promise<OptionType[]>
 
     addOrder: (newOrder: NewOrder) => Promise<void>,
 
     deviceUnitValidate: any,
     getDeviceUnitValidate: (orderId: String) => Promise<any>,
+
+    getDevicesByTypeAndBrand: (type: String, brand: String) => Promise<OptionType[]>
+    getDevicesUnitsByVersionId: (versionId: String) => Promise<OptionType[]>
 }
 
 export const useOrderStore = create<OrderStore>((set) => ({
@@ -105,5 +108,13 @@ export const useOrderStore = create<OrderStore>((set) => ({
   deviceUnitValidate: false as any,
   getDeviceUnitValidate: async (orderId: String): Promise<any> => {
     return await getTemporaryDeviceUnit(orderId);
+  },
+
+  getDevicesByTypeAndBrand: async (type: String, brand: String): Promise<OptionType[]> => {
+    return await getDevicesByTypeAndBrand(type, brand);
+  },
+
+  getDevicesUnitsByVersionId: async (versionId: String): Promise<OptionType[]> => {
+    return await getDevicesUnitsByVersionId(versionId);
   }
 }));

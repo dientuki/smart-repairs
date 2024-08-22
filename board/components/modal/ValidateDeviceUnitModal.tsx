@@ -3,43 +3,91 @@ import { useModalWindow } from "react-modal-global";
 import ModalLayout from "@/components/modal/ModalLayout";
 import { useTranslation } from "react-i18next";
 import { useForm, FieldValues, FieldErrors } from "react-hook-form";
-import { Autocomplete, createFilterOptions, TextField} from "@mui/material";
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useOrderStore } from "@/store/OrderStore";
 import { toast } from "react-toastify";
 import { GlobeAltIcon } from "@heroicons/react/16/solid";
 import InputField from "../form/InputField";
 import ValidatedAutocomplete from "../form/ValidatedAutocomplete";
 
-const filter = createFilterOptions<Device>();
 type ModalParams = {
   order: string;
 };
 
+type SelectionState = {
+  type: OptionType | null;
+  brand: OptionType | null;
+  device: OptionType | null;
+  version: OptionType | null;
+  serial: OptionType | null;
+};
+
+type DataState = {
+  types: OptionType[] | null;
+  brands: OptionType[] | null;
+  devices: OptionType[] | null;
+  versions: OptionType[] | null;
+  serials: OptionType[] | null;
+  temporaryDeviceUnit: temporaryDeviceUnit[] | null;
+}
+
 function ValidateDeviceUnitModal() {
   const modal = useModalWindow<ModalParams>();
   const { t } = useTranslation();
-  const { getDeviceUnitValidate} = useOrderStore();
+  const { getDeviceUnitValidate, getDevicesByTypeAndBrand, getDeviceVersions, getDevicesUnitsByVersionId} = useOrderStore();
   const { handleSubmit, control, formState: { errors }, getValues, setValue, setError, trigger } = useForm();
   const [isLoading, setIsLoading] = useState(true);
-  const [data, setData] = useState<any | null>(null);
-  const [devices, setDevices] = useState<Device[] | false>(false);
-  const [values, setValues] = useState(null);
+  const [data, setData] = useState<DataState | null>(null);
+  const [selection, setSelection] = useState<SelectionState>({
+    type: null,
+    brand: null,
+    device: null,
+    version: null,
+    serial: null
+  });
+
+  const setType = (type: OptionType | null) => {
+    setSelection(prev => ({ ...prev, type }));
+  };
+
+  const setBrand = (brand: OptionType | null) => {
+    setSelection(prev => ({ ...prev, brand }));
+  };
+
+  const setDevice = (device: OptionType | null) => {
+    setSelection(prev => ({ ...prev, device }));
+  };
+
+  const setVersion = (version: OptionType | null) => {
+    setSelection(prev => ({ ...prev, version }));
+  };
+
+  const setSerial = (serial: OptionType | null) => {
+    setSelection(prev => ({ ...prev, serial }));
+  };
+
+  const findAndSet = (options: OptionType[], id: string, setOption: (option: OptionType | null) => void,  prefix: string) => {
+    const option = options.find(item => item.id === id) || null;
+    setOption(option);
+    if (option) {
+      setValue(`${prefix}id`, option.id);
+      setValue(`${prefix}label`, option.label);
+    }
+  };
 
   useEffect(() => {
-    setValues({
-      label: 'asdf',
-    });
+    console.log('modal.params.order', modal.params.order)
     getDeviceUnitValidate(modal.params.order)
       .then((queryData) => {
         setData(queryData);
-        setValue('typeid', queryData.temporaryDeviceUnit.deviceType);
-        setValue('brandid', queryData.temporaryDeviceUnit.deviceBrand);
-        setValue('commercialname', queryData.temporaryDeviceUnit.commercialName);
+
+        findAndSet(queryData.types, queryData.temporaryDeviceUnit.type_id, setType, 'type');
+        findAndSet(queryData.brands, queryData.temporaryDeviceUnit.brand_id, setBrand, 'brand');
+        findAndSet(queryData.devices, queryData.temporaryDeviceUnit.device_id, setDevice, 'device');
         setValue('url', queryData.temporaryDeviceUnit.url);
-        setValue('deviceversionid', queryData.temporaryDeviceUnit.deviceVersion);
-        setValue('serial', queryData.temporaryDeviceUnit.serial);
-        setDevices(queryData.devices);
+        findAndSet(queryData.versions, queryData.temporaryDeviceUnit.device_version_id, setVersion, 'version');
+        findAndSet(queryData.serials, queryData.temporaryDeviceUnit.serial, setSerial, 'serial');
+
       })
       .catch((e: any) => {
         toast.error(t(`toast.error.${e.message}`));
@@ -49,7 +97,8 @@ function ValidateDeviceUnitModal() {
   }, []);
 
   const handleRegistration = (data: FieldValues ) => {
-    console.log('data')
+    console.log('data', data)
+    return
     //modal.close();
   }
 
@@ -61,52 +110,116 @@ function ValidateDeviceUnitModal() {
   const registerOptions = {
     typeid: { required: t('validation.required', { field: t('field.type')}) },
     brandid: { required: t('validation.required', { field: t('field.brand')}) },
-    deviceversionid: { required: t('validation.required', { field: t('field.brand')}) },
-    commercialname: { required: t('validation.required', { field: t('field.commercial_name')}) },
+    versionid: { required: t('validation.required', { field: t('field.brand')}) },
+    deviceid: { required: t('validation.required', { field: t('field.commercial_name')}) },
     url: {
       pattern: {
         value: /^https?:\/\//,
         message: t('validation.url', { field: t('field.url')})
       }
     },
-    serial: { required: t('validation.required', { field: t('field.serial')}) },
+    serialid: { required: t('validation.required', { field: t('field.serial')}) },
   };
 
-  const handleDeviceChange = useCallback(async(newValue: Device | null, reason: string) => {
-    console.log('here')
-  }, []);
+  const handleTypesChange =  (newValue: OptionType | null) => {
+    setType(newValue);
+    setValue('typeid', newValue?.id);
+    setValue('typelabel', newValue?.label);
+    clearByTypeAndBrand();
 
-  const handleDeviceTypesChange = (newValue: OptionType | null, reason: string) => {
-    console.log('0', getValues('serial'), newValue, reason);
-    setValue('typeid', newValue?.label);
-    //setComboBox({ ...comboBox, type: newValue?.id ?? null});
   }
 
   const handleBrandsChange = (newValue: OptionType | null) => {
-    setValue('brandid', newValue?.label);
-    //setComboBox({ ...comboBox, brand: newValue?.id ?? null });
+    setBrand(newValue);
+    setValue('brandid', newValue?.id);
+    setValue('brandlabel', newValue?.label);
+    clearByTypeAndBrand();
   }
 
-  const handleCommercialNameChange = (newValue: OptionType | null) => {
-    //setValue('brandid', newValue?.label);
-    console.log('change url')
-    //setComboBox({ ...comboBox, brand: newValue?.id ?? null });
+  const clearByTypeAndBrand = async () => {
+    setData((prevState) => ({
+      ...prevState,
+      devices: null,
+      versions: null
+    }) as DataState | null);
+
+    try {
+
+      const devices = await getDevicesByTypeAndBrand(getValues('typeid'), getValues('brandid'));
+
+      setData((prevState) => ({
+        ...prevState,
+        devices: devices,
+      }) as DataState | null);
+
+      if (devices) {
+        findAndSet(devices, getValues('deviceid'), setDevice, 'device');
+      }
+
+    } catch (e) {}
   }
 
+  const handleDeviceChange = async (newValue: OptionType | null) => {
+    setDevice(newValue);
+    setValue('deviceid', newValue?.id);
+    setValue('devicelabel', newValue?.label);
+    setValue('url', newValue?.info || '');
 
+    setData((prevState) => ({
+      ...prevState,
+      versions: null
+    }) as DataState | null);
 
-  const deviceFilterOptions = (options: any, params: any) => {
-    const filtered = filter(options, params);
+    try {
 
-    if (params.inputValue !== '') {
-      filtered.push({
-        id: 'new',
-        label: 'Agregar equipo nuevo',
-      });
-    }
+      const versions = await getDeviceVersions(getValues('deviceid'));
+      console.log('versions', versions)
 
-    return filtered;
-  };
+      setData((prevState) => ({
+        ...prevState,
+        versions: versions,
+      }) as DataState | null);
+
+      if (versions) {
+        findAndSet(versions, getValues('versionid'), setVersion, 'version');
+      }
+
+    } catch (e) {}
+
+  }
+
+  const handleVersionChange = async(newValue: OptionType | null) => {
+    setVersion(newValue);
+    setValue('versionid', newValue?.id);
+    setValue('versionlabel', newValue?.label);
+
+    setData((prevState) => ({
+      ...prevState,
+      serials: null
+    }) as DataState | null);
+
+    try {
+
+      const serials = await getDevicesUnitsByVersionId(getValues('versionid'));
+      console.log('serials', serials)
+
+      setData((prevState) => ({
+        ...prevState,
+        serials: serials,
+      }) as DataState | null);
+
+      if (serials) {
+        findAndSet(serials, getValues('serialid'), setSerial, 'serial');
+      }
+
+    } catch (e) {}
+  }
+
+  const handleSerialChange = (newValue: OptionType | null) => {
+    setSerial(newValue);
+    setValue('serialid', newValue?.id);
+    setValue('seriallabel', newValue?.label);
+  }
 
   return (
     <ModalLayout width="728px" height="460px">
@@ -119,42 +232,14 @@ function ValidateDeviceUnitModal() {
               <ValidatedAutocomplete
                 name="typeid"
                 label={t('field.type')}
-                options={data.deviceTypes}
-                isLoading={!data.deviceTypes}
+                options={data.types}
+                isLoading={!data.types}
                 control={control}
                 rules={registerOptions.typeid}
                 errors={errors}
-                value={values}
+                value={selection.type}
                 disableClearable
-                onChange={(event, newValue) => {
-                  if (typeof newValue === 'string') {
-                    setValues({
-                      label: newValue,
-                    });
-                  } else if (newValue && newValue.inputValue) {
-                    // Create a new value from the user input
-                    setValues({
-                      label: newValue.inputValue,
-                    });
-                  } else {
-                    setValues(newValue);
-                  }
-                }}
-                filterOptions={(options, params) => {
-                  const filtered = filter(options, params);
-
-                  const { inputValue } = params;
-                  // Suggest the creation of a new value
-                  const isExisting = options.some((option) => inputValue === option.label);
-                  if (inputValue !== '' && !isExisting) {
-                    filtered.push({
-                      inputValue,
-                      label: `Add "${inputValue}"`,
-                    });
-                  }
-
-                  return filtered;
-                }}
+                onChange={(_, newValue) => handleTypesChange(newValue)}
               />
 
               <ValidatedAutocomplete
@@ -165,34 +250,41 @@ function ValidateDeviceUnitModal() {
                 control={control}
                 rules={registerOptions.brandid}
                 errors={errors}
+                value={selection.brand}
                 disableClearable
                 onChange={(_, newValue) => handleBrandsChange(newValue)}
               />
+
             </div>
 
             <div className="grid gap-6 grid-cols-2 mt-4">
+
               <ValidatedAutocomplete
-                name="commercialname"
+                name="deviceid"
                 label={t('field.commercial_name')}
-                options={devices}
-                isLoading={!devices}
+                options={data.devices}
+                isLoading={!data.devices}
                 control={control}
-                rules={registerOptions.commercialname}
+                rules={registerOptions.deviceid}
                 errors={errors}
+                value={selection.device}
                 disableClearable
-                onChange={(_, newValue) => handleCommercialNameChange(newValue)}
+                onChange={(_, newValue) => handleDeviceChange(newValue)}
               />
 
               <ValidatedAutocomplete
-                name="deviceversionid"
+                name="versionid"
                 label={t('field.device_version')}
-                options={data.deviceVersions}
-                isLoading={!data.deviceVersions}
+                options={data.versions}
+                isLoading={!data.versions}
                 control={control}
-                disableClearable
-                rules={registerOptions.deviceversionid}
+                rules={registerOptions.versionid}
                 errors={errors}
+                value={selection.version}
+                disableClearable
+                onChange={(_, newValue) => handleVersionChange(newValue)}
               />
+
             </div>
 
             <div className="mt-4">
@@ -207,15 +299,20 @@ function ValidateDeviceUnitModal() {
             </div>
 
             <div className="mt-4">
-              <InputField
-                name="serial"
+              <ValidatedAutocomplete
+                name="serialid"
                 label={t('field.serial')}
+                options={data.serials}
+                isLoading={!data.serials}
                 control={control}
-                rules={registerOptions.serial}
+                rules={registerOptions.serialid}
                 errors={errors}
+                value={selection.serial}
+                disableClearable
+                onChange={(_, newValue) => handleSerialChange(newValue)}
               />
             </div>
-            <button type="submit" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center w-1/4">Siguiente</button>
+            <button type="submit" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center w-full mt-4">Validar</button>
           </form>
         </>
       }

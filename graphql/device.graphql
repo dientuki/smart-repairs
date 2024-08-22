@@ -3,6 +3,9 @@ extend type Query {
     devicesByBrandWithTmpOrder(orderId: String!): [Device!]!
         @field(resolver: "DeviceQueries@getDeviceByBrandWithTmpOrder")
         @namespace(field: "App\\GraphQL\\Queries")
+    deviceByTypeAndBrand(brandId: String!, typeId: String!): [Device!]!
+        @field(resolver: "DeviceQueries@getDeviceByTypeAndBrand")
+        @namespace(field: "App\\GraphQL\\Queries")
 }
 
 extend type Mutation {

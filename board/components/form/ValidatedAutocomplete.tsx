@@ -1,13 +1,11 @@
 import { Field, Label } from "@headlessui/react";
-import { Autocomplete, TextField, Skeleton } from '@mui/material';
+import { Autocomplete, TextField, Skeleton, createFilterOptions } from '@mui/material';
 import { Controller, Control, FieldValues, RegisterOptions, FieldErrors } from 'react-hook-form';
 import ErrorMessage from "./ErrorMessage";
 
 // Define el tipo para las opciones del Autocomplete
-interface OptionType {
-  id: string;
-  label: string;
-}
+
+const filter = createFilterOptions<OptionType>();
 
 interface ValidatedAutocompleteProps {
   name: string;
@@ -16,12 +14,30 @@ interface ValidatedAutocompleteProps {
   options: OptionType[] | boolean;
   onChange?: (event: React.SyntheticEvent, newValue: OptionType | null, reason?: string) => void;
   label: string;
-  value?: any,
+  value?: OptionType | null,
   isLoading: boolean;
   errors?: FieldErrors<FieldValues>;
   disableClearable?: boolean;
+  disabled?: boolean;
   filterOptions?: (options: any, params: any) => OptionType[];
+  key?: any;
 }
+
+const defaultFilterOptions = (options: OptionType[], params: any) => {
+  const filtered = filter(options, params);
+
+  const { inputValue } = params;
+  // Suggest the creation of a new value
+  const isExisting = options.some((option: OptionType) => inputValue === option.label);
+  if (inputValue !== '' && !isExisting) {
+    filtered.push({
+      id: 'new',
+      label: inputValue,
+    });
+  }
+
+  return filtered;
+};
 
 // Componente ValidatedAutocomplete
 const ValidatedAutocomplete: React.FC<ValidatedAutocompleteProps> = ({
@@ -33,30 +49,35 @@ const ValidatedAutocomplete: React.FC<ValidatedAutocompleteProps> = ({
   label,
   isLoading,
   disableClearable = false,
-  filterOptions,
+  filterOptions = defaultFilterOptions,
   value,
+  disabled = false,
+  key,
   errors }) => {
   return (
     <Field>
       <Label className="first-letter:uppercase block mb-2 text-sm font-medium text-gray-900">{label}</Label>
-      {isLoading ? (
-        <Skeleton variant="rectangular" width={210} height={32} />
+      {isLoading && !disabled ? (
+        <Skeleton variant="rectangular" height={40} />
       ) : (
         <Controller
           name={name}
           control={control}
           defaultValue=""
           rules={rules}
-          render={({ field }) => (
+          render={() => (
             <Autocomplete
               onChange={onChange}
               filterOptions={filterOptions}
               selectOnFocus
               handleHomeEndKeys
+              clearOnEscape
               value={value}
-              options={options}
+              options={Array.isArray(options) ? options : []}
               disableClearable={disableClearable}
-              isOptionEqualToValue={(option, value) => option.label === value.label}
+              isOptionEqualToValue={() => true}
+              disabled={disabled}
+              key={key}
               renderInput={(params) => (
                 <TextField
                   {...params}

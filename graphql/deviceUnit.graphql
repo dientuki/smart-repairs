@@ -2,8 +2,14 @@ extend type Query {
     devicesRepared: [DeviceUnit!]
         @field(resolver: "DeviceUnitQueries@getDeviceUnits")
         @namespace(field: "App\\GraphQL\\Queries")
+    deviceUnitsByVersionId(versionId: String!): [DeviceUnit]
+        @field(resolver: "DeviceUnitQueries@getDeviceUnitsByVersionId")
+        @namespace(field: "App\\GraphQL\\Queries")
     temporaryDeviceUnit(orderId: String!): TemporaryDeviceUnit
         @field(resolver: "DeviceUnitQueries@getTemporaryDeviceUnit")
+        @namespace(field: "App\\GraphQL\\Queries")
+    temporaryDeviceUnits(orderId: String!): [DeviceUnit]
+        @field(resolver: "DeviceUnitQueries@getTemporaryDeviceUnits")
         @namespace(field: "App\\GraphQL\\Queries")
 }
 
@@ -30,6 +36,7 @@ type DeviceUnit {
     deviceVersion: DeviceVersion!
     unlock_type: String!
     unlock_code: String
+    label: String
 }
 
 type TemporaryDeviceUnit {
