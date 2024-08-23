@@ -36,7 +36,9 @@ export async function updateDeviceUnit(deviceUnit: NewDeviceUnit): Promise<boole
     return response.data.updateDeviceUnit;
 }
 
-export async function setCustomerDeviceUnit(customerDeviceUnit: CustomerDeviceUnit): Promise<boolean> {
+export async function setTemporaryDeviceUnit(data: TemporaryDeviceUnitInput): Promise<boolean> {
+    console.log(data);
+    return;
     const response = await graphqlRequest(`
         mutation {
             addCustomerDeviceUnit(

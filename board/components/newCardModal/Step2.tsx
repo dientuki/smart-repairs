@@ -11,8 +11,8 @@ import ValidatedAutocomplete from "../form/ValidatedAutocomplete";
 import { capitalizeFirstLetter } from "@/helper/functions";
 import Modal from "@/components/modal/Modal";
 import PatternLockModal from "@/components/modal/PatternLockModal";
-import { useOrderStore } from "@/store/OrderStore";
 import NewDeviceUnitModal from "../modal/NewDeviceUnitModal";
+import { useDeviceStore } from "@/store/DeviceStore";
 
 const filter = createFilterOptions<OptionType>();
 type Step2Props = {
@@ -38,11 +38,10 @@ enum UnlockTypeEnum {
 const unlockTypeEntries = Object.entries(UnlockTypeEnum);
 
 function Step2({ nextStep, prevStep, brands, deviceTypes, devices }: Step2Props) {
-  const { setCustomerDeviceUnit, getDeviceVersions } = useOrderStore();
+  const { setTemporaryDeviceUnit, getDeviceVersions, clearDeviceVersions } = useDeviceStore();
   const { t } = useTranslation();
   const [ isDisableCode, setIsDisableCode ] = useState(true);
-  const { handleSubmit, control, formState: { errors }, setValue, setError, trigger } = useForm();
-  const [ deviceVersions, setDeviceVersions] = useState<OptionType[]>([]);
+  const { handleSubmit, control, formState: { errors }, setValue, reset, resetField } = useForm();
   const unlockOptions: OptionType[] = unlockTypeEntries.map(([key, value]) => ({
     id: value,
     label: capitalizeFirstLetter(t(`unlock_type.${key.toLowerCase()}`)),
@@ -53,7 +52,10 @@ function Step2({ nextStep, prevStep, brands, deviceTypes, devices }: Step2Props)
     unlocktype: unlockOptions[0]
   });
 
-  useEffect(() => { setValue('unlocktype', unlockOptions[0].label); }, []);
+  useEffect(() => {
+    setValue('unlocktype', unlockOptions[0].id);
+    setValue('unlockcode', undefined);
+  }, []);
 
 
   const setType = (type: OptionType | null) => {
@@ -77,41 +79,43 @@ function Step2({ nextStep, prevStep, brands, deviceTypes, devices }: Step2Props)
     }
   };
 
-  const handleDeviceChange = async(newValue: OptionType | null, reason?: string) => {
-    if (newValue?.id != 'new' && reason === 'selectOption') {
-      findAndSet(brands, newValue.info.brandid, setBrand, 'brand');
-      findAndSet(deviceTypes, newValue.info.typeid, setType, 'type');
-      setValue('url', newValue.info.url);
-      setValue('commercialname', newValue.info.commercialname);
+  const handleDeviceChange = async(newValue: OptionType | null, reason: string) => {
+    if (newValue && newValue.id != 'new' && reason === 'selectOption') {
+      clearDeviceVersions();
+      if (typeof newValue.info === 'object' && newValue.info !== null) {
+        findAndSet(brands, newValue.info.brandid ?? '', setBrand, 'brand');
+        findAndSet(deviceTypes, newValue.info.typeid ?? '', setType, 'type');
+
+        setValue('url', newValue.info.url ?? '');
+        setValue('commercialname', newValue.info.commercialname ?? '');
+      }
+
       setValue('deviceid', newValue.id);
 
       try {
-        const dv = await getDeviceVersions(newValue.id);
-        console.log(dv)
-        setDeviceVersions(dv);
+        await getDeviceVersions(newValue.id);
       } catch (error) {}
     }
 
     if (reason === 'clear' || newValue?.id == 'new') {
       setSelection(prev => ({ ...prev, type: null, brand: null }));
-      setDeviceVersions([]);
-      [ 'deviceid',
-        'typeid',
-        'typelabel',
-        'brandid',
-        'brandlabel',
-        'url',
-        'commercialname'].forEach(field => setValue(field, ''));
+      clearDeviceVersions();
+      reset();
+      setValue('unlocktype', unlockOptions[0].id);
+      setValue('unlockcode', undefined);
     }
   }
 
   const handleDeviceWorksVersion = () => {
-    Modal.open(NewDeviceUnitModal, {layer: 5, deviceVersion: deviceVersions, setDeviceUnit: setDeviceUnit });
+    Modal.open(NewDeviceUnitModal, {layer: 5, setDeviceUnit: setDeviceUnit });
   }
 
   const setDeviceUnit = (data: FieldValues) => {
     for (const element in data) {
-      setValue(element, data[element]);
+      resetField(element);
+      if (data[element] != undefined) {
+        setValue(element, data[element]);
+      };
     }
   }
 
@@ -137,22 +141,25 @@ function Step2({ nextStep, prevStep, brands, deviceTypes, devices }: Step2Props)
   }
 
   const handleUnlockTypeChange = (newValue: OptionType | null) => {
-    setValue('unlocktype', newValue?.id);
+    if (!newValue) return;
+
+    setValue('unlocktype', newValue.id);
     setUnlockType(newValue);
-    handleUnlock(newValue?.id);
+    handleUnlock(newValue.id);
   }
 
   const handleRegistration = async (data: FieldValues ) => {
     console.log('data', data)
 
+    /*
     try {
-      const tempDeviceUnitId = await setCustomerDeviceUnit(data);
+      const tempDeviceUnitId = await setTemporaryDeviceUnit(data as TemporaryDeviceUnitInput);
       device.id = tempDeviceUnitId.deviceid;
 
       nextStep(device, tempDeviceUnitId.temporarydeviceunit);
 
     } catch (error) {}
-
+    */
     return
     //modal.close();
   }

@@ -2,47 +2,31 @@ import "react-modal-global/styles/modal.scss" // Imports essential styles for `M
 import { useModalWindow } from "react-modal-global";
 import ModalLayout from "@/components/modal/ModalLayout";
 import { useTranslation } from "react-i18next";
-import { useForm, FieldValues, FieldErrors } from "react-hook-form";
-import { useState } from 'react';
+import { useForm, FieldValues } from "react-hook-form";
+import { useEffect, useState } from 'react';
 import ValidatedAutocomplete from "../form/ValidatedAutocomplete";
-import { useOrderStore } from "@/store/OrderStore";
+import { useDeviceStore } from "@/store/DeviceStore";
 
 type ModalParams = {
-    deviceVersion: OptionType[] | [];
-    setDeviceUnit: (data: FieldValues) => void
+    setDeviceUnit: (data: FieldValues) => void;
 };
-
-type SelectionState = {
-  version: OptionType | null;
-  serial: OptionType | null;
-};
-
-type DataState = {
-  versions: OptionType[] | [];
-  serials: OptionType[] | [];
-}
 
 function NewDeviceUnitModal() {
   const modal = useModalWindow<ModalParams>();
   const { t } = useTranslation();
-  const { handleSubmit, control, formState: { errors }, setValue, getValues} = useForm();
-  const { getDevicesUnitsByVersionId} = useOrderStore();
+  const { handleSubmit, control, formState: { errors }, setValue, getValues, resetField} = useForm();
+  const { deviceVersions, deviceUnitsByVersion, deviceUnitSelected, setDeviceUnitSelected, getDevicesUnitsByVersion } = useDeviceStore();
 
-  const [data, setData] = useState<DataState>({
-    versions: modal.params.deviceVersion,
-    serials: [],
-  });
-  const [selection, setSelection] = useState<SelectionState>({
-    version: null,
-    serial: null
-  });
+  useEffect(() => {
+    findAndSet(deviceUnitsByVersion, getValues('serialid'), setSerial, 'serial');
+  }, [deviceUnitsByVersion]);
 
   const setVersion = (version: OptionType | null) => {
-    setSelection(prev => ({ ...prev, version }));
+    setDeviceUnitSelected({version});
   };
 
   const setSerial = (serial: OptionType | null) => {
-    setSelection(prev => ({ ...prev, serial }));
+    setDeviceUnitSelected({serial});
   };
 
   const handleRegistration = (data: FieldValues ) => {
@@ -63,25 +47,10 @@ function NewDeviceUnitModal() {
     setVersion(newValue);
     setValue('versionid', newValue?.id);
     setValue('versionlabel', newValue?.label);
-
-    setData((prevState) => ({
-      ...prevState,
-      serials: []
-    }) as DataState);
+    resetField('serialid');
 
     try {
-
-      const serials = await getDevicesUnitsByVersionId(getValues('versionid'));
-
-      setData((prevState) => ({
-        ...prevState,
-        serials: serials,
-      }) as DataState);
-
-      if (serials) {
-        findAndSet(serials, getValues('serialid'), setSerial, 'serial');
-      }
-
+      await getDevicesUnitsByVersion(getValues('versionid'));
     } catch (e) {}
   }
 
@@ -102,12 +71,12 @@ function NewDeviceUnitModal() {
           <ValidatedAutocomplete
               name="versionid"
               label={t('field.device_version')}
-              options={data.versions}
-              isLoading={!data.versions}
+              options={deviceVersions}
+              isLoading={!deviceVersions}
               control={control}
               rules={registerOptions.versionid}
               errors={errors}
-              value={selection.version}
+              value={deviceUnitSelected.version}
               disableClearable
               onChange={(_, newValue) => handleVersionChange(newValue)}
             />
@@ -115,12 +84,12 @@ function NewDeviceUnitModal() {
           <ValidatedAutocomplete
               name="serialid"
               label={t('field.serial')}
-              options={data.serials}
-              isLoading={!data.serials}
+              options={deviceUnitsByVersion}
+              isLoading={!deviceUnitsByVersion}
               control={control}
               rules={registerOptions.serialid}
               errors={errors}
-              value={selection.serial}
+              value={deviceUnitSelected.serial}
               disableClearable
               onChange={(_, newValue) => handleSerialChange(newValue)}
             />
