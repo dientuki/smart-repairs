@@ -61,3 +61,10 @@ export const capitalizeFirstLetter = (value: string): string => {
 
     return value.charAt(0).toUpperCase() + value.slice(1).toLowerCase();
 }
+
+export const handleNew = (value: string | undefined | null): string | null => {
+    if (value === 'new') {
+      return '';
+    }
+    return value ?? '';
+  }

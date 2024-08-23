@@ -1,4 +1,4 @@
-import { graphqlRequest, handleGraphQLErrors, handleUndefined, handlePayloadErrors } from "@/helper/functions";
+import { graphqlRequest, handleGraphQLErrors, handleUndefined, handlePayloadErrors, handleNew } from "@/helper/functions";
 import { deviceVersion, extra } from "@/helper/reduce";
 
 export async function createDeviceUnit(deviceUnit: NewDeviceUnit): Promise<string> {
@@ -36,30 +36,30 @@ export async function updateDeviceUnit(deviceUnit: NewDeviceUnit): Promise<boole
     return response.data.updateDeviceUnit;
 }
 
-export async function setTemporaryDeviceUnit(data: TemporaryDeviceUnitInput): Promise<boolean> {
+export async function addTemporaryDeviceUnit(data: TemporaryDeviceUnitInput): Promise<boolean> {
     console.log(data);
-    return;
+
     const response = await graphqlRequest(`
         mutation {
-            addCustomerDeviceUnit(
-                device: {
-                    id: "${customerDeviceUnit.deviceid}"
-                    typeid: "${customerDeviceUnit.typeid}"
-                    brandid: "${customerDeviceUnit.brandid}"
-                    commercialname: "${customerDeviceUnit.commercialname}"
-                    url: "${handleUndefined(customerDeviceUnit.url)}"
-                },
-                deviceunit: {
-                    serial: "${handleUndefined(customerDeviceUnit.serial)}"
-                    unlocktype: "${customerDeviceUnit.unlocktype}"
-                    unlockcode: "${customerDeviceUnit.unlockcode}"
-                    deviceunitid: "${handleUndefined(customerDeviceUnit.deviceunitid)}"
-                    deviceversionid: "${handleUndefined(customerDeviceUnit.deviceversionid)}"
+            addTemporaryDeviceUnit(input: {
+                deviceid: "${handleNew(data.deviceid)}"
 
-                }
-            ) {
+                brandid: "${handleNew(data.brandid)}"
+                brandlabel: "${data.brandlabel}"
+                typeid: "${handleNew(data.typeid)}"
+                typelabel: "${data.typelabel}"
+                commercialname: "${data.commercialname}"
+                url: "${handleUndefined(data.url)}"
+
+                unlocktype: "${data.unlocktype}"
+                unlockcode: "${handleUndefined(data.unlockcode)}"
+                serialid: "${handleNew(data.serialid)}"
+                seriallabel: "${handleUndefined(data.seriallabel)}"
+                versionid: "${handleNew(data.versionid)}"
+                versionlabel: "${(data.versionlabel)}"
+            }) {
                 __typename
-                ... on CustomerDeviceUnitPayload {
+                ... on TemporaryDeviceUnitPayload {
                     temporarydeviceunit
                     deviceid
                     status

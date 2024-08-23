@@ -38,7 +38,7 @@ enum UnlockTypeEnum {
 const unlockTypeEntries = Object.entries(UnlockTypeEnum);
 
 function Step2({ nextStep, prevStep, brands, deviceTypes, devices }: Step2Props) {
-  const { setTemporaryDeviceUnit, getDeviceVersions, clearDeviceVersions } = useDeviceStore();
+  const { addTemporaryDeviceUnit, getDeviceVersions, clearDeviceVersions } = useDeviceStore();
   const { t } = useTranslation();
   const [ isDisableCode, setIsDisableCode ] = useState(true);
   const { handleSubmit, control, formState: { errors }, setValue, reset, resetField } = useForm();
@@ -79,7 +79,7 @@ function Step2({ nextStep, prevStep, brands, deviceTypes, devices }: Step2Props)
     }
   };
 
-  const handleDeviceChange = async(newValue: OptionType | null, reason: string) => {
+  const handleDeviceChange = async(newValue: OptionType | null, reason?: string) => {
     if (newValue && newValue.id != 'new' && reason === 'selectOption') {
       clearDeviceVersions();
       if (typeof newValue.info === 'object' && newValue.info !== null) {
@@ -151,15 +151,15 @@ function Step2({ nextStep, prevStep, brands, deviceTypes, devices }: Step2Props)
   const handleRegistration = async (data: FieldValues ) => {
     console.log('data', data)
 
-    /*
     try {
-      const tempDeviceUnitId = await setTemporaryDeviceUnit(data as TemporaryDeviceUnitInput);
-      device.id = tempDeviceUnitId.deviceid;
+      const tempDeviceUnitId = await addTemporaryDeviceUnit(data as TemporaryDeviceUnitInput);
+      console.log('tempDeviceUnitId', tempDeviceUnitId);
+      //device.id = tempDeviceUnitId.deviceid;
 
-      nextStep(device, tempDeviceUnitId.temporarydeviceunit);
+      //nextStep(device, tempDeviceUnitId.temporarydeviceunit);
 
     } catch (error) {}
-    */
+
     return
     //modal.close();
   }

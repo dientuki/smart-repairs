@@ -1,6 +1,14 @@
 import { create } from 'zustand'
-import { getDevicesUnitsByVersionId, setTemporaryDeviceUnit } from "@/lib/deviceUnits";
+import { addTemporaryDeviceUnit, getDevicesUnitsByVersionId } from "@/lib/deviceUnits";
 import { getDeviceVersions } from "@/lib/deviceVersions";
+
+/*
+  get To retrieve data from the server
+  add To add data to the server
+
+  clear To clear data from the store
+  set To set data in the store
+*/
 
 interface DeviceUnitSelectedUpdate {
   version?: OptionType | null;
@@ -21,7 +29,7 @@ interface DeviceStore {
   },
   setDeviceUnitSelected: (data: DeviceUnitSelectedUpdate) => void;
 
-  setTemporaryDeviceUnit: (data: TemporaryDeviceUnitInput) => Promise<any>
+  addTemporaryDeviceUnit: (data: TemporaryDeviceUnitInput) => Promise<any>
 }
 
 export const useDeviceStore = create<DeviceStore>((set) => ({
@@ -63,8 +71,8 @@ export const useDeviceStore = create<DeviceStore>((set) => ({
     }));
   },
 
-  setTemporaryDeviceUnit: async (data: TemporaryDeviceUnitInput): Promise<any> => {
-    return await setTemporaryDeviceUnit(data);
+  addTemporaryDeviceUnit: async (data: TemporaryDeviceUnitInput): Promise<any> => {
+    return await addTemporaryDeviceUnit(data);
   },
 
 }));
