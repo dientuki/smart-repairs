@@ -1,19 +1,21 @@
-import { Autocomplete, Skeleton, TextField, createFilterOptions } from "@mui/material";
-import { Field, Input, Label, TabPanel } from '@headlessui/react';
+import { createFilterOptions } from "@mui/material";
+import { Input, TabPanel } from '@headlessui/react';
 import { Controller, useForm, FieldValues, FieldErrors } from "react-hook-form";
 import { useOrderStore } from "@/store/OrderStore";
 import { useState } from "react";
 import { EnvelopeIcon, PhoneIcon } from "@heroicons/react/16/solid";
 import { toast } from "react-toastify";
 import { useTranslation } from 'react-i18next';
+import InputField from "@/components/form/InputField";
+import SimpleAutocomplete from "@/components/form/SimpleAutocomplete";
 
 const filter = createFilterOptions<Customer>();
-type Props = {
+type Step1Props = {
   nextStep: (customer: CustomerFullName) => void,
   customers: Customer[],
 }
 
-function Step1({ nextStep, customers }: Props) {
+function Step1({ nextStep, customers }: Step1Props) {
   const { addCustomer, updateCustomer } = useOrderStore();
   const { handleSubmit, control, formState: { errors }, getValues, setValue, setError, trigger } = useForm();
   const [ selectedCustomer, setSelectedCustomer ] = useState<Customer | null>(null);
@@ -93,58 +95,52 @@ function Step1({ nextStep, customers }: Props) {
      }
   };
 
+  const handleCustomerChange = (newValue: OptionType | null) => {
+    if (newValue != null && newValue?.id !== 'new') {
+      const customer = newValue as Customer
+      setSelectedCustomer(customer);
+      setValue('id', customer.id);
+      setValue('firstname', customer.firstname);
+      setValue('lastname', customer.lastname);
+      setValue('phone', customer.phone);
+      setValue('email', customer.email);
+    } else {
+      setSelectedCustomer(null);
+      setValue('id', '');
+      setValue('firstname', '');
+      setValue('lastname', '');
+      setValue('phone', '');
+      setValue('email', '');
+    }
+    trigger('firstname');
+    trigger('lastname');
+    trigger('phone');
+    trigger('email');
+  };
+
+  const customerFilterOptions = (options: any, params: any) => {
+    const filtered = filter(options, params);
+
+    if (params.inputValue !== '') {
+      filtered.push({
+        id: 'new',
+        label: 'Agregar nuevo cliente',
+      });
+    }
+
+    return filtered;
+  };
+
   return (
     <TabPanel unmount={false}>
-      <Field>
-        <Label className="block mb-2 text-sm font-medium text-gray-900">Cliente</Label>
-        {customers ? (
-          <Autocomplete
-            selectOnFocus
-            handleHomeEndKeys
-            id="customer"
-            onChange={(event, newValue) => {
-              if (newValue != null && newValue?.id !== 'new') {
-                setSelectedCustomer(newValue);
-                setValue('id', newValue.id);
-                setValue('firstname', newValue.firstname);
-                setValue('lastname', newValue.lastname);
-                setValue('phone', newValue.phone);
-                setValue('email', newValue.email);
-              } else {
-                setSelectedCustomer(null);
-                setValue('id', '');
-                setValue('firstname', '');
-                setValue('lastname', '');
-                setValue('phone', '');
-                setValue('email', '');
-              }
-              trigger('firstname');
-              trigger('lastname');
-              trigger('phone');
-              trigger('email');
-            }}
-            filterOptions={(options, params) => {
-              const filtered = filter(options, params);
-
-              if (params.inputValue !== '') {
-                filtered.push({
-                  id: 'new',
-                  label: 'Agregar nuevo cliente',
-                });
-              }
-
-              return filtered;
-            }}
-            isOptionEqualToValue={() => true}
-            options={customers}
-            renderInput={(params) => <TextField {...params} size="small" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" />}
-            renderOption={(props, option) => <li {...props} key={option.id}>{option.label}</li>}
-          />
-        ) : (
-          <Skeleton variant="rectangular" width={210} height={32} />
-        )}
-      </Field>
-
+      <SimpleAutocomplete
+        id="customer"
+        label="Cliente"
+        options={customers}
+        isLoading={!customers}
+        onChange={(_, newValue) => handleCustomerChange(newValue)}
+        filterOptions={customerFilterOptions}
+      />
 
       <form onSubmit={handleSubmit(handleRegistration, handleError)}>
         <Controller
@@ -158,91 +154,41 @@ function Step1({ nextStep, customers }: Props) {
         />
 
         <div className="grid gap-6 grid-cols-2 mt-4">
-          <Field>
-            <Label className="first-letter:uppercase block mb-2 text-sm font-medium text-gray-900">{t('field.firstname')}</Label>
-            <Controller
-              name="firstname"
-              defaultValue=""
-              control={control}
-              rules={registerOptions.firstname}
-              render={({ field }) => (
-                <Input {...field} className={`${errors?.firstname ? 'bg-red-50 border-red-500 text-red-900 placeholder-red-700 focus:ring-red-500 focus:border-red-500' : 'bg-gray-50 border-gray-300 text-gray-900 focus:ring-blue-500 focus:border-blue-500' } text-sm rounded-lg  block w-full p-2.5 border`} />
-              )}
-            />
-            {errors?.firstname && errors.firstname.message && (
-              <p className="mt-2 text-sm text-red-600 dark:text-red-500">
-                {typeof errors.firstname.message === 'string' ? errors.firstname.message : JSON.stringify(errors.firstname.message)}
-              </p>
-            )}
-          </Field>
+          <InputField
+            name="firstname"
+            label={t('field.firstname')}
+            control={control}
+            rules={registerOptions.firstname}
+            errors={errors}
+          />
 
-          <Field>
-            <Label className="first-letter:uppercase block mb-2 text-sm font-medium text-gray-900">{t('field.lastname')}</Label>
-            <Controller
-              name="lastname"
-              control={control}
-              defaultValue=""
-              rules={registerOptions.lastname}
-              render={({ field }) => (
-                <Input {...field} className={`${errors?.lastname ? 'bg-red-50 border-red-500 text-red-900 placeholder-red-700 focus:ring-red-500 focus:border-red-500' : 'bg-gray-50 border-gray-300 text-gray-900 focus:ring-blue-500 focus:border-blue-500' } text-sm rounded-lg  block w-full p-2.5 border`} />
-
-              )}
-            />
-            {errors.lastname && (
-              <p className="mt-2 text-sm text-red-600 dark:text-red-500">
-                {typeof errors.lastname.message === 'string' ? errors.lastname.message : JSON.stringify(errors.lastname.message)}
-              </p>
-            )}
-          </Field>
+          <InputField
+            name="lastname"
+            label={t('field.lastname')}
+            control={control}
+            rules={registerOptions.lastname}
+            errors={errors}
+          />
         </div>
 
         <div className="grid gap-6 grid-cols-2 mt-4">
-          <Field>
-            <Label className="first-letter:uppercase block mb-2 text-sm font-medium text-gray-900">{t('field.email')}</Label>
-            <div className="flex">
-              <div className="inline-flex items-center px-3 text-sm text-gray-900 bg-gray-200 border rounded-e-0 border-gray-300 border-e-0 rounded-s-md">
-                <EnvelopeIcon className="w-4 h-4 text-gray-500 " aria-hidden="true" />
-              </div>
-              <Controller
-                name="email"
-                control={control}
-                defaultValue=""
-                rules={registerOptions.email}
-                render={({ field }) => (
-                  <Input  {...field} className="rounded-none rounded-e-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5 " />
-                )}
-              />
-            </div>
-            {errors?.email && errors.email.message && (
-              <p className="mt-2 text-sm text-red-600 dark:text-red-500">
-                {typeof errors.email.message === 'string' ? errors.email.message : JSON.stringify(errors.email.message)}
-              </p>
-            )}
-          </Field>
+          <InputField
+            name="email"
+            label={t('field.email')}
+            control={control}
+            rules={registerOptions.email}
+            errors={errors}
+            icon={EnvelopeIcon}
+          />
 
-          <Field>
-            <Label className="first-letter:uppercase block mb-2 text-sm font-medium text-gray-900">{t('field.phone')}</Label>
-            <div className="flex">
-              <div className="inline-flex items-center px-3 text-sm text-gray-900 bg-gray-200 border rounded-e-0 border-gray-300 border-e-0 rounded-s-md">
-                <PhoneIcon className="w-4 h-4 text-gray-500 " aria-hidden="true" />
-              </div>
-              <Controller
-                name="phone"
-                control={control}
-                defaultValue=""
-                rules={registerOptions.phone}
-                render={({ field }) => (
-                  <Input  {...field} className="rounded-none rounded-e-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5 " />
-                )}
-              />
-            </div>
-            <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">Completar con el codigo de pais correspondiente.</p>
-            {errors?.phone && errors.phone.message && (
-              <p className="mt-2 text-sm text-red-600 dark:text-red-500">
-                {typeof errors.phone.message === 'string' ? errors.phone.message : JSON.stringify(errors.phone.message)}
-              </p>
-            )}
-          </Field>
+          <InputField
+            name="phone"
+            label={t('field.phone')}
+            control={control}
+            rules={registerOptions.phone}
+            errors={errors}
+            icon={PhoneIcon}
+          />
         </div>
 
         <div className="flex justify-end mt-6">
