@@ -58,7 +58,8 @@ final readonly class DeviceUnitMutations
         return false;
     }
 
-    public function createTemporaryDeviceUnit(null $root, array $args, GraphQLContext $context, ResolveInfo $resolveInfo): mixed {
+    public function createTemporaryDeviceUnit(null $root, array $args, GraphQLContext $context, ResolveInfo $resolveInfo): mixed
+    {
 
         try {
             DB::beginTransaction();
@@ -109,7 +110,6 @@ final readonly class DeviceUnitMutations
                 'temporarydeviceunit' => $temporaryDeviceUnit->id,
                 'deviceid' => $device->id
             ];
-
         } catch (Exception $e) {
             DB::rollBack();
 
@@ -120,6 +120,5 @@ final readonly class DeviceUnitMutations
                 'code' => $e->getCode(),
             ];
         };
-
     }
 }

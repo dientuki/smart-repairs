@@ -79,7 +79,11 @@ function Step2({ nextStep, prevStep }: Step2Props) {
     if (newValue && newValue.id != 'new' && reason === 'selectOption') {
       clearDeviceVersions();
       if (typeof newValue.info === 'object' && newValue.info !== null) {
-        setCreateOrderSelectedData({ device: newValue.label, deviceType: newValue.info.type });
+        setCreateOrderSelectedData({
+          deviceId: newValue.id,
+          deviceLabel: newValue.label,
+          deviceType: newValue.info.type
+        });
 
         findAndSet(brands, newValue.info.brandid ?? '', setBrand, 'brand');
         findAndSet(deviceTypes, newValue.info.typeid ?? '', setType, 'type');
@@ -97,7 +101,8 @@ function Step2({ nextStep, prevStep }: Step2Props) {
 
     if (reason === 'clear' || newValue?.id == 'new') {
       setSelection(prev => ({ ...prev, type: null, brand: null }));
-      clearCreateOrderSelectedData('device');
+      clearCreateOrderSelectedData('deviceId');
+      clearCreateOrderSelectedData('deviceLabel');
       clearCreateOrderSelectedData('deviceType');
       clearDeviceVersions();
       reset();
@@ -171,7 +176,9 @@ function Step2({ nextStep, prevStep }: Step2Props) {
   }
 
   const handleBrandsChange = (newValue: OptionType | null) => {
-    setCreateOrderSelectedData({ device: `${newValue?.label} ${getValues('commercialname')}` });
+    setCreateOrderSelectedData({
+      deviceLabel: `${newValue?.label} ${getValues('commercialname')}`
+    });
     setBrand(newValue);
     setValue('brandid', newValue?.id);
     setValue('brandlabel', newValue?.label);

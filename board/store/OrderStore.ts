@@ -6,7 +6,8 @@ import { useCustomerStore, useDeviceStore } from "@/store";
 
 interface CreateOrderSelectedData {
   customer?: OptionType | null;
-  device?: string | null;
+  deviceId: string | null;
+  deviceLabel?: string | null;
   deviceType?: string | null;
 }
 interface OrderStore {
@@ -21,7 +22,8 @@ interface OrderStore {
     initializeOrderCreationData: () => Promise<void>
     createOrderSelectedData: {
       customer: OptionType | null;
-      device: string | null;
+      deviceId: string | null;
+      deviceLabel: string | null;
       deviceType: string | null;
     },
     setCreateOrderSelectedData: (data: CreateOrderSelectedData) => void;
@@ -69,7 +71,8 @@ export const useOrderStore = create<OrderStore>((set) => ({
 
   createOrderSelectedData: {
     customer: null,
-    device: null,
+    deviceId: null,
+    deviceLabel: null,
     deviceType: null,
   },
 
@@ -77,7 +80,8 @@ export const useOrderStore = create<OrderStore>((set) => ({
     set((state) => ({
       createOrderSelectedData: {
         customer: data.customer ?? state.createOrderSelectedData.customer,
-        device: data.device ?? state.createOrderSelectedData.device,
+        deviceId: data.deviceId ?? state.createOrderSelectedData.deviceId,
+        deviceLabel: data.deviceLabel ?? state.createOrderSelectedData.deviceLabel,
         deviceType: data.deviceType ?? state.createOrderSelectedData.deviceType,
       },
     }));
