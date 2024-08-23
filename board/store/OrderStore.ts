@@ -1,7 +1,6 @@
 import { create } from 'zustand'
 import { getOrder, getOrderCreationData } from "@/lib/orders";
 import { addComment, updateCommentVisibility, updateComment, deleteComment } from "@/lib/comments";
-import { createCustomer, updateCustomer } from "@/lib/customers";
 import { createDevice, getDevicesByTypeAndBrand, updateDevice } from "@/lib/devices";
 import { createDeviceUnit, updateDeviceUnit, setCustomerDeviceUnit, getTemporaryDeviceUnit, getDevicesUnitsByVersionId } from "@/lib/deviceUnits";
 import { createOrder } from "@/lib/orders";
@@ -18,9 +17,6 @@ interface OrderStore {
 
     data: any,
     getOrderCreationData: () => Promise<void>
-
-    addCustomer: (customer: Customer) => Promise<string>
-    updateCustomer: (customer: Customer) => Promise<boolean>
 
     setCustomerDeviceUnit: (customerDevice: CustomerDeviceUnit) => Promise<any>
 
@@ -68,13 +64,6 @@ export const useOrderStore = create<OrderStore>((set) => ({
   getOrderCreationData: async () => {
     const data = await getOrderCreationData();
     set({ data });
-  },
-  addCustomer: async (customer: Customer): Promise<string> => {
-    return await createCustomer(customer);
-  },
-
-  updateCustomer: async (customer: Customer): Promise<boolean> => {
-    return await updateCustomer(customer);
   },
 
   setCustomerDeviceUnit: async (customerDevice: CustomerDeviceUnit): Promise<any> => {

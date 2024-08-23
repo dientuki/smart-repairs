@@ -1,13 +1,13 @@
 import { createFilterOptions } from "@mui/material";
 import { Input, TabPanel } from '@headlessui/react';
 import { Controller, useForm, FieldValues, FieldErrors } from "react-hook-form";
-import { useOrderStore } from "@/store/OrderStore";
 import { useState } from "react";
 import { EnvelopeIcon, PhoneIcon } from "@heroicons/react/16/solid";
 import { toast } from "react-toastify";
 import { useTranslation } from 'react-i18next';
 import InputField from "@/components/form/InputField";
 import SimpleAutocomplete from "@/components/form/SimpleAutocomplete";
+import { useCustomerStore } from "@/store/CustomerStore";
 
 const filter = createFilterOptions<Customer>();
 type Step1Props = {
@@ -16,7 +16,7 @@ type Step1Props = {
 }
 
 function Step1({ nextStep, customers }: Step1Props) {
-  const { addCustomer, updateCustomer } = useOrderStore();
+  const { addCustomer, updateCustomer } = useCustomerStore();
   const { handleSubmit, control, formState: { errors }, getValues, setValue, setError, trigger } = useForm();
   const [ selectedCustomer, setSelectedCustomer ] = useState<Customer | null>(null);
   const { t } = useTranslation();
