@@ -3,7 +3,7 @@ import { Input, TabPanel } from "@headlessui/react";
 import { Controller, FieldErrors, FieldValues, useForm } from "react-hook-form";
 import { createFilterOptions } from "@mui/material";
 import { toast } from "react-toastify";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { GlobeAltIcon } from "@heroicons/react/16/solid";
 import InputField from "../form/InputField";
 import SimpleAutocomplete from "../form/SimpleAutocomplete";
@@ -53,6 +53,8 @@ function Step2({ nextStep, prevStep, brands, deviceTypes, devices }: Step2Props)
     unlocktype: unlockOptions[0]
   });
 
+  useEffect(() => { setValue('unlocktype', unlockOptions[0].label); }, []);
+
 
   const setType = (type: OptionType | null) => {
     setSelection(prev => ({ ...prev, type }));
@@ -75,7 +77,7 @@ function Step2({ nextStep, prevStep, brands, deviceTypes, devices }: Step2Props)
     }
   };
 
-  const handleDeviceChange = async(newValue: OptionType, reason?: string) => {
+  const handleDeviceChange = async(newValue: OptionType | null, reason?: string) => {
     if (newValue?.id != 'new' && reason === 'selectOption') {
       findAndSet(brands, newValue.info.brandid, setBrand, 'brand');
       findAndSet(deviceTypes, newValue.info.typeid, setType, 'type');
@@ -175,13 +177,7 @@ function Step2({ nextStep, prevStep, brands, deviceTypes, devices }: Step2Props)
       }
     },
     unlocktype: { required: t('validation.required', { field: t('field.unlock_type')}) },
-    unlockcode: { required: false },
-    /*
-    deviceunitid: {required: false},
-
-    serial:{required: false},
-    deviceversionid: {required: false},
-    */
+    unlockcode: { required: false }
   };
 
   const deviceFilterOptions = (options: any, params: any) => {
