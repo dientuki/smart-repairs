@@ -23,17 +23,12 @@ type SelectionState = {
 };
 
 type DataState = {
-  types: OptionType[] | null;
-  brands: OptionType[] | null;
-  devices: OptionType[] | null;
-  versions: OptionType[] | null;
-  serials: OptionType[] | null;
+  types: OptionType[] | [];
+  brands: OptionType[] | [];
+  devices: OptionType[] | [];
+  versions: OptionType[] | [];
+  serials: OptionType[] | [];
   temporaryDeviceUnit: temporaryDeviceUnit[] | null;
-}
-
-type DisableState = {
-  version: boolean;
-  serial: boolean;
 }
 
 function ValidateDeviceUnitModal() {
@@ -42,16 +37,12 @@ function ValidateDeviceUnitModal() {
   const { getDeviceUnitValidate, getDevicesByTypeAndBrand, getDeviceVersions, getDevicesUnitsByVersionId} = useOrderStore();
   const { handleSubmit, control, formState: { errors }, getValues, setValue, setError, trigger } = useForm();
   const [isLoading, setIsLoading] = useState(true);
-  const [isDisableState, setIsDisableState] = useState<DisableState>({
-    version: true,
-    serial: true
-  });
   const [data, setData] = useState<DataState>({
-    types: null,
-    brands: null,
-    devices: null,
-    versions: null,
-    serials: null,
+    types: [],
+    brands: [],
+    devices: [],
+    versions: [],
+    serials: [],
     temporaryDeviceUnit: null,
   });
   const [selection, setSelection] = useState<SelectionState>({
@@ -102,12 +93,6 @@ function ValidateDeviceUnitModal() {
         setValue('url', queryData.temporaryDeviceUnit.url);
         findAndSet(queryData.versions, queryData.temporaryDeviceUnit.device_version_id, setVersion, 'version');
         findAndSet(queryData.serials, queryData.temporaryDeviceUnit.serial, setSerial, 'serial');
-        setIsDisableState({
-          version: false,
-          serial: false
-        })
-
-
       })
       .catch((e: any) => {
         toast.error(t(`toast.error.${e.message}`));
@@ -159,7 +144,7 @@ function ValidateDeviceUnitModal() {
   const clearByTypeAndBrand = async () => {
     setData((prevState) => ({
       ...prevState,
-      devices: null,
+      devices: [],
       versions: [],
       serials: [],
     }) as DataState);
@@ -190,7 +175,7 @@ function ValidateDeviceUnitModal() {
 
     setData((prevState) => ({
       ...prevState,
-      versions: null
+      versions: []
     }) as DataState);
 
     try {
@@ -217,7 +202,7 @@ function ValidateDeviceUnitModal() {
 
     setData((prevState) => ({
       ...prevState,
-      serials: null
+      serials: []
     }) as DataState);
 
     try {

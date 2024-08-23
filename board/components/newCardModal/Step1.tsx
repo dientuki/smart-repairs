@@ -134,7 +134,7 @@ function Step1({ nextStep, customers }: Step1Props) {
   return (
     <TabPanel unmount={false}>
       <SimpleAutocomplete
-        id="customer"
+        name="customer"
         label="Cliente"
         options={customers}
         isLoading={!customers}

@@ -11,9 +11,9 @@ interface ValidatedAutocompleteProps {
   name: string;
   control: Control<FieldValues>;
   label: string;
-  isLoading: boolean;
+  isLoading?: boolean;
+  options: OptionType[] | [];
 
-  options: OptionType[] | null;
   rules?: RegisterOptions;
   errors?: FieldErrors<FieldValues>;
   value?: OptionType | null,
@@ -71,6 +71,7 @@ const ValidatedAutocomplete: React.FC<ValidatedAutocompleteProps> = ({
               selectOnFocus
               handleHomeEndKeys
               clearOnEscape
+              id={name}
               onChange={onChange}
               filterOptions={filterOptions}
               value={value}

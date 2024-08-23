@@ -230,9 +230,11 @@ export const getOrderCreationData = async () => {
                 commercial_name
                 url
                 brand {
+                    id
                     name
                 }
                 deviceType {
+                    id
                     name
                 }
               }
@@ -287,17 +289,21 @@ export const getOrderCreationData = async () => {
 
       }, []);
 
-    const devices: Device[] = response.data.devices.reduce((acc: Device[], device: any) => {
-    acc.push({
-        id: device.id,
-        label: `${device.brand.name} ${device.commercial_name}`,
-        commercialname: device.commercial_name,
-        brand: device.brand.name,
-        type: device.deviceType.name,
-        url: device.url
-    });
+    const devices: OptionType[] = response.data.devices.reduce((acc: OptionType[], device: any): OptionType[] => {
+        acc.push({
+            id: device.id,
+            label: `${device.brand.name} ${device.commercial_name}`,
+            info: {
+                commercialname: device.commercial_name,
+                brandid: device.brand.id,
+                brand: device.brand.name,
+                typeid: device.deviceType.id,
+                type: device.deviceType.name,
+                url: device.url
+            }
+        });
 
-    return acc;
+        return acc;
 
     }, []);
 

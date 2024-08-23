@@ -55,3 +55,9 @@ export const arrayToString = (array: { [key: string]: any }[]): string => {
 export const handleUndefined = (value: string | undefined | null): string => {
     return value === undefined || value === null || value === 'undefined' ? '' : value;
 }
+
+export const capitalizeFirstLetter = (value: string): string => {
+    if (typeof value !== 'string' || value.length === 0) return value;
+
+    return value.charAt(0).toUpperCase() + value.slice(1).toLowerCase();
+}
