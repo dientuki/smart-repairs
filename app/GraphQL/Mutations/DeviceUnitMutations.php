@@ -83,17 +83,19 @@ final readonly class DeviceUnitMutations
                 ]
             );
 
-            $deviceVersion = DeviceVersion::updateOrCreate(
-                ['id' => $args['input']['versionid']],
-                [
-                    'version' => $args['input']['versionlabel'],
-                    'device_id' => $device->id,
-                ]
-            );
+            if (!empty($args['input']['versionid']) && !empty($args['input']['versionlabel'])) {
+                $deviceVersion = DeviceVersion::updateOrCreate(
+                    ['id' => $args['input']['versionid']],
+                    [
+                        'version' => $args['input']['versionlabel'],
+                        'device_id' => $device->id,
+                    ]
+                );
+            }
 
             $temporaryDeviceUnit = TemporaryDeviceUnit::create([
                 'device_id' => $device->id,
-                'device_version_id' => $deviceVersion->id,
+                'device_version_id' => isset($deviceVersion) ? $deviceVersion->id : null,
                 'device_unit_id' => $args['input']['serialid'],
                 'serial' => $args['input']['seriallabel'],
                 'unlock_type' => $args['input']['unlocktype'],

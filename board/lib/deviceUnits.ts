@@ -37,6 +37,7 @@ export async function updateDeviceUnit(deviceUnit: NewDeviceUnit): Promise<boole
 }
 
 export async function addTemporaryDeviceUnit(data: TemporaryDeviceUnitInput): Promise<boolean> {
+
     const response = await graphqlRequest(`
         mutation {
             addTemporaryDeviceUnit(input: {
@@ -54,7 +55,7 @@ export async function addTemporaryDeviceUnit(data: TemporaryDeviceUnitInput): Pr
                 serialid: "${handleNew(data.serialid)}"
                 seriallabel: "${handleUndefined(data.seriallabel)}"
                 versionid: "${handleNew(data.versionid)}"
-                versionlabel: "${(data.versionlabel)}"
+                versionlabel: "${handleUndefined(data.versionlabel)}"
             }) {
                 __typename
                 ... on TemporaryDeviceUnitPayload {

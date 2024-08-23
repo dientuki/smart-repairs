@@ -79,7 +79,6 @@ function Step2({ nextStep, prevStep }: Step2Props) {
     if (newValue && newValue.id != 'new' && reason === 'selectOption') {
       clearDeviceVersions();
       if (typeof newValue.info === 'object' && newValue.info !== null) {
-        console.log(newValue)
         setCreateOrderSelectedData({ device: newValue.label, deviceType: newValue.info.type });
 
         findAndSet(brands, newValue.info.brandid ?? '', setBrand, 'brand');
@@ -150,8 +149,8 @@ function Step2({ nextStep, prevStep }: Step2Props) {
 
   const handleRegistration = async (data: FieldValues ) => {
     try {
-      const tempDeviceUnitId = await addTemporaryDeviceUnit(data as TemporaryDeviceUnitInput);
-      console.log('tempDeviceUnitId', tempDeviceUnitId);
+      const status = await addTemporaryDeviceUnit(data as TemporaryDeviceUnitInput);
+      console.log('tempDeviceUnitId', status);
       //device.id = tempDeviceUnitId.deviceid;
 
       //nextStep(device, tempDeviceUnitId.temporarydeviceunit);
