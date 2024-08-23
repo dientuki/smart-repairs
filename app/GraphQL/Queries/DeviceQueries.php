@@ -10,7 +10,8 @@ use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 
 final readonly class DeviceQueries
 {
-    private function getDevices(Array $values) {
+    private function getDevices(array $values)
+    {
         return Device::where($values)->get();
     }
 

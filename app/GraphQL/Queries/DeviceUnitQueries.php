@@ -44,6 +44,5 @@ final readonly class DeviceUnitQueries
             'team_id' => $team_id,
             'device_version_id' => $deviceVersion
             ])->get();
-
     }
 }
