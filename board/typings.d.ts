@@ -37,11 +37,6 @@ interface DeviceInfo {
     typeId: string;
 }
 
-interface DeviceVersion {
-    id: string;
-    label: string;
-}
-
 interface Device {
     id: string;
     label: string;
@@ -186,15 +181,6 @@ interface DeviceChecks {
     features: [feature];
 }
 
-interface GraphQLErrorExtension {
-    validation?: any;
-}
-
-interface GraphQLError {
-    message: string;
-    extensions?: GraphQLErrorExtension;
-}
-
 interface CustomerDeviceUnit {
     deviceid: string;
     commercialname: string;
@@ -206,10 +192,4 @@ interface CustomerDeviceUnit {
     unlockcode: number[] | null;
     deviceversionid: string | null;
     serial: string;
-}
-
-interface OptionType {
-    id: string;
-    label: string;
-    info?: string | null | Record<string, any>;
 }

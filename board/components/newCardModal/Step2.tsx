@@ -89,7 +89,6 @@ function Step2({ nextStep, prevStep, brands, deviceTypes, devices }: Step2Props)
         const dv = await getDeviceVersions(newValue.id);
         console.log(dv)
         setDeviceVersions(dv);
-        //setAllowNewDeviceRepared(true);
       } catch (error) {}
     }
 
@@ -143,8 +142,17 @@ function Step2({ nextStep, prevStep, brands, deviceTypes, devices }: Step2Props)
     handleUnlock(newValue?.id);
   }
 
-  const handleRegistration = (data: FieldValues ) => {
+  const handleRegistration = async (data: FieldValues ) => {
     console.log('data', data)
+
+    try {
+      const tempDeviceUnitId = await setCustomerDeviceUnit(data);
+      device.id = tempDeviceUnitId.deviceid;
+
+      nextStep(device, tempDeviceUnitId.temporarydeviceunit);
+
+    } catch (error) {}
+
     return
     //modal.close();
   }

@@ -30,15 +30,15 @@ interface OrderStore {
     addDeviceUnit: (deviceUnit: NewDeviceUnit) => Promise<string>
     updateDeviceUnit: (deviceUnit: NewDeviceUnit) => Promise<boolean>
 
-    getDeviceVersions: (device: String) => Promise<OptionType[]>
+    getDeviceVersions: (device: string) => Promise<OptionType[]>
 
     addOrder: (newOrder: NewOrder) => Promise<void>,
 
     deviceUnitValidate: any,
-    getDeviceUnitValidate: (orderId: String) => Promise<any>,
+    getDeviceUnitValidate: (orderId: string) => Promise<any>,
 
-    getDevicesByTypeAndBrand: (type: String, brand: String) => Promise<OptionType[]>
-    getDevicesUnitsByVersionId: (versionId: String) => Promise<OptionType[]>
+    getDevicesByTypeAndBrand: (type: string, brand: string) => Promise<OptionType[]>
+    getDevicesUnitsByVersionId: (versionId: string) => Promise<OptionType[]>
 }
 
 export const useOrderStore = create<OrderStore>((set) => ({
@@ -97,7 +97,7 @@ export const useOrderStore = create<OrderStore>((set) => ({
     return await updateDeviceUnit(deviceUnit);
   },
 
-  getDeviceVersions: async (device: String): Promise<DeviceVersion[]> => {
+  getDeviceVersions: async (device: String): Promise<OptionType[]> => {
     return await getDeviceVersions(device);
   },
 
