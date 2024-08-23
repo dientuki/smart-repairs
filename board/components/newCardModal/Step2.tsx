@@ -11,16 +11,14 @@ import ValidatedAutocomplete from "../form/ValidatedAutocomplete";
 import { capitalizeFirstLetter } from "@/helper/functions";
 import Modal from "@/components/modal/Modal";
 import PatternLockModal from "@/components/modal/PatternLockModal";
-import NewDeviceUnitModal from "../modal/NewDeviceUnitModal";
-import { useDeviceStore } from "@/store/DeviceStore";
+import NewDeviceUnitModal from "@/components/modal/NewDeviceUnitModal";
+import { useDeviceStore, useOrderStore } from "@/store";
+import { UnlockType } from "@/types/enums";
 
 const filter = createFilterOptions<OptionType>();
 type Step2Props = {
   nextStep: (device: DeviceInfo, tempDeviceUnitId: string) => void,
   prevStep: () => void,
-  brands: OptionType[] | [],
-  deviceTypes: OptionType[] | [],
-  devices: OptionType[] | []
 }
 
 type SelectionState = {
@@ -29,16 +27,11 @@ type SelectionState = {
   unlocktype: OptionType | null;
 };
 
-enum UnlockTypeEnum {
-  NONE = 'none',
-  CODE = 'code',
-  PATTERN = 'pattern',
-}
+const unlockTypeEntries = Object.entries(UnlockType);
 
-const unlockTypeEntries = Object.entries(UnlockTypeEnum);
-
-function Step2({ nextStep, prevStep, brands, deviceTypes, devices }: Step2Props) {
-  const { addTemporaryDeviceUnit, getDeviceVersions, clearDeviceVersions } = useDeviceStore();
+function Step2({ nextStep, prevStep }: Step2Props) {
+  const { devices, addTemporaryDeviceUnit, getDeviceVersions, clearDeviceVersions } = useDeviceStore();
+  const { brands, deviceTypes } = useOrderStore();
   const { t } = useTranslation();
   const [ isDisableCode, setIsDisableCode ] = useState(true);
   const { handleSubmit, control, formState: { errors }, setValue, reset, resetField } = useForm();
@@ -127,13 +120,13 @@ function Step2({ nextStep, prevStep, brands, deviceTypes, devices }: Step2Props)
 
   const handleUnlock = (unlock: string) => {
     switch (unlock) {
-      case UnlockTypeEnum.NONE:
+      case UnlockType.NONE:
         setIsDisableCode(true);
         break;
-      case UnlockTypeEnum.CODE:
+      case UnlockType.CODE:
         setIsDisableCode(false);
         break;
-      case UnlockTypeEnum.PATTERN:
+      case UnlockType.PATTERN:
         setIsDisableCode(true);
         openPatternLock();
         break;
@@ -149,8 +142,6 @@ function Step2({ nextStep, prevStep, brands, deviceTypes, devices }: Step2Props)
   }
 
   const handleRegistration = async (data: FieldValues ) => {
-    console.log('data', data)
-
     try {
       const tempDeviceUnitId = await addTemporaryDeviceUnit(data as TemporaryDeviceUnitInput);
       console.log('tempDeviceUnitId', tempDeviceUnitId);
@@ -158,7 +149,9 @@ function Step2({ nextStep, prevStep, brands, deviceTypes, devices }: Step2Props)
 
       //nextStep(device, tempDeviceUnitId.temporarydeviceunit);
 
-    } catch (error) {}
+    } catch (error) {
+      console.log('error', error);
+    }
 
     return
     //modal.close();

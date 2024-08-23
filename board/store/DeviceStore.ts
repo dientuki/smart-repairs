@@ -16,6 +16,9 @@ interface DeviceUnitSelectedUpdate {
 }
 interface DeviceStore {
 
+  devices : OptionType[],
+  setDevices: (devices: OptionType[]) => void;
+
   deviceVersions: OptionType[],
   getDeviceVersions: (device: string) => Promise<void>,
   clearDeviceVersions: () => void,
@@ -33,6 +36,11 @@ interface DeviceStore {
 }
 
 export const useDeviceStore = create<DeviceStore>((set) => ({
+  devices: [],
+  setDevices: (devices: OptionType[]) => {
+    set({ devices });
+  },
+
   deviceVersions: [],
 
   getDeviceVersions: async (deviceId: string): Promise<void> => {
@@ -76,3 +84,5 @@ export const useDeviceStore = create<DeviceStore>((set) => ({
   },
 
 }));
+
+export default useDeviceStore;

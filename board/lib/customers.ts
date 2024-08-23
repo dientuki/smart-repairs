@@ -1,7 +1,25 @@
 import { graphqlRequest, handleGraphQLErrors } from "@/helper/functions";
+import { extra } from "@/helper/reduce";
 
-export const createCustomer = async(customer: Customer) => {
+export const getCustomers = async() => {
 
+    const response = await graphqlRequest(`
+            query {
+              customers {
+                id
+                label
+                first_name
+                last_name
+                phone
+                email
+              }
+            `);
+
+    handleGraphQLErrors(response.errors);
+
+    return extra(response.data.customers);
+}
+export const createCustomer = async(customer: CustomerInput) => {
     const response = await graphqlRequest(`
                         mutation {
                             addCustomer(customer: {
@@ -20,7 +38,7 @@ export const createCustomer = async(customer: Customer) => {
     return response.data.addCustomer.id;
 }
 
-export const updateCustomer = async(customer: Customer) => {
+export const updateCustomer = async(customer: CustomerInput) => {
     const response = await graphqlRequest(`
         mutation {
             updateCustomer(customerId: "${customer.id}", customer: {

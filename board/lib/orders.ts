@@ -1,4 +1,5 @@
 import { graphqlRequest, arrayToString, handleGraphQLErrors } from "@/helper/functions";
+import { extra } from "@/helper/reduce";
 
 export const createOrder = async (newOrder: NewOrder) => {
 
@@ -218,7 +219,7 @@ export const getOrderCreationData = async () => {
             query {
               customers {
                 id
-                fullName
+                label
                 first_name
                 last_name
                 phone
@@ -239,26 +240,11 @@ export const getOrderCreationData = async () => {
                 }
               }
 
-              devicesRepared {
-                id
-                serial
-                deviceVersion {
-                    id
-                    version
-                    device {
-                        id
-                        commercial_name
-                        brand {
-                            name
-                        }
-                    }
-                }
-              }
-
               brands {
                 id
                 label
               }
+
               deviceTypes {
                 id
                 label
@@ -274,20 +260,6 @@ export const getOrderCreationData = async () => {
         `);
 
     handleGraphQLErrors(response.errors);
-
-    const customers: Customer[] = response.data.customers.reduce((acc: Customer[], customer: any) => {
-        acc.push({
-            id: customer.id,
-            label: customer.fullName,
-            firstname: customer.first_name,
-            lastname: customer.last_name,
-            email: customer.email,
-            phone: customer.phone,
-        });
-
-        return acc;
-
-      }, []);
 
     const devices: OptionType[] = response.data.devices.reduce((acc: OptionType[], device: any): OptionType[] => {
         acc.push({
@@ -307,7 +279,7 @@ export const getOrderCreationData = async () => {
 
     }, []);
 
-
+        /*
     const devicesChecks: DeviceChecks[] = response.data.deviceTypeChecks.reduce((acc: DeviceChecks[], device: any) => {
         acc.push({
             deviceTypeId: device.device_type_id,
@@ -331,13 +303,15 @@ export const getOrderCreationData = async () => {
         return acc;
 
     }, []);
+        */
 
     return {
-        customers: customers,
-        devices: devices,
-        devicesRepared: devicesRepared,
+        customers: extra(response.data.customers),
         brands: response.data.brands,
         deviceTypes: response.data.deviceTypes,
+        devices: devices,
+        /*
         devicesChecks: devicesChecks
+        */
     }
 }

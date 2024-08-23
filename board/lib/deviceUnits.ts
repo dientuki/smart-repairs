@@ -37,8 +37,6 @@ export async function updateDeviceUnit(deviceUnit: NewDeviceUnit): Promise<boole
 }
 
 export async function addTemporaryDeviceUnit(data: TemporaryDeviceUnitInput): Promise<boolean> {
-    console.log(data);
-
     const response = await graphqlRequest(`
         mutation {
             addTemporaryDeviceUnit(input: {
@@ -74,9 +72,9 @@ export async function addTemporaryDeviceUnit(data: TemporaryDeviceUnitInput): Pr
     `);
 
     handleGraphQLErrors(response.errors);
-    handlePayloadErrors(response.data.addCustomerDeviceUnit);
+    handlePayloadErrors(response.data.addTemporaryDeviceUnit);
 
-    return response.data.addCustomerDeviceUnit;
+    return response.data.addTemporaryDeviceUnit;
 }
 
 export async function getDevicesUnitsByVersionId(versionId: String): Promise<OptionType[]> {

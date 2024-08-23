@@ -15,3 +15,12 @@ interface TemporaryDeviceUnitInput {
   versionid?: string;
   versionlabel?: string;
 }
+
+interface CustomerInput {
+  id: string;
+  label: string;
+  firstname: string;
+  lastname: string;
+  phone?: string;
+  email?: string;
+}

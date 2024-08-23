@@ -1,27 +1,64 @@
 import "react-modal-global/styles/modal.scss" // Imports essential styles for `ModalContainer`.
 import ModalLayout from "@/components/modal/ModalLayout";
+import { Tab, TabGroup, TabList, TabPanels } from '@headlessui/react'
 import { useEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
-import { toast } from "react-toastify";
-import { useBoardStore, useOrderStore } from "@/store";
-import { Tab, TabGroup, TabList, TabPanels } from "@headlessui/react";
 import Step1 from "@/components/newCardModal/Step1";
 import Step2 from "@/components/newCardModal/Step2";
+import Step3 from "@/components/newCardModal/Step3";
+import { useModalWindow } from "react-modal-global";
+import { toast } from "react-toastify";
+import { useTranslation } from "react-i18next";
+import { useBoardStore, useOrderStore, useCustomerStore } from "@/store";
+
 
 function NewCardModal() {
+  const { customers } = useCustomerStore();
   const [ selectedIndex, setSelectedIndex ] = useState(0);
+  const { data, getOrderCreationData, addOrder } = useOrderStore();
+  const [ customer, setCustomer ] = useState<CustomerFullName | null>(null);
+  const [ device, setDevice ] = useState<DeviceInfo | null>(null);
+  const [ checks, setChecks ] = useState(null);
+  const { getBoard } = useBoardStore();
+  const [ newOrder, setNewOrder ] = useState<NewOrder>();
+  const modal = useModalWindow();
+  const date = new Date();
   const { t } = useTranslation();
-  const { initializeOrderCreationData, createOrderSelectedData } = useOrderStore();
 
   useEffect(() => {
-    initializeOrderCreationData().catch((e: any) => {
+    getOrderCreationData().catch((e: any) => {
       toast.error(t(`toast.error.${e.message}`));
     });
-  }, []);
+  }, [getOrderCreationData]);
+
+  console.log('c', customers);
+
+  const goToStep2 = (customer: CustomerFullName) => {
+    setCustomer(customer);
+    setNewOrder({
+      ...newOrder,
+      customerId: customer.id
+    } as NewOrder);
+    nextStep();
+  };
 
   const goToStep3 = (device: DeviceInfo, tempDeviceUnitId: String) => {
+    const toCheck = data.devicesChecks[data.devicesChecks.findIndex((d: DeviceChecks) => d.deviceTypeId === device.typeId)];
 
+    setDevice(device);
+    setNewOrder({
+      ...newOrder,
+      tempDeviceUnitId: tempDeviceUnitId,
+      deviceid: device.id
+    } as NewOrder );
+    setChecks(toCheck);
+    nextStep();
   };
+
+  const saveOrder =  async (step3data: Step3data) => {
+    await addOrder({ ...newOrder, ...step3data } as NewOrder);
+    await getBoard();
+    modal.close();
+  }
 
   const prevStep = () => {
     setSelectedIndex(selectedIndex - 1);
@@ -71,8 +108,10 @@ function NewCardModal() {
             </TabList>
 
             <TabPanels className="mt-4">
-              <Step1 nextStep={nextStep} />
-              <Step2 prevStep={prevStep} nextStep={goToStep3} />
+              <Step1 nextStep={goToStep2} customers={data.customers} />
+              <Step2 prevStep={prevStep} nextStep={goToStep3}
+                devices={data.devices} brands={data.brands} deviceTypes={data.deviceTypes}  />
+              <Step3 prevStep={prevStep} nextStep={saveOrder} checks={checks} />
             </TabPanels>
 
           </TabGroup>
@@ -83,12 +122,15 @@ function NewCardModal() {
         <div className="basis-1/4">
           <p>Estado: FIJO</p>
           <div className="border border-gray-300 p-3 rounded mt-4">
-
+            <p className="my-2">Fecha de entrada: {date.toDateString()} {date.toLocaleTimeString()} </p>
             <p className="my-2">Vendedor: </p>
 
           </div>
           <div className="border border-gray-300 p-3 rounded mt-4">
-            <p className="my-2">Cliente: {createOrderSelectedData.customer?.label} </p>
+            <p className="my-2">Cliente: {customer?.fullName} </p>
+            <p className="my-2">
+              {device?.type ? device.type : 'Equipo'}: {device?.label}
+            </p>
           </div>
         </div>
       </div>

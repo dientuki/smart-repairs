@@ -24,7 +24,7 @@ type Customer {
     id: ID!
     first_name: String!
     last_name: String!
-    fullName: String!
+    label: String!
     phone: String
     email: String
 }

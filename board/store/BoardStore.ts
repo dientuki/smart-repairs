@@ -26,3 +26,5 @@ export const useBoardStore = create<BoardStore>((set) => ({
   }
 
 }));
+
+export default useBoardStore;
