@@ -12,6 +12,7 @@ function NewCardModal() {
   const [ selectedIndex, setSelectedIndex ] = useState(0);
   const { t } = useTranslation();
   const { initializeOrderCreationData, createOrderSelectedData } = useOrderStore();
+  const date = new Date();
 
   useEffect(() => {
     initializeOrderCreationData().catch((e: any) => {
@@ -83,12 +84,15 @@ function NewCardModal() {
         <div className="basis-1/4">
           <p>Estado: FIJO</p>
           <div className="border border-gray-300 p-3 rounded mt-4">
-
+            <p className="my-2">Fecha de entrada: {date.toDateString()} {date.toLocaleTimeString()} </p>
             <p className="my-2">Vendedor: </p>
 
           </div>
           <div className="border border-gray-300 p-3 rounded mt-4">
             <p className="my-2">Cliente: {createOrderSelectedData.customer?.label} </p>
+            <p className="my-2">
+              {createOrderSelectedData.deviceType ? createOrderSelectedData.deviceType : 'Equipo'}: {createOrderSelectedData.device}
+            </p>
           </div>
         </div>
       </div>

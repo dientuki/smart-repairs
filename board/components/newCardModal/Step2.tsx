@@ -31,10 +31,10 @@ const unlockTypeEntries = Object.entries(UnlockType);
 
 function Step2({ nextStep, prevStep }: Step2Props) {
   const { devices, addTemporaryDeviceUnit, getDeviceVersions, clearDeviceVersions } = useDeviceStore();
-  const { brands, deviceTypes } = useOrderStore();
+  const { brands, deviceTypes, setCreateOrderSelectedData, clearCreateOrderSelectedData } = useOrderStore();
   const { t } = useTranslation();
   const [ isDisableCode, setIsDisableCode ] = useState(true);
-  const { handleSubmit, control, formState: { errors }, setValue, reset, resetField } = useForm();
+  const { handleSubmit, control, formState: { errors }, getValues, setValue, reset, resetField } = useForm();
   const unlockOptions: OptionType[] = unlockTypeEntries.map(([key, value]) => ({
     id: value,
     label: capitalizeFirstLetter(t(`unlock_type.${key.toLowerCase()}`)),
@@ -46,10 +46,13 @@ function Step2({ nextStep, prevStep }: Step2Props) {
   });
 
   useEffect(() => {
-    setValue('unlocktype', unlockOptions[0].id);
-    setValue('unlockcode', undefined);
+    resetUnlock();
   }, []);
 
+  const resetUnlock = () => {
+    setValue('unlocktype', unlockOptions[0].id);
+    setValue('unlockcode', undefined);
+  }
 
   const setType = (type: OptionType | null) => {
     setSelection(prev => ({ ...prev, type }));
@@ -76,6 +79,9 @@ function Step2({ nextStep, prevStep }: Step2Props) {
     if (newValue && newValue.id != 'new' && reason === 'selectOption') {
       clearDeviceVersions();
       if (typeof newValue.info === 'object' && newValue.info !== null) {
+        console.log(newValue)
+        setCreateOrderSelectedData({ device: newValue.label, deviceType: newValue.info.type });
+
         findAndSet(brands, newValue.info.brandid ?? '', setBrand, 'brand');
         findAndSet(deviceTypes, newValue.info.typeid ?? '', setType, 'type');
 
@@ -92,10 +98,11 @@ function Step2({ nextStep, prevStep }: Step2Props) {
 
     if (reason === 'clear' || newValue?.id == 'new') {
       setSelection(prev => ({ ...prev, type: null, brand: null }));
+      clearCreateOrderSelectedData('device');
+      clearCreateOrderSelectedData('deviceType');
       clearDeviceVersions();
       reset();
-      setValue('unlocktype', unlockOptions[0].id);
-      setValue('unlockcode', undefined);
+      resetUnlock();
     }
   }
 
@@ -158,12 +165,14 @@ function Step2({ nextStep, prevStep }: Step2Props) {
   }
 
   const handleTypesChange =  (newValue: OptionType | null) => {
+    setCreateOrderSelectedData({ deviceType: newValue?.label });
     setType(newValue);
     setValue('typeid', newValue?.id);
     setValue('typelabel', newValue?.label);
   }
 
   const handleBrandsChange = (newValue: OptionType | null) => {
+    setCreateOrderSelectedData({ device: `${newValue?.label} ${getValues('commercialname')}` });
     setBrand(newValue);
     setValue('brandid', newValue?.id);
     setValue('brandlabel', newValue?.label);
