@@ -1,5 +1,5 @@
-export const deviceVersion = (deviceVersion: any): OptionType[] => {
-  return deviceVersion.reduce((acc: DeviceVersion[], deviceVersion: any) => {
+export const deviceVersion = (collection: any[]): OptionType[] => {
+  return collection.reduce((acc: OptionType[], deviceVersion: any) => {
       const desc = deviceVersion.description? ` (${deviceVersion.description})` : '';
       acc.push({
           id: deviceVersion.id,
@@ -9,6 +9,26 @@ export const deviceVersion = (deviceVersion: any): OptionType[] => {
       return acc;
 
     }, []);
+}
+
+export const device = (collection: any[]): OptionType[] => {
+  return collection.reduce((acc: OptionType[], device: any): OptionType[] => {
+    acc.push({
+        id: device.id,
+        label: `${device.brand.name} ${device.commercial_name}`,
+        info: {
+            commercialname: device.commercial_name,
+            brandid: device.brand.id,
+            brand: device.brand.label,
+            typeid: device.deviceType.id,
+            type: device.deviceType.label,
+            url: device.url
+        }
+    });
+
+    return acc;
+
+  }, []);
 }
 
 export const extra = (collection: any[]): OptionType[] => {

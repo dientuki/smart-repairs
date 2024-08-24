@@ -91,7 +91,7 @@ function NewCardModal() {
           <div className="border border-gray-300 p-3 rounded mt-4">
             <p className="my-2">Cliente: {createOrderSelectedData.customer?.label} </p>
             <p className="my-2">
-              {createOrderSelectedData.deviceType ? createOrderSelectedData.deviceType : 'Equipo'}: {createOrderSelectedData.device}
+              {createOrderSelectedData.deviceType ? createOrderSelectedData.deviceType : 'Equipo'}: {createOrderSelectedData.deviceLabel}
             </p>
           </div>
         </div>

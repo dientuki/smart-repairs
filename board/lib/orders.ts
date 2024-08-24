@@ -1,5 +1,5 @@
 import { graphqlRequest, arrayToString, handleGraphQLErrors } from "@/helper/functions";
-import { extra } from "@/helper/reduce";
+import { device, extra } from "@/helper/reduce";
 
 export const createOrder = async (newOrder: NewOrder) => {
 
@@ -261,23 +261,7 @@ export const getOrderCreationData = async () => {
 
     handleGraphQLErrors(response.errors);
 
-    const devices: OptionType[] = response.data.devices.reduce((acc: OptionType[], device: any): OptionType[] => {
-        acc.push({
-            id: device.id,
-            label: `${device.brand.name} ${device.commercial_name}`,
-            info: {
-                commercialname: device.commercial_name,
-                brandid: device.brand.id,
-                brand: device.brand.name,
-                typeid: device.deviceType.id,
-                type: device.deviceType.name,
-                url: device.url
-            }
-        });
 
-        return acc;
-
-    }, []);
 
         /*
     const devicesChecks: DeviceChecks[] = response.data.deviceTypeChecks.reduce((acc: DeviceChecks[], device: any) => {
@@ -291,25 +275,13 @@ export const getOrderCreationData = async () => {
 
       }, []);
 
-    const devicesRepared: DeviceRepared[] = response.data.devicesRepared.reduce((acc: DeviceRepared[], device: any) => {
-        acc.push({
-            id: device.id,
-            label: `${device.deviceVersion.device.brand.name} ${device.deviceVersion.device.commercial_name} - ${device.serial}`,
-            deviceId: device.deviceVersion.device.id,
-            serial: device.serial,
-
-        });
-
-        return acc;
-
-    }, []);
         */
 
     return {
         customers: extra(response.data.customers),
         brands: response.data.brands,
         deviceTypes: response.data.deviceTypes,
-        devices: devices,
+        devices: device(response.data.devices),
         /*
         devicesChecks: devicesChecks
         */

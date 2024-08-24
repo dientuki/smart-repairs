@@ -63,6 +63,9 @@ type TemporaryDeviceUnitPayload {
     temporarydeviceunit: ID!
     deviceid: ID!
     status: Boolean
+    brand: Brand
+    deviceType: DeviceType
+    device: Device
 }
 
 input TemporaryDeviceUnitInput {

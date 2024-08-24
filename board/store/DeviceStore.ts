@@ -1,6 +1,8 @@
 import { create } from 'zustand'
 import { addTemporaryDeviceUnit, getDevicesUnitsByVersionId } from "@/lib/deviceUnits";
 import { getDeviceVersions } from "@/lib/deviceVersions";
+import { useBrandStore, useDeviceTypeStore }  from "@/store";
+import { device } from "@/helper/reduce";
 
 /*
   get To retrieve data from the server
@@ -32,7 +34,8 @@ interface DeviceStore {
   },
   setDeviceUnitSelected: (data: DeviceUnitSelectedUpdate) => void;
 
-  addTemporaryDeviceUnit: (data: TemporaryDeviceUnitInput) => Promise<any>
+  addTemporaryDeviceUnit: (data: TemporaryDeviceUnitInput) => Promise<any>;
+  updateDeviceInStore: (device: OptionType) => void;
 }
 
 export const useDeviceStore = create<DeviceStore>((set) => ({
@@ -80,7 +83,29 @@ export const useDeviceStore = create<DeviceStore>((set) => ({
   },
 
   addTemporaryDeviceUnit: async (data: TemporaryDeviceUnitInput): Promise<any> => {
-    return await addTemporaryDeviceUnit(data);
+    const response = await addTemporaryDeviceUnit(data);
+
+    useBrandStore.getState().updateBrandInStore(response.brand);
+    useDeviceTypeStore.getState().updateDeviceTypeInStore(response.deviceType);
+    useDeviceStore.getState().updateDeviceInStore(device([response.device])[0]);
+
+    //return await addTemporaryDeviceUnit(data);
+  },
+
+  updateDeviceInStore: (device: OptionType) => {
+    set((state) => {
+      const existingIndex = state.devices.findIndex((b) => b.id === device.id);
+
+      if (existingIndex >= 0) {
+        // Update the existing brand
+        const updatedDevices = [...state.devices];
+        updatedDevices[existingIndex] = device;
+        return { devices: updatedDevices };
+      } else {
+        // Add the new brand
+        return { devices: [...state.devices, device] };
+      }
+    });
   },
 
 }));

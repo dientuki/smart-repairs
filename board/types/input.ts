@@ -24,3 +24,8 @@ interface CustomerInput {
   phone?: string;
   email?: string;
 }
+
+interface BrandInput {
+  id: string;
+  name: string;
+}

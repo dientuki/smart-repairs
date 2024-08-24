@@ -2,11 +2,11 @@ import { create } from 'zustand'
 import { getOrder, getOrderCreationData } from "@/lib/orders";
 import { addComment, updateCommentVisibility, updateComment, deleteComment } from "@/lib/comments";
 import { createOrder } from "@/lib/orders";
-import { useCustomerStore, useDeviceStore } from "@/store";
+import { useCustomerStore, useDeviceStore, useBrandStore, useDeviceTypeStore } from "@/store";
 
 interface CreateOrderSelectedData {
   customer?: OptionType | null;
-  deviceId: string | null;
+  deviceId?: string | null;
   deviceLabel?: string | null;
   deviceType?: string | null;
 }
@@ -29,7 +29,6 @@ interface OrderStore {
     setCreateOrderSelectedData: (data: CreateOrderSelectedData) => void;
     clearCreateOrderSelectedData: (field: keyof CreateOrderSelectedData) => void;
 
-    brands: OptionType[];
     deviceTypes: OptionType[];
 
     addOrder: (newOrder: NewOrder) => Promise<void>,
@@ -59,14 +58,12 @@ export const useOrderStore = create<OrderStore>((set) => ({
   },
 
   initializeOrderCreationData: async () => {
-    const setCustomers = useCustomerStore.getState().setCustomers;
-    const setDevices = useDeviceStore.getState().setDevices;
-
     const { customers, brands, deviceTypes, devices } = await getOrderCreationData();
 
-    setCustomers(customers);
-    setDevices(devices);
-    set({ brands, deviceTypes });
+    useCustomerStore.getState().setCustomers(customers);
+    useDeviceStore.getState().setDevices(devices);
+    useBrandStore.getState().setBrands(brands);
+    useDeviceTypeStore.getState().setDeviceTypes(deviceTypes);
   },
 
   createOrderSelectedData: {

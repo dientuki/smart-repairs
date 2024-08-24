@@ -12,7 +12,7 @@ import { capitalizeFirstLetter } from "@/helper/functions";
 import Modal from "@/components/modal/Modal";
 import PatternLockModal from "@/components/modal/PatternLockModal";
 import NewDeviceUnitModal from "@/components/modal/NewDeviceUnitModal";
-import { useDeviceStore, useOrderStore } from "@/store";
+import { useDeviceStore, useOrderStore, useBrandStore, useDeviceTypeStore } from "@/store";
 import { UnlockType } from "@/types/enums";
 
 const filter = createFilterOptions<OptionType>();
@@ -31,7 +31,9 @@ const unlockTypeEntries = Object.entries(UnlockType);
 
 function Step2({ nextStep, prevStep }: Step2Props) {
   const { devices, addTemporaryDeviceUnit, getDeviceVersions, clearDeviceVersions } = useDeviceStore();
-  const { brands, deviceTypes, setCreateOrderSelectedData, clearCreateOrderSelectedData } = useOrderStore();
+  const { brands } = useBrandStore();
+  const { deviceTypes } = useDeviceTypeStore();
+  const { setCreateOrderSelectedData, clearCreateOrderSelectedData } = useOrderStore();
   const { t } = useTranslation();
   const [ isDisableCode, setIsDisableCode ] = useState(true);
   const { handleSubmit, control, formState: { errors }, getValues, setValue, reset, resetField } = useForm();

@@ -108,7 +108,27 @@ final readonly class DeviceUnitMutations
                 '__typename' => 'TemporaryDeviceUnitPayload',
                 'status' => true,
                 'temporarydeviceunit' => $temporaryDeviceUnit->id,
-                'deviceid' => $device->id
+                'brand' => [
+                    'id' => $brand->id,
+                    'label' => $brand->name,
+                ],
+                'deviceType' => [
+                    'id' => $type->id,
+                    'label' => $type->name,
+                ],
+                'device' => [
+                    'id' => $device->id,
+                    'commercial_name' => $device->commercial_name,
+                    'url' => $device->url,
+                    'brand' => [
+                        'id' => $device->brand->id,
+                        'name' => $device->brand->name,
+                    ],
+                    'deviceType' => [
+                        'id' => $device->deviceType->id,
+                        'name' => $device->deviceType->name,
+                    ],
+                ]
             ];
         } catch (Exception $e) {
             DB::rollBack();
