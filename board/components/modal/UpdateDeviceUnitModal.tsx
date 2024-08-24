@@ -4,7 +4,6 @@ import ModalLayout from "@/components/modal/ModalLayout";
 import { useTranslation } from "react-i18next";
 import { useForm, FieldValues, FieldErrors } from "react-hook-form";
 import { useEffect, useState } from 'react';
-//import { useOrderStore } from "@/store/OrderStore";
 import { toast } from "react-toastify";
 import { GlobeAltIcon } from "@heroicons/react/16/solid";
 import { InputField, ValidatedAutocomplete } from "@/components/form";
@@ -28,7 +27,8 @@ function UpdateDeviceUnitModal() {
   const { t } = useTranslation();
   const { brands } = useBrandStore();
   const { deviceTypes } = useDeviceTypeStore();
-  const { devices, deviceVersions, deviceUnitsByVersion, deviceUnit, getDeviceUnitUpdate } = useDeviceStore();
+  const { clear, devices, deviceVersions, deviceUnitsByVersion, deviceUnit } = useDeviceStore();
+  const { getDeviceUnitUpdate, getDevicesByTypeAndBrand, getDeviceVersions, getDevicesUnitsByVersion } = useDeviceStore();
   const { handleSubmit, control, formState: { errors }, getValues, setValue, setError, trigger } = useForm();
   const [isLoading, setIsLoading] = useState(true);
 
@@ -39,6 +39,32 @@ function UpdateDeviceUnitModal() {
     version: null,
     serial: null
   });
+
+  useEffect(() => {
+    getDeviceUnitUpdate(modal.params.order, modal.params.deviceUnitId)
+      .catch((e: any) => {
+        toast.error(t(`toast.error.${e.message}`));
+      });
+  }, []);
+
+  useEffect(() => {
+    findAndSet(deviceTypes, deviceUnit.type_id, setType, 'type');
+    findAndSet(brands, deviceUnit.brand_id, setBrand, 'brand');
+    findAndSet(devices, deviceUnit.device_id, setDevice, 'device');
+    setValue('url', deviceUnit.url);
+    findAndSet(deviceVersions, deviceUnit.device_version_id, setVersion, 'version');
+    findAndSet(deviceUnitsByVersion, deviceUnit.device_unit_id, setSerial, 'serial');
+    setIsLoading(false);
+  }, [deviceUnit]);
+
+  useEffect(() => {
+    if (deviceVersions.length == 0) return;
+    findAndSet(deviceVersions, getValues('versionid'), setVersion, 'version');
+  }, [deviceVersions]);
+
+  useEffect(() => {
+    findAndSet(deviceUnitsByVersion, getValues('serialid'), setSerial, 'serial');
+  }, [deviceUnitsByVersion]);
 
   const setType = (type: OptionType | null) => {
     setSelection(prev => ({ ...prev, type }));
@@ -56,26 +82,6 @@ function UpdateDeviceUnitModal() {
     setSelection(prev => ({ ...prev, version }));
   };
 
-  useEffect(() => {
-    findAndSet(deviceTypes, deviceUnit.type_id, setType, 'type');
-    findAndSet(brands, deviceUnit.brand_id, setBrand, 'brand');
-    findAndSet(devices, deviceUnit.device_id, setDevice, 'device');
-    setValue('url', deviceUnit.url);
-    findAndSet(deviceVersions, deviceUnit.device_version_id, setVersion, 'version');
-    findAndSet(deviceUnitsByVersion, deviceUnit.device_unit_id, setSerial, 'serial');
-    setIsLoading(false);
-  }, [deviceUnit]);
-
-  /*
-  useEffect(() => {
-    findAndSet(deviceVersions, getValues('versionid'), setVersion, 'version');
-  }, [deviceVersions]);
-
-  useEffect(() => {
-    findAndSet(deviceUnitsByVersion, getValues('serialid'), setSerial, 'serial');
-  }, [deviceUnitsByVersion]);
-  */
-
   const setSerial = (serial: OptionType | null) => {
     setSelection(prev => ({ ...prev, serial }));
   };
@@ -88,13 +94,6 @@ function UpdateDeviceUnitModal() {
       setValue(`${prefix}label`, option.label);
     }
   };
-
-  useEffect(() => {
-    getDeviceUnitUpdate(modal.params.order, modal.params.deviceUnitId)
-      .catch((e: any) => {
-        toast.error(t(`toast.error.${e.message}`));
-      });
-  }, []);
 
   const handleRegistration = (data: FieldValues ) => {
     console.log('data', data)
@@ -136,15 +135,7 @@ function UpdateDeviceUnitModal() {
   }
 
   const clearByTypeAndBrand = async () => {
-
-    /*
-    setData((prevState) => ({
-      ...prevState,
-      devices: [],
-      versions: [],
-      serials: [],
-    }) as DataState);
-     */
+    clear(['devices', 'deviceVersions', 'deviceUnitsByVersion']);
 
     setDevice(null);
     setVersion(null);
@@ -152,27 +143,20 @@ function UpdateDeviceUnitModal() {
     setValue('url', '')
 
     try {
-
-      //await getDevicesByTypeAndBrand(getValues('typeid'), getValues('brandid'));
-
-      /*
-      setData((prevState) => ({
-        ...prevState,
-        devices: devices,
-      }) as DataState);
-       */
-
+      await getDevicesByTypeAndBrand(getValues('typeid'), getValues('brandid'));
     } catch (e) {}
   }
 
   const handleDeviceChange = async (newValue: OptionType | null) => {
+    clear(['deviceVersions']);
+
     setDevice(newValue);
     setValue('deviceid', newValue?.id);
     setValue('devicelabel', newValue?.label);
     setValue('url', newValue?.info || '');
 
     try {
-      //await getDeviceVersions(getValues('deviceid'));
+      await getDeviceVersions(getValues('deviceid'));
     } catch (e) {}
   }
 
@@ -182,7 +166,7 @@ function UpdateDeviceUnitModal() {
     setValue('versionlabel', newValue?.label);
 
     try {
-      //await getDevicesUnitsByVersion(getValues('versionid'));
+      await getDevicesUnitsByVersion(getValues('versionid'));
     } catch (e) {}
   }
 

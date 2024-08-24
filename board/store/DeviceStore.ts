@@ -38,8 +38,9 @@ interface DeviceStore {
   updateDeviceInStore: (device: OptionType) => void;
 
   deviceUnit: any,
-  getDeviceUnitUpdate: (id: string, deviceUnit: string | null) => Promise<any>;
-  getDevicesByTypeAndBrand: (typeId: string, brandId: string) => Promise<OptionType[]>;
+  getDeviceUnitUpdate: (id: string, deviceUnit: string | null) => Promise<void>;
+  getDevicesByTypeAndBrand: (typeId: string, brandId: string) => Promise<void>;
+  clear: (fields: string | string[]) => void;
 }
 
 export const useDeviceStore = create<DeviceStore>((set) => ({
@@ -132,10 +133,28 @@ export const useDeviceStore = create<DeviceStore>((set) => ({
     });
   },
 
+  clear: (fields: string | string[]) => {
+    set((state) => {
+      // Convertir el argumento en un array si es un string
+      const fieldsArray = Array.isArray(fields) ? fields : [fields];
+      const newState: Partial<DeviceStore> = { ...state };
+
+      // Limpiar los campos especificados
+      fieldsArray.forEach(field => {
+        if (field in newState) {
+          (newState as any)[field] = [];
+        }
+      });
+
+      return newState as DeviceStore;
+    });
+  },
+
     /****************************** */
 
-  getDevicesByTypeAndBrand: async (type: string, brand: string): Promise<OptionType[]> => {
-    return await getDevicesByTypeAndBrand(type, brand);
+  getDevicesByTypeAndBrand: async (typeId: string, brandId: string): Promise<void> => {
+    const devices: OptionType[] = await getDevicesByTypeAndBrand(typeId, brandId);
+    set({ devices });
   },
 
 }));

@@ -11,7 +11,8 @@ use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 
 final readonly class DeviceVersionQueries
 {
-    public function getDeviceVersionsByDeviceUnit(null $root, array $args, GraphQLContext $context): mixed {
+    public function getDeviceVersionsByDeviceUnit(null $root, array $args, GraphQLContext $context): mixed
+    {
 
         $deviceUnit = DeviceUnit::findOrFail($args['deviceUnitId']);
         $device = $deviceUnit->deviceVersion->device;
