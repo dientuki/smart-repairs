@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import { addTemporaryDeviceUnit, getDevicesUnitsByVersionId, getDeviceUnitUpdate, getTemporaryDeviceUnit } from "@/lib/deviceUnits";
+import { addTemporaryDeviceUnit, confirmDeviceUnit, getDevicesUnitsByVersionId, getDeviceUnitUpdate, getTemporaryDeviceUnit } from "@/lib/deviceUnits";
 import { getDeviceVersions } from "@/lib/deviceVersions";
 import { useBrandStore, useDeviceTypeStore, useOrderStore }  from "@/store";
 import { device } from "@/helper/reduce";
@@ -41,6 +41,8 @@ interface DeviceStore {
   getDeviceUnitUpdate: (id: string, deviceUnit: string | null) => Promise<void>;
   getDevicesByTypeAndBrand: (typeId: string, brandId: string) => Promise<void>;
   clear: (fields: string | string[]) => void;
+
+  confirmDeviceUnit: (data: any) => Promise<void>;
 }
 
 export const useDeviceStore = create<DeviceStore>((set) => ({
@@ -150,12 +152,15 @@ export const useDeviceStore = create<DeviceStore>((set) => ({
     });
   },
 
-    /****************************** */
-
   getDevicesByTypeAndBrand: async (typeId: string, brandId: string): Promise<void> => {
     const devices: OptionType[] = await getDevicesByTypeAndBrand(typeId, brandId);
     set({ devices });
   },
+
+  confirmDeviceUnit: async(data: any): Promise<void> => {
+    const response = await confirmDeviceUnit(data);
+    set({ deviceUnit: response });
+  }
 
 }));
 

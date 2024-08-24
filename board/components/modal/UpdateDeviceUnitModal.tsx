@@ -41,6 +41,7 @@ function UpdateDeviceUnitModal() {
   });
 
   useEffect(() => {
+    setValue('order', modal.params.order);
     getDeviceUnitUpdate(modal.params.order, modal.params.deviceUnitId)
       .catch((e: any) => {
         toast.error(t(`toast.error.${e.message}`));
@@ -97,6 +98,7 @@ function UpdateDeviceUnitModal() {
 
   const handleRegistration = (data: FieldValues ) => {
     console.log('data', data)
+
     return
     //modal.close();
   }

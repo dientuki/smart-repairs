@@ -244,3 +244,27 @@ export async function getTemporaryDeviceUnit(orderId: string): Promise<any> {
         serials: response.data.temporaryDeviceUnits
     }
 }
+
+export async function confirmDeviceUnit(data: any): Promise<any> {
+    const response = await graphqlRequest(`
+        mutation {
+            confirmDeviceUnit(confirmDeviceUnitInput: {
+                order: "${data.order}",
+                brandid: "${handleNew(data.brandid)}",
+                brandlabel: "${data.brandlabel}",
+                deviceid: "${handleNew(data.deviceid)}",
+                devicelabel: "${data.devicelabel}",
+                serialid: "${handleNew(data.serialid)}",
+                seriallabel: "${data.seriallabel}",
+                typeid: "${handleNew(data.typeid)}",
+                typelabel: "${data.typelabel}",
+                url: "${handleUndefined(data.url)}",
+                versionid: "${handleNew(data.versionid)}",
+                versionlabel: "${data.versionlabel}"
+            })
+        `);
+
+    handleGraphQLErrors(response.errors);
+
+    return
+}

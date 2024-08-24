@@ -14,6 +14,9 @@ extend type Query {
     temporaryDeviceUnits(orderId: String!): [DeviceUnit]
         @field(resolver: "DeviceUnitQueries@getTemporaryDeviceUnits")
         @namespace(field: "App\\GraphQL\\Queries")
+    confirmDeviceUnit(data: ConfirmDeviceUnitInput!): Boolean
+        @field(resolver: "DeviceUnitMutations@confirmDeviceUnit")
+        @namespace(field: "App\\GraphQL\\Mutations")
 }
 
 extend type Mutation {
@@ -33,6 +36,21 @@ input DeviceUnitInput {
     deviceversionid: String @rules(apply: ["nullable", "ulid", "exists:device_versions,id"])
     unlocktype: String! @rules(apply: ["required", "in:code,pattern,none"])
     unlockcode: String @rules(apply: ["required_if:unlocktype,code,unlocktype,pattern"])
+}
+
+input ConfirmDeviceUnitInput {
+  order: ID!
+  brandid: ID!
+  brandlabel: String!
+  deviceid: ID!
+  devicelabel: String!
+  serialid: ID!
+  seriallabel: String!
+  typeid: ID!
+  typelabel: String!
+  url: String
+  versionid: ID!
+  versionlabel: String!
 }
 
 type DeviceUnit {

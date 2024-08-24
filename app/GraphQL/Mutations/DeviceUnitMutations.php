@@ -58,7 +58,7 @@ final readonly class DeviceUnitMutations
         return false;
     }
 
-    public function createTemporaryDeviceUnit(null $root, array $args, GraphQLContext $context, ResolveInfo $resolveInfo): mixed
+    public function createTemporaryDeviceUnit(null $root, array $args): mixed
     {
 
         try {
@@ -140,5 +140,12 @@ final readonly class DeviceUnitMutations
                 'code' => $e->getCode(),
             ];
         };
+    }
+
+    public function confirmDeviceUnit(null $root, array $args, GraphQLContext $context, ResolveInfo $resolveInfo): mixed
+    {
+        $team_id = $this->getTeamIdFromContext($context);
+
+        return
     }
 }
