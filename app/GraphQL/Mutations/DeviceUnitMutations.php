@@ -141,11 +141,10 @@ final readonly class DeviceUnitMutations
             ];
         };
     }
-
+/*
     public function confirmDeviceUnit(null $root, array $args, GraphQLContext $context, ResolveInfo $resolveInfo): mixed
     {
         $team_id = $this->getTeamIdFromContext($context);
-
-        return
     }
+        */
 }
