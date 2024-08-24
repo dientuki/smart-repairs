@@ -42,7 +42,7 @@ export const updateDevice = async(device: NewDevice) => {
 export const getDevicesByTypeAndBrand = async(type:String, brand:String): Promise<OptionType[]> => {
     const response = await graphqlRequest(`
         query {
-            deviceByTypeAndBrand(typeId: "${type}", brandId: "${brand}") {
+            devicesByTypeAndBrand(typeId: "${type}", brandId: "${brand}") {
                     id
                     label
                     url
@@ -52,5 +52,5 @@ export const getDevicesByTypeAndBrand = async(type:String, brand:String): Promis
 
     handleGraphQLErrors(response.errors);
 
-    return extra(response.data.deviceByTypeAndBrand);
+    return extra(response.data.devicesByTypeAndBrand);
 }

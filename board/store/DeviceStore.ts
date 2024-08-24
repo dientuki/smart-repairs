@@ -1,8 +1,9 @@
 import { create } from 'zustand'
-import { addTemporaryDeviceUnit, getDevicesUnitsByVersionId } from "@/lib/deviceUnits";
+import { addTemporaryDeviceUnit, getDevicesUnitsByVersionId, getDeviceUnitUpdate, getTemporaryDeviceUnit } from "@/lib/deviceUnits";
 import { getDeviceVersions } from "@/lib/deviceVersions";
 import { useBrandStore, useDeviceTypeStore, useOrderStore }  from "@/store";
 import { device } from "@/helper/reduce";
+import { getDevicesByTypeAndBrand } from "@/lib/devices";
 
 /*
   get To retrieve data from the server
@@ -17,16 +18,15 @@ interface DeviceUnitSelectedUpdate {
   serial?: OptionType | null;
 }
 interface DeviceStore {
-
   devices : OptionType[],
   setDevices: (devices: OptionType[]) => void;
 
   deviceVersions: OptionType[],
   getDeviceVersions: (device: string) => Promise<void>,
-  clearDeviceVersions: () => void,
 
   deviceUnitsByVersion: OptionType[],
   getDevicesUnitsByVersion: (versionId: string) => Promise<void>,
+  clearDeviceVersions: () => void,
 
   deviceUnitSelected: {
     version: OptionType | null;
@@ -36,6 +36,10 @@ interface DeviceStore {
 
   addTemporaryDeviceUnit: (data: TemporaryDeviceUnitInput) => Promise<any>;
   updateDeviceInStore: (device: OptionType) => void;
+
+  deviceUnit: any,
+  getDeviceUnitUpdate: (id: string, deviceUnit: string | null) => Promise<any>;
+  getDevicesByTypeAndBrand: (typeId: string, brandId: string) => Promise<OptionType[]>;
 }
 
 export const useDeviceStore = create<DeviceStore>((set) => ({
@@ -45,10 +49,15 @@ export const useDeviceStore = create<DeviceStore>((set) => ({
   },
 
   deviceVersions: [],
-
   getDeviceVersions: async (deviceId: string): Promise<void> => {
     const deviceVersions: OptionType[] = await getDeviceVersions(deviceId);
     set({ deviceVersions });
+  },
+
+  deviceUnitsByVersion: [],
+  getDevicesUnitsByVersion: async (versionId: string): Promise<void> => {
+    const deviceUnitsByVersion: OptionType[] = await getDevicesUnitsByVersionId(versionId);
+    set({ deviceUnitsByVersion });
   },
 
   clearDeviceVersions: () => {
@@ -60,12 +69,6 @@ export const useDeviceStore = create<DeviceStore>((set) => ({
         serial: null,
       },
     });
-  },
-
-  deviceUnitsByVersion: [],
-  getDevicesUnitsByVersion: async (versionId: string): Promise<void> => {
-    const deviceUnitsByVersion: OptionType[] = await getDevicesUnitsByVersionId(versionId);
-    set({ deviceUnitsByVersion });
   },
 
   deviceUnitSelected: {
@@ -107,6 +110,32 @@ export const useDeviceStore = create<DeviceStore>((set) => ({
         return { devices: [...state.devices, device] };
       }
     });
+  },
+
+  deviceUnit: {} as any,
+
+  getDeviceUnitUpdate: async (orderId: string, deviceUnit: string | null): Promise<void> => {
+    let result;
+    if (deviceUnit) {
+      result = await getDeviceUnitUpdate(deviceUnit);
+    } else {
+      result = await getTemporaryDeviceUnit(orderId);
+    }
+
+    useBrandStore.getState().setBrands(result.brands);
+    useDeviceTypeStore.getState().setDeviceTypes(result.types);
+    set({
+      devices: result.devices,
+      deviceVersions: result.versions,
+      deviceUnitsByVersion: result.serials,
+      deviceUnit: result.deviceUnit
+    });
+  },
+
+    /****************************** */
+
+  getDevicesByTypeAndBrand: async (type: string, brand: string): Promise<OptionType[]> => {
+    return await getDevicesByTypeAndBrand(type, brand);
   },
 
 }));

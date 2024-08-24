@@ -1,10 +1,13 @@
 extend type Query {
     devices: [Device!] @all
     devicesByBrandWithTmpOrder(orderId: String!): [Device!]!
-        @field(resolver: "DeviceQueries@getDeviceByBrandWithTmpOrder")
+        @field(resolver: "DeviceQueries@getDevicesByBrandWithTmpOrder")
         @namespace(field: "App\\GraphQL\\Queries")
-    deviceByTypeAndBrand(brandId: String!, typeId: String!): [Device!]!
-        @field(resolver: "DeviceQueries@getDeviceByTypeAndBrand")
+    devicesByTypeAndBrand(brandId: String!, typeId: String!): [Device!]!
+        @field(resolver: "DeviceQueries@getDevicesByTypeAndBrand")
+        @namespace(field: "App\\GraphQL\\Queries")
+    devicesByDeviceUnit(deviceUnitId: String!): [Device!]!
+        @field(resolver: "DeviceQueries@getDevicesByDeviceUnit")
         @namespace(field: "App\\GraphQL\\Queries")
 }
 

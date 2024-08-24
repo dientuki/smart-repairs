@@ -3,11 +3,9 @@ import { useModalWindow } from "react-modal-global";
 import { useOrderStore } from "@/store/OrderStore";
 import Comments from "@/components/Comments";
 import { useEffect } from "react";
-import ModalLayout from "@/components/modal/ModalLayout";
 import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
-import ValidateDeviceUnitModal from "./ValidateDeviceUnitModal";
-import Modal from "./Modal";
+import { Modal, UpdateDeviceUnitModal, ModalLayout } from "@/components/modal";
 
 
 type ModalParams = {
@@ -26,8 +24,8 @@ function ViewCardModal() {
     });
   }, [getOrder]);
 
-  const handleValidate = () => {
-    Modal.open(ValidateDeviceUnitModal, {layer: 5, order: order.$id});
+  const handleUpdateDeviceUnit = () => {
+    Modal.open(UpdateDeviceUnitModal, {layer: 5, order: order.$id, deviceUnitId: order.deviceUnitId});
   }
 
   return (
@@ -62,9 +60,7 @@ function ViewCardModal() {
                 <p className="my-2">Desbloqueo: Codigo/patron</p>
                 <p className="my-2">Validaciones: Usuario</p>
               </div>
-              {!order.deviceSerial &&
-                <button className="rounded-md bg-sky-600 px-3 py-1.5 text-sm font-bold leading-6 text-white shadow-sm hover:bg-sky-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-600" onClick={handleValidate}>Validar</button>
-              }
+                <button className="rounded-md bg-sky-600 px-3 py-1.5 text-sm font-bold leading-6 text-white shadow-sm hover:bg-sky-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-600" onClick={handleUpdateDeviceUnit}>Validar/Actualizar</button>
             </div>
           </div>
       }

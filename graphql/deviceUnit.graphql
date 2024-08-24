@@ -1,8 +1,9 @@
 union TemporaryDeviceUnitResult = TemporaryDeviceUnitPayload | ErrorPayload
 
 extend type Query {
-    devicesRepared: [DeviceUnit!]
-        @field(resolver: "DeviceUnitQueries@getDeviceUnits")
+    deviceUnit(deviceUnitId: String!): DeviceUnit @first
+    deviceUnitsByDeviceUnit(deviceUnitId: String!): [DeviceUnit]
+        @field(resolver: "DeviceUnitQueries@getDeviceUnitsByDeviceUnit")
         @namespace(field: "App\\GraphQL\\Queries")
     deviceUnitsByVersionId(versionId: String!): [DeviceUnit]
         @field(resolver: "DeviceUnitQueries@getDeviceUnitsByVersionId")

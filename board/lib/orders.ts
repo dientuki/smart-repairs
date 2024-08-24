@@ -69,6 +69,7 @@ export const getOrder = async (id: string) => {
                 }
 
                 deviceUnit {
+                    id
                     serial
                     unlock_type
                     unlock_code
@@ -106,6 +107,7 @@ export const getOrder = async (id: string) => {
         status: response.data.order.status,
         brand: response.data.order.device.brand.name,
         brandImage: response.data.order.device.brand.imageUrl,
+        deviceUnitId: response.data.order.deviceUnit?.id,
         deviceType: response.data.order.device.deviceType.name,
         deviceTypeImage: response.data.order.device.deviceType.imageUrl,
         deviceCommercialName: response.data.order.device.commercial_name,
@@ -261,7 +263,7 @@ export const getOrderCreationData = async () => {
 
     handleGraphQLErrors(response.errors);
 
-    const devicesChecks: DeviceChecks[] = response.data.deviceTypeChecks.reduce((acc: DeviceChecks[], device: any) => {
+    const devicesChecks: DeviceCheck[] = response.data.deviceTypeChecks.reduce((acc: DeviceCheck[], device: any) => {
         acc.push({
             deviceTypeId: device.device_type_id,
             damages: device.damages,

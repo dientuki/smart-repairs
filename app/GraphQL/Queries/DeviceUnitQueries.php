@@ -13,11 +13,9 @@ final readonly class DeviceUnitQueries
 {
     use TeamContextTrait;
 
-    public function getDeviceUnits(null $root, array $args, GraphQLContext $context): mixed
+    private function getDeviceUnits(array $values)
     {
-        $team_id = $this->getTeamIdFromContext($context);
-
-        return DeviceUnit::where('team_id', $team_id)->get();
+        return DeviceUnit::where($values)->get();
     }
 
     public function getTemporaryDeviceUnit(null $root, array $args, GraphQLContext $context): mixed
@@ -29,10 +27,10 @@ final readonly class DeviceUnitQueries
     {
         $team_id = $this->getTeamIdFromContext($context);
 
-        return DeviceUnit::where([
+        return $this->getDeviceUnits([
             'team_id' => $team_id,
             'device_version_id' => $args['versionId']
-            ])->get();
+        ]);
     }
 
     public function getTemporaryDeviceUnits(null $root, array $args, GraphQLContext $context): mixed
@@ -40,9 +38,20 @@ final readonly class DeviceUnitQueries
         $team_id = $this->getTeamIdFromContext($context);
         $deviceVersion = TemporaryDeviceUnit::where('order_id', $args['orderId'])->value('device_version_id');
 
-        return DeviceUnit::where([
+        return $this->getDeviceUnits([
             'team_id' => $team_id,
             'device_version_id' => $deviceVersion
-            ])->get();
+        ]);
+    }
+
+    public function getDeviceUnitsByDeviceUnit(null $root, array $args, GraphQLContext $context): mixed
+    {
+        $deviceVersion = DeviceUnit::where('id', $args['deviceUnitId'])->value('device_version_id');
+        $team_id = $this->getTeamIdFromContext($context);
+
+        return $this->getDeviceUnits([
+            'team_id' => $team_id,
+            'device_version_id' => $deviceVersion
+        ]);
     }
 }

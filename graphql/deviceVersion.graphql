@@ -3,6 +3,9 @@ extend type Query {
     temporaryDeviceVersions(orderId: String!): [DeviceVersion]
         @field(resolver: "DeviceVersionQueries@getTemporaryDeviceVersions")
         @namespace(field: "App\\GraphQL\\Queries")
+    deviceVersionsByDeviceUnit(deviceUnitId: String!): [DeviceVersion]
+        @field(resolver: "DeviceVersionQueries@getDeviceVersionsByDeviceUnit")
+        @namespace(field: "App\\GraphQL\\Queries")
 }
 
 type DeviceVersion {

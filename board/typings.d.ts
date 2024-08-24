@@ -77,6 +77,7 @@ interface Order {
     brand: string,
     brandImage: string,
     deviceType: string,
+    deviceUnitId: string | null,
     deviceTypeImage?: string,
     deviceCommercialName: string,
     deviceTechName?: string,
