@@ -24,6 +24,12 @@ function NewCardModal() {
 
   };
 
+  const saveOrder =  async () => {
+    //await addOrder();
+    //await getBoard();
+    //modal.close();
+  }
+
   const prevStep = () => {
     setSelectedIndex(selectedIndex - 1);
   };
@@ -73,7 +79,7 @@ function NewCardModal() {
 
             <TabPanels className="mt-4">
               <Step1 nextStep={nextStep} />
-              <Step2 prevStep={prevStep} nextStep={goToStep3} />
+              <Step2 prevStep={prevStep} nextStep={nextStep} />
             </TabPanels>
 
           </TabGroup>

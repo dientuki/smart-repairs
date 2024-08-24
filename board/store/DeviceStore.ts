@@ -1,7 +1,7 @@
 import { create } from 'zustand'
 import { addTemporaryDeviceUnit, getDevicesUnitsByVersionId } from "@/lib/deviceUnits";
 import { getDeviceVersions } from "@/lib/deviceVersions";
-import { useBrandStore, useDeviceTypeStore }  from "@/store";
+import { useBrandStore, useDeviceTypeStore, useOrderStore }  from "@/store";
 import { device } from "@/helper/reduce";
 
 /*
@@ -88,6 +88,7 @@ export const useDeviceStore = create<DeviceStore>((set) => ({
     useBrandStore.getState().updateBrandInStore(response.brand);
     useDeviceTypeStore.getState().updateDeviceTypeInStore(response.deviceType);
     useDeviceStore.getState().updateDeviceInStore(device([response.device])[0]);
+    useOrderStore.getState().setCreateOrderSelectedData({temporaryDeviceUnitId: response.temporarydeviceunit});
 
     //return await addTemporaryDeviceUnit(data);
   },

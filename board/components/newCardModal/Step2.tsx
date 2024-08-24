@@ -175,6 +175,7 @@ function Step2({ nextStep, prevStep }: Step2Props) {
     setType(newValue);
     setValue('typeid', newValue?.id);
     setValue('typelabel', newValue?.label);
+
   }
 
   const handleBrandsChange = (newValue: OptionType | null) => {

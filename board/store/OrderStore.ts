@@ -9,6 +9,7 @@ interface CreateOrderSelectedData {
   deviceId?: string | null;
   deviceLabel?: string | null;
   deviceType?: string | null;
+  temporaryDeviceUnitId?: string | null;
 }
 interface OrderStore {
     order: Order,
@@ -25,11 +26,10 @@ interface OrderStore {
       deviceId: string | null;
       deviceLabel: string | null;
       deviceType: string | null;
+      temporaryDeviceUnitId: string | null;
     },
     setCreateOrderSelectedData: (data: CreateOrderSelectedData) => void;
     clearCreateOrderSelectedData: (field: keyof CreateOrderSelectedData) => void;
-
-    deviceTypes: OptionType[];
 
     addOrder: (newOrder: NewOrder) => Promise<void>,
 }
@@ -71,6 +71,7 @@ export const useOrderStore = create<OrderStore>((set) => ({
     deviceId: null,
     deviceLabel: null,
     deviceType: null,
+    temporaryDeviceUnitId: null,
   },
 
   setCreateOrderSelectedData: (data: CreateOrderSelectedData): void => {
@@ -80,6 +81,7 @@ export const useOrderStore = create<OrderStore>((set) => ({
         deviceId: data.deviceId ?? state.createOrderSelectedData.deviceId,
         deviceLabel: data.deviceLabel ?? state.createOrderSelectedData.deviceLabel,
         deviceType: data.deviceType ?? state.createOrderSelectedData.deviceType,
+        temporaryDeviceUnitId: data.temporaryDeviceUnitId ?? state.createOrderSelectedData.temporaryDeviceUnitId,
       },
     }));
   },
@@ -92,9 +94,6 @@ export const useOrderStore = create<OrderStore>((set) => ({
       },
     }));
   },
-
-  brands: [],
-  deviceTypes: [],
 
   addOrder: async (newOrder: NewOrder): Promise<void> => {
     return await createOrder(newOrder);
