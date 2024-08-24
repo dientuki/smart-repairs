@@ -4,8 +4,7 @@ import { Controller, useForm, FieldValues, FieldErrors } from "react-hook-form";
 import { EnvelopeIcon, PhoneIcon } from "@heroicons/react/16/solid";
 import { toast } from "react-toastify";
 import { useTranslation } from 'react-i18next';
-import InputField from "@/components/form/InputField";
-import SimpleAutocomplete from "@/components/form/SimpleAutocomplete";
+import { InputField, SimpleAutocomplete } from "@/components/form";
 import { useCustomerStore, useOrderStore } from "@/store";
 import { OperationStatus } from "@/types/enums";
 

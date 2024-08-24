@@ -82,12 +82,9 @@ function NewCardModal() {
               <Step2 prevStep={prevStep} nextStep={nextStep} />
               <Step3 prevStep={prevStep} nextStep={saveOrder} />
             </TabPanels>
-
           </TabGroup>
-
-
-
         </div>
+
         <div className="basis-1/4">
           <p>Estado: FIJO</p>
           <div className="border border-gray-300 p-3 rounded mt-4">

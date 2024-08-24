@@ -5,13 +5,9 @@ import { createFilterOptions } from "@mui/material";
 import { toast } from "react-toastify";
 import { useEffect, useState } from "react";
 import { GlobeAltIcon } from "@heroicons/react/16/solid";
-import InputField from "../form/InputField";
-import SimpleAutocomplete from "../form/SimpleAutocomplete";
-import ValidatedAutocomplete from "../form/ValidatedAutocomplete";
+import { InputField, SimpleAutocomplete, ValidatedAutocomplete } from "@/components/form";
 import { capitalizeFirstLetter } from "@/helper/functions";
-import Modal from "@/components/modal/Modal";
-import PatternLockModal from "@/components/modal/PatternLockModal";
-import NewDeviceUnitModal from "@/components/modal/NewDeviceUnitModal";
+import { Modal, NewDeviceUnitModal, PatternLockModal } from "@/components/modal";
 import { useDeviceStore, useOrderStore, useBrandStore, useDeviceTypeStore } from "@/store";
 import { UnlockType } from "@/types/enums";
 
