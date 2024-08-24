@@ -261,9 +261,6 @@ export const getOrderCreationData = async () => {
 
     handleGraphQLErrors(response.errors);
 
-
-
-        /*
     const devicesChecks: DeviceChecks[] = response.data.deviceTypeChecks.reduce((acc: DeviceChecks[], device: any) => {
         acc.push({
             deviceTypeId: device.device_type_id,
@@ -275,15 +272,11 @@ export const getOrderCreationData = async () => {
 
       }, []);
 
-        */
-
     return {
         customers: extra(response.data.customers),
         brands: response.data.brands,
         deviceTypes: response.data.deviceTypes,
         devices: device(response.data.devices),
-        /*
         devicesChecks: devicesChecks
-        */
     }
 }

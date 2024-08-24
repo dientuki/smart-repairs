@@ -154,7 +154,7 @@ interface DeviceType {
     label: string;
 }
 
-interface DeviceChecks {
+interface DeviceCheck {
     deviceTypeId: String,
     damages: [damage];
     features: [feature];

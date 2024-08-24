@@ -7,11 +7,15 @@ import { useBoardStore, useOrderStore } from "@/store";
 import { Tab, TabGroup, TabList, TabPanels } from "@headlessui/react";
 import Step1 from "@/components/newCardModal/Step1";
 import Step2 from "@/components/newCardModal/Step2";
+import Step3 from "@/components/newCardModal/Step3";
+import { useModalWindow } from "react-modal-global";
 
 function NewCardModal() {
+  const modal = useModalWindow();
   const [ selectedIndex, setSelectedIndex ] = useState(0);
   const { t } = useTranslation();
-  const { initializeOrderCreationData, createOrderSelectedData } = useOrderStore();
+  const { getBoard } = useBoardStore();
+  const { initializeOrderCreationData, createOrderSelectedData, createOrder } = useOrderStore();
   const date = new Date();
 
   useEffect(() => {
@@ -20,14 +24,10 @@ function NewCardModal() {
     });
   }, []);
 
-  const goToStep3 = (device: DeviceInfo, tempDeviceUnitId: String) => {
-
-  };
-
   const saveOrder =  async () => {
-    //await addOrder();
-    //await getBoard();
-    //modal.close();
+    await createOrder();
+    await getBoard();
+    modal.close();
   }
 
   const prevStep = () => {
@@ -80,6 +80,7 @@ function NewCardModal() {
             <TabPanels className="mt-4">
               <Step1 nextStep={nextStep} />
               <Step2 prevStep={prevStep} nextStep={nextStep} />
+              <Step3 prevStep={prevStep} nextStep={saveOrder} />
             </TabPanels>
 
           </TabGroup>
@@ -97,7 +98,7 @@ function NewCardModal() {
           <div className="border border-gray-300 p-3 rounded mt-4">
             <p className="my-2">Cliente: {createOrderSelectedData.customer?.label} </p>
             <p className="my-2">
-              {createOrderSelectedData.deviceType ? createOrderSelectedData.deviceType : 'Equipo'}: {createOrderSelectedData.deviceLabel}
+              {createOrderSelectedData.deviceTypeLabel ? createOrderSelectedData.deviceTypeLabel : 'Equipo'}: {createOrderSelectedData.deviceLabel}
             </p>
           </div>
         </div>

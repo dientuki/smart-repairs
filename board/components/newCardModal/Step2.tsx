@@ -17,7 +17,7 @@ import { UnlockType } from "@/types/enums";
 
 const filter = createFilterOptions<OptionType>();
 type Step2Props = {
-  nextStep: (device: DeviceInfo, tempDeviceUnitId: string) => void,
+  nextStep: () => void,
   prevStep: () => void,
 }
 
@@ -84,7 +84,8 @@ function Step2({ nextStep, prevStep }: Step2Props) {
         setCreateOrderSelectedData({
           deviceId: newValue.id,
           deviceLabel: newValue.label,
-          deviceType: newValue.info.type
+          deviceTypeId: newValue.info.typeid,
+          deviceTypeLabel: newValue.info.type
         });
 
         findAndSet(brands, newValue.info.brandid ?? '', setBrand, 'brand');
@@ -105,7 +106,8 @@ function Step2({ nextStep, prevStep }: Step2Props) {
       setSelection(prev => ({ ...prev, type: null, brand: null }));
       clearCreateOrderSelectedData('deviceId');
       clearCreateOrderSelectedData('deviceLabel');
-      clearCreateOrderSelectedData('deviceType');
+      clearCreateOrderSelectedData('deviceTypeLabel');
+      clearCreateOrderSelectedData('deviceTypeId');
       clearDeviceVersions();
       reset();
       resetUnlock();
@@ -157,21 +159,19 @@ function Step2({ nextStep, prevStep }: Step2Props) {
   const handleRegistration = async (data: FieldValues ) => {
     try {
       const status = await addTemporaryDeviceUnit(data as TemporaryDeviceUnitInput);
-      console.log('tempDeviceUnitId', status);
-      //device.id = tempDeviceUnitId.deviceid;
 
-      //nextStep(device, tempDeviceUnitId.temporarydeviceunit);
+      nextStep();
 
     } catch (error) {
       console.log('error', error);
     }
-
-    return
-    //modal.close();
   }
 
   const handleTypesChange =  (newValue: OptionType | null) => {
-    setCreateOrderSelectedData({ deviceType: newValue?.label });
+    setCreateOrderSelectedData({
+      deviceTypeId: newValue?.id,
+      deviceTypeLabel: newValue?.label
+    });
     setType(newValue);
     setValue('typeid', newValue?.id);
     setValue('typelabel', newValue?.label);
