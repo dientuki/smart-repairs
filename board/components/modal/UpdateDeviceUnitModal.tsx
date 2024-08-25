@@ -70,9 +70,10 @@ function UpdateDeviceUnitModal() {
   }, [deviceVersions]);
 
   useEffect(() => {
-    if (!deviceUnit.device_unit_id) {
-      deviceUnitsByVersion.push({ id: '', label: deviceUnit.serial || '' });
+    if (!deviceUnit.device_unit_id && deviceUnit.serial) {
+      deviceUnitsByVersion.push({ id: '', label: deviceUnit.serial });
       setSerial(deviceUnitsByVersion[0]);
+      setValue('seriallabel', deviceUnitsByVersion[0].label);
     }
     findAndSet(deviceUnitsByVersion, getValues('serialid'), setSerial, 'serial');
   }, [deviceUnitsByVersion]);
@@ -107,9 +108,9 @@ function UpdateDeviceUnitModal() {
   };
 
   const handleRegistration = async(data: FieldValues ) => {
+    data.deviceunitid = deviceUnit.device_unit_id || null;
     await confirmDeviceUnit(data);
 
-    //return
     modal.close();
   }
 

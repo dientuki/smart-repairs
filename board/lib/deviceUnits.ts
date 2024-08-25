@@ -258,7 +258,8 @@ export async function confirmDeviceUnit(data: any): Promise<any> {
                 typelabel: "${data.typelabel}",
                 url: "${handleUndefined(data.url)}",
                 versionid: "${handleNew(data.versionid)}",
-                versionlabel: "${data.versionlabel}"
+                versionlabel: "${data.versionlabel}",
+                deviceunitid: "${handleUndefined(data.deviceunitid)}"
             })
         }`);
 

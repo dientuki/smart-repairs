@@ -193,7 +193,7 @@ final readonly class DeviceUnitMutations
                 $tmpOrder->delete();
             } else {
                 $deviceUnit = DeviceUnit::updateOrCreate(
-                    ['id' => $args['input']['serialid']],
+                    ['id' => $args['input']['deviceunitid']],
                     [
                         'serial' => $args['input']['seriallabel'],
                         'team_id' => $team_id,
