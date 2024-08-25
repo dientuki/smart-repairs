@@ -39,7 +39,7 @@ class OrderSeeder extends Seeder
             'team_id' => $team,
             'user_id' => $user,
             'device_id' => $devices[1]->id,
-            'device_unit_id' => $devicesUnit[1]->id,
+            'device_unit_id' => $devicesUnit[2]->id,
             'created_at' => now(),
             'updated_at' => now(),
         ]);
@@ -50,8 +50,8 @@ class OrderSeeder extends Seeder
             'customer_id' => $customers[1]->id,
             'team_id' => $team,
             'user_id' => $user,
-            'device_id' => $devices[2]->id,
-            'device_unit_id' => $devicesUnit[2]->id,
+            'device_id' => $devices[0]->id,
+            'device_unit_id' => $devicesUnit[1]->id,
             'created_at' => now(),
             'updated_at' => now(),
         ]);
