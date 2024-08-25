@@ -2,74 +2,98 @@ import "react-modal-global/styles/modal.scss" // Imports essential styles for `M
 import { useModalWindow } from "react-modal-global";
 import ModalLayout from "@/components/modal/ModalLayout";
 import { useTranslation } from "react-i18next";
-import { Controller, useForm, FieldValues, FieldErrors } from "react-hook-form";
-import { Field, Input, Label } from '@headlessui/react';
-import { Autocomplete, TextField } from "@mui/material";
-import { useState } from 'react';
+import { useForm, FieldValues } from "react-hook-form";
+import { useEffect, useState } from 'react';
+import ValidatedAutocomplete from "../form/ValidatedAutocomplete";
+import { useDeviceStore } from "@/store/DeviceStore";
 
 type ModalParams = {
-    deviceVersion: DeviceVersion[];
-    setDeviceUnit: (deviceversionid: string, serial: string) => void
+    setDeviceUnit: (data: FieldValues) => void;
 };
 
 function NewDeviceUnitModal() {
   const modal = useModalWindow<ModalParams>();
   const { t } = useTranslation();
-  const { handleSubmit, control, formState: { errors }, setValue} = useForm();
-  const [ deviceVersionId, setDeviceVersionId ] = useState<string>('');
+  const { handleSubmit, control, formState: { errors }, setValue, getValues, resetField} = useForm();
+  const { deviceVersions, deviceUnitsByVersion, deviceUnitSelected, setDeviceUnitSelected, getDevicesUnitsByVersion } = useDeviceStore();
+
+  useEffect(() => {
+    findAndSet(deviceUnitsByVersion, getValues('serialid'), setSerial, 'serial');
+  }, [deviceUnitsByVersion]);
+
+  const setVersion = (version: OptionType | null) => {
+    setDeviceUnitSelected({version});
+  };
+
+  const setSerial = (serial: OptionType | null) => {
+    setDeviceUnitSelected({serial});
+  };
 
   const handleRegistration = (data: FieldValues ) => {
-    modal.params.setDeviceUnit(deviceVersionId, data.serial);
+    modal.params.setDeviceUnit(data);
     modal.close();
   }
 
+  const findAndSet = (options: OptionType[], id: string, setOption: (option: OptionType | null) => void,  prefix: string) => {
+    const option = options.find(item => item.id === id) || null;
+    setOption(option);
+    if (option) {
+      setValue(`${prefix}id`, option.id);
+      setValue(`${prefix}label`, option.label);
+    }
+  };
+
+  const handleVersionChange = async(newValue: OptionType | null) => {
+    setVersion(newValue);
+    setValue('versionid', newValue?.id);
+    setValue('versionlabel', newValue?.label);
+    resetField('serialid');
+
+    try {
+      await getDevicesUnitsByVersion(getValues('versionid'));
+    } catch (e) {}
+  }
+
+  const handleSerialChange = (newValue: OptionType | null) => {
+    setSerial(newValue);
+    setValue('serialid', newValue?.id);
+    setValue('seriallabel', newValue?.label);
+  }
+
   const registerOptions = {
-    serial: {required: false},
-    deviceversion: {required: false},
+    serialid: {required: false},
+    versionid: {required: false},
   }
 
   return (
     <ModalLayout width="328px" height="260px">
         <form onSubmit={handleSubmit(handleRegistration)}>
-            <Field>
-                <Label className="first-letter:uppercase block mb-2 text-sm font-medium text-gray-900">{t('field.device_version')}</Label>
-                <Controller
-                name="deviceversion"
-                control={control}
-                defaultValue=""
-                render={({ field }) => (
-                    <Autocomplete
-                        {...field}
-                        selectOnFocus
-                        handleHomeEndKeys
-                        disableClearable
-                        id="deviceversion"
-                        onChange={(_, newValue) => {
-                            setValue('deviceversion', newValue.label);
-                            setDeviceVersionId(newValue.id);
-                        }}
-                        options={modal.params.deviceVersion}
-                        isOptionEqualToValue={() => true}
-                        renderInput={(params) => <TextField {...params} size="small" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" />}
-                        renderOption={(props, option) => <li {...props} key={option.id}>{option.label}</li>}
-                    />
-                )}
-                />
-            </Field>
+          <ValidatedAutocomplete
+              name="versionid"
+              label={t('field.device_version')}
+              options={deviceVersions}
+              isLoading={!deviceVersions}
+              control={control}
+              rules={registerOptions.versionid}
+              errors={errors}
+              value={deviceUnitSelected.version}
+              disableClearable
+              onChange={(_, newValue) => handleVersionChange(newValue)}
+            />
 
-            <Field className="mt-4">
-                <Label className="first-letter:uppercase block mb-2 text-sm font-medium text-gray-900">{t('field.serial')}</Label>
-                <Controller
-                name="serial"
-                control={control}
-                defaultValue=""
-                rules={registerOptions.serial}
-                render={({ field }) => (
-                    <Input {...field} className={`${errors?.serial ? 'bg-red-50 border-red-500 text-red-900 placeholder-red-700 focus:ring-red-500 focus:border-red-500' : 'bg-gray-50 border-gray-300 text-gray-900 focus:ring-blue-500 focus:border-blue-500' } text-sm rounded-lg  block w-full p-2.5 border`} />
-                )}
-                />
-          </Field>
-          <button type="submit" className="mt-4 w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Listo!</button>
+          <ValidatedAutocomplete
+              name="serialid"
+              label={t('field.serial')}
+              options={deviceUnitsByVersion}
+              isLoading={!deviceUnitsByVersion}
+              control={control}
+              rules={registerOptions.serialid}
+              errors={errors}
+              value={deviceUnitSelected.serial}
+              disableClearable
+              onChange={(_, newValue) => handleSerialChange(newValue)}
+            />
+            <button type="submit" className="mt-4 w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Listo!</button>
         </form>
     </ModalLayout>
   )

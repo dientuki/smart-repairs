@@ -46,6 +46,7 @@ final readonly class OrderMutations
     public function create(null $root, array $args, GraphQLContext $context, ResolveInfo $resolveInfo): bool
     {
         $team_id = $this->getTeamIdFromContext($context);
+        //dd($args['order']);
 
         try {
             DB::beginTransaction();
@@ -76,7 +77,6 @@ final readonly class OrderMutations
             return true;
         } catch (\Exception $e) {
             DB::rollBack();
-            dd($e);
 
             return false;
         };

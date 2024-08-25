@@ -4,30 +4,9 @@ interface Board {
 
 type TypedColumn = "for budgeting" | "budgeting" | "budgeted" | "to do" | "repairing" | "repaired";
 
-enum UnlockTypeEnum {
-    NONE = 'none',
-    CODE = 'code',
-    PATTERN = 'pattern',
-}
-
 interface Column {
     id: TypedColumn;
     orders: Order[];
-}
-
-interface CustomerFullName {
-    id?: string;
-    fullName?: string;
-}
-
-interface Customer {
-    id: string;
-    label: string;
-    firstName?: string;
-    lastName?: string;
-    phone?: string;
-    email?: string;
-    [key: string]: string | undefined; // Add this line
 }
 
 interface DeviceInfo {
@@ -35,11 +14,6 @@ interface DeviceInfo {
     label: string;
     type: string;
     typeId: string;
-}
-
-interface DeviceVersion {
-    id: string;
-    label: string;
 }
 
 interface Device {
@@ -58,6 +32,16 @@ interface DeviceUnit {
     unlockType: UnlockTypeEnum;
     unlockCode?: string;
     deviceId: string | null;
+}
+
+interface temporaryDeviceUnit {
+    serial: string;
+    brand_id: string;
+    type_id: string
+    device_id: string;
+    device_version_id: string | null;
+    device_unit_id: string;
+    url: string;
 }
 
 interface NewDeviceUnit {
@@ -88,10 +72,12 @@ interface Order {
     $id: string;
     createdAt: timestamp;
     createdAtDate: Date;
+    author: string;
     status: TypedColumn;
     brand: string,
     brandImage: string,
     deviceType: string,
+    deviceUnitId: string | null,
     deviceTypeImage?: string,
     deviceCommercialName: string,
     deviceTechName?: string,
@@ -169,19 +155,10 @@ interface DeviceType {
     label: string;
 }
 
-interface DeviceChecks {
+interface DeviceCheck {
     deviceTypeId: String,
     damages: [damage];
     features: [feature];
-}
-
-interface GraphQLErrorExtension {
-    validation?: any;
-}
-
-interface GraphQLError {
-    message: string;
-    extensions?: GraphQLErrorExtension;
 }
 
 interface CustomerDeviceUnit {
@@ -195,9 +172,4 @@ interface CustomerDeviceUnit {
     unlockcode: number[] | null;
     deviceversionid: string | null;
     serial: string;
-}
-
-interface OptionType {
-    id: string;
-    label: string;
 }

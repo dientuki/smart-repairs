@@ -1,4 +1,5 @@
 import { graphqlRequest, arrayToString, handleGraphQLErrors } from "@/helper/functions";
+import { device, extra } from "@/helper/reduce";
 
 export const createOrder = async (newOrder: NewOrder) => {
 
@@ -33,11 +34,16 @@ export const getOrder = async (id: string) => {
                 created_at
                 observation
 
+                author {
+                    name
+                }
+
                 customer {
                     first_name
                     last_name
                     phone
                 }
+
                 comments {
                     id
                     comment
@@ -63,6 +69,7 @@ export const getOrder = async (id: string) => {
                 }
 
                 deviceUnit {
+                    id
                     serial
                     unlock_type
                     unlock_code
@@ -96,9 +103,11 @@ export const getOrder = async (id: string) => {
         $id: response.data.order.id,
         createdAt: response.data.order.created_at,
         createdAtDate: new Date(response.data.order.created_at),
+        author: response.data.order.author.name,
         status: response.data.order.status,
         brand: response.data.order.device.brand.name,
         brandImage: response.data.order.device.brand.imageUrl,
+        deviceUnitId: response.data.order.deviceUnit?.id,
         deviceType: response.data.order.device.deviceType.name,
         deviceTypeImage: response.data.order.device.deviceType.imageUrl,
         deviceCommercialName: response.data.order.device.commercial_name,
@@ -212,7 +221,7 @@ export const getOrderCreationData = async () => {
             query {
               customers {
                 id
-                fullName
+                label
                 first_name
                 last_name
                 phone
@@ -224,26 +233,12 @@ export const getOrderCreationData = async () => {
                 commercial_name
                 url
                 brand {
+                    id
                     name
                 }
                 deviceType {
-                    name
-                }
-              }
-
-              devicesRepared {
-                id
-                serial
-                deviceVersion {
                     id
-                    version
-                    device {
-                        id
-                        commercial_name
-                        brand {
-                            name
-                        }
-                    }
+                    name
                 }
               }
 
@@ -251,6 +246,7 @@ export const getOrderCreationData = async () => {
                 id
                 label
               }
+
               deviceTypes {
                 id
                 label
@@ -267,36 +263,7 @@ export const getOrderCreationData = async () => {
 
     handleGraphQLErrors(response.errors);
 
-    const customers: Customer[] = response.data.customers.reduce((acc: Customer[], customer: any) => {
-        acc.push({
-            id: customer.id,
-            label: customer.fullName,
-            firstname: customer.first_name,
-            lastname: customer.last_name,
-            email: customer.email,
-            phone: customer.phone,
-        });
-
-        return acc;
-
-      }, []);
-
-    const devices: Device[] = response.data.devices.reduce((acc: Device[], device: any) => {
-    acc.push({
-        id: device.id,
-        label: `${device.brand.name} ${device.commercial_name}`,
-        commercialname: device.commercial_name,
-        brand: device.brand.name,
-        type: device.deviceType.name,
-        url: device.url
-    });
-
-    return acc;
-
-    }, []);
-
-
-    const devicesChecks: DeviceChecks[] = response.data.deviceTypeChecks.reduce((acc: DeviceChecks[], device: any) => {
+    const devicesChecks: DeviceCheck[] = response.data.deviceTypeChecks.reduce((acc: DeviceCheck[], device: any) => {
         acc.push({
             deviceTypeId: device.device_type_id,
             damages: device.damages,
@@ -307,25 +274,11 @@ export const getOrderCreationData = async () => {
 
       }, []);
 
-    const devicesRepared: DeviceRepared[] = response.data.devicesRepared.reduce((acc: DeviceRepared[], device: any) => {
-        acc.push({
-            id: device.id,
-            label: `${device.deviceVersion.device.brand.name} ${device.deviceVersion.device.commercial_name} - ${device.serial}`,
-            deviceId: device.deviceVersion.device.id,
-            serial: device.serial,
-
-        });
-
-        return acc;
-
-    }, []);
-
     return {
-        customers: customers,
-        devices: devices,
-        devicesRepared: devicesRepared,
+        customers: extra(response.data.customers),
         brands: response.data.brands,
         deviceTypes: response.data.deviceTypes,
+        devices: device(response.data.devices),
         devicesChecks: devicesChecks
     }
 }

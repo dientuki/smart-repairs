@@ -1,189 +1,187 @@
-import { Autocomplete, TextField, createFilterOptions } from "@mui/material";
-import { Field, Input, Label, TabPanel } from '@headlessui/react';
-import { Controller, useForm, FieldValues, FieldErrors } from "react-hook-form";
-import { useOrderStore } from "@/store/OrderStore";
-import { useState } from "react";
-import { GlobeAltIcon } from "@heroicons/react/16/solid";
-import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
-import Modal from "@/components/modal/Modal";
-import PatternLockModal from "@/components/modal/PatternLockModal";
-import NewDeviceUnitModal from '@/components/modal/NewDeviceUnitModal';
-import { useCallback } from 'react';
-import InputField from "../form/InputField";
-import SimpleAutocomplete from "../form/SimpleAutocomplete";
-import ValidatedAutocomplete from "../form/ValidatedAutocomplete";
+import { Input, TabPanel } from "@headlessui/react";
+import { Controller, FieldErrors, FieldValues, useForm } from "react-hook-form";
+import { createFilterOptions } from "@mui/material";
+import { toast } from "react-toastify";
+import { useEffect, useState } from "react";
+import { GlobeAltIcon } from "@heroicons/react/16/solid";
+import { InputField, SimpleAutocomplete, ValidatedAutocomplete } from "@/components/form";
+import { capitalizeFirstLetter } from "@/helper/functions";
+import { Modal, NewDeviceUnitModal, PatternLockModal } from "@/components/modal";
+import { useDeviceStore, useOrderStore, useBrandStore, useDeviceTypeStore } from "@/store";
+import { UnlockType } from "@/types/enums";
 
-const filter = createFilterOptions<Device>();
-type Props = {
-  nextStep: (device: DeviceInfo, tempDeviceUnitId: string) => void,
+const filter = createFilterOptions<OptionType>();
+type Step2Props = {
+  nextStep: () => void,
   prevStep: () => void,
-  devices: Device[],
-  brands: Brand[],
-  deviceTypes: DeviceType[]
-  devicesRepared: DeviceRepared[]
 }
 
-enum UnlockTypeEnum {
-  NONE = 'none',
-  CODE = 'code',
-  PATTERN = 'pattern',
-}
-
-type ComboBox = {
-  brand: string | null;
-  type: string | null;
-  deviceRepared: string | null;
+type SelectionState = {
+  type: OptionType | null;
+  brand: OptionType | null;
+  unlocktype: OptionType | null;
 };
 
-function Step2({ nextStep, prevStep, devices, brands, deviceTypes, devicesRepared }: Props) {
-  const { setCustomerDeviceUnit, getDeviceVersions } = useOrderStore();
-  const deviceReparedComboEmpty = [{id: 'new', label: 'Agregar nuevo equipo'}];
-  const { handleSubmit, control, formState: { errors }, setValue, setError, trigger } = useForm();
-  const [ comboBox, setComboBox ] = useState<ComboBox>({ brand: null, type: null, deviceRepared: null });
-  const [ deviceVersions, setDeviceVersions] = useState<DeviceVersion[]>([]);
-  const [ allowNewDeviceRepared, setAllowNewDeviceRepared ] = useState(false);
-  const [ isDisableCode, setIsDisableCode ] = useState(true);
+const unlockTypeEntries = Object.entries(UnlockType);
+
+function Step2({ nextStep, prevStep }: Step2Props) {
+  const { devices, addTemporaryDeviceUnit, getDeviceVersions, clearDeviceVersions } = useDeviceStore();
+  const { brands } = useBrandStore();
+  const { deviceTypes } = useDeviceTypeStore();
+  const { setCreateOrderSelectedData, clearCreateOrderSelectedData } = useOrderStore();
   const { t } = useTranslation();
-  const [ unlockType, setUnlockType] = useState<UnlockTypeEnum>(UnlockTypeEnum.NONE);
-  const [ deviceReparedCombo, setDeviceReparedCombo ] = useState<DeviceRepared[]>(deviceReparedComboEmpty);
-  const UnlockTypeEnumLabels: Record<string, string> = {
-    [UnlockTypeEnum.NONE]: t('unlock_type.none'),
-    [UnlockTypeEnum.CODE]: t('unlock_type.code'),
-    [UnlockTypeEnum.PATTERN]: t('unlock_type.pattern'),
+  const [ isDisableCode, setIsDisableCode ] = useState(true);
+  const { handleSubmit, control, formState: { errors }, getValues, setValue, reset, resetField } = useForm();
+  const unlockOptions: OptionType[] = unlockTypeEntries.map(([key, value]) => ({
+    id: value,
+    label: capitalizeFirstLetter(t(`unlock_type.${key.toLowerCase()}`)),
+  }));
+  const [selection, setSelection] = useState<SelectionState>({
+    type: null,
+    brand: null,
+    unlocktype: unlockOptions[0]
+  });
+
+  useEffect(() => {
+    resetUnlock();
+  }, []);
+
+  const resetUnlock = () => {
+    setValue('unlocktype', unlockOptions[0].id);
+    setValue('unlockcode', undefined);
+  }
+
+  const setType = (type: OptionType | null) => {
+    setSelection(prev => ({ ...prev, type }));
   };
-  const unlocktypeOptions = Object.keys(UnlockTypeEnumLabels).map((key) => ({ id: key, label: UnlockTypeEnumLabels[key] }));
-  const openPatternLock = () => Modal.open(PatternLockModal, {layer: 5, setPattern: setPattern});
+
+  const setBrand = (brand: OptionType | null) => {
+    setSelection(prev => ({ ...prev, brand }));
+  };
+
+  const setUnlockType = (unlocktype: OptionType | null) => {
+    setSelection(prev => ({ ...prev, unlocktype }));
+  };
+
+  const findAndSet = (options: OptionType[], id: string, setOption: (option: OptionType | null) => void,  prefix: string) => {
+    const option = options.find(item => item.id === id) || null;
+    setOption(option);
+    if (option) {
+      setValue(`${prefix}id`, option.id);
+      setValue(`${prefix}label`, option.label);
+    }
+  };
+
+  const handleDeviceChange = async(newValue: OptionType | null, reason?: string) => {
+    if (newValue && newValue.id != 'new' && reason === 'selectOption') {
+      clearDeviceVersions();
+      if (typeof newValue.info === 'object' && newValue.info !== null) {
+        setCreateOrderSelectedData({
+          deviceId: newValue.id,
+          deviceLabel: newValue.label,
+          deviceTypeId: newValue.info.typeid,
+          deviceTypeLabel: newValue.info.type
+        });
+
+        findAndSet(brands, newValue.info.brandid ?? '', setBrand, 'brand');
+        findAndSet(deviceTypes, newValue.info.typeid ?? '', setType, 'type');
+
+        setValue('url', newValue.info.url ?? '');
+        setValue('commercialname', newValue.info.commercialname ?? '');
+      }
+
+      setValue('deviceid', newValue.id);
+
+      try {
+        await getDeviceVersions(newValue.id);
+      } catch (error) {}
+    }
+
+    if (reason === 'clear' || newValue?.id == 'new') {
+      setSelection(prev => ({ ...prev, type: null, brand: null }));
+      clearCreateOrderSelectedData('deviceId');
+      clearCreateOrderSelectedData('deviceLabel');
+      clearCreateOrderSelectedData('deviceTypeLabel');
+      clearCreateOrderSelectedData('deviceTypeId');
+      clearDeviceVersions();
+      reset();
+      resetUnlock();
+    }
+  }
+
+  const handleDeviceWorksVersion = () => {
+    Modal.open(NewDeviceUnitModal, {layer: 5, setDeviceUnit: setDeviceUnit });
+  }
+
+  const setDeviceUnit = (data: FieldValues) => {
+    for (const element in data) {
+      resetField(element);
+      if (data[element] != undefined) {
+        setValue(element, data[element]);
+      };
+    }
+  }
 
   const setPattern = (pattern: number[]) => {
     setValue('unlockcode', pattern.length > 0 ? pattern : null);
   }
 
-  const handleUnlock = (unlock: UnlockTypeEnum) => {
+  const openPatternLock = () => Modal.open(PatternLockModal, {layer: 5, setPattern: setPattern});
+
+  const handleUnlock = (unlock: string) => {
     switch (unlock) {
-      case UnlockTypeEnum.NONE:
+      case UnlockType.NONE:
         setIsDisableCode(true);
         break;
-      case UnlockTypeEnum.CODE:
+      case UnlockType.CODE:
         setIsDisableCode(false);
         break;
-      case UnlockTypeEnum.PATTERN:
+      case UnlockType.PATTERN:
         setIsDisableCode(true);
         openPatternLock();
         break;
     }
   }
 
-  const handleDeviceVersion = () => {
-    Modal.open(NewDeviceUnitModal, {layer: 5, deviceVersion: deviceVersions, setDeviceUnit: setDeviceUnit });
-  }
+  const handleUnlockTypeChange = (newValue: OptionType | null) => {
+    if (!newValue) return;
 
-  const setDeviceUnit = (deviceversionid: string, serial: string) => {
-    setValue('serial', serial);
-    setValue('deviceversionid', deviceversionid);
-  }
-
-  const handleDeviceChange = useCallback(async(newValue: OptionType | null, reason?: string) => {
-    if ((newValue != null && newValue?.id !== 'new') && reason !== 'clear') {
-      setAllowNewDeviceRepared(false);
-      const { id, type, brand, commercialname, url } = newValue as Device;
-      const brandId = brands.find(b => b?.label === brand)?.id ?? null;
-      const typeId = deviceTypes.find(t => t?.label === type)?.id ?? null;
-
-      //setSelectedDevice(newValue);
-      setValue('deviceid', id);
-      setValue('typeid', type);
-      setValue('brandid', brand);
-      setValue('commercialname', commercialname);
-      setValue('url', url);
-      setComboBox({ brand: brandId, type: typeId, deviceRepared: null });
-      setDeviceReparedCombo(devicesRepared?.filter(d => d.deviceId === id) ?? deviceReparedComboEmpty);
-      ['typeid', 'brandid', 'commercialname', 'url'].forEach(field => trigger(field));
-      ['serial','deviceversionid'].forEach(field => setValue(field, ''));
-
-      try {
-        const tmp = await getDeviceVersions(id);
-        setDeviceVersions(tmp);
-        setAllowNewDeviceRepared(true);
-      } catch (error) {}
-
-    } else {
-      //setSelectedDevice(null);
-      [
-        'deviceid',
-        'typeid',
-        'brandid',
-        'commercialname',
-        'url',
-        'unlockcode',
-        'deviceunitid',
-        'serial',
-        'deviceversionid'].forEach(field => setValue(field, ''));
-      setComboBox({ brand: null, type: null, deviceRepared: null });
-      setDeviceReparedCombo(deviceReparedComboEmpty);
-      setUnlockType(UnlockTypeEnum.NONE);
-      setValue('unlocktype', UnlockTypeEnumLabels[UnlockTypeEnum.NONE]);
-    }
-  }, [brands, deviceTypes, devicesRepared, setComboBox, setDeviceReparedCombo, setValue, setUnlockType, trigger]);
-
-  const handleDeviceTypesChange = (newValue: OptionType | null) => {
-    setValue('typeid', newValue?.label);
-    setComboBox({ ...comboBox, type: newValue?.id ?? null});
-  }
-
-  const handleBrandsChange = (newValue: OptionType | null) => {
-    setValue('brandid', newValue?.label);
-    setComboBox({ ...comboBox, brand: newValue?.id ?? null });
+    setValue('unlocktype', newValue.id);
+    setUnlockType(newValue);
+    handleUnlock(newValue.id);
   }
 
   const handleRegistration = async (data: FieldValues ) => {
-    const rawData: CustomerDeviceUnit = {
-      deviceid: data.deviceid,
-      commercialname: data.commercialname,
-      url: data.url,
-      brandid: comboBox.brand || '',
-      typeid: comboBox.type || '',
-      deviceunitid: comboBox.deviceRepared || '',
-      unlocktype: unlockType,
-      unlockcode: data.unlockcode,
-      deviceversionid: data.deviceversionid,
-      serial: data.serial
-    }
-    const device: DeviceInfo = {
-      id: data.deviceid,
-      label: data.commercialname ,
-      type: data.typeid,
-      typeId: rawData.typeid
-    }
-
     try {
-      const tempDeviceUnitId = await setCustomerDeviceUnit(rawData);
-      device.id = tempDeviceUnitId.deviceid;
+      const status = await addTemporaryDeviceUnit(data as TemporaryDeviceUnitInput);
 
-      nextStep(device, tempDeviceUnitId.temporarydeviceunit);
+      nextStep();
 
-    } catch (e: any) {
-      const toValidate = ['typeid', 'brandid', 'commercialname', 'url'];
+    } catch (error) {
+      console.log('error', error);
+    }
+  }
 
-      switch (e.constructor.name) {
-        case 'Object':
-          for (let i = 0, c = toValidate.length; i < c; i++) {
-            if (e.hasOwnProperty(`device.${toValidate[i]}`)) {
-              console.log(e[`device.${toValidate[i]}`]);
-              setError(toValidate[i], {message: e[`device.${toValidate[i]}`][0]});
-            }
-          }
-          toast.error("Error en el formulario");
-          break;
-        case 'Error':
-          toast.error(e.message);
-          break;
-        default:
-          toast.error("Error!! a los botes");
-          break;
-      }
-    };
-  };
+  const handleTypesChange =  (newValue: OptionType | null) => {
+    setCreateOrderSelectedData({
+      deviceTypeId: newValue?.id,
+      deviceTypeLabel: newValue?.label
+    });
+    setType(newValue);
+    setValue('typeid', newValue?.id);
+    setValue('typelabel', newValue?.label);
+
+  }
+
+  const handleBrandsChange = (newValue: OptionType | null) => {
+    setCreateOrderSelectedData({
+      deviceLabel: `${newValue?.label} ${getValues('commercialname')}`
+    });
+    setBrand(newValue);
+    setValue('brandid', newValue?.id);
+    setValue('brandlabel', newValue?.label);
+  }
 
   const handleError = (errors: FieldErrors<FieldValues>) => {
     toast.error("Error en el formulario de error react");
@@ -200,11 +198,8 @@ function Step2({ nextStep, prevStep, devices, brands, deviceTypes, devicesRepare
         message: t('validation.url', { field: t('field.url')})
       }
     },
-    deviceunitid: {required: false},
     unlocktype: { required: t('validation.required', { field: t('field.unlock_type')}) },
-    unlockcode: { required: false },
-    serial:{required: false},
-    deviceversionid: {required: false},
+    unlockcode: { required: false }
   };
 
   const deviceFilterOptions = (options: any, params: any) => {
@@ -223,7 +218,7 @@ function Step2({ nextStep, prevStep, devices, brands, deviceTypes, devicesRepare
   return (
     <TabPanel unmount={false}>
       <SimpleAutocomplete
-        id="devices"
+        name="devices"
         label={t('field.device')}
         options={devices}
         isLoading={!devices}
@@ -250,8 +245,10 @@ function Step2({ nextStep, prevStep, devices, brands, deviceTypes, devicesRepare
             isLoading={!deviceTypes}
             control={control}
             rules={registerOptions.typeid}
+            value={selection.type}
             errors={errors}
-            onChange={(_, newValue) => handleDeviceTypesChange(newValue)}
+            disableClearable
+            onChange={(_, newValue) => handleTypesChange(newValue)}
           />
 
           <ValidatedAutocomplete
@@ -262,6 +259,8 @@ function Step2({ nextStep, prevStep, devices, brands, deviceTypes, devicesRepare
             control={control}
             rules={registerOptions.brandid}
             errors={errors}
+            value={selection.brand}
+            disableClearable
             onChange={(_, newValue) => handleBrandsChange(newValue)}
           />
         </div>
@@ -283,107 +282,32 @@ function Step2({ nextStep, prevStep, devices, brands, deviceTypes, devicesRepare
             errors={errors}
             icon={GlobeAltIcon}
           />
-
         </div>
 
-        <div className="grid gap-6 grid-cols-4 mt-4">
-          <Field className="col-span-3">
-            <Label className="first-letter:uppercase block mb-2 text-sm font-medium text-gray-900">Devices Repared</Label>
-            <Controller
-              name="deviceunitid"
-              control={control}
-              defaultValue=""
-              rules={registerOptions.deviceunitid}
-              render={({ field }) => (
-                <Autocomplete
-                  { ...field }
-                  selectOnFocus
-                  handleHomeEndKeys
-                  onKeyDown={(e) => {e.preventDefault();}}
-                  onChange={(event, newValue) => {
-                    if (newValue != null && newValue?.id !== 'new') {
-                      setValue('deviceunitid', newValue.label);
-                      setComboBox({ ...comboBox, deviceRepared: newValue.id });
-                    } else {
-                      setValue('deviceunitid', '');
-                      setComboBox({ ...comboBox, deviceRepared: null });
-                    }
-                  }}
-                  isOptionEqualToValue={() => true}
-                  options={deviceReparedCombo}
-                  renderInput={(params) => <TextField {...params} size="small" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" />}
-                  renderOption={(props, option) => <li {...props} key={option.id}>{option.label}</li>}
-                />
-            )}/>
-
-            {errors?.deviceunitid && errors.deviceunitid.message && (
-              <p className="mt-2 text-sm text-red-600 dark:text-red-500">
-                {typeof errors.deviceunitid.message === 'string' ? errors.deviceunitid.message : JSON.stringify(errors.deviceunitid.message)}
-              </p>
-            )}
-          </Field>
-
+        <div className="grid gap-6 grid-cols-3 mt-4">
           <div className="relative">
-            <button type="button" className="absolute bottom-0 right-0 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center cursor-pointer w-full" disabled={!allowNewDeviceRepared} onClick={handleDeviceVersion}>Nuevo</button>
+            <button type="button" className="absolute bottom-0 right-0 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center cursor-pointer w-full" onClick={handleDeviceWorksVersion}>Enciende</button>
           </div>
-
+          <ValidatedAutocomplete
+            name="unlocktype"
+            label={t('field.unlock_type')}
+            options={unlockOptions}
+            control={control}
+            rules={registerOptions.unlocktype}
+            errors={errors}
+            value={selection.unlocktype}
+            disableClearable
+            onChange={(_, newValue) => handleUnlockTypeChange(newValue)}
+          />
+          <InputField
+            name="unlockcode"
+            label={t('field.unlock_code')}
+            control={control}
+            rules={registerOptions.unlockcode}
+            errors={errors}
+            disabled={isDisableCode}
+          />
         </div>
-
-        <div className="grid gap-6 grid-cols-2 mt-4">
-          <Field>
-            <Label className="first-letter:uppercase block mb-2 text-sm font-medium text-gray-900">{t('field.unlock_type')}</Label>
-            <Controller
-              name="unlocktype"
-              control={control}
-              defaultValue={UnlockTypeEnumLabels[UnlockTypeEnum.NONE]}
-              rules={registerOptions.unlocktype}
-              render={({ field }) => (
-                <Autocomplete
-                  {...field}
-                  selectOnFocus
-                  handleHomeEndKeys
-                  disableClearable
-                  id="unlocktype"
-                  onChange={(event, newValue) => {
-                    setValue('unlocktype', newValue?.label);
-                    setUnlockType(newValue?.id as UnlockTypeEnum);
-                    handleUnlock(newValue?.id);
-                  }}
-                  options={unlocktypeOptions}
-                  isOptionEqualToValue={() => true}
-                  renderInput={(params) => <TextField {...params} size="small" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" />}
-                  renderOption={(props, option) => <li {...props} key={option.id}>{option.label}</li>}
-                />
-              )}
-            />
-            {errors?.unlocktype && errors.unlocktype.message && (
-              <p className="mt-2 text-sm text-red-600 dark:text-red-500">
-                {typeof errors.unlocktype.message === 'string' ? errors.unlocktype.message : JSON.stringify(errors.unlocktype.message)}
-              </p>
-            )}
-          </Field>
-
-          <Field>
-            <Label className="first-letter:uppercase block mb-2 text-sm font-medium text-gray-900">{t('field.unlock_code')}</Label>
-            <Controller
-              name="unlockcode"
-              control={control}
-              defaultValue=""
-              rules={registerOptions.unlockcode}
-              render={({ field }) => (
-                <Input {...field} readOnly={isDisableCode} className={`${errors?.unlockcode ? 'bg-red-50 border-red-500 text-red-900 placeholder-red-700 focus:ring-red-500 focus:border-red-500' : 'bg-gray-50 border-gray-300 text-gray-900 focus:ring-blue-500 focus:border-blue-500' } text-sm rounded-lg  block w-full p-2.5 border`} />
-              )}
-            />
-            {errors?.unlockcode && errors.unlockcode.message && (
-              <p className="mt-2 text-sm text-red-600 dark:text-red-500">
-                {typeof errors.unlockcode.message === 'string' ? errors.unlockcode.message : JSON.stringify(errors.unlockcode.message)}
-              </p>
-            )}
-          </Field>
-        </div>
-
-
-
 
         <div className="flex justify-between mt-6">
           <div onClick={prevStep} className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center w-1/4 cursor-pointer">Anterior</div>
@@ -391,6 +315,7 @@ function Step2({ nextStep, prevStep, devices, brands, deviceTypes, devicesRepare
           <button type="submit" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center w-1/4">Siguiente</button>
         </div>
       </form>
+
     </TabPanel>
   )
 }

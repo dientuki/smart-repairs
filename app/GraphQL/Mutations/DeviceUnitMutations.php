@@ -4,8 +4,16 @@ declare(strict_types=1);
 
 namespace App\GraphQL\Mutations;
 
+use App\Models\Brand;
+use App\Models\Device;
+use App\Models\DeviceType;
+use Illuminate\Support\Facades\DB;
 use App\Models\DeviceUnit;
+use App\Models\DeviceVersion;
+use App\Models\Order;
+use App\Models\TemporaryDeviceUnit;
 use App\Traits\TeamContextTrait;
+use Exception;
 use Nuwave\Lighthouse\Execution\ResolveInfo;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 
@@ -49,5 +57,166 @@ final readonly class DeviceUnitMutations
         }
 
         return false;
+    }
+
+    public function createTemporaryDeviceUnit(null $root, array $args): mixed
+    {
+        try {
+            DB::beginTransaction();
+
+            $brand = Brand::updateOrCreate(
+                ['id' => $args['input']['brandid']],
+                ['name' => $args['input']['brandlabel']]
+            );
+
+            $type = DeviceType::updateOrCreate(
+                ['id' => $args['input']['typeid']],
+                ['name' => $args['input']['typelabel']]
+            );
+
+            $device = Device::updateOrCreate(
+                ['id' => $args['input']['deviceid']],
+                [
+                    'commercial_name' => $args['input']['commercialname'],
+                    'brand_id' => $brand->id,
+                    'device_type_id' => $type->id,
+                    'url' => $args['input']['url'],
+                ]
+            );
+
+            if (!empty($args['input']['versionlabel'])) {
+                $deviceVersion = DeviceVersion::updateOrCreate(
+                    ['id' => $args['input']['versionid']],
+                    [
+                        'version' => $args['input']['versionlabel'],
+                        'device_id' => $device->id,
+                    ]
+                );
+            }
+
+            $temporaryDeviceUnit = TemporaryDeviceUnit::create([
+                'device_id' => $device->id,
+                'device_version_id' => isset($deviceVersion) ? $deviceVersion->id : null,
+                'device_unit_id' => $args['input']['serialid'],
+                'serial' => $args['input']['seriallabel'],
+                'unlock_type' => $args['input']['unlocktype'],
+                'unlock_code' => $args['input']['unlockcode'],
+            ]);
+            DB::commit();
+
+            return [
+                '__typename' => 'TemporaryDeviceUnitPayload',
+                'status' => true,
+                'temporarydeviceunit' => $temporaryDeviceUnit->id,
+                'brand' => [
+                    'id' => $brand->id,
+                    'label' => $brand->name,
+                ],
+                'deviceType' => [
+                    'id' => $type->id,
+                    'label' => $type->name,
+                ],
+                'device' => [
+                    'id' => $device->id,
+                    'commercial_name' => $device->commercial_name,
+                    'url' => $device->url,
+                    'brand' => [
+                        'id' => $device->brand->id,
+                        'name' => $device->brand->name,
+                    ],
+                    'deviceType' => [
+                        'id' => $device->deviceType->id,
+                        'name' => $device->deviceType->name,
+                    ],
+                ]
+            ];
+        } catch (Exception $e) {
+            DB::rollBack();
+
+            return [
+                '__typename' => 'ErrorPayload',
+                'status' => false,
+                'message' => $e->getMessage(),
+                'code' => $e->getCode(),
+            ];
+        };
+    }
+
+    public function confirmDeviceUnit(null $root, array $args, GraphQLContext $context, ResolveInfo $resolveInfo): mixed
+    {
+        $team_id = $this->getTeamIdFromContext($context);
+        $order = Order::where('id', $args['input']['order'])->first();
+        $tmpOrder = TemporaryDeviceUnit::where('order_id', $args['input']['order'])->first();
+
+        try {
+            DB::beginTransaction();
+
+            $brand = Brand::updateOrCreate(
+                ['id' => $args['input']['brandid']],
+                ['name' => $args['input']['brandlabel']]
+            );
+
+            $type = DeviceType::updateOrCreate(
+                ['id' => $args['input']['typeid']],
+                ['name' => $args['input']['typelabel']]
+            );
+
+            $device = Device::updateOrCreate(
+                ['id' => $args['input']['deviceid']],
+                [
+                    'commercial_name' => $args['input']['devicelabel'],
+                    'brand_id' => $brand->id,
+                    'device_type_id' => $type->id,
+                    'url' => $args['input']['url'],
+                ]
+            );
+
+            $deviceVersion = DeviceVersion::updateOrCreate(
+                ['id' => $args['input']['versionid']],
+                [
+                    'version' => $args['input']['versionlabel'],
+                    'device_id' => $device->id,
+                ]
+            );
+
+            if ($tmpOrder) {
+                $deviceUnit = DeviceUnit::updateOrCreate(
+                    ['id' => $args['input']['serialid']],
+                    [
+                        'serial' => $args['input']['seriallabel'],
+                        'unlock_type' => $tmpOrder->unlock_type,
+                        'unlock_code' => $tmpOrder->unlock_code,
+                        'team_id' => $team_id,
+                        'device_version_id' => $deviceVersion->id,
+                    ]
+                );
+                $tmpOrder->delete();
+            } else {
+                $deviceUnit = DeviceUnit::updateOrCreate(
+                    ['id' => $args['input']['deviceunitid']],
+                    [
+                        'serial' => $args['input']['seriallabel'],
+                        'team_id' => $team_id,
+                        'device_version_id' => $deviceVersion->id,
+                    ]
+                );
+            }
+            $order->device_id = $device->id;
+            $order->device_unit_id = $deviceUnit->id;
+            $order->save();
+
+            DB::commit();
+
+            return true;
+        } catch (Exception $e) {
+            DB::rollBack();
+
+            return [
+                '__typename' => 'ErrorPayload',
+                'status' => false,
+                'message' => $e->getMessage(),
+                'code' => $e->getCode(),
+            ];
+        };
     }
 }

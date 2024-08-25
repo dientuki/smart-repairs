@@ -2,11 +2,9 @@
 
 namespace App\Models;
 
-use Database\Seeders\DevicePartSeeder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 
 class Device extends ModelAuditable
 {
@@ -30,6 +28,13 @@ class Device extends ModelAuditable
     public function versions()
     {
         return $this->hasMany(DeviceVersion::class);
+    }
+
+    public function label(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => $this->commercial_name
+        );
     }
 
     public function parts()

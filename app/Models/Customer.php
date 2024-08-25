@@ -13,7 +13,7 @@ class Customer extends ModelWithTeam
      *
      * @return Attribute The Attribute object containing the full name.
      */
-    public function fullName(): Attribute
+    public function label(): Attribute
     {
         return Attribute::make(
             get: fn ($value, $attributes) => "{$attributes['first_name']} {$attributes['last_name']}",

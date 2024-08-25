@@ -29,17 +29,6 @@ export const getOrderCreationData = async () => {
                     name
                 }
               }
-              devicesRepared {
-                id
-                serial
-                device {
-                    id
-                    commercial_name
-                    brand {
-                      name
-                    }
-                }
-              }
               brands {
                 id
                 label

@@ -1,17 +1,21 @@
+import { useOrderStore } from "@/store";
 import { Field, Input, Label, TabPanel } from '@headlessui/react';
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 type Props = {
+  nextStep: () => void,
   prevStep: () => void,
-  checks: {
-    damages: damage[],
-    features: feature[]
-  } | null,
-  nextStep: (step3data: Step3data) => void
 }
 
-function Step3({ prevStep, nextStep, checks }: Props) {
+function Step3({ prevStep, nextStep }: Props) {
   const { t } = useTranslation();
+  const { createOrderSelectedData, devicesChecks, setTmpOrder } = useOrderStore();
+  const [ checks, setChecks ] = useState<DeviceCheck | null>(null);
+
+  useEffect(() => {
+    setChecks(devicesChecks[devicesChecks.findIndex((d: DeviceCheck) => d.deviceTypeId === createOrderSelectedData.deviceTypeId)]);
+  }, [createOrderSelectedData.deviceTypeId]);
 
   const handleSubmit: React.FormEventHandler<HTMLFormElement> = (event) => {
     event.preventDefault()
@@ -28,13 +32,15 @@ function Step3({ prevStep, nextStep, checks }: Props) {
       checked: formElement.features[index].checked,
     })) : [];
 
-    nextStep({
+    setTmpOrder({
       damageDescription: formElement.damageDescription.value,
       featureDescription: formElement.featureDescription.value,
       damages: damages as [damage],
       features: features as [feature],
       observation: formElement.observation.value
-    } as Step3data);
+    });
+
+    nextStep();
   };
 
   return (

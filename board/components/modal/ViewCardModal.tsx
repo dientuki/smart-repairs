@@ -3,9 +3,10 @@ import { useModalWindow } from "react-modal-global";
 import { useOrderStore } from "@/store/OrderStore";
 import Comments from "@/components/Comments";
 import { useEffect } from "react";
-import ModalLayout from "@/components/modal/ModalLayout";
 import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
+import { Modal, UpdateDeviceUnitModal, ModalLayout } from "@/components/modal";
+
 
 type ModalParams = {
   order: string;
@@ -18,10 +19,13 @@ function ViewCardModal() {
 
   useEffect(() => {
     getOrder(modal.params.order).catch((e: any) => {
-      console.log(e.message);
       toast.error(t(`toast.error.${e.message}`));
     });
   }, [getOrder]);
+
+  const handleUpdateDeviceUnit = () => {
+    Modal.open(UpdateDeviceUnitModal, {layer: 5, order: order.$id, deviceUnitId: order.deviceUnitId});
+  }
 
   return (
     <ModalLayout>
@@ -49,12 +53,15 @@ function ViewCardModal() {
                 <p className="my-2">Cliente: {order.customerFullName}</p>
                 <p className="my-2">Whatsap: <a target="_blank" href={`https://wa.me/${order.customerPhone}`}>whatsap</a></p>
                 <p className="my-2">Tecnico: Usuario</p>
-                <p className="my-2">Vendedor: Usuario</p>
+                <p className="my-2">Vendedor: {order.author}</p>
               </div>
               <div className="border border-gray-300 p-3 rounded mt-4">
                 <p className="my-2">Desbloqueo: Codigo/patron</p>
                 <p className="my-2">Validaciones: Usuario</p>
               </div>
+                <button className="mt-4 w-full rounded-md bg-sky-600 px-3 py-1.5 text-sm font-bold leading-6 text-white shadow-sm hover:bg-sky-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-600" onClick={handleUpdateDeviceUnit}>
+                  { order.deviceUnitId ? "Actualizar" : "Validar" }
+                </button>
             </div>
           </div>
       }

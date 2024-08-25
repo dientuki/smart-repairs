@@ -1,6 +1,20 @@
+union TemporaryDeviceUnitResult = TemporaryDeviceUnitPayload | ErrorPayload
+
 extend type Query {
-    devicesRepared: [DeviceUnit!]
-        @field(resolver: "DeviceUnitQueries@getDeviceUnits")
+    deviceUnit(deviceUnitId: String!): DeviceUnit
+        @field(resolver: "DeviceUnitQueries@getDeviceUnit")
+        @namespace(field: "App\\GraphQL\\Queries")
+    deviceUnitsByDeviceUnit(deviceUnitId: String!): [DeviceUnit]
+        @field(resolver: "DeviceUnitQueries@getDeviceUnitsByDeviceUnit")
+        @namespace(field: "App\\GraphQL\\Queries")
+    deviceUnitsByVersionId(versionId: String!): [DeviceUnit]
+        @field(resolver: "DeviceUnitQueries@getDeviceUnitsByVersionId")
+        @namespace(field: "App\\GraphQL\\Queries")
+    temporaryDeviceUnit(orderId: String!): TemporaryDeviceUnit
+        @field(resolver: "DeviceUnitQueries@getTemporaryDeviceUnit")
+        @namespace(field: "App\\GraphQL\\Queries")
+    temporaryDeviceUnits(orderId: String!): [DeviceUnit]
+        @field(resolver: "DeviceUnitQueries@getTemporaryDeviceUnits")
         @namespace(field: "App\\GraphQL\\Queries")
 }
 
@@ -11,6 +25,12 @@ extend type Mutation {
     updateDeviceUnit(deviceUnitId: String, deviceunit: DeviceUnitInput): Boolean
         @field(resolver: "DeviceUnitMutations@update")
         @namespace(field: "App\\GraphQL\\Mutations")
+    addTemporaryDeviceUnit(input: TemporaryDeviceUnitInput): TemporaryDeviceUnitResult
+        @field(resolver: "DeviceUnitMutations@createTemporaryDeviceUnit")
+        @namespace(field: "App\\GraphQL\\Mutations")
+    confirmDeviceUnit(input: ConfirmDeviceUnitInput!): Boolean
+        @field(resolver: "DeviceUnitMutations@confirmDeviceUnit")
+        @namespace(field: "App\\GraphQL\\Mutations")
 }
 
 input DeviceUnitInput {
@@ -20,6 +40,22 @@ input DeviceUnitInput {
     unlockcode: String @rules(apply: ["required_if:unlocktype,code,unlocktype,pattern"])
 }
 
+input ConfirmDeviceUnitInput {
+  order: ID!
+  brandid: ID!
+  brandlabel: String!
+  deviceid: ID!
+  devicelabel: String!
+  serialid: ID!
+  seriallabel: String!
+  typeid: ID!
+  typelabel: String!
+  url: String
+  versionid: ID!
+  versionlabel: String!
+  deviceunitid: String!
+}
+
 type DeviceUnit {
     id: ID!
     serial: String!
@@ -27,6 +63,15 @@ type DeviceUnit {
     deviceVersion: DeviceVersion!
     unlock_type: String!
     unlock_code: String
+    label: String
+}
+
+type TemporaryDeviceUnit {
+    id: ID!
+    serial: String
+    device: Device
+    deviceVersion: DeviceVersion
+    device_unit_id: String
 }
 
 type DeviceVersion {
@@ -34,4 +79,31 @@ type DeviceVersion {
     version: String!
     description: String
     device: Device!
+}
+
+type TemporaryDeviceUnitPayload {
+    temporarydeviceunit: ID!
+    deviceid: ID!
+    status: Boolean
+    brand: Brand
+    deviceType: DeviceType
+    device: Device
+}
+
+input TemporaryDeviceUnitInput {
+  deviceid: ID! @rules(apply: ["nullable", "ulid", "exists:devices,id"])
+
+  brandid: ID @rules(apply: ["nullable", "ulid", "exists:brands,id"])
+  brandlabel: String @rules(apply: ["nullable"])
+  typeid: ID @rules(apply: ["nullable", "ulid", "exists:device_types,id"])
+  typelabel: String @rules(apply: ["nullable"])
+  commercialname: String! @rules(apply: ["required"])
+  url: String @rules(apply: ["nullable", "url"])
+
+  unlocktype: String! @rules(apply: ["required", "in:code,pattern,none"])
+  unlockcode: String @rules(apply: ["required_if:unlocktype,code,unlocktype,pattern"])
+  serialid: ID @rules(apply: ["nullable", "ulid"])
+  seriallabel: String @rules(apply: ["nullable"])
+  versionid: ID @rules(apply: ["nullable", "ulid", "exists:device_versions,id"])
+  versionlabel: String @rules(apply: ["nullable"])
 }

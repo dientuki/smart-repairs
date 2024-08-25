@@ -1,5 +1,14 @@
 extend type Query {
     devices: [Device!] @all
+    devicesByBrandWithTmpOrder(orderId: String!): [Device!]!
+        @field(resolver: "DeviceQueries@getDevicesByBrandWithTmpOrder")
+        @namespace(field: "App\\GraphQL\\Queries")
+    devicesByTypeAndBrand(brandId: String!, typeId: String!): [Device!]!
+        @field(resolver: "DeviceQueries@getDevicesByTypeAndBrand")
+        @namespace(field: "App\\GraphQL\\Queries")
+    devicesByDeviceUnit(deviceUnitId: String!): [Device!]!
+        @field(resolver: "DeviceQueries@getDevicesByDeviceUnit")
+        @namespace(field: "App\\GraphQL\\Queries")
 }
 
 extend type Mutation {
@@ -25,4 +34,5 @@ type Device {
     brand: Brand!
     deviceType: DeviceType!
     url: String
+    label: String
 }

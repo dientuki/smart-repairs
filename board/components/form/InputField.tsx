@@ -1,4 +1,4 @@
-import { Field, Label } from "@headlessui/react";
+import { Field, Input, Label } from "@headlessui/react";
 import React from 'react';
 import { Controller, Control, FieldValues, FieldErrors, RegisterOptions } from 'react-hook-form';
 import ErrorMessage from "./ErrorMessage";
@@ -7,6 +7,7 @@ interface InputFieldProps {
   name: string;
   label: string;
   control: Control<FieldValues>;
+  disabled?: boolean;
   rules?: RegisterOptions;
   errors?: FieldErrors<FieldValues>;
   icon?: React.ComponentType<React.SVGProps<SVGSVGElement>>;
@@ -20,6 +21,7 @@ const InputField: React.FC<InputFieldProps> = ({
   rules = {},
   errors,
   icon: Icon,
+  disabled = false,
   defaultValue = '',
 }) => {
   return (
@@ -37,8 +39,9 @@ const InputField: React.FC<InputFieldProps> = ({
           defaultValue={defaultValue}
           rules={rules}
           render={({ field }) => (
-            <input
+            <Input
               {...field}
+              readOnly={disabled}
               className={`${Icon ? 'rounded-none rounded-e-lg' : 'rounded-lg'} bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block w-full text-sm border-gray-300 p-2.5 ${
                 errors?.[name] ? 'bg-red-50 border-red-500 text-red-900 placeholder-red-700 focus:ring-red-500 focus:border-red-500' : ''
               }`}

@@ -1,10 +1,10 @@
 import { graphqlRequest, handleGraphQLErrors } from "@/helper/functions";
+import { deviceVersion } from "@/helper/reduce";
 
-export const getDeviceVersions = async(device: String): Promise<DeviceVersion[]> => {
-
+export const getDeviceVersions = async(deviceId: string): Promise<OptionType[]> => {
     const response = await graphqlRequest(`
                 query {
-                    deviceVersions(device_id:"${device}") {
+                    deviceVersions(device_id:"${deviceId}") {
                         id
                         version
                         description
@@ -14,14 +14,5 @@ export const getDeviceVersions = async(device: String): Promise<DeviceVersion[]>
 
     handleGraphQLErrors(response.errors);
 
-    return response.data.deviceVersions.reduce((acc: DeviceVersion[], deviceVersion: any) => {
-        const desc = deviceVersion.description? ` (${deviceVersion.description})` : '';
-        acc.push({
-            id: deviceVersion.id,
-            label: deviceVersion.version + desc
-        });
-
-        return acc;
-
-    }, []) as DeviceVersion[];
+    return deviceVersion(response.data.deviceVersions);
 }

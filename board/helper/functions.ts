@@ -55,3 +55,27 @@ export const arrayToString = (array: { [key: string]: any }[]): string => {
 export const handleUndefined = (value: string | undefined | null): string => {
     return value === undefined || value === null || value === 'undefined' ? '' : value;
 }
+
+export const capitalizeFirstLetter = (value: string): string => {
+    if (typeof value !== 'string' || value.length === 0) return value;
+
+    return value.charAt(0).toUpperCase() + value.slice(1).toLowerCase();
+}
+
+export const handleNew = (value: string | undefined | null): string | null => {
+    if (value === 'new') {
+      return '';
+    }
+    return value ?? '';
+}
+
+export function omit<T extends Record<string, any>, K extends keyof T>(
+    obj: T,
+    keys: K[]
+  ): Omit<T, K> {
+    const result = { ...obj };
+    keys.forEach((key) => {
+      delete result[key];
+    });
+    return result;
+  }

@@ -1,53 +1,41 @@
 import { createFilterOptions } from "@mui/material";
 import { Input, TabPanel } from '@headlessui/react';
 import { Controller, useForm, FieldValues, FieldErrors } from "react-hook-form";
-import { useOrderStore } from "@/store/OrderStore";
-import { useState } from "react";
 import { EnvelopeIcon, PhoneIcon } from "@heroicons/react/16/solid";
 import { toast } from "react-toastify";
 import { useTranslation } from 'react-i18next';
-import InputField from "@/components/form/InputField";
-import SimpleAutocomplete from "@/components/form/SimpleAutocomplete";
+import { InputField, SimpleAutocomplete } from "@/components/form";
+import { useCustomerStore, useOrderStore } from "@/store";
+import { OperationStatus } from "@/types/enums";
 
-const filter = createFilterOptions<Customer>();
+const filter = createFilterOptions<OptionType>();
 type Step1Props = {
-  nextStep: (customer: CustomerFullName) => void,
-  customers: Customer[],
+  nextStep: () => void,
 }
 
-function Step1({ nextStep, customers }: Step1Props) {
-  const { addCustomer, updateCustomer } = useOrderStore();
-  const { handleSubmit, control, formState: { errors }, getValues, setValue, setError, trigger } = useForm();
-  const [ selectedCustomer, setSelectedCustomer ] = useState<Customer | null>(null);
+function Step1({ nextStep }: Step1Props) {
+  const { customers, updateOrCreateCustomer } = useCustomerStore();
+  const { setCreateOrderSelectedData, clearCreateOrderSelectedData } = useOrderStore();
   const { t } = useTranslation();
+  const { handleSubmit, control, formState: { errors }, getValues, setValue, reset, trigger, setError } = useForm();
 
   const handleRegistration = async(data: FieldValues ) => {
-    const toValidate = ['firstname', 'lastname', 'phone', 'email'];
-    const customer: CustomerFullName = {};
-
     try {
-      if (selectedCustomer === null) {
-        customer.id = await addCustomer(data as Customer);
-        customer.fullName = data.firstname + ' ' + data.lastname;
-        toast.success("Cliente agregado");
-      } else {
-        customer.id = selectedCustomer.id;
-        customer.fullName = selectedCustomer.firstname + ' ' + selectedCustomer.lastname;
-        for (let i = 0, c = toValidate.length; i < c; i++) {
-          if (data[toValidate[i]] !== selectedCustomer[toValidate[i]]) {
-            if (await updateCustomer(data as Customer)) {
-              toast.success("Actualizo");
-            } else {
-              toast.error("Error en actualizar");
-            };
-            break;
-          }
-        }
+      const customerStatus = await updateOrCreateCustomer(data as CustomerInput);
+      switch (customerStatus) {
+        case OperationStatus.CREATED:
+          toast.success("Cliente agregado");
+          break;
+        case OperationStatus.UPDATED:
+          toast.success("Actualizo");
+          break;
+        case OperationStatus.NO_CHANGE:
+          break;
       }
-
-      nextStep(customer);
+      nextStep();
 
     } catch (e: any) {
+      const toValidate = ['firstname', 'lastname', 'phone', 'email'];
       switch (e.constructor.name) {
         case 'Object':
           for (let i = 0, c = toValidate.length; i < c; i++) {
@@ -67,7 +55,7 @@ function Step1({ nextStep, customers }: Step1Props) {
     }
   };
 
-  const handleError = (errors: FieldErrors<FieldValues>) => {
+  const handleError = (_: FieldErrors<FieldValues>) => {
     toast.error("Error en el formulario");
   };
 
@@ -95,27 +83,23 @@ function Step1({ nextStep, customers }: Step1Props) {
      }
   };
 
-  const handleCustomerChange = (newValue: OptionType | null) => {
-    if (newValue != null && newValue?.id !== 'new') {
-      const customer = newValue as Customer
-      setSelectedCustomer(customer);
-      setValue('id', customer.id);
-      setValue('firstname', customer.firstname);
-      setValue('lastname', customer.lastname);
-      setValue('phone', customer.phone);
-      setValue('email', customer.email);
-    } else {
-      setSelectedCustomer(null);
-      setValue('id', '');
-      setValue('firstname', '');
-      setValue('lastname', '');
-      setValue('phone', '');
-      setValue('email', '');
+  const handleCustomerChange = (newValue: OptionType | null, reason?: string) => {
+    if (newValue && newValue.id != 'new' && reason === 'selectOption') {
+      if (typeof newValue.info === 'object' && newValue.info !== null) {
+        setCreateOrderSelectedData({ customer: newValue });
+        setValue('id', newValue.id);
+        setValue('firstname', newValue.info.first_name);
+        setValue('lastname', newValue.info.last_name);
+        setValue('phone', newValue.info.phone);
+        setValue('email', newValue.info.email);
+        ['firstname', 'lastname', 'phone', 'email'].forEach((field) => trigger(field));
+      }
     }
-    trigger('firstname');
-    trigger('lastname');
-    trigger('phone');
-    trigger('email');
+
+    if (reason === 'clear' || newValue?.id == 'new') {
+      clearCreateOrderSelectedData('customer');
+      reset();
+    }
   };
 
   const customerFilterOptions = (options: any, params: any) => {
@@ -134,11 +118,11 @@ function Step1({ nextStep, customers }: Step1Props) {
   return (
     <TabPanel unmount={false}>
       <SimpleAutocomplete
-        id="customer"
+        name="customer"
         label="Cliente"
         options={customers}
         isLoading={!customers}
-        onChange={(_, newValue) => handleCustomerChange(newValue)}
+        onChange={(_, newValue, reason) => handleCustomerChange(newValue, reason)}
         filterOptions={customerFilterOptions}
       />
 

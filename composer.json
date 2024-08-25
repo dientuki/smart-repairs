@@ -58,7 +58,7 @@
             "@php artisan migrate --graceful --ansi"
         ],
         "linter": [
-
+            "composer phpcbf",
             "composer phpcs",
             "composer phpstan",
             "composer phpmnd"
