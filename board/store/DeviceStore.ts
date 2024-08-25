@@ -160,7 +160,7 @@ export const useDeviceStore = create<DeviceStore>((set) => ({
 
   confirmDeviceUnit: async(data: any): Promise<void> => {
     const response = await confirmDeviceUnit(data);
-    set({ deviceUnit: response });
+    //set({ deviceUnit: response });
   }
 
 }));

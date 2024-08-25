@@ -28,7 +28,7 @@ function UpdateDeviceUnitModal() {
   const { brands } = useBrandStore();
   const { deviceTypes } = useDeviceTypeStore();
   const { clear, devices, deviceVersions, deviceUnitsByVersion, deviceUnit } = useDeviceStore();
-  const { getDeviceUnitUpdate, getDevicesByTypeAndBrand, getDeviceVersions, getDevicesUnitsByVersion } = useDeviceStore();
+  const { getDeviceUnitUpdate, getDevicesByTypeAndBrand, getDeviceVersions, getDevicesUnitsByVersion, confirmDeviceUnit } = useDeviceStore();
   const { handleSubmit, control, formState: { errors }, getValues, setValue, setError, trigger } = useForm();
   const [isLoading, setIsLoading] = useState(true);
 
@@ -96,11 +96,12 @@ function UpdateDeviceUnitModal() {
     }
   };
 
-  const handleRegistration = (data: FieldValues ) => {
+  const handleRegistration = async(data: FieldValues ) => {
     console.log('data', data)
+    await confirmDeviceUnit(data);
 
-    return
-    //modal.close();
+    //return
+    modal.close();
   }
 
   const handleError = (errors: FieldErrors<FieldValues>) => {

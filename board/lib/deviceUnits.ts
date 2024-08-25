@@ -248,7 +248,7 @@ export async function getTemporaryDeviceUnit(orderId: string): Promise<any> {
 export async function confirmDeviceUnit(data: any): Promise<any> {
     const response = await graphqlRequest(`
         mutation {
-            confirmDeviceUnit(confirmDeviceUnitInput: {
+            confirmDeviceUnit(input: {
                 order: "${data.order}",
                 brandid: "${handleNew(data.brandid)}",
                 brandlabel: "${data.brandlabel}",
@@ -262,9 +262,9 @@ export async function confirmDeviceUnit(data: any): Promise<any> {
                 versionid: "${handleNew(data.versionid)}",
                 versionlabel: "${data.versionlabel}"
             })
-        `);
+        }`);
 
     handleGraphQLErrors(response.errors);
 
-    return
+    return response.data.confirmDeviceUnit
 }

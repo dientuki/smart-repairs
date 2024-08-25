@@ -14,9 +14,6 @@ extend type Query {
     temporaryDeviceUnits(orderId: String!): [DeviceUnit]
         @field(resolver: "DeviceUnitQueries@getTemporaryDeviceUnits")
         @namespace(field: "App\\GraphQL\\Queries")
-    confirmDeviceUnit(data: ConfirmDeviceUnitInput!): Boolean
-        @field(resolver: "DeviceUnitMutations@confirmDeviceUnit")
-        @namespace(field: "App\\GraphQL\\Mutations")
 }
 
 extend type Mutation {
@@ -28,6 +25,9 @@ extend type Mutation {
         @namespace(field: "App\\GraphQL\\Mutations")
     addTemporaryDeviceUnit(input: TemporaryDeviceUnitInput): TemporaryDeviceUnitResult
         @field(resolver: "DeviceUnitMutations@createTemporaryDeviceUnit")
+        @namespace(field: "App\\GraphQL\\Mutations")
+    confirmDeviceUnit(input: ConfirmDeviceUnitInput!): Boolean
+        @field(resolver: "DeviceUnitMutations@confirmDeviceUnit")
         @namespace(field: "App\\GraphQL\\Mutations")
 }
 
