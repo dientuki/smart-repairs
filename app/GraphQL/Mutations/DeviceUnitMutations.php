@@ -209,7 +209,6 @@ final readonly class DeviceUnitMutations
             DB::commit();
 
             return true;
-
         } catch (Exception $e) {
             DB::rollBack();
 
@@ -220,6 +219,5 @@ final readonly class DeviceUnitMutations
                 'code' => $e->getCode(),
             ];
         };
-
     }
 }
