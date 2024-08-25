@@ -19,7 +19,6 @@ function ViewCardModal() {
 
   useEffect(() => {
     getOrder(modal.params.order).catch((e: any) => {
-      console.log(e.message);
       toast.error(t(`toast.error.${e.message}`));
     });
   }, [getOrder]);
@@ -60,7 +59,9 @@ function ViewCardModal() {
                 <p className="my-2">Desbloqueo: Codigo/patron</p>
                 <p className="my-2">Validaciones: Usuario</p>
               </div>
-                <button className="rounded-md bg-sky-600 px-3 py-1.5 text-sm font-bold leading-6 text-white shadow-sm hover:bg-sky-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-600" onClick={handleUpdateDeviceUnit}>Validar/Actualizar</button>
+                <button className="mt-4 w-full rounded-md bg-sky-600 px-3 py-1.5 text-sm font-bold leading-6 text-white shadow-sm hover:bg-sky-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-600" onClick={handleUpdateDeviceUnit}>
+                  { order.deviceUnitId ? "Actualizar" : "Validar" }
+                </button>
             </div>
           </div>
       }

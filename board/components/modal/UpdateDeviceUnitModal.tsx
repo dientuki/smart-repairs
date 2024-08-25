@@ -191,7 +191,7 @@ function UpdateDeviceUnitModal() {
 
   return (
     <ModalLayout width="728px" height="460px">
-      <h2>Validar/Actualizar equipo</h2>
+      <h2>{ deviceUnit.device_unit_id ? "Actualizar" : "Validar" } equipo</h2>
       {!isLoading &&
         <>
           <form onSubmit={handleSubmit(handleRegistration, handleError)} >
@@ -276,7 +276,9 @@ function UpdateDeviceUnitModal() {
                 onChange={(_, newValue) => handleSerialChange(newValue)}
               />
             </div>
-            <button type="submit" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center w-full mt-4">Validar/Actualizar</button>
+            <button type="submit" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center w-full mt-4">
+              { deviceUnit.device_unit_id ? "Actualizar" : "Validar" }
+            </button>
           </form>
         </>
       }
