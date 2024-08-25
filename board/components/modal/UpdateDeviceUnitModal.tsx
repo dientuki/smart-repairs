@@ -40,6 +40,10 @@ function UpdateDeviceUnitModal() {
     serial: null
   });
 
+  modal.on("close", () => {
+    clear(['devices', 'deviceVersions', 'deviceUnitsByVersion', 'deviceUnit']);
+  });
+
   useEffect(() => {
     setValue('order', modal.params.order);
     getDeviceUnitUpdate(modal.params.order, modal.params.deviceUnitId)
@@ -54,7 +58,9 @@ function UpdateDeviceUnitModal() {
     findAndSet(devices, deviceUnit.device_id, setDevice, 'device');
     setValue('url', deviceUnit.url || '');
     findAndSet(deviceVersions, deviceUnit.device_version_id, setVersion, 'version');
-    findAndSet(deviceUnitsByVersion, deviceUnit.device_unit_id, setSerial, 'serial');
+    if (deviceUnit.device_unit_id) {
+      findAndSet(deviceUnitsByVersion, deviceUnit.device_unit_id, setSerial, 'serial');
+    }
     setIsLoading(false);
   }, [deviceUnit]);
 
@@ -64,6 +70,10 @@ function UpdateDeviceUnitModal() {
   }, [deviceVersions]);
 
   useEffect(() => {
+    if (!deviceUnit.device_unit_id) {
+      deviceUnitsByVersion.push({ id: '', label: deviceUnit.serial || '' });
+      setSerial(deviceUnitsByVersion[0]);
+    }
     findAndSet(deviceUnitsByVersion, getValues('serialid'), setSerial, 'serial');
   }, [deviceUnitsByVersion]);
 
@@ -97,7 +107,6 @@ function UpdateDeviceUnitModal() {
   };
 
   const handleRegistration = async(data: FieldValues ) => {
-    console.log('data', data)
     await confirmDeviceUnit(data);
 
     //return
