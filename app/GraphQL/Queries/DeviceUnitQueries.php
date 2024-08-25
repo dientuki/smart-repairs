@@ -18,6 +18,16 @@ final readonly class DeviceUnitQueries
         return DeviceUnit::where($values)->get();
     }
 
+    public function getDeviceUnit(null $root, array $args, GraphQLContext $context): mixed
+    {
+        $team_id = $this->getTeamIdFromContext($context);
+
+        return DeviceUnit::where([
+            'team_id' => $team_id,
+            'id' => $args['deviceUnitId']
+        ])->first();
+    }
+
     public function getTemporaryDeviceUnit(null $root, array $args, GraphQLContext $context): mixed
     {
         return TemporaryDeviceUnit::where('order_id', $args['orderId'])->first();
