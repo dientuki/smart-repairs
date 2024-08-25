@@ -52,7 +52,7 @@ function UpdateDeviceUnitModal() {
     findAndSet(deviceTypes, deviceUnit.type_id, setType, 'type');
     findAndSet(brands, deviceUnit.brand_id, setBrand, 'brand');
     findAndSet(devices, deviceUnit.device_id, setDevice, 'device');
-    setValue('url', deviceUnit.url);
+    setValue('url', deviceUnit.url || '');
     findAndSet(deviceVersions, deviceUnit.device_version_id, setVersion, 'version');
     findAndSet(deviceUnitsByVersion, deviceUnit.device_unit_id, setSerial, 'serial');
     setIsLoading(false);
@@ -250,7 +250,7 @@ function UpdateDeviceUnitModal() {
                   errors={errors}
                   icon={GlobeAltIcon}
                 />
-            </div>
+              </div>
             <div className="mt-4">
               <ValidatedAutocomplete
                 name="serialid"
