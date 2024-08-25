@@ -95,6 +95,7 @@ export const useDeviceStore = create<DeviceStore>((set) => ({
     useDeviceTypeStore.getState().updateDeviceTypeInStore(response.deviceType);
     useDeviceStore.getState().updateDeviceInStore(device([response.device])[0]);
     useOrderStore.getState().setCreateOrderSelectedData({temporaryDeviceUnitId: response.temporarydeviceunit});
+    useOrderStore.getState().setCreateOrderSelectedData({deviceId: response.device.id});
 
     //return await addTemporaryDeviceUnit(data);
   },
