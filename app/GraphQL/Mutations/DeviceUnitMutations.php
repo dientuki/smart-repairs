@@ -61,7 +61,6 @@ final readonly class DeviceUnitMutations
 
     public function createTemporaryDeviceUnit(null $root, array $args): mixed
     {
-
         try {
             DB::beginTransaction();
 
@@ -85,7 +84,7 @@ final readonly class DeviceUnitMutations
                 ]
             );
 
-            if (!empty($args['input']['versionid']) && !empty($args['input']['versionlabel'])) {
+            if (!empty($args['input']['versionlabel'])) {
                 $deviceVersion = DeviceVersion::updateOrCreate(
                     ['id' => $args['input']['versionid']],
                     [

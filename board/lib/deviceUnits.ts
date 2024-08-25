@@ -92,8 +92,6 @@ export async function addTemporaryDeviceUnit(data: TemporaryDeviceUnitInput): Pr
         }
     `);
 
-    //console.log(response.data.addTemporaryDeviceUnit)
-
     handleGraphQLErrors(response.errors);
     handlePayloadErrors(response.data.addTemporaryDeviceUnit);
 
