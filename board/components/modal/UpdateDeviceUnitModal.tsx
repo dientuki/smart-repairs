@@ -153,7 +153,10 @@ function UpdateDeviceUnitModal() {
     setDevice(null);
     setVersion(null);
     setSerial(null);
-    setValue('url', '')
+    ['deviceid','versionid', 'serialid',
+      'devicelabel', 'versionlabel', 'seriallabel',
+      'url'
+    ].forEach(field => setValue(field, ''));
 
     try {
       await getDevicesByTypeAndBrand(getValues('typeid'), getValues('brandid'));
@@ -190,7 +193,7 @@ function UpdateDeviceUnitModal() {
   }
 
   return (
-    <ModalLayout width="728px" height="460px">
+    <ModalLayout width="728px" minHeight="460px">
       <h2>{ deviceUnit.device_unit_id ? "Actualizar" : "Validar" } equipo</h2>
       {!isLoading &&
         <>
