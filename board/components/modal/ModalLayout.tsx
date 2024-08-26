@@ -5,15 +5,20 @@ interface ModalLayoutProps {
   children: ReactNode;
   width?: string;
   height?: string;
+  minHeight?: string;
 }
 
 function ModalLayout(props: ModalLayoutProps) {
-  const { children, width = '80vw', height = '80vh' } = props;
+  const { children, width = '80vw', height = '80vh', minHeight } = props;
 
   return (
     <div
       className="transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl m-auto cursor-auto relative"
-      style={{ width, height }}
+      style={{
+        width,
+        height: minHeight ? undefined : height, // Usar height solo si minHeight no está definido
+        minHeight: minHeight || undefined // Usar minHeight si está definido
+      }}
     >
       {children ?
         children :

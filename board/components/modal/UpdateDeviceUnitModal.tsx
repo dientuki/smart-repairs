@@ -7,7 +7,7 @@ import { useEffect, useState } from 'react';
 import { toast } from "react-toastify";
 import { GlobeAltIcon } from "@heroicons/react/16/solid";
 import { InputField, ValidatedAutocomplete } from "@/components/form";
-import { useBrandStore, useDeviceStore, useDeviceTypeStore } from "@/store";
+import { useBoardStore, useBrandStore, useDeviceStore, useDeviceTypeStore, useOrderStore } from "@/store";
 
 type ModalParams = {
   order: string;
@@ -29,6 +29,8 @@ function UpdateDeviceUnitModal() {
   const { deviceTypes } = useDeviceTypeStore();
   const { clear, devices, deviceVersions, deviceUnitsByVersion, deviceUnit } = useDeviceStore();
   const { getDeviceUnitUpdate, getDevicesByTypeAndBrand, getDeviceVersions, getDevicesUnitsByVersion, confirmDeviceUnit } = useDeviceStore();
+  const { getOrder } = useOrderStore();
+  const { getBoard } = useBoardStore();
   const { handleSubmit, control, formState: { errors }, getValues, setValue, setError, trigger } = useForm();
   const [isLoading, setIsLoading] = useState(true);
 
@@ -110,6 +112,9 @@ function UpdateDeviceUnitModal() {
   const handleRegistration = async(data: FieldValues ) => {
     data.deviceunitid = deviceUnit.device_unit_id || null;
     await confirmDeviceUnit(data);
+    await getOrder(data.order);
+    getBoard();
+
 
     modal.close();
   }
@@ -153,7 +158,10 @@ function UpdateDeviceUnitModal() {
     setDevice(null);
     setVersion(null);
     setSerial(null);
-    setValue('url', '')
+    ['deviceid','versionid', 'serialid',
+      'devicelabel', 'versionlabel', 'seriallabel',
+      'url'
+    ].forEach(field => setValue(field, ''));
 
     try {
       await getDevicesByTypeAndBrand(getValues('typeid'), getValues('brandid'));
@@ -190,7 +198,7 @@ function UpdateDeviceUnitModal() {
   }
 
   return (
-    <ModalLayout width="728px" height="460px">
+    <ModalLayout width="728px" minHeight="460px">
       <h2>{ deviceUnit.device_unit_id ? "Actualizar" : "Validar" } equipo</h2>
       {!isLoading &&
         <>
