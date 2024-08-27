@@ -1,5 +1,6 @@
-import { graphqlRequest, handleGraphQLErrors, handleUndefined, handlePayloadErrors, handleNew } from "@/helper/functions";
-import { deviceVersion, extra } from "@/helper/reduce";
+import { graphqlRequest, handleGraphQLErrors, handlePayloadErrors } from "@/helper/graphqlHelpers";
+import { deviceVersion, extra } from "@/helper/reduceHelpers";
+import { handleNew, handleUndefined } from "@/helper/stringHelpers";
 
 export async function createDeviceUnit(deviceUnit: NewDeviceUnit): Promise<string> {
     const response = await graphqlRequest(`

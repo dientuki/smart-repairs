@@ -1,5 +1,6 @@
-import { graphqlRequest, arrayToString, handleGraphQLErrors } from "@/helper/functions";
-import { device, extra } from "@/helper/reduce";
+import { arrayToString } from "@/helper/stringHelpers";
+import { device, extra } from "@/helper/reduceHelpers";
+import { graphqlRequest, handleGraphQLErrors } from "@/helper/graphqlHelpers";
 
 export const createOrder = async (newOrder: NewOrder) => {
 

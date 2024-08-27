@@ -1,4 +1,4 @@
-import { graphqlRequest } from "@/helper/functions";
+import { graphqlRequest } from "@/helper/graphqlHelpers";
 
 export const updateCommentVisibility = (commentId: string, isPublic: boolean) => {
   graphqlRequest(`

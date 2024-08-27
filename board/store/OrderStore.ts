@@ -1,7 +1,7 @@
 import { create } from 'zustand'
-import { getOrder, getOrderCreationData } from "@/lib/orders";
-import { addComment, updateCommentVisibility, updateComment, deleteComment } from "@/lib/comments";
-import { createOrder } from "@/lib/orders";
+import { getOrder, getOrderCreationData } from "@/services/orders";
+import { addComment, updateCommentVisibility, updateComment, deleteComment } from "@/services/comments";
+import { createOrder } from "@/services/orders";
 import { useCustomerStore, useDeviceStore, useBrandStore, useDeviceTypeStore } from "@/store";
 
 interface CreateOrderSelectedData {

@@ -1,9 +1,9 @@
 import { create } from 'zustand'
-import { addTemporaryDeviceUnit, confirmDeviceUnit, getDevicesUnitsByVersionId, getDeviceUnitUpdate, getTemporaryDeviceUnit } from "@/lib/deviceUnits";
-import { getDeviceVersions } from "@/lib/deviceVersions";
+import { addTemporaryDeviceUnit, confirmDeviceUnit, getDevicesUnitsByVersionId, getDeviceUnitUpdate, getTemporaryDeviceUnit } from "@/services/deviceUnits";
+import { getDeviceVersions } from "@/services/deviceVersions";
 import { useBrandStore, useDeviceTypeStore, useOrderStore }  from "@/store";
-import { device } from "@/helper/reduce";
-import { getDevicesByTypeAndBrand } from "@/lib/devices";
+import { device } from "@/helper/reduceHelpers";
+import { getDevicesByTypeAndBrand } from "@/services/devices";
 
 /*
   get To retrieve data from the server
