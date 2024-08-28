@@ -40,29 +40,40 @@ const defaultData: BillItem[] = [
 ];
 const columnHelper = createColumnHelper<BillItem>();
 
-const registerOptions = {
-  quantity: {
-    required: true
-  }
-}
 
 export const BudgetModal = () => {
   const { t } = useTranslation();
   const [data, setData] = useState(() => [...defaultData]);
   const [total, setTotal] = useState(0);
-  const { control, handleSubmit } = useForm();
-  const { fields, append, remove } = useFieldArray({
-    control,
-    name: 'items',
-  });
+  const { control, handleSubmit, formState: { errors } } = useForm();
 
   useEffect(() => {
     const newTotal = data
-      .filter(item => item.includeInSum)  // Filtrar solo los elementos donde includeInSum es true
-      .reduce((acc, item) => acc + item.totalPrice, 0);  // Sumar los priceTotal de esos elementos
+      .filter(item => item.includeInSum)
+      .reduce((acc, item) => acc + item.totalPrice, 0);
 
     setTotal(newTotal);
   }, [data]);
+
+  const registerOptions = {
+    quantity: {
+      required: true,
+      min: 1,
+      valueAsNumber: true,
+      validate: (value: number) => Number.isInteger(value),
+    },
+    unitPrice: {
+      required: true,
+      valueAsNumber: true,
+      validate: (value: number) => Number.isInteger(value),
+    },
+  }
+
+
+  const { remove } = useFieldArray({
+    control,
+    name: "items"
+  });
 
   const columns = [
     columnHelper.accessor("description", {
@@ -76,11 +87,20 @@ export const BudgetModal = () => {
         name: "items",
         control: control,
         rules: registerOptions.quantity,
+        errors: errors,
+        type: "number"
       }
     }),
     columnHelper.accessor("unitPrice", {
       header: "Precio unitario",
-
+      cell: InputCell,
+      meta: {
+        name: "items",
+        control: control,
+        rules: registerOptions.unitPrice,
+        errors: errors,
+        type: "number"
+      }
     }),
     columnHelper.accessor("totalPrice", {
       header: "Precio Total",
@@ -135,12 +155,13 @@ export const BudgetModal = () => {
         const setFilterFunc = (old: BillItem[]) =>
           old.filter((_row: BillItem, index: number) => index !== rowIndex);
         setData(setFilterFunc);
+        remove(rowIndex);
       },
     },
   });
 
   const handleRegistration = async(data: FieldValues ) => {
-    console.log(data)
+    console.log('submit', data)
     return false;
   }
 
@@ -148,10 +169,16 @@ export const BudgetModal = () => {
     console.log('error', error)
   };
 
+  const handleKeyDown = (event: React.KeyboardEvent) => {
+    if (event.key === 'Enter') {
+      event.preventDefault(); // Evita que se envíe el formulario al presionar Enter
+    }
+  };
+
   return (
     <ModalLayout minHeight="460px">
       <h2>Presupuestar equipo</h2>
-      <form onSubmit={handleSubmit(handleRegistration, handleError)}>
+      <form onSubmit={handleSubmit(handleRegistration, handleError)} onKeyDown={handleKeyDown}>
         <table>
           <thead>
             {table.getHeaderGroups().map((headerGroup) => (

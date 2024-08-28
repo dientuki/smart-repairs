@@ -10,7 +10,6 @@ export const BooleanCell = ({ getValue, row, column, table }) => {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.checked;
-    console.log(e.target.checked, newValue);
     setValue(newValue);
 
     // Actualiza los datos en el `onChange`
