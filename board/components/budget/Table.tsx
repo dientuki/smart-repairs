@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { InputCell } from "./InputCell";
 import { RemoveRow } from "./RemoveRow";
 import { AddRow } from "./AddRow";
@@ -9,14 +9,15 @@ import {
   getCoreRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { Button } from "@headlessui/react";
 import ActionButton from "../form/ActionButton";
+import { BooleanCell } from "./BooleanCell";
 
 
 type BillItem = {
   description: string;
   quantity: number;
   price: number;
+  priceTotal: number;
   addToTotal: boolean;
 };
 
@@ -25,18 +26,21 @@ const defaultData: BillItem[] = [
     description: 'Mano de obra',
     quantity: 1,
     price: 5000,
+    priceTotal: 5000,
     addToTotal: true,
   },
   {
     description: 'Parte',
     quantity: 2,
     price: 5000,
+    priceTotal: 10000,
     addToTotal: false,
   },
   {
     description: 'Otra cosa',
     quantity: 1,
     price: 1000,
+    priceTotal: 1000,
     addToTotal: false,
   }
 ];
@@ -52,15 +56,19 @@ const columns = [
     meta: {type: "number"}
   }),
   columnHelper.accessor("price", {
-    header: "Precio",
+    header: "Precio unitario",
     cell: InputCell,
     meta: {
       type: "number",
       caca: "popo"
     }
   }),
+  columnHelper.accessor("priceTotal", {
+    header: "Precio Total",
+  }),
   columnHelper.accessor("addToTotal", {
     header: "Suma?",
+    cell: BooleanCell
   }),
   columnHelper.display({
     id: "edit",
@@ -71,6 +79,16 @@ const columns = [
 
 export const Table = () => {
   const [data, setData] = useState(() => [...defaultData]);
+  const [total, setTotal] = useState(0);
+
+  useEffect(() => {
+    const newTotal = data
+      .filter(item => item.addToTotal)  // Filtrar solo los elementos donde addToTotal es true
+      .reduce((acc, item) => acc + item.priceTotal, 0);  // Sumar los priceTotal de esos elementos
+
+    setTotal(newTotal);
+  }, [data]);
+
 
   const table = useReactTable({
     data,
@@ -81,9 +99,15 @@ export const Table = () => {
         setData((old) =>
           old.map((row, index) => {
             if (index === rowIndex) {
+
+              const newQuantity = columnId === 'quantity' ? Number(value) : row.quantity;
+              const newPrice = columnId === 'price' ? Number(value) : row.price;
+              const newPriceTotal = newQuantity * newPrice;
+
               return {
-                ...old[rowIndex],
-                [columnId]: value,
+                ...row,
+                [columnId]: Number(value),
+                priceTotal: newPriceTotal,
               };
             }
             return row;
@@ -95,17 +119,16 @@ export const Table = () => {
           description: "text",
           quantity: 1,
           price: 200,
+          priceTotal: 1000,
           addToTotal: true,
         };
         const setFunc = (old: BillItem[]) => [...old, newRow];
         setData(setFunc);
-        //setOriginalData(setFunc);
       },
       removeRow: (rowIndex: number) => {
         const setFilterFunc = (old: BillItem[]) =>
           old.filter((_row: BillItem, index: number) => index !== rowIndex);
         setData(setFilterFunc);
-        //setOriginalData(setFilterFunc);
       },
     },
   });
@@ -147,14 +170,14 @@ export const Table = () => {
         </tbody>
         <tfoot>
           <tr>
-            <td colSpan={2}>Total</td>
-            <td colSpan={1} align="right">Precio</td>
+            <td colSpan={3} >Total</td>
+            <td colSpan={1} align="right">{total}</td>
             <td colSpan={2}></td>
           </tr>
         </tfoot>
       </table>
       <div className="mt-4">
-          <ActionButton customClass=" mt-6">asdf</ActionButton>
+          <ActionButton customClass=" mt-6">asdf {total}</ActionButton>
       </div>
 
     </>

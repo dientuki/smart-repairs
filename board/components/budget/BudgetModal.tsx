@@ -8,7 +8,7 @@ function BudgetModal() {
   const { t } = useTranslation();
 
   return (
-    <ModalLayout width="728px" minHeight="460px">
+    <ModalLayout minHeight="460px">
       <h2>Presupuestar equipo</h2>
       <div>
         <Table />

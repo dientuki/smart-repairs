@@ -7,15 +7,20 @@ export const InputCell = ({ getValue, row, column, table }) => {
   useEffect(() => {
     setValue(initialValue);
   }, [initialValue]);
-  const onBlur = () => {
-    table.options.meta?.updateData(row.index, column.id, value);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newValue = e.target.value;
+    setValue(newValue);
+
+    // Actualiza los datos en el `onChange`
+    table.options.meta?.updateData(row.index, column.id, newValue);
+    console.log('Actualización en onChange');
   };
 
   return (
     <input
       value={value}
-      onChange={(e) => setValue(e.target.value)}
-      onBlur={onBlur}
+      onChange={handleChange}
       type={column.columnDef.meta?.type || "text"}
     />
   );
