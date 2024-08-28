@@ -6,7 +6,7 @@ import { toast } from "react-toastify";
 import { useEffect, useState } from "react";
 import { GlobeAltIcon } from "@heroicons/react/16/solid";
 import { InputField, SimpleAutocomplete, ValidatedAutocomplete } from "@/components/form";
-import { capitalizeFirstLetter } from "@/helper/functions";
+import { capitalizeFirstLetter } from "@/helper/stringHelpers";
 import { Modal, NewDeviceUnitModal, PatternLockModal } from "@/components/modal";
 import { useDeviceStore, useOrderStore, useBrandStore, useDeviceTypeStore } from "@/store";
 import { UnlockType } from "@/types/enums";
