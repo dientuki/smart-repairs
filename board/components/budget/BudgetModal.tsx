@@ -4,70 +4,40 @@ import { useTranslation } from "react-i18next";
 import { useEffect, useState } from "react";
 import { AddRow, InputCell, RemoveRow, BooleanCell } from "@/components/budget";
 import { createColumnHelper, flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table";
-import { ActionButton } from "@/components/form";
+import { ActionButton } from "../form";
 
 type BillItem = {
   description: string;
   quantity: number;
-  price: number;
-  priceTotal: number;
-  addToTotal: boolean;
+  unitPrice: number;
+  totalPrice: number;
+  includeInSum: boolean;
 };
 
 const defaultData: BillItem[] = [
   {
     description: 'Mano de obra',
     quantity: 1,
-    price: 5000,
-    priceTotal: 5000,
-    addToTotal: true,
+    unitPrice: 5000,
+    totalPrice: 5000,
+    includeInSum: true,
   },
   {
     description: 'Parte',
     quantity: 2,
-    price: 5000,
-    priceTotal: 10000,
-    addToTotal: false,
+    unitPrice: 5000,
+    totalPrice: 10000,
+    includeInSum: false,
   },
   {
     description: 'Otra cosa',
     quantity: 1,
-    price: 1000,
-    priceTotal: 1000,
-    addToTotal: false,
+    unitPrice: 1000,
+    totalPrice: 1000,
+    includeInSum: false,
   }
 ];
 const columnHelper = createColumnHelper<BillItem>();
-
-const columns = [
-  columnHelper.accessor("description", {
-    header: "Description",
-  }),
-  columnHelper.accessor("quantity", {
-    header: "Cantidad",
-    cell: InputCell,
-    meta: {type: "number"}
-  }),
-  columnHelper.accessor("price", {
-    header: "Precio unitario",
-    cell: InputCell,
-    meta: {
-      type: "number",
-      caca: "popo"
-    }
-  }),
-  columnHelper.accessor("priceTotal", {
-    header: "Precio Total",
-  }),
-  columnHelper.accessor("addToTotal", {
-    header: "Suma?",
-    cell: BooleanCell
-  }),
-  columnHelper.display({
-    id: "edit",
-    cell: RemoveRow,
-  }),
-];
 
 export const BudgetModal = () => {
   const { t } = useTranslation();
@@ -76,11 +46,41 @@ export const BudgetModal = () => {
 
   useEffect(() => {
     const newTotal = data
-      .filter(item => item.addToTotal)  // Filtrar solo los elementos donde addToTotal es true
-      .reduce((acc, item) => acc + item.priceTotal, 0);  // Sumar los priceTotal de esos elementos
+      .filter(item => item.includeInSum)  // Filtrar solo los elementos donde includeInSum es true
+      .reduce((acc, item) => acc + item.totalPrice, 0);  // Sumar los priceTotal de esos elementos
 
     setTotal(newTotal);
   }, [data]);
+
+  const columns = [
+    columnHelper.accessor("description", {
+      header: "Description",
+    }),
+
+    columnHelper.accessor("quantity", {
+      header: "Cantidad",
+      cell: InputCell,
+      meta: {
+        type: "number",
+        name: "items"
+      }
+    }),
+    columnHelper.accessor("unitPrice", {
+      header: "Precio unitario",
+
+    }),
+    columnHelper.accessor("totalPrice", {
+      header: "Precio Total",
+    }),
+    columnHelper.accessor("includeInSum", {
+      header: "Suma?",
+      cell: BooleanCell
+    }),
+    columnHelper.display({
+      id: "edit",
+      cell: RemoveRow,
+    }),
+  ];
 
 
   const table = useReactTable({
@@ -94,13 +94,13 @@ export const BudgetModal = () => {
             if (index === rowIndex) {
 
               const newQuantity = columnId === 'quantity' ? Number(value) : row.quantity;
-              const newPrice = columnId === 'price' ? Number(value) : row.price;
+              const newPrice = columnId === 'unitPrice' ? Number(value) : row.unitPrice;
               const newPriceTotal = newQuantity * newPrice;
 
               return {
                 ...row,
                 [columnId]: Number(value),
-                priceTotal: newPriceTotal,
+                totalPrice: newPriceTotal,
               };
             }
             return row;
@@ -111,9 +111,9 @@ export const BudgetModal = () => {
         const newRow: BillItem = {
           description: "text",
           quantity: 1,
-          price: 200,
-          priceTotal: 1000,
-          addToTotal: true,
+          unitPrice: 200,
+          totalPrice: 1000,
+          includeInSum: true,
         };
         const setFunc = (old: BillItem[]) => [...old, newRow];
         setData(setFunc);
@@ -130,51 +130,51 @@ export const BudgetModal = () => {
     <ModalLayout minHeight="460px">
       <h2>Presupuestar equipo</h2>
       <div>
-        <table>
-          <thead>
-            {table.getHeaderGroups().map((headerGroup) => (
-              <tr key={headerGroup.id}>
-                {headerGroup.headers.map((header) => (
-                  <th key={header.id}>
-                    {header.isPlaceholder
-                      ? null
-                      : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext()
-                        )}
-                  </th>
-                ))}
-              </tr>
-            ))}
-          </thead>
-          <tbody>
-            {table.getRowModel().rows.map((row) => (
-              <tr key={row.id}>
-                {row.getVisibleCells().map((cell) => (
-                  <td key={cell.id}>
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </td>
-                ))}
-              </tr>
-            ))}
-            <tr>
-              <td colSpan={table.getCenterLeafColumns().length} align="right">
-                <AddRow table={table} />
-              </td>
+      <table>
+        <thead>
+          {table.getHeaderGroups().map((headerGroup) => (
+            <tr key={headerGroup.id}>
+              {headerGroup.headers.map((header) => (
+                <th key={header.id}>
+                  {header.isPlaceholder
+                    ? null
+                    : flexRender(
+                        header.column.columnDef.header,
+                        header.getContext()
+                      )}
+                </th>
+              ))}
             </tr>
-          </tbody>
-          <tfoot>
-            <tr>
-              <td colSpan={3} >Total</td>
-              <td colSpan={1} align="right">{total}</td>
-              <td colSpan={2}></td>
+          ))}
+        </thead>
+        <tbody>
+          {table.getRowModel().rows.map((row) => (
+            <tr key={row.id}>
+              {row.getVisibleCells().map((cell) => (
+                <td key={cell.id}>
+                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                </td>
+              ))}
             </tr>
-          </tfoot>
-        </table>
-
-        <div className="mt-4">
+          ))}
+          <tr>
+            <td colSpan={table.getCenterLeafColumns().length} align="right">
+              <AddRow table={table} />
+            </td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <tr>
+            <td colSpan={3} >Total</td>
+            <td colSpan={1} align="right">{total}</td>
+            <td colSpan={2}></td>
+          </tr>
+        </tfoot>
+      </table>
+      <div className="mt-4">
           <ActionButton customClass=" mt-6">asdf {total}</ActionButton>
-        </div>
+      </div>
+
 
       </div>
     </ModalLayout>
