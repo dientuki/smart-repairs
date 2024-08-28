@@ -9,7 +9,7 @@ interface ActionButtonProps {
   type?: 'button' | 'submit' | 'reset'; // Button type
 }
 
-const ActionButton: React.FC<ActionButtonProps> = ({
+export const ActionButton: React.FC<ActionButtonProps> = ({
   customClass = 'w-1/4',
   children,
   onClick,
@@ -29,5 +29,3 @@ const ActionButton: React.FC<ActionButtonProps> = ({
     </Button>
   );
 };
-
-export default ActionButton;

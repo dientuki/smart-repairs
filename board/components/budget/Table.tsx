@@ -1,7 +1,5 @@
 import { useEffect, useState } from "react";
-import { InputCell } from "./InputCell";
-import { RemoveRow } from "./RemoveRow";
-import { AddRow } from "./AddRow";
+import { AddRow, InputCell, RemoveRow, BooleanCell } from "@/components/budget";
 
 import {
   createColumnHelper,
@@ -9,8 +7,8 @@ import {
   getCoreRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import ActionButton from "../form/ActionButton";
-import { BooleanCell } from "./BooleanCell";
+import [ ActionButton from "../form/ActionButton";
+
 
 
 type BillItem = {
