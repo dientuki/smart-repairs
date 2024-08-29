@@ -19,11 +19,11 @@ enum DiscountEnum: string implements HasLabel
      */
     public function getLabel(): string
     {
-      return match ($this) {
-        self::None => __('None'),
-        self::Percentage => __('Percentage'),
-        self::Amount => __('Amount'),
-      };
+        return match ($this) {
+            self::None => __('None'),
+            self::Percentage => __('Percentage'),
+            self::Amount => __('Amount'),
+        };
     }
 
     /**
