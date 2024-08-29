@@ -15,7 +15,7 @@ return new class extends Migration
         Schema::create('orders', function (Blueprint $table) {
             $table->ulid('id')->primary();
 
-            $table->enum('status', OrderStatusEnum::getAllCasesAsArray());
+            $table->enum('status', OrderStatusEnum::getAllCasesAsArray())->default(OrderStatusEnum::default()->value);
             $table->text('observation')->nullable();
             $table->boolean('was_edited')->default(false);
 

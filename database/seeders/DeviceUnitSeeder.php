@@ -22,7 +22,6 @@ class DeviceUnitSeeder extends Seeder
             'device_version_id' => $devices[0]->id,
             'team_id' => $team,
             'serial' => '123456789',
-            'unlock_type' => UnlockEnum::None,
             'created_at' => now(),
             'updated_at' => now(),
         ]);

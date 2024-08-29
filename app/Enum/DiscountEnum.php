@@ -5,21 +5,25 @@ namespace App\Enum;
 use Filament\Support\Contracts\HasLabel;
 use App\Traits\EnumAsArrayTrait;
 
-enum UnlockEnum: string implements HasLabel
+enum DiscountEnum: string implements HasLabel
 {
     use EnumAsArrayTrait;
 
-    case None = 'none';
-    case Code = 'code';
-    case Pattern = 'pattern';
+    case None = 'None';
+    case Percentage = 'Percentage';
+    case Amount = 'Amount';
 
+    /**
+     * @param string $value
+     * @return string|null
+     */
     public function getLabel(): string
     {
-        return match ($this) {
-            self::None => __('None'),
-            self::Code => __('Code'),
-            self::Pattern => __('Pattern'),
-        };
+      return match ($this) {
+        self::None => __('None'),
+        self::Percentage => __('Percentage'),
+        self::Amount => __('Amount'),
+      };
     }
 
     /**

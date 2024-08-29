@@ -16,7 +16,7 @@ return new class extends Migration
             $table->ulid('id')->primary();
 
             $table->string('serial');
-            $table->enum('unlock_type', UnlockEnum::getAllCasesAsArray()); //Enum
+            $table->enum('unlock_type', UnlockEnum::getAllCasesAsArray())->default(UnlockEnum::default()->value);
             $table->string('unlock_code')->nullable();
 
             $table->foreignUlid('team_id')->constrained();
