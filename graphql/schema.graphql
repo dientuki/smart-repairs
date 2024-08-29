@@ -21,6 +21,7 @@ type ErrorPayload {
 #import deviceVersion.graphql
 #import serviceJob.graphql
 #import order.graphql
+#import part.graphql
 
 type Brand {
     "Unique primary key."

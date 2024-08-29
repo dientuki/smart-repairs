@@ -25,6 +25,7 @@ class StockSeeder extends Seeder
                 'part_id' => $parts[$i]->id,
                 'quantity' => rand(1, 50),
                 'warning' => rand(1, 10),
+                'price' => number_format(mt_rand(150, 50000000) / 100, 2, '.', ''),
                 'team_id' => $team,
                 'created_at' => now(),
                 'updated_at' => now(),

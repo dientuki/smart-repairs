@@ -15,13 +15,20 @@ export const getInitialValues = async(orderId: string): Promise<any> => {
               label
               price
           }
+          partsByOrder(orderId: "${orderId}") {
+            id
+            label
+            price
+            stock
+            image
+          }
       }
   `);
 
   handleGraphQLErrors(response.errors);
 
   /*
-            parts(orderId: "${orderId}") {
+          partsByOrder(orderId: "${orderId}") {
             id
             label
             price
@@ -33,6 +40,6 @@ export const getInitialValues = async(orderId: string): Promise<any> => {
   return {
     discounts: extra(response.data.discounts),
     services: extra(response.data.services),
-    //parts: extra(response.data.parts)
+    parts: extra(response.data.partsByOrder)
   }
 }

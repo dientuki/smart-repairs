@@ -17,6 +17,7 @@ return new class extends Migration
             $table->foreignUlid('team_id')->constrained();
             $table->unsignedMediumInteger('quantity');
             $table->unsignedMediumInteger('warning');
+            $table->decimal('price', 15, 2);
             $table->timestamps();
         });
     }

@@ -62,4 +62,20 @@ class Part extends ModelAuditable
     {
         return $this->belongsToMany(DeviceVersion::class, 'device_versions_parts');
     }
+
+    public function deviceVersionParts()
+    {
+        return $this->hasMany(DeviceVersionPart::class);
+    }
+
+    public function stock()
+    {
+        return $this->hasMany(Stock::class);
+    }
+
+    public function stockForTeam($teamId)
+    {
+        return $this->stock()->where('team_id', $teamId)->first();
+    }
+
 }

@@ -1,4 +1,4 @@
-import { useServiceJobStore } from "@/store";
+import { useBudgetStore, useServiceJobStore } from "@/store";
 import { Autocomplete, TextField } from "@mui/material";
 import { useEffect, useState } from "react";
 
@@ -13,6 +13,7 @@ export const StaticAutocomplete = ({ getValue, row, column, table }: InputCellPr
   const initialValue = getValue();
   const [val, setVal] = useState(initialValue);
   const { discounts, services } = useServiceJobStore();
+  const { parts } = useBudgetStore();
   const isClearable = row.index == 1 ? true : false;
 
   useEffect(() => {
@@ -38,7 +39,7 @@ export const StaticAutocomplete = ({ getValue, row, column, table }: InputCellPr
       clearOnEscape
       disableClearable={!isClearable}
       onChange={onChange}
-      options={optionsMap[row.index] || discounts}
+      options={optionsMap[row.index] || parts}
       isOptionEqualToValue={() => true}
       renderInput={(params) => (
         <TextField
