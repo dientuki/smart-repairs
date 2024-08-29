@@ -77,5 +77,4 @@ class Part extends ModelAuditable
     {
         return $this->stock()->where('team_id', $teamId)->first();
     }
-
 }
