@@ -45,6 +45,7 @@ type Order {
     observation: String!
     comments: [Comment!]
     author: User!
+    hasBudget: Boolean!
 }
 
 type Orders {

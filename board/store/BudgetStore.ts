@@ -5,16 +5,16 @@ import { getInitialValues } from "@/services/budget";
 interface BudgetStore {
   parts: OptionType[];
   budget: any;
-  initialValues: () => Promise<void>;
+  initialValues: (orderId: string) => Promise<void>;
 }
 
 export const useBudgetStore = create<BudgetStore>((set) => ({
     parts: [],
     budget: {},
 
-    initialValues: async() => {
+    initialValues: async(orderId: string) => {
       //get discounts, services, parts; and set vars in store
-      const {discounts, services, parts} = await getInitialValues('01J6FDPPA4CGWQ2A8RWRJNH53G');
+      const {discounts, services, parts} = await getInitialValues(orderId);
       //const parts = 'parts';
 
       useServiceJobStore.getState().setDiscounts(discounts);

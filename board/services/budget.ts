@@ -22,20 +22,21 @@ export const getInitialValues = async(orderId: string): Promise<any> => {
             stock
             image
           }
+          budget(orderId: "${orderId}") {
+            id
+            total
+            items {
+              part_id
+              service_job_id
+              quantity
+              unit_price
+              include_in_sum
+            }
+          }
       }
   `);
 
   handleGraphQLErrors(response.errors);
-
-  /*
-          partsByOrder(orderId: "${orderId}") {
-            id
-            label
-            price
-            stock
-            image
-          }
-            */
 
   return {
     discounts: extra(response.data.discounts),

@@ -1,0 +1,20 @@
+extend type Query {
+    budget(orderId: ID): [Budget]
+        @field(resolver: "BudgetQueries@getBudget")
+        @namespace(field: "App\\GraphQL\\Queries")
+}
+
+type Budget {
+    id: ID!
+    total: Float!
+    items: [BudgetItem]
+}
+
+type BudgetItem {
+    id: ID!
+    part_id: ID
+    service_job_id: ID
+    quantity: Int!
+    unit_price: Float!
+    include_in_sum: Boolean!
+}

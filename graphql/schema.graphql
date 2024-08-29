@@ -13,6 +13,7 @@ type ErrorPayload {
     code: String
 }
 
+#import budget.graphql
 #import comment.graphql
 #import customer.graphql
 #import device.graphql
