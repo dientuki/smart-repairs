@@ -51,7 +51,7 @@ class Part extends ModelAuditable
         return $this->belongsTo(ModuleCategory::class);
     }
 
-    public function optionLabel(): Attribute
+    public function label(): Attribute
     {
         return Attribute::make(
             get: fn () => $this->moduleCategory->name . ' ' . $this->brand->name . ' ' . $this->part_number

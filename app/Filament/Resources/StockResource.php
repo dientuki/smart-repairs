@@ -47,7 +47,7 @@ class StockResource extends Resource
                             }
                         }
                     )
-                    ->getOptionLabelFromRecordUsing(fn (Model $record) => $record->optionLabel)
+                    ->getOptionLabelFromRecordUsing(fn (Model $record) => $record->label)
                     ->preload()
                     ->required()
                     ->disabledOn('edit')
