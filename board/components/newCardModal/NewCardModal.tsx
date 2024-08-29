@@ -10,7 +10,7 @@ import Step2 from "@/components/newCardModal/Step2";
 import Step3 from "@/components/newCardModal/Step3";
 import { useModalWindow } from "react-modal-global";
 
-function NewCardModal() {
+export const NewCardModal = () => {
   const modal = useModalWindow();
   const [ selectedIndex, setSelectedIndex ] = useState(0);
   const { t } = useTranslation();
@@ -103,5 +103,3 @@ function NewCardModal() {
     </ModalLayout>
   )
 }
-
-export default NewCardModal;

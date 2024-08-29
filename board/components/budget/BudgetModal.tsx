@@ -8,37 +8,35 @@ import { ActionButton } from "@/components/form";
 import { FieldErrors, FieldValues, useFieldArray, useForm } from "react-hook-form";
 import { useBudgetStore } from "@/store";
 import { StaticAutocomplete } from "./StaticAutocomplete";
+import { useModalWindow } from "react-modal-global";
 
 type Item = {
-  description: string;
+  id: string;
   quantity: number;
   unitPrice: number;
   totalPrice: number;
   includeInSum: boolean;
 };
 
+type ModalParams = {
+  order: string;
+};
+
 const defaultData: Item[] = [
   {
     description: 'Mano de obra',
     quantity: 1,
-    unitPrice: 5000,
-    totalPrice: 5000,
+    unitPrice: 0,
+    totalPrice: 0,
     includeInSum: true,
   },
   {
     description: 'Parte',
-    quantity: 2,
-    unitPrice: 5000,
-    totalPrice: 10000,
+    quantity: 0,
+    unitPrice: 0,
+    totalPrice: 0,
     includeInSum: false,
   },
-  {
-    description: 'Otra cosa',
-    quantity: 1,
-    unitPrice: 1000,
-    totalPrice: 1000,
-    includeInSum: false,
-  }
 ];
 const columnHelper = createColumnHelper<Item>();
 
@@ -58,6 +56,7 @@ const registerOptions = {
 
 
 export const BudgetModal = () => {
+  const modal = useModalWindow<ModalParams>();
   const { t } = useTranslation();
   const [data, setData] = useState(() => [...defaultData]);
   const [total, setTotal] = useState(0);
@@ -65,7 +64,7 @@ export const BudgetModal = () => {
   const { initialValues } = useBudgetStore();
 
   useEffect(() => {
-    initialValues();
+    initialValues(modal.params.order);
   }, []);
 
   useEffect(() => {
@@ -74,6 +73,7 @@ export const BudgetModal = () => {
       .reduce((acc, item) => acc + item.totalPrice, 0);
 
     setTotal(newTotal);
+    console.log(data);
   }, [data]);
 
   const { remove } = useFieldArray({
@@ -128,6 +128,22 @@ export const BudgetModal = () => {
     columns,
     getCoreRowModel: getCoreRowModel(),
     meta: {
+      updateItem: (rowIndex: number, newPrice: number) => {
+        setData(oldData =>
+          oldData.map((row, index) => {
+            if (index === rowIndex) {
+              // Actualiza el precio unitario y recalcula el precio total
+              const newTotalPrice = row.quantity * newPrice;
+              return {
+                ...row,
+                unitPrice: newPrice,
+                totalPrice: newTotalPrice,
+              };
+            }
+            return row;
+          })
+        );
+      },
       updateData: (rowIndex: number, columnId: string, value: string) => {
         setData((old) =>
           old.map((row, index) => {
@@ -183,7 +199,7 @@ export const BudgetModal = () => {
   };
 
   return (
-    <ModalLayout minHeight="460px">
+    <ModalLayout minHeight="460px" width = '70vw'>
       <h2>Presupuestar equipo</h2>
       <form onSubmit={handleSubmit(handleRegistration, handleError)} onKeyDown={handleKeyDown}>
         <table className="w-full">
@@ -228,7 +244,7 @@ export const BudgetModal = () => {
           </tfoot>
         </table>
         <div className="mt-4">
-            <ActionButton customClass=" mt-6" type="submit">asdf {total}</ActionButton>
+            <ActionButton customClass=" mt-6" type="submit">Done</ActionButton>
         </div>
 
 

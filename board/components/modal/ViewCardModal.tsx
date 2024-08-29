@@ -6,6 +6,8 @@ import { useEffect } from "react";
 import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
 import { Modal, UpdateDeviceUnitModal, ModalLayout } from "@/components/modal";
+import { ActionButton } from "@/components/form";
+import { BudgetModal } from "@/components/budget";
 
 
 type ModalParams = {
@@ -27,6 +29,10 @@ function ViewCardModal() {
     Modal.open(UpdateDeviceUnitModal, {layer: 5, order: order.$id, deviceUnitId: order.deviceUnitId});
   }
 
+  const handleBudgetModal = () => {
+    Modal.open(BudgetModal, {layer: 5, order: order.$id});
+  }
+
   return (
     <ModalLayout>
       {(modal.params.order == order.$id) &&
@@ -42,8 +48,10 @@ function ViewCardModal() {
                 <p><b>Descripcion inicial del problema:</b></p>
                 <p className="border border-gray-300 p-3 rounded min-h-20">{order.observation}</p>
               </div>
-              <div className="my-2">attachments</div>
-              <div className="my-2">presupuesto</div>
+              <div className="my-2">
+                Presupuesto si lo tiene
+                <br />edistar
+              </div>
               <Comments orderId={order.$id} comments={order.comments?.length ? order.comments : []}/>
             </div>
             <div className="basis-1/4">
@@ -59,9 +67,23 @@ function ViewCardModal() {
                 <p className="my-2">Desbloqueo: Codigo/patron</p>
                 <p className="my-2">Validaciones: Usuario</p>
               </div>
-                <button className="mt-4 w-full rounded-md bg-sky-600 px-3 py-1.5 text-sm font-bold leading-6 text-white shadow-sm hover:bg-sky-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-600" onClick={handleUpdateDeviceUnit}>
-                  { order.deviceUnitId ? "Actualizar" : "Validar" }
-                </button>
+              <div>
+                <ActionButton
+                  onClick={handleUpdateDeviceUnit}
+                  customClass="w-full mt-4"
+                  type="button">
+                    { order.deviceUnitId ? t('button.update') : t('button.validate') } {t('device')}
+                </ActionButton>
+                <ActionButton
+                  customClass="w-full mt-4"
+                  disabled={order.deviceUnitId == null && !order.hasBudget}
+                  onClick={handleBudgetModal}
+                  type="button">
+                    { t('button.quote') }
+                </ActionButton>
+
+              </div>
+
             </div>
           </div>
       }

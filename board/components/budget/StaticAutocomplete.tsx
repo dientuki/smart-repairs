@@ -25,7 +25,15 @@ export const StaticAutocomplete = ({ getValue, row, column, table }: InputCellPr
     1: discounts
   };
 
-  const onChange = (newValue: any) => {
+  const handleOnChange = (newValue: OptionType | null, reason: string) => {
+    console.log(row.index, newValue, reason)
+    if (reason === 'clear') {
+      table.options.meta?.updateItem(row.index, 0)
+    } else {
+      const price = row.index == 0 ? newValue?.info : newValue?.info.price;
+      table.options.meta?.updateData(row.index, 'unitPrice', price)
+    }
+
     //setVal(newValue);
     //table.options.meta?.updateData(row.index, column.id, newValue);
   };
@@ -38,7 +46,7 @@ export const StaticAutocomplete = ({ getValue, row, column, table }: InputCellPr
       handleHomeEndKeys
       clearOnEscape
       disableClearable={!isClearable}
-      onChange={onChange}
+      onChange={(_, newValue, reason) => handleOnChange(newValue, reason)}
       options={optionsMap[row.index] || parts}
       isOptionEqualToValue={() => true}
       renderInput={(params) => (

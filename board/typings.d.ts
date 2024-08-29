@@ -87,6 +87,7 @@ interface Order {
     observation: string,
     comments?: OrderComment[],
     commentsQuantity?: number,
+    hasBudget: boolean;
 }
 
 interface OrderComment {
