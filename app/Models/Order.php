@@ -3,12 +3,14 @@
 namespace App\Models;
 
 use App\Enum\OrderStatusEnum;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Order extends ModelWithTeam
 {
-    protected $fillable = ['customer_id', 'team_id', 'user_id', 'device_unit_id', 'device_id', 'observation'];
+    protected $fillable = ['customer_id', 'team_id', 'user_id', 'device_unit_id', 'device_id', 'diagnosis', 'observation'];
 
     protected $casts = [
         'was_edited' => 0,
@@ -39,6 +41,11 @@ class Order extends ModelWithTeam
         return $this->belongsTo(User::class, 'user_id', 'id');
     }
 
+    public function budget(): HasOne
+    {
+        return $this->hasOne(Budget::class);
+    }
+
     /**
      * Updates the status of an order.
      *
@@ -54,5 +61,12 @@ class Order extends ModelWithTeam
             return $order->save();
         }
         return false;
+    }
+
+    public function hasBudget(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => $this->budget()->exists()
+        );
     }
 }
