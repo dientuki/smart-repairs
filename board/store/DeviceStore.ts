@@ -164,5 +164,3 @@ export const useDeviceStore = create<DeviceStore>((set) => ({
   }
 
 }));
-
-export default useDeviceStore;

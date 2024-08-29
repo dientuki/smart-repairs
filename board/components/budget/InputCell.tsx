@@ -15,7 +15,6 @@ export const InputCell = ({ getValue, row, column, table }: InputCellProps) => {
   const name = `${column.columnDef.meta?.name}.${row.id}.${column.id}`;
   const errorMessage = column.columnDef.meta.errors.items?.[row.index]?.[column.id] ?? null;
 
-
   useEffect(() => {
     setVal(initialValue);
   }, [initialValue]);

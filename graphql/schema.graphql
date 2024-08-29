@@ -19,6 +19,7 @@ type ErrorPayload {
 #import deviceTypeCheck.graphql
 #import deviceUnit.graphql
 #import deviceVersion.graphql
+#import serviceJob.graphql
 #import order.graphql
 
 type Brand {

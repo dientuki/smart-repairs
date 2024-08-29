@@ -30,5 +30,3 @@ export const useBrandStore = create<BrandStore>((set) => ({
   },
 
 }));
-
-export default useBrandStore;

@@ -1,13 +1,15 @@
 import "react-modal-global/styles/modal.scss" // Imports essential styles for `ModalContainer`.
-import ModalLayout from "@/components/modal/ModalLayout";
+import { ModalLayout } from "@/components/modal";
 import { useTranslation } from "react-i18next";
 import { useEffect, useState } from "react";
 import { AddRow, InputCell, RemoveRow, BooleanCell } from "@/components/budget";
 import { createColumnHelper, flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table";
-import { ActionButton } from "../form";
+import { ActionButton } from "@/components/form";
 import { FieldErrors, FieldValues, useFieldArray, useForm } from "react-hook-form";
+import { useBudgetStore } from "@/store";
+import { StaticAutocomplete } from "./StaticAutocomplete";
 
-type BillItem = {
+type Item = {
   description: string;
   quantity: number;
   unitPrice: number;
@@ -15,7 +17,7 @@ type BillItem = {
   includeInSum: boolean;
 };
 
-const defaultData: BillItem[] = [
+const defaultData: Item[] = [
   {
     description: 'Mano de obra',
     quantity: 1,
@@ -38,7 +40,21 @@ const defaultData: BillItem[] = [
     includeInSum: false,
   }
 ];
-const columnHelper = createColumnHelper<BillItem>();
+const columnHelper = createColumnHelper<Item>();
+
+const registerOptions = {
+  quantity: {
+    required: true,
+    min: 1,
+    valueAsNumber: true,
+    validate: (value: number) => Number.isInteger(value),
+  },
+  unitPrice: {
+    required: true,
+    valueAsNumber: true,
+    validate: (value: number) => Number.isInteger(value),
+  },
+}
 
 
 export const BudgetModal = () => {
@@ -46,6 +62,11 @@ export const BudgetModal = () => {
   const [data, setData] = useState(() => [...defaultData]);
   const [total, setTotal] = useState(0);
   const { control, handleSubmit, formState: { errors } } = useForm();
+  const { initialValues } = useBudgetStore();
+
+  useEffect(() => {
+    initialValues();
+  }, []);
 
   useEffect(() => {
     const newTotal = data
@@ -55,21 +76,6 @@ export const BudgetModal = () => {
     setTotal(newTotal);
   }, [data]);
 
-  const registerOptions = {
-    quantity: {
-      required: true,
-      min: 1,
-      valueAsNumber: true,
-      validate: (value: number) => Number.isInteger(value),
-    },
-    unitPrice: {
-      required: true,
-      valueAsNumber: true,
-      validate: (value: number) => Number.isInteger(value),
-    },
-  }
-
-
   const { remove } = useFieldArray({
     control,
     name: "items"
@@ -78,6 +84,7 @@ export const BudgetModal = () => {
   const columns = [
     columnHelper.accessor("description", {
       header: "Description",
+      cell: StaticAutocomplete,
     }),
 
     columnHelper.accessor("quantity", {
@@ -141,19 +148,19 @@ export const BudgetModal = () => {
         );
       },
       addRow: () => {
-        const newRow: BillItem = {
+        const newRow: Item = {
           description: "text",
           quantity: 1,
           unitPrice: 200,
           totalPrice: 1000,
           includeInSum: true,
         };
-        const setFunc = (old: BillItem[]) => [...old, newRow];
+        const setFunc = (old: Item[]) => [...old, newRow];
         setData(setFunc);
       },
       removeRow: (rowIndex: number) => {
-        const setFilterFunc = (old: BillItem[]) =>
-          old.filter((_row: BillItem, index: number) => index !== rowIndex);
+        const setFilterFunc = (old: Item[]) =>
+          old.filter((_row: Item, index: number) => index !== rowIndex);
         setData(setFilterFunc);
         remove(rowIndex);
       },
@@ -179,7 +186,7 @@ export const BudgetModal = () => {
     <ModalLayout minHeight="460px">
       <h2>Presupuestar equipo</h2>
       <form onSubmit={handleSubmit(handleRegistration, handleError)} onKeyDown={handleKeyDown}>
-        <table>
+        <table className="w-full">
           <thead>
             {table.getHeaderGroups().map((headerGroup) => (
               <tr key={headerGroup.id}>

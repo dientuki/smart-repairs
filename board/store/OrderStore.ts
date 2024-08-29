@@ -144,5 +144,3 @@ export const useOrderStore = create<OrderStore>((set) => ({
     });
   },
 }));
-
-export default useOrderStore;

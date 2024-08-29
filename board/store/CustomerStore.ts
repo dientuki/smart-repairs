@@ -51,5 +51,3 @@ export const useCustomerStore = create<CustomerStore>((set) => ({
     }
   },
 }));
-
-export default useCustomerStore;

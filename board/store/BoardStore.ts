@@ -10,7 +10,7 @@ interface BoardStore {
     updateStatus: (taskId: string, columnId: TypedColumn) => void,
 }
 
-export const useBoardStore = create<BoardStore>((set) => ({
+export const  useBoardStore = create<BoardStore>((set) => ({
   board: {
     columns: new Map<TypedColumn, Column>(),
   },
@@ -26,5 +26,3 @@ export const useBoardStore = create<BoardStore>((set) => ({
   }
 
 }));
-
-export default useBoardStore;
