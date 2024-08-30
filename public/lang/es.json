@@ -1,4 +1,15 @@
 {
+    "button": {
+        "cancel": "Cancelar",
+        "confirm": "Confirmar",
+        "ok": "OK",
+        "send": "Enviar",
+        "save": "Guardar",
+        "update": "Actualizar",
+        "validate": "Validar",
+        "quote": "Presupuestar"
+    },
+
     "device": "equipo",
 
     "field": {
