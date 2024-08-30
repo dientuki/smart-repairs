@@ -10,6 +10,7 @@ import { useBudgetStore, useServiceJobStore } from "@/store";
 import { StaticAutocomplete } from "./StaticAutocomplete";
 import { useModalWindow } from "react-modal-global";
 import { DiscountType } from "@/types/enums";
+import { capitalizeFirstLetter } from "@/helper/stringHelpers";
 
 type Item = {
   itemId: string;
@@ -24,7 +25,6 @@ type ModalParams = {
   order: string;
 };
 
-
 const newItem: Item = {
   itemId: '',
   serviceId: '',
@@ -37,6 +37,9 @@ const newItem: Item = {
 const columnHelper = createColumnHelper<Item>();
 
 const registerOptions = {
+  serviceId: {
+    required: true,
+  },
   quantity: {
     required: true,
     min: 1,
@@ -130,43 +133,48 @@ export const BudgetModal = () => {
 
   const columns = [
     columnHelper.accessor("itemId", {
-      header: "Description",
+      header: capitalizeFirstLetter(t('budget.description')),
       cell: StaticAutocomplete,
+      meta: {
+        name: "items",
+        control: control,
+        rules: registerOptions.serviceId,
+        errors: errors,
+      }
+
     }),
 
     columnHelper.accessor("quantity", {
-      header: "Cantidad",
+      header: capitalizeFirstLetter(t('budget.quantity')),
       cell: QuantityCell,
       meta: {
         name: "items",
         control: control,
         rules: registerOptions.quantity,
         errors: errors,
-        type: "number",
         className: "w-20 text-center",
       }
     }),
     columnHelper.accessor("unitPrice", {
-      header: "Precio unitario",
+      header: capitalizeFirstLetter(t('budget.unit_price')),
       cell: UnitPriceCell,
       meta: {
         name: "items",
         control: control,
         rules: registerOptions.unitPrice,
         errors: errors,
-        type: "number",
         className: "w-40 text-center",
       }
     }),
     columnHelper.accessor("totalPrice", {
-      header: "Precio Total",
+      header: capitalizeFirstLetter(t('budget.total_price')),
       cell: TotalPriceCell,
       meta: {
         className: "w-40 text-center",
       }
     }),
     columnHelper.accessor("includeInSum", {
-      header: "¿Suma?",
+      header: `¿${capitalizeFirstLetter(t('budget.sum'))}?`,
       cell: BooleanCell,
       meta: {
         className: "w-20",
@@ -283,7 +291,7 @@ export const BudgetModal = () => {
               ))}
               <tr>
                 <td colSpan={table.getCenterLeafColumns().length - 1} align="right" className="border-t-4 border-green-500 py-3">
-                  <div className="cursor-pointer float-right" onClick={table.options.meta?.addRow}>Añadir item</div>
+                  <div className="first-letter:uppercase cursor-pointer float-right" onClick={table.options.meta?.addRow}>{t('budget.new_item')}</div>
                 </td>
                 <td className="border-t-4 border-green-500">
                   <AddRow table={table} />
