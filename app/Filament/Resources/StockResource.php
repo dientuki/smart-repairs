@@ -12,6 +12,7 @@ use Filament\Facades\Filament;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms;
+use Filament\Forms\Components\Grid;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
@@ -52,12 +53,19 @@ class StockResource extends Resource
                     ->required()
                     ->disabledOn('edit')
                     ->columnSpan('full'),
-                TextInput::make('quantity')
-                    ->required(),
-                TextInput::make('warning')
-                    ->required(),
+                Grid::make(3)
+                    ->schema([
+                        TextInput::make('price')
+                            ->prefix('$')
+                            ->required(),
+                        TextInput::make('quantity')
+                            ->required(),
+                        TextInput::make('warning')
+                            ->required(),
+                    ]),
             ]);
     }
+
 
     public static function table(Table $table): Table
     {
@@ -66,6 +74,7 @@ class StockResource extends Resource
                 TextColumn::make('part.moduleCategory.name'),
                 TextColumn::make('part.brand.name'),
                 TextColumn::make('part.part_number'),
+                TextColumn::make('price')->money('ARS'),
                 TextColumn::make('quantity')
                     ->badge()
                     ->color(fn ($state, $record) => match (true) {

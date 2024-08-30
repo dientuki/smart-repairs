@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 
 class Stock extends ModelWithTeam
 {
-    protected $fillable = ['part_id', 'team_id', 'quantity', 'warning'];
+    protected $fillable = ['part_id', 'team_id', 'quantity', 'warning', 'price'];
 
     public function part(): BelongsTo
     {
