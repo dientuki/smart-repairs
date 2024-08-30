@@ -1,4 +1,14 @@
 {
+    "budget": {
+        "quantity": "cantidad",
+        "description": "descripcion",
+        "unit_price": "precio unitario",
+        "total_price": "precio total",
+        "total": "total",
+        "sum": "suma",
+        "new_item": "añadir item"
+    },
+
     "button": {
         "cancel": "Cancelar",
         "confirm": "Confirmar",
@@ -37,7 +47,8 @@
     "toast": {
         "error": {
             "data": "Error de datos",
-            "network": "Error de red"
+            "network": "Error de red",
+            "form": "Error de formulario"
         }
     },
 

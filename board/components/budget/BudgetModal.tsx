@@ -11,6 +11,7 @@ import { StaticAutocomplete } from "./StaticAutocomplete";
 import { useModalWindow } from "react-modal-global";
 import { DiscountType } from "@/types/enums";
 import { capitalizeFirstLetter } from "@/helper/stringHelpers";
+import { toast } from "react-toastify";
 
 type Item = {
   itemId: string;
@@ -132,7 +133,7 @@ export const BudgetModal = () => {
   });
 
   const columns = [
-    columnHelper.accessor("itemId", {
+    columnHelper.accessor("serviceId", {
       header: capitalizeFirstLetter(t('budget.description')),
       cell: StaticAutocomplete,
       meta: {
@@ -141,7 +142,6 @@ export const BudgetModal = () => {
         rules: registerOptions.serviceId,
         errors: errors,
       }
-
     }),
 
     columnHelper.accessor("quantity", {
@@ -246,7 +246,8 @@ export const BudgetModal = () => {
   }
 
   const handleError = (error: FieldErrors<FieldValues>) => {
-    console.log('error', error)
+    console.log(data)
+    toast.error(t(`toast.error.form`));
   };
 
   const handleKeyDown = (event: React.KeyboardEvent) => {
