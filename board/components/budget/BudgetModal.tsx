@@ -82,7 +82,7 @@ export const BudgetModal = () => {
   const [data, setData] = useState<Item[]>([]);
   const [total, setTotal] = useState(0);
   const { control, handleSubmit, formState: { errors } } = useForm();
-  const { initialValues } = useBudgetStore();
+  const { initialValues, updateBudget } = useBudgetStore();
   const { discounts } = useServiceJobStore();
 
   useEffect(() => {
@@ -228,8 +228,13 @@ export const BudgetModal = () => {
         );
       },
       addRow: () => {
-        const setFunc = (old: Item[]) => [...old, newItem];
-        setData(setFunc);
+        const canAdd = data.every(item => item.itemId === "init" || item.serviceId !== '');
+        if (canAdd) {
+          const setFunc = (old: Item[]) => [...old, newItem];
+          setData(setFunc);
+        } else {
+          toast.error(capitalizeFirstLetter(t(`budget.error.can_add`)));
+        }
       },
       removeRow: (rowIndex: number) => {
         const setFilterFunc = (old: Item[]) =>
@@ -240,8 +245,9 @@ export const BudgetModal = () => {
     },
   });
 
-  const handleRegistration = async(data: FieldValues ) => {
+  const handleRegistration = async(formData: FieldValues ) => {
     console.log('submit', data)
+    await updateBudget(modal.params.order, data);
     return false;
   }
 
