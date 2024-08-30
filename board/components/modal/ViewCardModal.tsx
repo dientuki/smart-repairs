@@ -38,7 +38,7 @@ function ViewCardModal() {
       {(modal.params.order == order.$id) &&
           <div className="flex flex-row h-full">
             <div className="basis-3/4 pr-6 overflow-y-scroll mr-3">
-              <h2 className="text-2xl font-medium leading-6 text-gray-900">
+              <h2 className="text-3xl font-medium leading-6 text-gray-900">
                 {order.brand} {order.deviceCommercialName}{order.deviceTechName && ` (${order.deviceTechName})`}
               </h2>
               <p className="my-2">

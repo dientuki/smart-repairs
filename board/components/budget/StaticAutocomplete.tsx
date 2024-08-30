@@ -15,7 +15,7 @@ export const StaticAutocomplete = ({ getValue, row, column, table }: StaticAutoc
   useEffect(() => {
 
     if (row.index == 0) {
-      table.options.meta?.updateId(row.index, options[0].id)
+      table.options.meta?.updateServiceId(row.index, options[0].id)
       table.options.meta?.updatePrice(row.index, 'unitPrice', options[0].info)
     }
 
@@ -33,7 +33,7 @@ export const StaticAutocomplete = ({ getValue, row, column, table }: StaticAutoc
         price = newValue.info.price ? Number(newValue.info.price) : 0;
       }
 
-      table.options.meta?.updateId(row.index, newValue?.id ?? '');
+      table.options.meta?.updateServiceId(row.index, newValue?.id ?? '');
       table.options.meta?.updatePrice(row.index, 'unitPrice', price);
     }
   };

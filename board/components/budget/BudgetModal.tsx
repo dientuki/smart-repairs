@@ -2,16 +2,18 @@ import "react-modal-global/styles/modal.scss" // Imports essential styles for `M
 import { ModalLayout } from "@/components/modal";
 import { useTranslation } from "react-i18next";
 import { useEffect, useState } from "react";
-import { AddRow, InputCell, RemoveRow, BooleanCell, QuantityCell, UnitPriceCell, TotalPriceCell } from "@/components/budget";
+import { AddRow, RemoveRow, BooleanCell, QuantityCell, UnitPriceCell, TotalPriceCell } from "@/components/budget";
 import { createColumnHelper, flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table";
 import { ActionButton } from "@/components/form";
 import { FieldErrors, FieldValues, useFieldArray, useForm } from "react-hook-form";
-import { useBudgetStore } from "@/store";
+import { useBudgetStore, useServiceJobStore } from "@/store";
 import { StaticAutocomplete } from "./StaticAutocomplete";
 import { useModalWindow } from "react-modal-global";
+import { DiscountType } from "@/types/enums";
 
 type Item = {
-  id: string;
+  itemId: string;
+  serviceId: string;
   quantity: number;
   unitPrice: number;
   totalPrice: number;
@@ -24,7 +26,8 @@ type ModalParams = {
 
 
 const newItem: Item = {
-  id: '',
+  itemId: '',
+  serviceId: '',
   quantity: 1,
   unitPrice: 0,
   totalPrice: 0,
@@ -50,14 +53,16 @@ const registerOptions = {
 
 const defaultData: Item[] = [
   {
-    id: 'init',
+    itemId: 'init',
+    serviceId: '',
     quantity: 1,
     unitPrice: 0,
     totalPrice: 0,
     includeInSum: true,
   },
   {
-    id: 'init',
+    itemId: 'init',
+    serviceId: '',
     quantity: 1,
     unitPrice: 0,
     totalPrice: 0,
@@ -74,6 +79,7 @@ export const BudgetModal = () => {
   const [total, setTotal] = useState(0);
   const { control, handleSubmit, formState: { errors } } = useForm();
   const { initialValues } = useBudgetStore();
+  const { discounts } = useServiceJobStore();
 
   useEffect(() => {
     initialValues(modal.params.order)
@@ -87,10 +93,34 @@ export const BudgetModal = () => {
   }, []);
 
   useEffect(() => {
-    const newTotal = data
-      .filter(item => item.includeInSum)
+
+    if (data.length === 0) return;
+    let discount:number = 0;
+
+    const subtotal:number = data
+      .filter((item, index) => index === 0 || (index > 1 && item.includeInSum))
       .reduce((acc, item) => acc + item.totalPrice, 0);
-    setTotal(newTotal);
+
+    const discountItem = data[1];
+
+
+    if  (discountItem.serviceId) {
+
+      const discountDetail = discounts.find(d => d.id === discountItem.serviceId);
+
+      if (discountDetail && discountDetail.info) {
+        switch (discountDetail?.info.discount_type) {
+          case DiscountType.Percentage:
+            discount =  (subtotal * discountItem.unitPrice) / 100; // Descuento porcentual
+            break;
+          case DiscountType.Amount:
+            discount =  discountItem.unitPrice; // Descuento fijo
+            break;
+        }
+      }
+    }
+
+    setTotal(subtotal - discount);
   }, [data]);
 
   const { remove } = useFieldArray({
@@ -99,7 +129,7 @@ export const BudgetModal = () => {
   });
 
   const columns = [
-    columnHelper.accessor("id", {
+    columnHelper.accessor("itemId", {
       header: "Description",
       cell: StaticAutocomplete,
     }),
@@ -136,7 +166,7 @@ export const BudgetModal = () => {
       }
     }),
     columnHelper.accessor("includeInSum", {
-      header: "Suma?",
+      header: "¿Suma?",
       cell: BooleanCell,
       meta: {
         className: "w-20",
@@ -157,13 +187,13 @@ export const BudgetModal = () => {
     columns,
     getCoreRowModel: getCoreRowModel(),
     meta: {
-      updateId: (rowIndex: number, newId: string) => {
+      updateServiceId: (rowIndex: number, newId: string) => {
         setData(oldData =>
           oldData.map((row, index) => {
             if (index === rowIndex) {
               return {
                 ...row,
-                id: newId,
+                serviceId: newId,
               };
             }
             return row;
@@ -218,7 +248,7 @@ export const BudgetModal = () => {
   };
 
   return (
-    <ModalLayout minHeight="460px" width = '70vw' title={<h2 className="mb-4">Presupuestar equipo</h2>}>
+    <ModalLayout minHeight="460px" width = '70vw' title={<h2 className="text-2xl font-medium leading-6 text-gray-900 mb-4">Presupuestar equipo</h2>}>
       { !isLoading &&
         <form
           onSubmit={handleSubmit(handleRegistration, handleError)}
