@@ -2,7 +2,7 @@ import "react-modal-global/styles/modal.scss" // Imports essential styles for `M
 import { ModalLayout } from "@/components/modal";
 import { useTranslation } from "react-i18next";
 import { useEffect, useState } from "react";
-import { AddRow, InputCell, RemoveRow, BooleanCell } from "@/components/budget";
+import { AddRow, InputCell, RemoveRow, BooleanCell, QuantityCell, UnitPriceCell, TotalPriceCell } from "@/components/budget";
 import { createColumnHelper, flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table";
 import { ActionButton } from "@/components/form";
 import { FieldErrors, FieldValues, useFieldArray, useForm } from "react-hook-form";
@@ -106,32 +106,33 @@ export const BudgetModal = () => {
 
     columnHelper.accessor("quantity", {
       header: "Cantidad",
-      cell: InputCell,
+      cell: QuantityCell,
       meta: {
         name: "items",
         control: control,
         rules: registerOptions.quantity,
         errors: errors,
         type: "number",
-        className: "w-20",
+        className: "w-20 text-center",
       }
     }),
     columnHelper.accessor("unitPrice", {
       header: "Precio unitario",
-      cell: InputCell,
+      cell: UnitPriceCell,
       meta: {
         name: "items",
         control: control,
         rules: registerOptions.unitPrice,
         errors: errors,
         type: "number",
-        className: "w-40",
+        className: "w-40 text-center",
       }
     }),
     columnHelper.accessor("totalPrice", {
       header: "Precio Total",
+      cell: TotalPriceCell,
       meta: {
-        className: "w-40",
+        className: "w-40 text-center",
       }
     }),
     columnHelper.accessor("includeInSum", {
@@ -217,18 +218,18 @@ export const BudgetModal = () => {
   };
 
   return (
-    <ModalLayout minHeight="460px" width = '70vw' title={<h2>Presupuestar equipo</h2>}>
+    <ModalLayout minHeight="460px" width = '70vw' title={<h2 className="mb-4">Presupuestar equipo</h2>}>
       { !isLoading &&
         <form
           onSubmit={handleSubmit(handleRegistration, handleError)}
           onKeyDown={handleKeyDown}
         >
-          <table className="w-full relative overflow-x-auto shadow-md sm:rounded-lg">
-            <thead className="text-xs text-gray-700  bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+          <table className="w-full relative overflow-x-auto shadow-md sm:rounded-lg text-left rtl:text-right text-gray-500 dark:text-gray-400">
+            <thead className="text-lg text-gray-700  bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
               {table.getHeaderGroups().map((headerGroup) => (
                 <tr key={headerGroup.id}>
                   {headerGroup.headers.map((header) => (
-                    <th key={header.id} className={header.column.columnDef.meta?.className || ''}>
+                    <th key={header.id} className={`${header.column.columnDef.meta?.className || ''} py-1 px-2`}>
                       {header.isPlaceholder
                         ? null
                         : flexRender(
@@ -244,25 +245,34 @@ export const BudgetModal = () => {
               {table.getRowModel().rows.map((row) => (
                 <tr key={row.id} className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
                   {row.getVisibleCells().map((cell) => (
-                    <td key={cell.id} className="px-2 py-1">
+                    <td key={cell.id} className="p-2">
                       {flexRender(cell.column.columnDef.cell, cell.getContext())}
                     </td>
                   ))}
                 </tr>
               ))}
               <tr>
-                <td colSpan={table.getCenterLeafColumns().length - 1} align="right">
-                  Añadir item
+                <td colSpan={table.getCenterLeafColumns().length - 1} align="right" className="border-t-4 border-green-500 py-3">
+                  <div className="cursor-pointer float-right" onClick={table.options.meta?.addRow}>Añadir item</div>
                 </td>
-                <td>
+                <td className="border-t-4 border-green-500">
                   <AddRow table={table} />
                 </td>
               </tr>
             </tbody>
             <tfoot>
-              <tr className="font-semibold text-gray-900 dark:text-white">
-                <td className="px-2 py-1" colSpan={3} >Total</td>
-                <td className="px-2 py-1" colSpan={1} align="right">{total}</td>
+              <tr className="font-semibold text-gray-900 dark:text-white text-lg">
+                <td className="px-2 py-1 text-right" colSpan={3}>Total:</td>
+                <td className="px-2 py-1" colSpan={1}>
+                  <div className="relative flex items-center rounded-lg bg-gray-50 border text-gray-900 text-base border-gray-300 p-2.5">
+                    <div className="absolute inset-y-0 left-0 w-10 flex items-center justify-center bg-gray-200 rounded-l-lg pointer-events-none">
+                      <span className="text-gray-500 sm:text-sm">$</span>
+                    </div>
+                    <span className="ml-12 flex-grow text-base font-medium text-right">
+                      {total}
+                    </span>
+                  </div>
+                </td>
                 <td colSpan={2}></td>
               </tr>
             </tfoot>

@@ -39,7 +39,7 @@ const SimpleAutocomplete: React.FC<SimpleAutocompleteProps> = ({
 }) => {
   return (
     <Field>
-      <Label className="first-letter:uppercase block mb-2 text-sm font-medium text-gray-900">{label}</Label>
+      <Label className="first-letter:uppercase block mb-2 text-base font-medium text-gray-900">{label}</Label>
       {isLoading ? (
         <Skeleton variant="rectangular" width={210} height={32} />
       ) : (
@@ -58,7 +58,7 @@ const SimpleAutocomplete: React.FC<SimpleAutocompleteProps> = ({
             <TextField
               {...params}
               size="small"
-              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+              className="bg-gray-50 border border-gray-300 text-gray-900 text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
             />
           )}
         />

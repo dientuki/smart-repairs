@@ -54,7 +54,7 @@ export const NewCardModal = () => {
                 </span>
                 <span>
                     <h3 className="font-medium leading-tight">Cliente</h3>
-                    <p className="text-sm">Informacion del cliente</p>
+                    <p className="text-base">Informacion del cliente</p>
                 </span>
               </Tab>
               <Tab className="flex items-center data-[selected]:text-blue-600 text-gray-500 space-x-2.5 p-2 grow">
@@ -63,7 +63,7 @@ export const NewCardModal = () => {
                 </span>
                 <span>
                     <h3 className="font-medium leading-tight">Equipo</h3>
-                    <p className="text-sm">Informacion del equipo</p>
+                    <p className="text-base">Informacion del equipo</p>
                 </span>
               </Tab>
               <Tab className="flex items-center data-[selected]:text-blue-600 text-gray-500 space-x-2.5 p-2 grow">
@@ -72,7 +72,7 @@ export const NewCardModal = () => {
                 </span>
                 <span>
                     <h3 className="font-medium leading-tight">Problema</h3>
-                    <p className="text-sm">Detalle del problema a resolver</p>
+                    <p className="text-base">Detalle del problema a resolver</p>
                 </span>
               </Tab>
             </TabList>
