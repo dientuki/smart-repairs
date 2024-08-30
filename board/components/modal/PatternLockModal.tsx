@@ -1,6 +1,6 @@
 import "react-modal-global/styles/modal.scss" // Imports essential styles for `ModalContainer`.
 //import { useModalWindow } from "react-modal-global";
-import ModalLayout from "@/components/modal/ModalLayout";
+import { ModalLayout } from "@/components/modal";
 import PatternLock from "react-pattern-lock/lib/components/PatternLock";
 import { useState } from "react";
 import { useModalWindow } from "react-modal-global";
