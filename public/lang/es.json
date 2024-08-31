@@ -6,7 +6,10 @@
         "total_price": "precio total",
         "total": "total",
         "sum": "suma",
-        "new_item": "añadir item"
+        "new_item": "añadir item",
+        "error": {
+            "can_add": "agrega un item antes"
+        }
     },
 
     "button": {

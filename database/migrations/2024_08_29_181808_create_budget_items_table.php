@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('budget_items', function (Blueprint $table) {
-            $table->id();
+            $table->ulid('id')->primary();
 
             $table->foreignUlid('budget_id')->constrained();
             $table->foreignUlid('part_id')->nullable()->constrained();

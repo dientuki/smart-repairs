@@ -4,6 +4,26 @@ extend type Query {
         @namespace(field: "App\\GraphQL\\Queries")
 }
 
+extend type Mutation {
+    updateBudget(orderId: ID, budgetItems: [BudgetItemInput!]!): BudgetUpdateResponse!
+        @field(resolver: "BudgetMutations@updateBudget")
+        @namespace(field: "App\\GraphQL\\Mutations")
+}
+
+input BudgetItemInput {
+  itemId: String!
+  serviceId: String!
+  quantity: Int!
+  unitPrice: Float!
+  includeInSum: Boolean!
+  type: String!
+}
+
+type BudgetUpdateResponse {
+  success: Boolean!
+  message: String
+}
+
 type Budget {
     id: ID!
     total: Float!

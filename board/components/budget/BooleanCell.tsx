@@ -13,7 +13,7 @@ export const BooleanCell = ({ getValue, row, column, table }: BooleanCellProps )
     setValue(newValue);
 
     // Actualiza los datos en el `onChange`
-    table.options.meta?.updatePrice(row.index, column.id, newValue);
+    table.options.meta?.updateSum(row.index, newValue);
   };
 
   return (

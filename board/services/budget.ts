@@ -1,5 +1,6 @@
 import { graphqlRequest, handleGraphQLErrors } from "@/helper/graphqlHelpers";
 import { extra } from "@/helper/reduceHelpers";
+import { arrayToString } from "@/helper/stringHelpers";
 
 export const getInitialValues = async(orderId: string): Promise<any> => {
   const response = await graphqlRequest(`
@@ -43,4 +44,24 @@ export const getInitialValues = async(orderId: string): Promise<any> => {
     services: extra(response.data.services),
     parts: extra(response.data.partsByOrder)
   }
+}
+
+export const updateBudget = async(orderId: string, data: any) : Promise<any> => {
+  console.log(data);
+  const response = await await graphqlRequest(`
+    mutation {
+      updateBudget(
+        orderId: "${orderId}",
+        budgetItems: ${arrayToString(data)}
+      ) {
+        success
+        message
+      }
+    }
+  `);
+
+
+  handleGraphQLErrors(response.errors);
+
+  return response.data
 }

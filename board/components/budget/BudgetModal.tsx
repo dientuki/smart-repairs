@@ -20,6 +20,7 @@ type Item = {
   unitPrice: number;
   totalPrice: number;
   includeInSum: boolean;
+  type: "service" | "discount" | "part"
 };
 
 type ModalParams = {
@@ -33,6 +34,7 @@ const newItem: Item = {
   unitPrice: 0,
   totalPrice: 0,
   includeInSum: true,
+  type: "part"
 };
 
 const columnHelper = createColumnHelper<Item>();
@@ -63,6 +65,7 @@ const defaultData: Item[] = [
     unitPrice: 0,
     totalPrice: 0,
     includeInSum: true,
+    type: "service"
   },
   {
     itemId: 'init',
@@ -71,6 +74,7 @@ const defaultData: Item[] = [
     unitPrice: 0,
     totalPrice: 0,
     includeInSum: true,
+    type: "discount"
   }
 ];
 
@@ -97,7 +101,6 @@ export const BudgetModal = () => {
   }, []);
 
   useEffect(() => {
-
     if (data.length === 0) return;
     let discount:number = 0;
 
@@ -107,8 +110,7 @@ export const BudgetModal = () => {
 
     const discountItem = data[1];
 
-
-    if  (discountItem.serviceId) {
+    if  (discountItem.serviceId && discountItem.includeInSum) {
 
       const discountDetail = discounts.find(d => d.id === discountItem.serviceId);
 
@@ -124,7 +126,15 @@ export const BudgetModal = () => {
       }
     }
 
-    setTotal(subtotal - discount);
+    const total = subtotal - discount;
+
+    if (data[1].totalPrice !== discount) {
+      const newData = [...data];
+      newData[1] = { ...newData[1], totalPrice: discount };
+      setData(newData);
+    }
+
+    setTotal(total);
   }, [data]);
 
   const { remove } = useFieldArray({
@@ -213,6 +223,7 @@ export const BudgetModal = () => {
           old.map((row, index) => {
             if (index === rowIndex) {
 
+              // Lógica para las demás filas
               const newQuantity = columnId === 'quantity' ? Number(value) : row.quantity;
               const newPrice = columnId === 'unitPrice' ? Number(value) : row.unitPrice;
               const newPriceTotal = newQuantity * newPrice;
@@ -226,6 +237,20 @@ export const BudgetModal = () => {
             return row;
           })
         );
+      },
+      updateSum: (rowIndex: number, newValue: boolean) => {
+        setData((old) =>
+          old.map((row, index) => {
+            if (index === rowIndex) {
+              // Actualiza solo el valor de 'include_in_sum'
+              return {
+                ...row,
+                includeInSum: newValue,
+              };
+            }
+            return row;
+          })
+        )
       },
       addRow: () => {
         const canAdd = data.every(item => item.itemId === "init" || item.serviceId !== '');
