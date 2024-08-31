@@ -86,8 +86,12 @@ export const BudgetModal = () => {
   const [data, setData] = useState<Item[]>([]);
   const [total, setTotal] = useState(0);
   const { control, handleSubmit, formState: { errors } } = useForm();
-  const { initialValues, updateBudget } = useBudgetStore();
-  const { discounts } = useServiceJobStore();
+  const { clear: clearBudget, initialValues, updateBudget } = useBudgetStore();
+  const { clear: clearService, discounts } = useServiceJobStore();
+
+  useEffect(() => {
+    console.log('después de limpiar--------------->', discounts);
+  }, [discounts]);
 
   useEffect(() => {
     initialValues(modal.params.order)
@@ -95,6 +99,7 @@ export const BudgetModal = () => {
       }
     )
     .finally(() => {
+
       setIsLoading(false)
       setData([...defaultData]);
     });
@@ -270,14 +275,25 @@ export const BudgetModal = () => {
     },
   });
 
-  const handleRegistration = async(formData: FieldValues ) => {
-    console.log('submit', data)
-    await updateBudget(modal.params.order, data);
-    return false;
+  const handleRegistration = async(_: FieldValues ) => {
+
+    console.log('antes de limpiar', useServiceJobStore.getState().discounts);
+    clearService(['services', 'discounts']);
+    console.log('después de limpiar', useServiceJobStore.getState().discounts);
+    //modal.close();
+    /*
+    const $result = await updateBudget(modal.params.order, data);
+    if ($result) {
+      clearBudget('parts');
+      clearService(['services', 'discounts']);
+      console.log('despues de limpiar', discounts);
+      toast.success(t(`toast.success.form`));
+      modal.close();
+    }
+      */
   }
 
-  const handleError = (error: FieldErrors<FieldValues>) => {
-    console.log(data)
+  const handleError = (_: FieldErrors<FieldValues>) => {
     toast.error(t(`toast.error.form`));
   };
 

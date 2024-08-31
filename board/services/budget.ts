@@ -1,4 +1,4 @@
-import { graphqlRequest, handleGraphQLErrors } from "@/helper/graphqlHelpers";
+import { graphqlRequest, handleGraphQLErrors, handlePayloadErrors } from "@/helper/graphqlHelpers";
 import { extra } from "@/helper/reduceHelpers";
 import { arrayToString } from "@/helper/stringHelpers";
 
@@ -46,22 +46,28 @@ export const getInitialValues = async(orderId: string): Promise<any> => {
   }
 }
 
-export const updateBudget = async(orderId: string, data: any) : Promise<any> => {
-  console.log(data);
-  const response = await await graphqlRequest(`
+export const updateBudget = async(orderId: string, data: any) : Promise<boolean> => {
+  const response = await graphqlRequest(`
     mutation {
       updateBudget(
         orderId: "${orderId}",
         budgetItems: ${arrayToString(data)}
       ) {
-        success
-        message
+        __typename
+        ... on UpdateBudgetPayload {
+          success
+        }
+        ... on ErrorPayload {
+          message
+          code
+        }
       }
     }
   `);
 
 
   handleGraphQLErrors(response.errors);
+  handlePayloadErrors(response.data.updateBudget);
 
-  return response.data
+  return response.data.updateBudget.success
 }
