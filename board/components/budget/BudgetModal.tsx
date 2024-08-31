@@ -86,7 +86,7 @@ export const BudgetModal = () => {
   const [data, setData] = useState<Item[]>([]);
   const [total, setTotal] = useState(0);
   const { control, handleSubmit, formState: { errors } } = useForm();
-  const { clear: clearBudget, initialValues, updateBudget } = useBudgetStore();
+  const { initialValues, updateBudget } = useBudgetStore();
   const { clear: clearService, discounts } = useServiceJobStore();
 
   useEffect(() => {
@@ -277,9 +277,9 @@ export const BudgetModal = () => {
 
   const handleRegistration = async(_: FieldValues ) => {
 
-    console.log('antes de limpiar', useServiceJobStore.getState().discounts);
+    console.log('antes de limpiar', discounts);
     clearService(['services', 'discounts']);
-    console.log('después de limpiar', useServiceJobStore.getState().discounts);
+    console.log('después de limpiar',discounts);
     //modal.close();
     /*
     const $result = await updateBudget(modal.params.order, data);
