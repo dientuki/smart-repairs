@@ -99,7 +99,6 @@ final readonly class BudgetMutations
                         $discount = $discountItem->unit_price;
                         break;
                 }
-
             }
 
             $budget->total = $subtotal - $discount;
@@ -122,5 +121,4 @@ final readonly class BudgetMutations
             ];
         };
     }
-
 }

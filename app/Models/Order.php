@@ -10,7 +10,15 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Order extends ModelWithTeam
 {
-    protected $fillable = ['customer_id', 'team_id', 'user_id', 'device_unit_id', 'device_id', 'diagnosis', 'observation'];
+    protected $fillable = [
+        'customer_id',
+        'team_id',
+        'user_id',
+        'device_unit_id',
+        'device_id',
+        'diagnosis',
+        'observation'
+    ];
 
     protected $casts = [
         'was_edited' => 0,
