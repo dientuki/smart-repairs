@@ -24,17 +24,16 @@ export const useBudgetStore = create<BudgetStore>((set) => ({
 
   initialValues: async(orderId: string) => {
     //get discounts, services, parts; and set vars in store
-    const {discounts, services, parts} = await getInitialValues(orderId);
+    const {discounts, services, parts, budget} = await getInitialValues(orderId);
 
     useServiceJobStore.getState().setDiscounts(discounts);
     useServiceJobStore.getState().setServices(services);
-    set({parts});
-    /*
 
+    set({parts});
     if (budget) {
+      console.log(budget)
       set({budget});
     };
-    */
   },
 
   updateBudget: async(orderId: string, data: any): Promise<boolean> => {

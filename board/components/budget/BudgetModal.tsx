@@ -83,8 +83,8 @@ export const BudgetModal = () => {
   const modal = useModalWindow<ModalParams>();
   const [isLoading, setIsLoading] = useState(true);
   const { t } = useTranslation();
-  const [data, setData] = useState<Item[]>([]);
-  const [total, setTotal] = useState(0);
+  const [ data, setData ] = useState<Item[]>([]);
+  const [ total, setTotal ] = useState(0);
   const { control, handleSubmit, formState: { errors } } = useForm();
   const { clear: clearBudget, initialValues, updateBudget } = useBudgetStore();
   const { clear: clearService, discounts } = useServiceJobStore();
@@ -96,11 +96,7 @@ export const BudgetModal = () => {
 
   useEffect(() => {
     initialValues(modal.params.order)
-    .then(() => {
-      }
-    )
     .finally(() => {
-
       setIsLoading(false)
       setData([...defaultData]);
     });

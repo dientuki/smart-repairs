@@ -42,7 +42,8 @@ export const getInitialValues = async(orderId: string): Promise<any> => {
   return {
     discounts: extra(response.data.discounts),
     services: extra(response.data.services),
-    parts: extra(response.data.partsByOrder)
+    parts: extra(response.data.partsByOrder),
+    budget: response.data.budget
   }
 }
 

@@ -18,6 +18,7 @@ return new class extends Migration
             $table->unsignedMediumInteger('quantity');
             $table->unsignedMediumInteger('warning');
             $table->decimal('price', 15, 2);
+            //$table->date('price_updated_at');
             $table->timestamps();
         });
     }
