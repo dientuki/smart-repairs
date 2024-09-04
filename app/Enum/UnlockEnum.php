@@ -21,4 +21,15 @@ enum UnlockEnum: string implements HasLabel
             self::Pattern => __('Pattern'),
         };
     }
+
+    /**
+     * Obtiene el valor por defecto para el enum.
+     *
+     * @return DiscountEnum
+     */
+    public static function default(): self
+    {
+        // Cambia 'None' por el valor que quieras como predeterminado
+        return self::None;
+    }
 }

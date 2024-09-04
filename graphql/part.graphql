@@ -1,0 +1,13 @@
+extend type Query {
+    partsByOrder(orderId: ID): [Part]!
+        @field(resolver: "PartQueries@getPartsByOrder")
+        @namespace(field: "App\\GraphQL\\Queries")
+}
+
+type Part {
+    id: ID!
+    label: String!
+    price: Float!
+    stock: Int!
+    image: String
+}

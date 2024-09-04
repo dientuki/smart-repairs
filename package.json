@@ -10,6 +10,7 @@
         "@emotion/styled": "^11.13.0",
         "@headlessui/react": "^2.1.4",
         "@heroicons/react": "^2.1.5",
+        "@tanstack/react-table": "^8.20.5",
         "@mui/material": "^6.0.2",
         "@vitejs/plugin-react": "^4.2.1",
         "dotenv": "^16.4.5",

@@ -1,5 +1,5 @@
-import { graphqlRequest, handleGraphQLErrors } from "@/helper/functions";
-import { extra } from "@/helper/reduce";
+import { graphqlRequest, handleGraphQLErrors } from "@/helper/graphqlHelpers";
+import { extra } from "@/helper/reduceHelpers";
 
 export const getCustomers = async() => {
 

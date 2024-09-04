@@ -73,7 +73,7 @@ function Comments({ orderId, comments }: Props) {
               <Textarea className="w-full p-2 border border-gray-300 rounded h-auto" name="description" onChange={handleChange} defaultValue={text} />
           </div>
           <div className="flex items-center gap-3 ml-12 mt-2">
-            <button className="rounded-md bg-sky-600 px-3 py-1.5 text-sm font-bold leading-6 text-white shadow-sm hover:bg-sky-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-600" onClick={saveComment}>Guardar</button>
+            <button className="rounded-md bg-sky-600 px-3 py-1.5 text-base font-bold leading-6 text-white shadow-sm hover:bg-sky-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-600" onClick={saveComment}>Guardar</button>
             <div className="cursor-pointer" onClick={toogleVisibility} >{isPublic ?
                 <><LockOpenIcon className="h-4 w-4 inline-block" /> Publico</>:
                 <><LockClosedIcon className="h-4 w-4 inline-block" /> Privado</>

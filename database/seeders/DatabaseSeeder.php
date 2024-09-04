@@ -30,7 +30,8 @@ class DatabaseSeeder extends Seeder
             OrderCommentSeeder::class,
             SupplierSeeder::class,
             SupplierContactSeeder::class,
-            StockSeeder::class
+            StockSeeder::class,
+            ServiceJobSeeder::class,
         ]);
     }
 }

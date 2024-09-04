@@ -13,13 +13,16 @@ type ErrorPayload {
     code: String
 }
 
+#import budget.graphql
 #import comment.graphql
 #import customer.graphql
 #import device.graphql
 #import deviceTypeCheck.graphql
 #import deviceUnit.graphql
 #import deviceVersion.graphql
+#import serviceJob.graphql
 #import order.graphql
+#import part.graphql
 
 type Brand {
     "Unique primary key."

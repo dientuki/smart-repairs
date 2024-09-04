@@ -6,7 +6,7 @@ import { toast } from "react-toastify";
 import { useEffect, useState } from "react";
 import { GlobeAltIcon } from "@heroicons/react/16/solid";
 import { InputField, SimpleAutocomplete, ValidatedAutocomplete } from "@/components/form";
-import { capitalizeFirstLetter } from "@/helper/functions";
+import { capitalizeFirstLetter } from "@/helper/stringHelpers";
 import { Modal, NewDeviceUnitModal, PatternLockModal } from "@/components/modal";
 import { useDeviceStore, useOrderStore, useBrandStore, useDeviceTypeStore } from "@/store";
 import { UnlockType } from "@/types/enums";
@@ -286,7 +286,7 @@ function Step2({ nextStep, prevStep }: Step2Props) {
 
         <div className="grid gap-6 grid-cols-3 mt-4">
           <div className="relative">
-            <button type="button" className="absolute bottom-0 right-0 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center cursor-pointer w-full" onClick={handleDeviceWorksVersion}>Enciende</button>
+            <button type="button" className="absolute bottom-0 right-0 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-base px-5 py-2.5 text-center cursor-pointer w-full" onClick={handleDeviceWorksVersion}>Enciende</button>
           </div>
           <ValidatedAutocomplete
             name="unlocktype"
@@ -310,9 +310,9 @@ function Step2({ nextStep, prevStep }: Step2Props) {
         </div>
 
         <div className="flex justify-between mt-6">
-          <div onClick={prevStep} className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center w-1/4 cursor-pointer">Anterior</div>
+          <div onClick={prevStep} className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-base px-5 py-2.5 text-center w-1/4 cursor-pointer">Anterior</div>
 
-          <button type="submit" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center w-1/4">Siguiente</button>
+          <button type="submit" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-base px-5 py-2.5 text-center w-1/4">Siguiente</button>
         </div>
       </form>
 

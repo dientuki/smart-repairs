@@ -1,5 +1,5 @@
 import "react-modal-global/styles/modal.scss" // Imports essential styles for `ModalContainer`.
-import ModalLayout from "@/components/modal/ModalLayout";
+import { ModalLayout } from "@/components/modal";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";
@@ -10,7 +10,7 @@ import Step2 from "@/components/newCardModal/Step2";
 import Step3 from "@/components/newCardModal/Step3";
 import { useModalWindow } from "react-modal-global";
 
-function NewCardModal() {
+export const NewCardModal = () => {
   const modal = useModalWindow();
   const [ selectedIndex, setSelectedIndex ] = useState(0);
   const { t } = useTranslation();
@@ -54,7 +54,7 @@ function NewCardModal() {
                 </span>
                 <span>
                     <h3 className="font-medium leading-tight">Cliente</h3>
-                    <p className="text-sm">Informacion del cliente</p>
+                    <p className="text-base">Informacion del cliente</p>
                 </span>
               </Tab>
               <Tab className="flex items-center data-[selected]:text-blue-600 text-gray-500 space-x-2.5 p-2 grow">
@@ -63,7 +63,7 @@ function NewCardModal() {
                 </span>
                 <span>
                     <h3 className="font-medium leading-tight">Equipo</h3>
-                    <p className="text-sm">Informacion del equipo</p>
+                    <p className="text-base">Informacion del equipo</p>
                 </span>
               </Tab>
               <Tab className="flex items-center data-[selected]:text-blue-600 text-gray-500 space-x-2.5 p-2 grow">
@@ -72,7 +72,7 @@ function NewCardModal() {
                 </span>
                 <span>
                     <h3 className="font-medium leading-tight">Problema</h3>
-                    <p className="text-sm">Detalle del problema a resolver</p>
+                    <p className="text-base">Detalle del problema a resolver</p>
                 </span>
               </Tab>
             </TabList>
@@ -103,5 +103,3 @@ function NewCardModal() {
     </ModalLayout>
   )
 }
-
-export default NewCardModal;

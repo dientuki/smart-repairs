@@ -1,6 +1,6 @@
 import { create } from 'zustand'
-import { createCustomer, getCustomers, updateCustomer } from "@/lib/customers";
-import { extra } from "@/helper/reduce";
+import { createCustomer, getCustomers, updateCustomer } from "@/services/customers";
+import { extra } from "@/helper/reduceHelpers";
 import { OperationStatus } from '@/types/enums';
 import { useOrderStore } from './OrderStore';
 
@@ -51,5 +51,3 @@ export const useCustomerStore = create<CustomerStore>((set) => ({
     }
   },
 }));
-
-export default useCustomerStore;

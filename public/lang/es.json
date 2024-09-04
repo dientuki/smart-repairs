@@ -1,4 +1,28 @@
 {
+    "budget": {
+        "quantity": "cantidad",
+        "description": "descripcion",
+        "unit_price": "precio unitario",
+        "total_price": "precio total",
+        "total": "total",
+        "sum": "suma",
+        "new_item": "añadir item",
+        "error": {
+            "can_add": "agrega un item antes"
+        }
+    },
+
+    "button": {
+        "cancel": "Cancelar",
+        "confirm": "Confirmar",
+        "ok": "OK",
+        "send": "Enviar",
+        "save": "Guardar",
+        "update": "Actualizar",
+        "validate": "Validar",
+        "quote": "Presupuestar"
+    },
+
     "device": "equipo",
 
     "field": {
@@ -26,7 +50,8 @@
     "toast": {
         "error": {
             "data": "Error de datos",
-            "network": "Error de red"
+            "network": "Error de red",
+            "form": "Error de formulario"
         }
     },
 

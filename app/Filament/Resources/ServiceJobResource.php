@@ -2,10 +2,12 @@
 
 namespace App\Filament\Resources;
 
+use App\Enum\DiscountEnum;
 use App\Filament\Resources\ServiceJobResource\Pages;
 use App\Filament\Resources\ServiceJobResource\RelationManagers;
 use App\Models\ServiceJob;
 use Filament\Forms;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -29,6 +31,7 @@ class ServiceJobResource extends Resource
             ->schema([
                 TextInput::make('name'),
                 TextInput::make('price')->prefix('$'),
+                Select::make('discount_type')->options(DiscountEnum::class)
             ]);
     }
 
@@ -38,6 +41,7 @@ class ServiceJobResource extends Resource
             ->columns([
                 TextColumn::make('name'),
                 TextColumn::make('price')->money('ARS'),
+                TextColumn::make('discount_type'),
             ])
             ->filters([
                 //

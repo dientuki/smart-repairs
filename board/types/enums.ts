@@ -9,3 +9,9 @@ export enum UnlockType {
   CODE = 'code',
   PATTERN = 'pattern',
 }
+
+export enum DiscountType {
+  None = 'None',
+  Percentage = 'Percentage',
+  Amount = 'Amount',
+}

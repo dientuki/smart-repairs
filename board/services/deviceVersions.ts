@@ -1,5 +1,5 @@
-import { graphqlRequest, handleGraphQLErrors } from "@/helper/functions";
-import { deviceVersion } from "@/helper/reduce";
+import { graphqlRequest, handleGraphQLErrors } from "@/helper/graphqlHelpers";
+import { deviceVersion } from "@/helper/reduceHelpers";
 
 export const getDeviceVersions = async(deviceId: string): Promise<OptionType[]> => {
     const response = await graphqlRequest(`

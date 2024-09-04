@@ -1,5 +1,6 @@
-import { graphqlRequest, arrayToString, handleGraphQLErrors } from "@/helper/functions";
-import { device, extra } from "@/helper/reduce";
+import { arrayToString } from "@/helper/stringHelpers";
+import { device, extra } from "@/helper/reduceHelpers";
+import { graphqlRequest, handleGraphQLErrors } from "@/helper/graphqlHelpers";
 
 export const createOrder = async (newOrder: NewOrder) => {
 
@@ -33,14 +34,14 @@ export const getOrder = async (id: string) => {
                 status
                 created_at
                 observation
+                hasBudget
 
                 author {
                     name
                 }
 
                 customer {
-                    first_name
-                    last_name
+                    label
                     phone
                 }
 
@@ -113,9 +114,10 @@ export const getOrder = async (id: string) => {
         deviceCommercialName: response.data.order.device.commercial_name,
         deviceTechName: response.data.order.deviceUnit?.deviceVersion.version,
         deviceSerial: response.data.order.deviceUnit?.serial,
-        customerFullName: `${response.data.order.customer.first_name} ${response.data.order.customer.last_name}`,
+        customerFullName: response.data.order.customer.label,
         customerPhone: response.data.order.customer.phone,
         observation: response.data.order.observation,
+        hasBudget: response.data.order.hasBudget,
         comments: comments
     } as Order;
 
@@ -131,8 +133,7 @@ export const getOrders = async () => {
                 observation
 
                 customer {
-                    first_name
-                    last_name
+                    label
                 }
                 comments {
                     id
@@ -183,7 +184,7 @@ export const getOrders = async () => {
             deviceCommercialName: order.device.commercial_name,
             deviceTechName: order.deviceUnit?.deviceVersion.version,
             deviceSerial: order.deviceUnit?.serial,
-            customerFullName: `${order.customer.first_name} ${order.customer.last_name}`,
+            customerFullName: order.customer.label,
             observation: order.observation,
             commentsQuantity: order.comments?.length
         })

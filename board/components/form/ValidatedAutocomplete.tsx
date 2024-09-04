@@ -55,7 +55,7 @@ const ValidatedAutocomplete: React.FC<ValidatedAutocompleteProps> = ({
   errors }) => {
   return (
     <Field>
-      <Label className="first-letter:uppercase block mb-2 text-sm font-medium text-gray-900">{label}</Label>
+      <Label className="first-letter:uppercase block mb-2 text-base font-medium text-gray-900">{label}</Label>
       {isLoading && !disabled ? (
         <Skeleton variant="rectangular" height={40} />
       ) : (
@@ -83,7 +83,7 @@ const ValidatedAutocomplete: React.FC<ValidatedAutocompleteProps> = ({
                 <TextField
                   {...params}
                   size="small"
-                  className={`bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ${
+                  className={`bg-gray-50 border border-gray-300 text-gray-900 text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ${
                 errors?.[name] ? 'bg-red-50 border-red-500 text-red-900 placeholder-red-700 focus:ring-red-500 focus:border-red-500' : ''
               }`}
                 />
