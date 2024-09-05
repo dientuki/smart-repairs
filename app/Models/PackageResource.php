@@ -7,5 +7,5 @@ use Illuminate\Database\Eloquent\Model;
 
 class PackageResource extends Model
 {
-  use HasUlids;
+    use HasUlids;
 }

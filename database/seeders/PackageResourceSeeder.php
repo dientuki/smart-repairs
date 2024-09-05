@@ -41,10 +41,5 @@ class PackageResourceSeeder extends Seeder
                 'name' => $packages[1]->name . ' ' . $resources[$mediumItem]->resource
             ]);
         }
-
-
-
-
-
     }
 }

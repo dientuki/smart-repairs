@@ -19,7 +19,8 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class CustomerResource extends Resource
 {
-    use CustomerFieldsTrait, RegistersNavigationTrait;
+    use CustomerFieldsTrait;
+    use RegistersNavigationTrait;
 
     protected static ?string $model = Customer::class;
 
