@@ -34,7 +34,7 @@ class StockResource extends Resource
 
     protected static ?string $tenantRelationshipName = 'customers';
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-book-open';
 
     public static function form(Form $form): Form
     {

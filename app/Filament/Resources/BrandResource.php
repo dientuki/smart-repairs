@@ -3,41 +3,39 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\BrandResource\Pages;
-use App\Filament\Resources\BrandResource\RelationManagers;
 use App\Models\Brand;
-use Filament\Forms;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
-use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
-class BrandResource extends Resource
+class BrandResource extends KnowledgeResource
 {
     protected static ?string $model = Brand::class;
 
-    protected static bool $isScopedToTenant = false;
-
     protected static ?int $navigationSort = 10;
 
-    protected static ?string $navigationGroup = 'Devices';
+    protected static ?string $navigationIcon = 'heroicon-o-tag';
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    public static function getModelLabel(): string
+    {
+        return __('resource.brand');
+    }
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
                 TextInput::make('name')
-                    ->required(),
+                    ->required()
+                    ->translateLabel(),
                 FileUpload::make('hash_filename')
                     ->directory('logos')
                     ->acceptedFileTypes(['image/svg+xml'])
+                    ->label(__('resource.image'))
             ]);
     }
 
@@ -45,8 +43,8 @@ class BrandResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('name'),
-                ImageColumn::make('hash_filename'),
+                TextColumn::make('name')->translateLabel(),
+                ImageColumn::make('hash_filename')->label(__('resource.image')),
             ])
             ->filters([
                 //

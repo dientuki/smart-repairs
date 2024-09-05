@@ -5,28 +5,20 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\DeviceResource\Pages;
 use App\Filament\Resources\DeviceResource\RelationManagers;
 use App\Models\Device;
-use Filament\Forms;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Form;
-use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
-class DeviceResource extends Resource
+class DeviceResource extends KnowledgeResource
 {
     protected static ?string $model = Device::class;
 
-    protected static bool $isScopedToTenant = false;
+    protected static ?int $navigationSort = 50;
 
-    protected static ?int $navigationSort = 40;
-
-    protected static ?string $navigationGroup = 'Devices';
-
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-device-phone-mobile';
 
     public static function form(Form $form): Form
     {

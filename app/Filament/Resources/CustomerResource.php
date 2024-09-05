@@ -26,7 +26,7 @@ class CustomerResource extends Resource
 
     protected static ?string $tenantRelationshipName = 'customers';
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-identification';
 
     public static function form(Form $form): Form
     {

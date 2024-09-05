@@ -22,7 +22,7 @@ class ServiceJobResource extends Resource
 
     protected static ?string $tenantRelationshipName = 'customers';
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-wrench-screwdriver';
 
     public static function form(Form $form): Form
     {

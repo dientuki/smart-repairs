@@ -28,7 +28,7 @@ class OrderResource extends Resource
 
     protected static ?string $tenantRelationshipName = 'customers';
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-inbox-stack';
 
     public static function form(Form $form): Form
     {

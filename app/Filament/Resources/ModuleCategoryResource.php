@@ -3,29 +3,20 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\ModuleCategoryResource\Pages;
-use App\Filament\Resources\ModuleCategoryResource\RelationManagers;
 use App\Models\ModuleCategory;
-use Filament\Forms;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
-use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
-class ModuleCategoryResource extends Resource
+class ModuleCategoryResource extends KnowledgeResource
 {
     protected static ?string $model = ModuleCategory::class;
 
-    protected static bool $isScopedToTenant = false;
-
     protected static ?int $navigationSort = 30;
 
-    protected static ?string $navigationGroup = 'Devices';
-
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-cube';
 
     public static function form(Form $form): Form
     {
