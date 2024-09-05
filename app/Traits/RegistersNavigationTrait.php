@@ -17,4 +17,10 @@ trait RegistersNavigationTrait
         $resource = str_replace(' ', '', strtolower(static::getModelLabel()));
         return Team::hasAccessToResource(Filament::getTenant(), $resource);
     }
+
+    public static function canAccess(): bool
+    {
+        $resource = str_replace(' ', '', strtolower(static::getModelLabel()));
+        return Team::hasAccessToResource(Filament::getTenant(), $resource);
+    }
 }
