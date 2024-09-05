@@ -8,12 +8,15 @@ use App\Filament\Resources\StockResource\RelationManagers\DevicesRelationManager
 use App\Filament\Resources\StockResource\RelationManagers\SuppliersRelationManager;
 use App\Models\Part;
 use App\Models\Stock;
+use App\Models\Team;
+use App\Traits\RegistersNavigationTrait;
 use Filament\Facades\Filament;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Form;
+use Filament\Panel;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
@@ -21,9 +24,12 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Facades\Auth;
 
 class StockResource extends Resource
 {
+    use RegistersNavigationTrait;
+
     protected static ?string $model = Stock::class;
 
     protected static ?string $tenantRelationshipName = 'customers';

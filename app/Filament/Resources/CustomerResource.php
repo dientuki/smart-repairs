@@ -6,6 +6,7 @@ use App\Filament\Resources\CustomerResource\Pages;
 use App\Filament\Resources\CustomerResource\RelationManagers;
 use App\Models\Customer;
 use App\Traits\CustomerFieldsTrait;
+use App\Traits\RegistersNavigationTrait;
 use Filament\Forms;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
@@ -18,7 +19,7 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class CustomerResource extends Resource
 {
-    use CustomerFieldsTrait;
+    use CustomerFieldsTrait, RegistersNavigationTrait;
 
     protected static ?string $model = Customer::class;
 

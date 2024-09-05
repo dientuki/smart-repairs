@@ -28,4 +28,14 @@ class Team extends ModelAuditable
     {
         return $this->hasMany(Customer::class);
     }
+
+    public function package()
+    {
+        return $this->belongsTo(Package::class);
+    }
+
+    public static function hasAccessToResource(Team $team, string $resourceName): bool
+    {
+        return $team->package->resources()->where('resources.resource', $resourceName)->exists();
+    }
 }
