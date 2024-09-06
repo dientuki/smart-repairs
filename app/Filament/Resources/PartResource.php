@@ -22,6 +22,11 @@ class PartResource extends KnowledgeResource
 
     protected static ?string $navigationIcon = 'heroicon-o-cpu-chip';
 
+    public static function getModelLabel(): string
+    {
+        return __('resource.part');
+    }
+
     public static function form(Form $form): Form
     {
         return $form
@@ -30,16 +35,21 @@ class PartResource extends KnowledgeResource
                     Select::make('module_category_id')
                         ->relationship('moduleCategory', 'name')
                         ->required()
+                        ->label(ucfirst(__('resource.module_category')))
                         ->preload(),
                     Select::make('brand_id')
                         ->relationship('brand', 'name')
                         ->required()
+                        ->label(ucfirst(__('resource.brand')))
                         ->preload(),
                     TextInput::make('screen_printing')
+                        ->label(__('resource.screen_printing'))
                         ->requiredWithout('part_number'),
                     TextInput::make('part_number')
+                        ->label(__('resource.part_number'))
                         ->requiredWithout('screen_printing'),
                     TextInput::make('observations')
+                        ->label(__('resource.observations'))
                         ->columnSpan(2),
                 ])->columnSpan(1),
                 Section::make()->schema([
@@ -48,6 +58,7 @@ class PartResource extends KnowledgeResource
                         ->openable()
                         ->imagePreviewHeight('300')
                         ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp'])
+                        ->label(__('resource.image'))
                 ])->columnSpan(1),
             ])->columns(2);
     }
@@ -56,10 +67,14 @@ class PartResource extends KnowledgeResource
     {
         return $table
             ->columns([
-                TextColumn::make('moduleCategory.name'),
-                TextColumn::make('brand.name'),
-                TextColumn::make('part_number')->formatStateUsing(fn (Part $record): string =>
-                    "{$record->screen_printing} {$record->part_number}"),
+                TextColumn::make('moduleCategory.name')
+                    ->label(ucfirst(__('resource.module_category'))),
+                TextColumn::make('brand.name')
+                    ->label(ucfirst(__('resource.brand'))),
+                TextColumn::make('part_number')
+                    ->label(__('resource.part_number'))
+                    ->formatStateUsing(fn (Part $record): string =>
+                        "{$record->screen_printing} {$record->part_number}"),
             ])
             ->filters([
                 //

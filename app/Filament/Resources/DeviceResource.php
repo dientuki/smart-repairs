@@ -20,19 +20,28 @@ class DeviceResource extends KnowledgeResource
 
     protected static ?string $navigationIcon = 'heroicon-o-device-phone-mobile';
 
+    public static function getModelLabel(): string
+    {
+        return __('resource.device');
+    }
+
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
                 Select::make('device_type_id')
                     ->relationship('deviceType', 'name')
+                    ->label(ucfirst(__('resource.device_type')))
                     ->preload(),
                 Select::make('brand_id')
                     ->relationship('brand', 'name')
+                    ->label(ucfirst(__('resource.brand')))
                     ->preload(),
                 TextInput::make('commercial_name')
+                    ->label(__('resource.commercial_name'))
                     ->required(),
                 TextInput::make('url')
+                    ->label(__('resource.url'))
                     ->suffixIcon('heroicon-m-globe-alt'),
             ]);
     }
@@ -41,10 +50,11 @@ class DeviceResource extends KnowledgeResource
     {
         return $table
             ->columns([
-                TextColumn::make('deviceType.name'),
-                TextColumn::make('brand.name'),
-                TextColumn::make('commercial_name'),
+                TextColumn::make('deviceType.name')->label(ucfirst(__('resource.device_type'))),
+                TextColumn::make('brand.name')->label(ucfirst(__('resource.brand'))),
+                TextColumn::make('commercial_name')->label(__('resource.commercial_name')),
                 TextColumn::make('url')
+                    ->label(__('resource.url'))
                     ->url(fn ($record) => $record->url ?? '#', true)
                     ->icon('heroicon-m-globe-alt')
                     ->formatStateUsing(fn (?string $state): string => $state ? __("Link") : __("No Link"))

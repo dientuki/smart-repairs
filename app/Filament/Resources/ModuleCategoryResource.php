@@ -18,12 +18,18 @@ class ModuleCategoryResource extends KnowledgeResource
 
     protected static ?string $navigationIcon = 'heroicon-o-cube';
 
+    public static function getModelLabel(): string
+    {
+        return __('resource.module_category');
+    }
+
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
                 TextInput::make('name')
-                    ->required(),
+                    ->required()
+                    ->translateLabel(),
             ]);
     }
 
@@ -31,7 +37,7 @@ class ModuleCategoryResource extends KnowledgeResource
     {
         return $table
             ->columns([
-                TextColumn::make('name'),
+                TextColumn::make('name')->translateLabel(),
             ])
             ->filters([
                 //
