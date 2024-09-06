@@ -3,15 +3,13 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\StockResource\Pages;
-use App\Filament\Resources\StockResource\RelationManagers;
 use App\Filament\Resources\StockResource\RelationManagers\DevicesRelationManager;
 use App\Filament\Resources\StockResource\RelationManagers\SuppliersRelationManager;
-use App\Models\Part;
 use App\Models\Stock;
+use App\Traits\RegistersNavigationTrait;
 use Filament\Facades\Filament;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
-use Filament\Forms;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -20,21 +18,31 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class StockResource extends Resource
 {
+    use RegistersNavigationTrait;
+
     protected static ?string $model = Stock::class;
 
-    protected static ?string $tenantRelationshipName = 'customers';
+    protected static ?string $navigationIcon = 'heroicon-o-book-open';
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    public static function getModelLabel(): string
+    {
+        return __('resource.stock');
+    }
+
+    public static function getPluralModelLabel(): string
+    {
+        return __('resource.stock');
+    }
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
                 Select::make('part_id')
+                    ->label(ucfirst(__('resource.part')))
                     ->relationship(
                         name: 'part',
                         modifyQueryUsing: function (Builder $query, string $operation) {
@@ -56,11 +64,14 @@ class StockResource extends Resource
                 Grid::make(3)
                     ->schema([
                         TextInput::make('price')
+                            ->label(__('resource.price'))
                             ->prefix('$')
                             ->required(),
                         TextInput::make('quantity')
+                            ->label(__('resource.quantity'))
                             ->required(),
                         TextInput::make('warning')
+                            ->label(__('resource.warning'))
                             ->required(),
                     ]),
             ]);
@@ -71,18 +82,25 @@ class StockResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('part.moduleCategory.name'),
-                TextColumn::make('part.brand.name'),
-                TextColumn::make('part.part_number'),
-                TextColumn::make('price')->money('ARS'),
+                TextColumn::make('part.moduleCategory.name')
+                    ->label(ucfirst(__('resource.module_category'))),
+                TextColumn::make('part.brand.name')
+                    ->label(ucfirst(__('resource.brand'))),
+                TextColumn::make('part.part_number')
+                    ->label(__('resource.part_number')),
+                TextColumn::make('price')
+                    ->label(__('resource.price'))
+                    ->money('ARS'),
                 TextColumn::make('quantity')
                     ->badge()
+                    ->label(__('resource.quantity'))
                     ->color(fn ($state, $record) => match (true) {
                         $state == 0 => 'danger',
                         $state < $record->warning => 'warning',
                         default => 'success',
                     }),
-                TextColumn::make('warning'),
+                TextColumn::make('warning')
+                    ->label(__('resource.warning')),
             ])
             ->filters([
                 //

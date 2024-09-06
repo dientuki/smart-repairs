@@ -5,30 +5,27 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\PartResource\Pages;
 use App\Filament\Resources\PartResource\RelationManagers;
 use App\Models\Part;
-use Filament\Forms;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
-use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
-class PartResource extends Resource
+class PartResource extends KnowledgeResource
 {
     protected static ?string $model = Part::class;
 
-    protected static bool $isScopedToTenant = false;
+    protected static ?int $navigationSort = 40;
 
-    protected static ?int $navigationSort = 50;
+    protected static ?string $navigationIcon = 'heroicon-o-cpu-chip';
 
-    protected static ?string $navigationGroup = 'Devices';
-
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    public static function getModelLabel(): string
+    {
+        return __('resource.part');
+    }
 
     public static function form(Form $form): Form
     {
@@ -38,16 +35,21 @@ class PartResource extends Resource
                     Select::make('module_category_id')
                         ->relationship('moduleCategory', 'name')
                         ->required()
+                        ->label(ucfirst(__('resource.module_category')))
                         ->preload(),
                     Select::make('brand_id')
                         ->relationship('brand', 'name')
                         ->required()
+                        ->label(ucfirst(__('resource.brand')))
                         ->preload(),
                     TextInput::make('screen_printing')
+                        ->label(__('resource.screen_printing'))
                         ->requiredWithout('part_number'),
                     TextInput::make('part_number')
+                        ->label(__('resource.part_number'))
                         ->requiredWithout('screen_printing'),
                     TextInput::make('observations')
+                        ->label(__('resource.observations'))
                         ->columnSpan(2),
                 ])->columnSpan(1),
                 Section::make()->schema([
@@ -56,6 +58,7 @@ class PartResource extends Resource
                         ->openable()
                         ->imagePreviewHeight('300')
                         ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp'])
+                        ->label(__('resource.image'))
                 ])->columnSpan(1),
             ])->columns(2);
     }
@@ -64,10 +67,14 @@ class PartResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('moduleCategory.name'),
-                TextColumn::make('brand.name'),
-                TextColumn::make('part_number')->formatStateUsing(fn (Part $record): string =>
-                    "{$record->screen_printing} {$record->part_number}"),
+                TextColumn::make('moduleCategory.name')
+                    ->label(ucfirst(__('resource.module_category'))),
+                TextColumn::make('brand.name')
+                    ->label(ucfirst(__('resource.brand'))),
+                TextColumn::make('part_number')
+                    ->label(__('resource.part_number'))
+                    ->formatStateUsing(fn (Part $record): string =>
+                        "{$record->screen_printing} {$record->part_number}"),
             ])
             ->filters([
                 //

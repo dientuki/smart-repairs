@@ -15,7 +15,7 @@ class StockSeeder extends Seeder
      */
     public function run(): void
     {
-        $team = DB::table('teams')->first()->id;
+        $team = DB::table('teams')->get();
         $parts = DB::table('parts')->get();
         $l = count($parts);
 
@@ -26,10 +26,21 @@ class StockSeeder extends Seeder
                 'quantity' => rand(1, 50),
                 'warning' => rand(1, 10),
                 'price' => number_format(mt_rand(150, 50000000) / 100, 2, '.', ''),
-                'team_id' => $team,
+                'team_id' => $team[0]->id,
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
         }
+
+        DB::table('stocks')->insert([
+            'id' => (string) Str::ulid(),
+            'part_id' => $parts[0]->id,
+            'quantity' => rand(1, 50),
+            'warning' => rand(1, 10),
+            'price' => number_format(mt_rand(150, 50000000) / 100, 2, '.', ''),
+            'team_id' => $team[1]->id,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
     }
 }

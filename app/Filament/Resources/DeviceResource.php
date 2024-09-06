@@ -5,28 +5,25 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\DeviceResource\Pages;
 use App\Filament\Resources\DeviceResource\RelationManagers;
 use App\Models\Device;
-use Filament\Forms;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Form;
-use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
-class DeviceResource extends Resource
+class DeviceResource extends KnowledgeResource
 {
     protected static ?string $model = Device::class;
 
-    protected static bool $isScopedToTenant = false;
+    protected static ?int $navigationSort = 50;
 
-    protected static ?int $navigationSort = 40;
+    protected static ?string $navigationIcon = 'heroicon-o-device-phone-mobile';
 
-    protected static ?string $navigationGroup = 'Devices';
-
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    public static function getModelLabel(): string
+    {
+        return __('resource.device');
+    }
 
     public static function form(Form $form): Form
     {
@@ -34,13 +31,17 @@ class DeviceResource extends Resource
             ->schema([
                 Select::make('device_type_id')
                     ->relationship('deviceType', 'name')
+                    ->label(ucfirst(__('resource.device_type')))
                     ->preload(),
                 Select::make('brand_id')
                     ->relationship('brand', 'name')
+                    ->label(ucfirst(__('resource.brand')))
                     ->preload(),
                 TextInput::make('commercial_name')
+                    ->label(__('resource.commercial_name'))
                     ->required(),
                 TextInput::make('url')
+                    ->label(__('resource.url'))
                     ->suffixIcon('heroicon-m-globe-alt'),
             ]);
     }
@@ -49,10 +50,11 @@ class DeviceResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('deviceType.name'),
-                TextColumn::make('brand.name'),
-                TextColumn::make('commercial_name'),
+                TextColumn::make('deviceType.name')->label(ucfirst(__('resource.device_type'))),
+                TextColumn::make('brand.name')->label(ucfirst(__('resource.brand'))),
+                TextColumn::make('commercial_name')->label(__('resource.commercial_name')),
                 TextColumn::make('url')
+                    ->label(__('resource.url'))
                     ->url(fn ($record) => $record->url ?? '#', true)
                     ->icon('heroicon-m-globe-alt')
                     ->formatStateUsing(fn (?string $state): string => $state ? __("Link") : __("No Link"))

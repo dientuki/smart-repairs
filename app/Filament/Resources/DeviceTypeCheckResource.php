@@ -3,10 +3,8 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\DeviceTypeCheckResource\Pages;
-use App\Filament\Resources\DeviceTypeCheckResource\RelationManagers;
 use App\Models\DeviceTypeCheck;
 use Filament\Facades\Filament;
-use Filament\Forms;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
@@ -16,15 +14,17 @@ use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class DeviceTypeCheckResource extends Resource
 {
     protected static ?string $model = DeviceTypeCheck::class;
 
-    protected static ?string $tenantRelationshipName = 'customers';
+    protected static ?string $navigationIcon = 'heroicon-o-document-check';
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    public static function getModelLabel(): string
+    {
+        return __('resource.device_check');
+    }
 
     public static function form(Form $form): Form
     {
@@ -46,18 +46,21 @@ class DeviceTypeCheckResource extends Resource
                             }
                         }
                     )
+                    ->label(ucfirst(__('resource.device_type')))
                     ->preload()
                     ->required()
                     ->disabledOn('edit')
                     ->columnSpan('full'),
                 Repeater::make('damages')
                     ->reorderable(false)
+                    ->label(__('resource.damages'))
                     ->simple(
                         TextInput::make('damages')
                             ->required(),
                     ),
                 Repeater::make('features')
                     ->reorderable(false)
+                    ->label(__('resource.features'))
                     ->simple(
                         TextInput::make('features')
                             ->required(),
@@ -69,9 +72,9 @@ class DeviceTypeCheckResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('deviceType.name'),
-                TextColumn::make('damages'),
-                TextColumn::make('features'),
+                TextColumn::make('deviceType.name')->label(ucfirst(__('resource.device_type'))),
+                TextColumn::make('damages')->label(__('resource.damages')),
+                TextColumn::make('features')->label(__('resource.features')),
             ])
             ->filters([
                 //

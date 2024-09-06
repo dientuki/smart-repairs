@@ -4,9 +4,8 @@ namespace App\Filament\Resources;
 
 use App\Enum\DiscountEnum;
 use App\Filament\Resources\ServiceJobResource\Pages;
-use App\Filament\Resources\ServiceJobResource\RelationManagers;
 use App\Models\ServiceJob;
-use Filament\Forms;
+use App\Traits\RegistersNavigationTrait;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
@@ -14,16 +13,19 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class ServiceJobResource extends Resource
 {
+    use RegistersNavigationTrait;
+
     protected static ?string $model = ServiceJob::class;
 
-    protected static ?string $tenantRelationshipName = 'customers';
+    protected static ?string $navigationIcon = 'heroicon-o-wrench-screwdriver';
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    public static function getModelLabel(): string
+    {
+        return __('resource.service_job');
+    }
 
     public static function form(Form $form): Form
     {

@@ -18,7 +18,7 @@ class UserSeeder extends Seeder
         DB::table('users')->insert([
             'id' => (string) Str::ulid(),
             'name' => 'Maximiliano Zarate',
-            'email' => 'laboratronica@gmail.com',
+            'email' => 'full@gmail.com',
             'password' => Hash::make('1234'),
             'created_at' => now(),
             'updated_at' => now(),
@@ -26,7 +26,15 @@ class UserSeeder extends Seeder
         DB::table('users')->insert([
             'id' => (string) Str::ulid(),
             'name' => 'Juan Alberto',
-            'email' => 'dientuki@gmail.com',
+            'email' => 'medio@gmail.com',
+            'password' => Hash::make('1234'),
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+        DB::table('users')->insert([
+            'id' => (string) Str::ulid(),
+            'name' => 'HP662 Pantone 6C 101',
+            'email' => 'moncho@gmail.com',
             'password' => Hash::make('1234'),
             'created_at' => now(),
             'updated_at' => now(),

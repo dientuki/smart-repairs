@@ -11,11 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('teams', function (Blueprint $table) {
-            $table->ulid('id')->primary();
-            $table->string('name');
+        Schema::create('package_resources', function (Blueprint $table) {
+            $table->foreignUlid('resource_id')->constrained();
             $table->foreignUlid('package_id')->constrained();
-            $table->timestamps();
+            $table->string('name');
+
+            $table->unique(['resource_id', 'package_id']);
         });
     }
 
@@ -24,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('teams');
+        Schema::dropIfExists('package_resources');
     }
 };

@@ -2,40 +2,54 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\StockResource\RelationManagers\SuppliersRelationManager;
 use App\Filament\Resources\SupplierResource\Pages;
-use App\Filament\Resources\SupplierResource\RelationManagers;
 use App\Filament\Resources\SupplierResource\RelationManagers\ContactsRelationManager;
 use App\Filament\Resources\SupplierResource\RelationManagers\StocksRelationManager;
 use App\Models\Supplier;
-use Filament\Facades\Filament;
-use Filament\Forms;
+use App\Traits\RegistersNavigationTrait;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Forms\Components\TextInput;
 use Filament\Tables\Columns\TextColumn;
 
 class SupplierResource extends Resource
 {
+    use RegistersNavigationTrait;
+
     protected static ?string $model = Supplier::class;
 
-    protected static ?string $tenantRelationshipName = 'customers';
+    protected static ?string $navigationIcon = 'heroicon-o-building-storefront';
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    public static function getModelLabel(): string
+    {
+        return __('resource.supplier');
+    }
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                TextInput::make('name')->required(),
-                TextInput::make('email')->required(),
-                TextInput::make('phone')->required(),
-                TextInput::make('address')->required(),
-                TextInput::make('website')->required(),
+                TextInput::make('name')
+                    ->required()
+                    ->translateLabel(),
+                TextInput::make('email')
+                    ->required()
+                    ->suffixIcon('heroicon-m-envelope')
+                    ->label(__('resource.email')),
+                TextInput::make('phone')
+                    ->required()
+                    ->suffixIcon('heroicon-m-phone')
+                    ->label(__('resource.phone')),
+                TextInput::make('address')
+                    ->required()
+                    ->suffixIcon('heroicon-m-map-pin')
+                    ->label(__('resource.address')),
+                TextInput::make('website')
+                    ->required()
+                    ->suffixIcon('heroicon-m-globe-alt')
+                    ->label(__('resource.website')),
             ]);
     }
 
@@ -43,11 +57,23 @@ class SupplierResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('name'),
-                TextColumn::make('email'),
-                TextColumn::make('phone'),
-                TextColumn::make('address'),
-                TextColumn::make('website'),
+                TextColumn::make('name')
+                    ->translateLabel(),
+                TextColumn::make('email')
+                    ->label(__('resource.email'))
+                    ->icon('heroicon-m-envelope'),
+                TextColumn::make('phone')
+                    ->label(__('resource.phone'))
+                    ->icon('heroicon-m-phone'),
+                TextColumn::make('address')
+                    ->icon('heroicon-m-map-pin')
+                    ->label(__('resource.address')),
+                TextColumn::make('website')
+                    ->label(__('resource.website'))
+                    ->url(fn ($record) => $record->url ?? '#', true)
+                    ->icon('heroicon-m-globe-alt')
+                    ->formatStateUsing(fn (?string $state): string => $state ? __("Link") : __("No Link"))
+                    ->tooltip(fn (Supplier $record): string => $record->website ?? __("No URL")),
             ])
             ->filters([
                 //
