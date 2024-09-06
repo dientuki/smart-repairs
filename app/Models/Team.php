@@ -24,10 +24,12 @@ class Team extends ModelAuditable
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
+    /*
     public function customers(): HasMany
     {
         return $this->hasMany(Customer::class);
     }
+    */
 
     public function package()
     {

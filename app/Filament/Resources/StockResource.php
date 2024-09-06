@@ -25,8 +25,6 @@ class StockResource extends Resource
 
     protected static ?string $model = Stock::class;
 
-    protected static ?string $tenantRelationshipName = 'customers';
-
     protected static ?string $navigationIcon = 'heroicon-o-book-open';
 
     public static function getModelLabel(): string

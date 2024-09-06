@@ -19,8 +19,6 @@ class DeviceTypeCheckResource extends Resource
 {
     protected static ?string $model = DeviceTypeCheck::class;
 
-    protected static ?string $tenantRelationshipName = 'customers';
-
     protected static ?string $navigationIcon = 'heroicon-o-document-check';
 
     public static function getModelLabel(): string

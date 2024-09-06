@@ -17,6 +17,7 @@ return [
     'user' => 'usuario',
     'stock' => 'stock',
     'supplier' => 'proveedor',
+    'service_job' => 'reparaciones',
 
 
 

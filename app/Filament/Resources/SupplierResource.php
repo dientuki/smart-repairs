@@ -20,9 +20,12 @@ class SupplierResource extends Resource
 
     protected static ?string $model = Supplier::class;
 
-    protected static ?string $tenantRelationshipName = 'customers';
-
     protected static ?string $navigationIcon = 'heroicon-o-building-storefront';
+
+    public static function getModelLabel(): string
+    {
+        return __('resource.supplier');
+    }
 
     public static function form(Form $form): Form
     {

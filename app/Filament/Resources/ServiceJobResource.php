@@ -20,9 +20,12 @@ class ServiceJobResource extends Resource
 
     protected static ?string $model = ServiceJob::class;
 
-    protected static ?string $tenantRelationshipName = 'customers';
-
     protected static ?string $navigationIcon = 'heroicon-o-wrench-screwdriver';
+
+    public static function getModelLabel(): string
+    {
+        return __('resource.service_job');
+    }
 
     public static function form(Form $form): Form
     {

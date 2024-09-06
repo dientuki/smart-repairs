@@ -2,22 +2,13 @@
 
 namespace App\Filament\Resources;
 
-use App\Enum\OrderStatusEnum;
 use App\Filament\Resources\OrderResource\Pages;
-use App\Filament\Resources\OrderResource\RelationManagers;
-use App\Models\Customer;
-use App\Models\Device;
 use App\Models\Order;
-use App\Models\DeviceUnit;
-use Filament\Actions\Modal\Actions\Action;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
-use Filament\Facades\Filament;
 use App\Traits\CustomerFieldsTrait;
 
 class OrderResource extends Resource
@@ -25,8 +16,6 @@ class OrderResource extends Resource
     use CustomerFieldsTrait;
 
     protected static ?string $model = Order::class;
-
-    protected static ?string $tenantRelationshipName = 'customers';
 
     protected static ?string $navigationIcon = 'heroicon-o-inbox-stack';
 
