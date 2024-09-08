@@ -16,18 +16,21 @@ class PackageSeeder extends Seeder
         DB::table('packages')->insert([
             'id' => (string) Str::ulid(),
             'name' => 'Full',
+            'price' => 40000,
             'created_at' => now(),
             'updated_at' => now(),
         ]);
         DB::table('packages')->insert([
             'id' => (string) Str::ulid(),
             'name' => 'Medio',
+            'price' => 20000,
             'created_at' => now(),
             'updated_at' => now(),
         ]);
         DB::table('packages')->insert([
             'id' => (string) Str::ulid(),
             'name' => 'Basico',
+            'price' => 10000,
             'created_at' => now(),
             'updated_at' => now(),
         ]);

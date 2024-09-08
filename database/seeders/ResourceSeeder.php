@@ -16,54 +16,63 @@ class ResourceSeeder extends Seeder
         DB::table('resources')->insert([
             'id' => (string) Str::ulid(),
             'resource' => 'simpleprice',
+            'description' => 'Simple price',
             'created_at' => now(),
             'updated_at' => now(),
         ]);
         DB::table('resources')->insert([
             'id' => (string) Str::ulid(),
             'resource' => 'stock',
+            'description' => 'Stock',
             'created_at' => now(),
             'updated_at' => now(),
         ]);
         DB::table('resources')->insert([
             'id' => (string) Str::ulid(),
             'resource' => 'provider',
+            'description' => 'Provider',
             'created_at' => now(),
             'updated_at' => now(),
         ]);
         DB::table('resources')->insert([
             'id' => (string) Str::ulid(),
             'resource' => 'customer',
+            'description' => 'Customer',
             'created_at' => now(),
             'updated_at' => now(),
         ]);
         DB::table('resources')->insert([
             'id' => (string) Str::ulid(),
             'resource' => 'salepoint',
+            'description' => 'Sale point',
             'created_at' => now(),
             'updated_at' => now(),
         ]);
         DB::table('resources')->insert([
             'id' => (string) Str::ulid(),
             'resource' => 'user',
+            'description' => 'User',
             'created_at' => now(),
             'updated_at' => now(),
         ]);
         DB::table('resources')->insert([
             'id' => (string) Str::ulid(),
             'resource' => 'supplier',
+            'description' => 'Supplier',
             'created_at' => now(),
             'updated_at' => now(),
         ]);
         DB::table('resources')->insert([
             'id' => (string) Str::ulid(),
             'resource' => 'deviceunit',
+            'description' => 'Device unit',
             'created_at' => now(),
             'updated_at' => now(),
         ]);
         DB::table('resources')->insert([
             'id' => (string) Str::ulid(),
             'resource' => 'servicejob',
+            'description' => 'Service job',
             'created_at' => now(),
             'updated_at' => now(),
         ]);

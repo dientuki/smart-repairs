@@ -23,8 +23,10 @@ class ResourceResource extends Resource
         return $form
             ->schema([
                 Forms\Components\TextInput::make('resource')
+                    ->required(),
+                Forms\Components\TextInput::make('description')
                     ->required()
-                    ->maxLength(255),
+
             ]);
     }
 
@@ -32,19 +34,10 @@ class ResourceResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('id')
-                    ->label('ID')
-                    ->searchable(),
                 Tables\Columns\TextColumn::make('resource')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('created_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('updated_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\TextColumn::make('description')
+                    ->searchable(),
             ])
             ->filters([
                 //

@@ -7,6 +7,7 @@ use App\Filament\Admin\Resources\PackageResource\Pages\EditPackage;
 use App\Filament\Admin\Resources\PackageResource\Pages\ListPackages;
 use App\Models\Admin\Package;
 use Filament\Forms;
+use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
@@ -25,6 +26,13 @@ class PackageResource extends Resource
                 Forms\Components\TextInput::make('name')
                     ->required()
                     ->maxLength(255),
+                Forms\Components\TextInput::make('description')
+                    ->required()
+                    ->maxLength(255),
+                TextInput::make('price')
+                    ->label(__('resource.price'))
+                    ->prefix('$')
+                    ->required(),
             ]);
     }
 
@@ -32,19 +40,10 @@ class PackageResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('id')
-                    ->label('ID')
-                    ->searchable(),
                 Tables\Columns\TextColumn::make('name')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('created_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('updated_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\TextColumn::make('description'),
+                Tables\Columns\TextColumn::make('price'),
             ])
             ->filters([
                 //

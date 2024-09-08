@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
+use App\Models\Admin\Package;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Team extends ModelAuditable
 {

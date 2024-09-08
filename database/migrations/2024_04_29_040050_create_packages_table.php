@@ -14,6 +14,8 @@ return new class extends Migration
         Schema::create('packages', function (Blueprint $table) {
             $table->ulid('id')->primary();
             $table->string('name');
+            $table->string('description')->nullable();
+            $table->decimal('price', 12, 0);
             $table->timestamps();
         });
     }
