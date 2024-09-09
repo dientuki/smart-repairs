@@ -1,5 +1,6 @@
 <?php
 
+use App\Enum\RolEnum;
 use App\Models\Team;
 use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
@@ -16,6 +17,7 @@ return new class extends Migration
         Schema::create('team_user', function (Blueprint $table) {
             $table->foreignUlid('user_id')->constrained();
             $table->foreignUlid('team_id')->constrained();
+            $table->enum('rol', RolEnum::getAllCasesAsArray())->default(RolEnum::default()->value);
 
             $table->unique(['user_id', 'team_id']);
         });
