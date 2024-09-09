@@ -4,6 +4,7 @@ namespace App\Filament\Admin\Resources;
 
 use App\Filament\Admin\Resources\TeamResource\Pages;
 use App\Filament\Admin\Resources\TeamResource\RelationManagers;
+use App\Filament\Admin\Resources\TeamResource\RelationManagers\UsersRelationManager;
 use App\Models\Team;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -54,7 +55,7 @@ class TeamResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            UsersRelationManager::class
         ];
     }
 
