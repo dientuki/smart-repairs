@@ -27,6 +27,8 @@ class StockResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-book-open';
 
+    protected static ?int $navigationSort = 60;
+
     public static function getModelLabel(): string
     {
         return __('resource.stock');

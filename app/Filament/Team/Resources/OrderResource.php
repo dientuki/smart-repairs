@@ -19,6 +19,8 @@ class OrderResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-inbox-stack';
 
+    protected static ?int $navigationSort = 10;
+
     public static function getModelLabel(): string
     {
         return __('resource.order');

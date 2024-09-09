@@ -22,6 +22,8 @@ class SupplierResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-building-storefront';
 
+    protected static ?int $navigationSort = 70;
+
     public static function getModelLabel(): string
     {
         return __('resource.supplier');

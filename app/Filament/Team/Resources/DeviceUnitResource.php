@@ -16,6 +16,8 @@ class DeviceUnitResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-server-stack';
 
+    protected static ?int $navigationSort = 40;
+
     public static function getModelLabel(): string
     {
         return __('resource.device_unit');
