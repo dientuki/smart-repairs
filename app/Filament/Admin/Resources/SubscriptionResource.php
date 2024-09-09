@@ -10,6 +10,7 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\ToggleColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -34,9 +35,16 @@ class SubscriptionResource extends Resource
             ->columns([
                 TextColumn::make('package.name'),
                 TextColumn::make('team.name'),
-                TextColumn::make('start_at'),
-                TextColumn::make('end_at'),
-                TextColumn::make('is_active'),
+                TextColumn::make('trial_end_at')
+                    ->sortable()
+                    ->date(),
+                TextColumn::make('start_at')
+                    ->sortable()
+                    ->date(),
+                TextColumn::make('end_at')
+                    ->sortable()
+                    ->date(),
+                ToggleColumn::make('is_active'),
             ])
             ->filters([
                 //
