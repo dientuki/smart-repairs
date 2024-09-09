@@ -17,7 +17,7 @@ class Team extends ModelAuditable
      */
     public function members(): BelongsToMany
     {
-        return $this->belongsToMany(User::class, 'team_user', 'user_id');
+        return $this->belongsToMany(User::class, 'team_user', 'team_id', 'user_id');
     }
 
     /**

@@ -45,7 +45,6 @@ class RegisterTeam extends RegisterTenant
     {
         $team = Team::create($data);
 
-        /*
         $package = Package::where('default', true)->first();
         Subscription::create([
             'team_id' => $team->id,
@@ -55,8 +54,7 @@ class RegisterTeam extends RegisterTenant
             'end_at' => now()->addMonth(),
             'is_active' => true,
         ]);
-        */
-        dd($team->members());
+
         $team->members()->attach(auth()->user());
 
         return $team;
