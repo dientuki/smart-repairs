@@ -65,9 +65,10 @@ class TeamPanelProvider extends PanelProvider
             ->tenantProfile(EditTeamProfile::class)
             ->tenantMenuItems([
                 'register' => MenuItem::make()->hidden(),
+                'billing' => MenuItem::make()->visible(), //take a look https://filamentphp.com/docs/3.x/panels/tenancy#conditionally-hiding-tenant-menu-items
             ])
-            //->tenantBillingProvider(new SubscriptionsProvider())
-            //->requiresTenantSubscription()
+            ->tenantBillingProvider(new SubscriptionsProvider())
+            ->requiresTenantSubscription()
             ->registration();
     }
 }

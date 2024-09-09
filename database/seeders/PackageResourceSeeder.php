@@ -15,7 +15,7 @@ class PackageResourceSeeder extends Seeder
     {
         $resources = DB::table('resources')->get();
         $packages = DB::table('packages')->get();
-        $medium = [1,2,3,5];
+        $medium = [1,2,4];
 
         DB::table('package_resources')->insert([
             'package_id' => $packages[2]->id,

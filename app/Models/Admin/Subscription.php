@@ -3,6 +3,7 @@
 namespace App\Models\Admin;
 
 use App\Models\Team;
+use App\Traits\IdAttributeUppercaseTrait;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -10,6 +11,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Subscription extends Model
 {
     use HasUlids;
+    use IdAttributeUppercaseTrait;
 
     protected $fillable = [
         'team_id',

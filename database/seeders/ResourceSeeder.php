@@ -34,13 +34,7 @@ class ResourceSeeder extends Seeder
             'created_at' => now(),
             'updated_at' => now(),
         ]);
-        DB::table('resources')->insert([
-            'id' => (string) Str::ulid(),
-            'resource' => 'customer',
-            'description' => 'Customer',
-            'created_at' => now(),
-            'updated_at' => now(),
-        ]);
+
         DB::table('resources')->insert([
             'id' => (string) Str::ulid(),
             'resource' => 'salepoint',

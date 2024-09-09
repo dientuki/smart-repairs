@@ -15,7 +15,6 @@ use Filament\Tables\Table;
 class CustomerResource extends Resource
 {
     use CustomerFieldsTrait;
-    use RegistersNavigationTrait;
 
     protected static ?string $model = Customer::class;
 

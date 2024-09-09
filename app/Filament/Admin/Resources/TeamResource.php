@@ -26,9 +26,6 @@ class TeamResource extends Resource
                 Forms\Components\TextInput::make('name')
                     ->required()
                     ->maxLength(255),
-                Forms\Components\TextInput::make('package_id')
-                    ->required()
-                    ->maxLength(26),
             ]);
     }
 
@@ -38,7 +35,7 @@ class TeamResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('name')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('package.name')
+                Tables\Columns\TextColumn::make('subscription.package.name')
                     ->searchable(),
             ])
             ->filters([

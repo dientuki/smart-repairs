@@ -17,11 +17,13 @@ class VerifyIsSubscribed
     {
 
         $user = $request->user();
-        //dd('aca');
-        //dd(filament());
-        //dd(filament()->getTenant());
 
-        //return redirect()->route('filament.01J780T5ACBCGKDF3BB946XPRD.tenant.billing');
+
+        if (!filament()->getTenant()->subscription->is_active) {
+            dd('no esta activa la suscripcion');
+            //if user admin, go to billin
+            //if user not admin, go to error page
+        }
 
         /*
 
@@ -34,6 +36,7 @@ class VerifyIsSubscribed
             }
         }
             */
+
 
         return $next($request);
     }

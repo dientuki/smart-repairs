@@ -4,6 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 
+use App\Traits\IdAttributeUppercaseTrait;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Models\Contracts\HasTenants;
 use Filament\Panel;
@@ -22,6 +23,7 @@ class User extends Authenticatable implements FilamentUser, HasTenants, Auditabl
     use Notifiable;
     use \OwenIt\Auditing\Auditable;
     use HasUlids;
+    use IdAttributeUppercaseTrait;
 
     /**
      * The attributes that are mass assignable.
@@ -57,8 +59,15 @@ class User extends Authenticatable implements FilamentUser, HasTenants, Auditabl
         ];
     }
 
+    /**
+     * Get the active tenants for the user. ONLY used in login and registration.
+     *
+     * @param  \Filament\Panel  $panel
+     * @return \Illuminate\Support\Collection
+     */
     public function getTenants(Panel $panel): Collection
     {
+        //return $this->teams
         return $this->teams->where('subscription.is_active', true);
     }
 

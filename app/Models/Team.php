@@ -44,7 +44,6 @@ class Team extends ModelAuditable
 
     public static function hasAccessToResource(Team $team, string $resourceName): bool
     {
-        //return $team->subscription->package->resources()->where('resources.resource', $resourceName)->exists();
-        return true;
+        return $team->subscription->package->resources()->where('resources.resource', $resourceName)->exists();
     }
 }

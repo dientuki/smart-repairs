@@ -2,6 +2,7 @@
 
 namespace App\Models\Admin;
 
+use App\Traits\IdAttributeUppercaseTrait;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -12,6 +13,7 @@ class Admin extends Authenticatable
     use HasFactory;
     use Notifiable;
     use HasUlids;
+    use IdAttributeUppercaseTrait;
 
     /**
      * The attributes that are mass assignable.
