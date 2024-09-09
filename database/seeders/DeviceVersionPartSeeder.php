@@ -16,37 +16,37 @@ class DeviceVersionPartSeeder extends Seeder
         $devices = DB::table('device_versions')->get();
         $parts = DB::table('parts')->get();
 
-        DB::table('device_versions_parts')->insert([
+        DB::table('device_versions_part')->insert([
             'device_version_id' => $devices[0]->id,
             'part_id' => $parts[0]->id,
         ]);
 
-        DB::table('device_versions_parts')->insert([
+        DB::table('device_versions_part')->insert([
             'device_version_id' => $devices[0]->id,
             'part_id' => $parts[1]->id,
         ]);
 
-        DB::table('device_versions_parts')->insert([
+        DB::table('device_versions_part')->insert([
             'device_version_id' => $devices[0]->id,
             'part_id' => $parts[2]->id,
         ]);
 
-        DB::table('device_versions_parts')->insert([
+        DB::table('device_versions_part')->insert([
             'device_version_id' => $devices[0]->id,
             'part_id' => $parts[3]->id,
         ]);
 
-        DB::table('device_versions_parts')->insert([
+        DB::table('device_versions_part')->insert([
             'device_version_id' => $devices[2]->id,
             'part_id' => $parts[2]->id,
         ]);
 
-        DB::table('device_versions_parts')->insert([
+        DB::table('device_versions_part')->insert([
             'device_version_id' => $devices[2]->id,
             'part_id' => $parts[4]->id,
         ]);
 
-        DB::table('device_versions_parts')->insert([
+        DB::table('device_versions_part')->insert([
             'device_version_id' => $devices[3]->id,
             'part_id' => $parts[4]->id,
         ]);

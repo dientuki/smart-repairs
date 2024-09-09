@@ -9,14 +9,13 @@ use Closure;
 
 class SubscriptionsProvider implements Provider
 {
-
     public function getRouteAction(): string | Closure
     {
-      return function (): RedirectResponse {
-        // go to billing page
-        dd(filament()->getCurrentPanel()->getId());
-        return redirect()->route('/');
-      };
+        return function (): RedirectResponse {
+          // go to billing page
+            dd(filament()->getCurrentPanel()->getId());
+            return redirect()->route('/');
+        };
     }
 
     public function getSubscribedMiddleware(): string
