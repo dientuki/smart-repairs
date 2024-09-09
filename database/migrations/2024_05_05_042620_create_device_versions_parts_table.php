@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('device_versions_parts', function (Blueprint $table) {
+        Schema::create('device_versions_part', function (Blueprint $table) {
             $table->foreignUlid('device_version_id')->constrained();
             $table->foreignUlid('part_id')->constrained();
 
@@ -24,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('device_parts');
+        Schema::dropIfExists('device_versions_part');
     }
 };

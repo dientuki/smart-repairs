@@ -25,6 +25,6 @@ class DeviceVersion extends ModelAuditable
 
     public function parts()
     {
-        return $this->belongsToMany(Part::class, 'device_versions_parts', 'device_version_id', 'part_id');
+        return $this->belongsToMany(Part::class, 'device_versions_part', 'device_version_id', 'part_id');
     }
 }

@@ -11,6 +11,7 @@ use Filament\Tables\Table;
 use App\Filament\Admin\Resources\ResourceResource\Pages\CreateResource;
 use App\Filament\Admin\Resources\ResourceResource\Pages\EditResource;
 use App\Filament\Admin\Resources\ResourceResource\Pages\ListResources;
+use App\Filament\Admin\Resources\ResourceResource\RelationManagers\PackagesRelationManager;
 
 class ResourceResource extends Resource
 {
@@ -55,7 +56,7 @@ class ResourceResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            PackagesRelationManager::class
         ];
     }
 

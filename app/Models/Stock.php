@@ -18,14 +18,14 @@ class Stock extends ModelWithTeam
 
     public function devicesVersions()
     {
-        //return $this->belongsToMany(DeviceVersion::class, 'device_versions_parts');
+        //return $this->belongsToMany(DeviceVersion::class, 'device_versions_part');
         //dd($this->part->deviceVersions()->toSql());
         return $this->part->deviceVersions();
     }
 
     public function suppliers(): BelongsToMany
     {
-        return $this->BelongsToMany(Supplier::class, 'stock_suppliers')->withPivot('price');
+        return $this->BelongsToMany(Supplier::class, 'stock_supplier')->withPivot('price');
     }
 
 
@@ -38,7 +38,7 @@ class Stock extends ModelWithTeam
 
     public function deviceVersions()
     {
-        return $this->belongsToMany(DeviceVersion::class, 'device_versions_parts');
+        return $this->belongsToMany(DeviceVersion::class, 'device_versions_part');
     }
         */
 }

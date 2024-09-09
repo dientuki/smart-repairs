@@ -5,6 +5,7 @@ namespace App\Filament\Admin\Resources;
 use App\Filament\Admin\Resources\PackageResource\Pages\CreatePackage;
 use App\Filament\Admin\Resources\PackageResource\Pages\EditPackage;
 use App\Filament\Admin\Resources\PackageResource\Pages\ListPackages;
+use App\Filament\Admin\Resources\PackageResource\RelationManagers\ResourcesRelationManager;
 use App\Models\Admin\Package;
 use Filament\Forms;
 use Filament\Forms\Components\TextInput;
@@ -61,7 +62,7 @@ class PackageResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            ResourcesRelationManager::class
         ];
     }
 

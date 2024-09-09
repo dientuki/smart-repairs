@@ -17,7 +17,7 @@ class Package extends Model
 
     public function resources(): BelongsToMany
     {
-        return $this->belongsToMany(Resource::class, 'package_resources', 'package_id', 'resource_id');
+        return $this->belongsToMany(Resource::class, 'package_resource', 'package_id', 'resource_id');
     }
 
     public function subscriptions(): HasMany

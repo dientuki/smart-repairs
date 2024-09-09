@@ -16,6 +16,6 @@ class Resource extends Model
 
     public function packages(): BelongsToMany
     {
-        return $this->belongsToMany(Package::class);
+        return $this->belongsToMany(Package::class, 'package_resource', 'resource_id', 'package_id');
     }
 }

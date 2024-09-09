@@ -60,7 +60,7 @@ class Part extends ModelAuditable
 
     public function deviceVersions()
     {
-        return $this->belongsToMany(DeviceVersion::class, 'device_versions_parts');
+        return $this->belongsToMany(DeviceVersion::class, 'device_versions_part');
     }
 
     public function deviceVersionParts()
