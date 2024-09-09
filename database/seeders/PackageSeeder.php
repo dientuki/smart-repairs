@@ -31,6 +31,7 @@ class PackageSeeder extends Seeder
             'id' => (string) Str::ulid(),
             'name' => 'Basico',
             'price' => 10000,
+            'default' => true,
             'created_at' => now(),
             'updated_at' => now(),
         ]);

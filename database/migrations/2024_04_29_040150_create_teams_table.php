@@ -14,7 +14,6 @@ return new class extends Migration
         Schema::create('teams', function (Blueprint $table) {
             $table->ulid('id')->primary();
             $table->string('name');
-            $table->foreignUlid('package_id')->constrained();
             $table->timestamps();
         });
     }

@@ -2,6 +2,8 @@
 
 namespace App\Filament\Team\Pages\Tenancy;
 
+use App\Models\Admin\Package;
+use App\Models\Admin\Subscription;
 use App\Models\Team;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
@@ -43,6 +45,18 @@ class RegisterTeam extends RegisterTenant
     {
         $team = Team::create($data);
 
+        /*
+        $package = Package::where('default', true)->first();
+        Subscription::create([
+            'team_id' => $team->id,
+            'package_id' => $package->id,
+            'trial_end_at' => now()->addDays(15),
+            'start_at' => now(),
+            'end_at' => now()->addMonth(),
+            'is_active' => true,
+        ]);
+        */
+        dd($team->members());
         $team->members()->attach(auth()->user());
 
         return $team;

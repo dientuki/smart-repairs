@@ -2,8 +2,9 @@
 
 namespace App\Models;
 
-use App\Models\Admin\Package;
+use App\Models\Admin\Subscription;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Team extends ModelAuditable
 {
@@ -31,13 +32,19 @@ class Team extends ModelAuditable
     }
     */
 
-    public function package()
+    public function subscription(): HasOne
     {
-        return $this->belongsTo(Package::class);
+        return $this->hasOne(Subscription::class);
+    }
+
+    public function users()
+    {
+        return $this->belongsToMany(User::class, 'team_user');
     }
 
     public static function hasAccessToResource(Team $team, string $resourceName): bool
     {
-        return $team->package->resources()->where('resources.resource', $resourceName)->exists();
+        //return $team->subscription->package->resources()->where('resources.resource', $resourceName)->exists();
+        return true;
     }
 }

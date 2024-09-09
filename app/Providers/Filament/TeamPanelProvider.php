@@ -5,6 +5,7 @@ namespace App\Providers\Filament;
 use App\Filament\Team\Pages\Tenancy\EditTeamProfile;
 use App\Filament\Team\Pages\Tenancy\RegisterTeam;
 use App\Models\Team;
+use App\Providers\SubscriptionsProvider;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
@@ -59,12 +60,14 @@ class TeamPanelProvider extends PanelProvider
             ->authMiddleware([
                 Authenticate::class,
             ])
-            ->tenant(Team::class)
+            ->tenant(Team::class, ownershipRelationship: 'teams')
             ->tenantRegistration(RegisterTeam::class)
             ->tenantProfile(EditTeamProfile::class)
             ->tenantMenuItems([
                 'register' => MenuItem::make()->hidden(),
             ])
+            //->tenantBillingProvider(new SubscriptionsProvider())
+            //->requiresTenantSubscription()
             ->registration();
     }
 }

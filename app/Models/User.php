@@ -60,6 +60,7 @@ class User extends Authenticatable implements FilamentUser, HasTenants, Auditabl
     public function getTenants(Panel $panel): Collection
     {
         return $this->teams;
+        return $this->teams->where('subscription.is_active', true);
     }
 
     /**

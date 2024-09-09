@@ -12,8 +12,8 @@ class ModelWithTeam extends ModelAuditable
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function team(): BelongsTo
+    public function teams(): BelongsTo
     {
-        return $this->belongsTo(Team::class);
+        return $this->belongsTo(Team::class, 'team_id');
     }
 }
