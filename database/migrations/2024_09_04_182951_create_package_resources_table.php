@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('package_resources', function (Blueprint $table) {
+        Schema::create('package_resource', function (Blueprint $table) {
             $table->foreignUlid('resource_id')->constrained();
             $table->foreignUlid('package_id')->constrained();
             $table->string('name');
@@ -25,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('package_resources');
+        Schema::dropIfExists('package_resource');
     }
 };

@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('resources', function (Blueprint $table) {
             $table->ulid('id')->primary();
             $table->string('resource');
+            $table->string('description');
             $table->timestamps();
         });
     }

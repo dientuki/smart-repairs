@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Traits\IdAttributeUppercaseTrait;
 use App\Traits\RemoveEmptyStringsTrait;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -16,14 +17,5 @@ class ModelAuditable extends Model implements Auditable
 
     use \OwenIt\Auditing\Auditable;
 
-    /**
-     * Set the ID attribute to uppercase when setting.
-     *
-     * @param  string  $value
-     * @return void
-     */
-    public function setIdAttribute($value)
-    {
-        $this->attributes['id'] = strtoupper($value);
-    }
+    use IdAttributeUppercaseTrait;
 }

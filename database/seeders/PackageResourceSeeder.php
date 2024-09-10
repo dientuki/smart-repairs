@@ -15,9 +15,9 @@ class PackageResourceSeeder extends Seeder
     {
         $resources = DB::table('resources')->get();
         $packages = DB::table('packages')->get();
-        $medium = [1,2,3];
+        $medium = [1,2,4];
 
-        DB::table('package_resources')->insert([
+        DB::table('package_resource')->insert([
             'package_id' => $packages[2]->id,
             'resource_id' => $resources[0]->id,
             'name' => $packages[2]->name . ' ' . $resources[0]->resource
@@ -27,7 +27,7 @@ class PackageResourceSeeder extends Seeder
             if ($index === 0) {
                 continue;
             }
-            DB::table('package_resources')->insert([
+            DB::table('package_resource')->insert([
                 'package_id' => $packages[0]->id,
                 'resource_id' => $resource->id,
                 'name' => $packages[0]->name . ' ' . $resource->resource
@@ -35,7 +35,7 @@ class PackageResourceSeeder extends Seeder
         }
 
         foreach ($medium as $mediumItem) {
-            DB::table('package_resources')->insert([
+            DB::table('package_resource')->insert([
                 'package_id' => $packages[1]->id,
                 'resource_id' => $resources[$mediumItem]->id,
                 'name' => $packages[1]->name . ' ' . $resources[$mediumItem]->resource

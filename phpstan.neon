@@ -21,4 +21,6 @@ parameters:
 	ignoreErrors:
 		-
 			message: "#This view is not used in the project.#"
-			path: resources/views/auth/
+			paths:
+				- resources/views/auth/
+				- resources/views/filament/

@@ -41,8 +41,8 @@ class Device extends ModelAuditable
     {
         return $this
             ->hasMany(DeviceVersion::class)
-            ->join('device_versions_parts', 'parts.id', '=', 'device_versions_parts.part_id')
-            ->join('device_versions', 'device_versions.id', '=', 'device_versions_parts.device_version_id')
+            ->join('device_versions_part', 'parts.id', '=', 'device_versions_part.part_id')
+            ->join('device_versions', 'device_versions.id', '=', 'device_versions_part.device_version_id')
             ->join('module_categories', 'module_categories.id', '=', 'parts.module_category_id')
             ->from('parts')
             ->select('parts.*', 'device_versions.version as version', 'module_categories.name as category');
