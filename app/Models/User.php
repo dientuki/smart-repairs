@@ -78,7 +78,7 @@ class User extends Authenticatable implements FilamentUser, HasTenants, Auditabl
      */
     public function teams(): BelongsToMany
     {
-        return $this->belongsToMany(Team::class);
+        return $this->belongsToMany(Team::class)->withPivot('rol');
     }
 
     public function canAccessTenant(Model $tenant): bool
@@ -90,5 +90,17 @@ class User extends Authenticatable implements FilamentUser, HasTenants, Auditabl
     public function canAccessPanel(Panel $panel): bool
     {
         return true;
+    }
+
+    /**
+     * Obtiene el rol de un usuario en un equipo específico.
+     *
+     * @return string|null
+     */
+    public function getRole(): ?string
+    {
+        $team = $this->teams()->where('team_id', filament()->getTenant()->id)->first();
+
+        return $team ? $team->pivot->rol : null;
     }
 }
