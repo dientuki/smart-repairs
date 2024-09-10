@@ -2,12 +2,12 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Admin\Subscription;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Team extends ModelAuditable
 {
-    use HasFactory;
-
     protected $fillable = ['name'];
 
     /**
@@ -15,8 +15,9 @@ class Team extends ModelAuditable
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
-    public function members() {
-        return $this->belongsToMany(User::class, 'team_user', 'user_id');
+    public function members(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class, 'team_user', 'team_id', 'user_id');
     }
 
     /**
@@ -24,9 +25,25 @@ class Team extends ModelAuditable
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function customers() {
+    /*
+    public function customers(): HasMany
+    {
         return $this->hasMany(Customer::class);
     }
+    */
 
+    public function subscription(): HasOne
+    {
+        return $this->hasOne(Subscription::class);
+    }
 
+    public function users()
+    {
+        return $this->belongsToMany(User::class, 'team_user');
+    }
+
+    public static function hasAccessToResource(Team $team, string $resourceName): bool
+    {
+        return $team->subscription->package->resources()->where('resources.resource', $resourceName)->exists();
+    }
 }

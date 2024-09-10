@@ -20,6 +20,8 @@ class CustomerSeeder extends Seeder
             'email' => 'juan@perez.com',
             'phone' => '1324',
             'team_id' => DB::table('teams')->first()->id,
+            'created_at' => now(),
+            'updated_at' => now(),
         ]);
         DB::table('customers')->insert([
             'id' => (string) Str::ulid(),
@@ -28,6 +30,8 @@ class CustomerSeeder extends Seeder
             'email' => 'calusilva@gmail.com',
             'phone' => '1324',
             'team_id' => DB::table('teams')->first()->id,
+            'created_at' => now(),
+            'updated_at' => now(),
         ]);
     }
 }

@@ -2,11 +2,16 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 
 class ServiceJob extends ModelWithTeam
 {
-    use HasFactory;
+    protected $fillable = ['name', 'price', 'discount_type', 'team_id'];
 
-    protected $fillable = ['name', 'price', 'team_id'];
+    public function label(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => $this->name
+        );
+    }
 }

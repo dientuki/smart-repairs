@@ -4,12 +4,18 @@ import { useBoardStore } from "@/store/BoardStore";
 import { useEffect } from 'react';
 import { DragDropContext, DropResult, Droppable } from 'react-beautiful-dnd';
 import Column from "@/components/board/Column";
+import { toast } from "react-toastify";
+import { useTranslation } from "react-i18next";
 
 function Board() {
   const { board, getBoard, setBoardState, updateStatus } = useBoardStore();
+  const { t } = useTranslation();
 
   useEffect(() => {
-    getBoard()
+    getBoard().catch((e: any) => {
+      console.log(e.message);
+      toast.error(t(`toast.error.${e.message}`));
+    });
   }, [getBoard]);
 
   const handleOnDragEnd = (result: DropResult) => {

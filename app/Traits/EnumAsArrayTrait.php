@@ -1,9 +1,9 @@
 <?php
+
 namespace App\Traits;
 
 trait EnumAsArrayTrait
 {
-
     /**
      * Returns an array containing the values of all cases in the UnlockEnum.
      *

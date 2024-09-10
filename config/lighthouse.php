@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 return [
     /*
@@ -36,7 +38,15 @@ return [
 
             // Logs in a user if they are authenticated. In contrast to Laravel's 'auth'
             // middleware, this delegates auth and permission checks to the field level.
-            Nuwave\Lighthouse\Http\Middleware\AttemptAuthentication::class,
+            //Nuwave\Lighthouse\Http\Middleware\AttemptAuthentication::class,
+
+            Illuminate\Cookie\Middleware\EncryptCookies::class,
+            Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
+            Illuminate\Session\Middleware\StartSession::class,
+            Illuminate\View\Middleware\ShareErrorsFromSession::class,
+            //Illuminate\Foundation\Http\Middleware\ValidateCsrfToken::class,
+            Illuminate\Auth\Middleware\Authenticate::class,
+            Illuminate\Routing\Middleware\SubstituteBindings::class,
 
             // Logs every incoming GraphQL query.
             // Nuwave\Lighthouse\Http\Middleware\LogGraphQLQueries::class,
@@ -240,9 +250,9 @@ return [
     | 15 => RETHROW_UNSAFE_EXCEPTIONS | RETHROW_INTERNAL_EXCEPTIONS | INCLUDE_TRACE | INCLUDE_DEBUG_MESSAGE
     |
     */
-
+    // phpcs:disable Generic.Files.LineLength.TooLong
     'debug' => env('LIGHTHOUSE_DEBUG', GraphQL\Error\DebugFlag::INCLUDE_DEBUG_MESSAGE | GraphQL\Error\DebugFlag::INCLUDE_TRACE),
-
+    // phpcs:enable
     /*
     |--------------------------------------------------------------------------
     | Error Handlers
@@ -487,7 +497,8 @@ return [
          * - Nuwave\Lighthouse\Tracing\ApolloTracing\ApolloTracing::class
          * - Nuwave\Lighthouse\Tracing\FederatedTracing\FederatedTracing::class
          *
-         * In Lighthouse v7 the default will be changed to 'Nuwave\Lighthouse\Tracing\FederatedTracing\FederatedTracing::class'.
+         * In Lighthouse v7 the default will be changed to
+         *      'Nuwave\Lighthouse\Tracing\FederatedTracing\FederatedTracing::class'.
          */
         'driver' => Nuwave\Lighthouse\Tracing\ApolloTracing\ApolloTracing::class,
     ],

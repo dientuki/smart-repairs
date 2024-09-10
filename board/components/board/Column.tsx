@@ -37,7 +37,7 @@ function Column( { id, orders, index }: Props ) {
                 >
                     <h2 className="flex justify-between text-xl font-bold p-2">
                         {idToColumnText[id]}
-                        <span className="text-gray-500 bg-gray-200 rounded-full px-2 py-1 text-sm font-normal">{orders.length}</span>
+                        <span className="text-gray-500 bg-gray-200 rounded-full px-2 py-1 text-base font-normal">{orders.length}</span>
                     </h2>
                     <div className="space-y-2">
                         {orders.map((order, index) => (

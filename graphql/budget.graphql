@@ -1,0 +1,41 @@
+union UpdateBudgetResult = UpdateBudgetPayload | ErrorPayload
+
+extend type Query {
+    budget(orderId: ID): [Budget]
+        @field(resolver: "BudgetQueries@getBudget")
+        @namespace(field: "App\\GraphQL\\Queries")
+}
+
+extend type Mutation {
+    updateBudget(orderId: ID, budgetItems: [BudgetItemInput!]!): UpdateBudgetResult
+        @field(resolver: "BudgetMutations@updateBudget")
+        @namespace(field: "App\\GraphQL\\Mutations")
+}
+
+type UpdateBudgetPayload {
+    success: Boolean!
+}
+
+input BudgetItemInput {
+  itemId: String!
+  serviceId: String!
+  quantity: Int!
+  unitPrice: Float!
+  includeInSum: Boolean!
+  type: String!
+}
+
+type Budget {
+    id: ID!
+    total: Float!
+    items: [BudgetItem]
+}
+
+type BudgetItem {
+    id: ID!
+    part_id: ID
+    service_job_id: ID
+    quantity: Int!
+    unit_price: Float!
+    include_in_sum: Boolean!
+}

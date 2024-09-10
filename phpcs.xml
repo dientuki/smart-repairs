@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<ruleset name="Custom Rules">
+    <description>Your custom ruleset for PHP CodeSniffer.</description>
+
+    <!-- Include the PSR12 standard -->
+    <rule ref="PSR12"/>
+
+    <!-- Specify the directories to include -->
+    <file>app/</file>
+    <file>bootstrap/</file>
+    <file>config/</file>
+    <file>database/</file>
+    <file>lang/</file>
+    <file>resources/views/</file>
+    <file>routes/</file>
+    <file>tests/</file>
+
+    <!-- Ignore specific files or patterns -->
+    <exclude-pattern>bootstrap/cache/*\.php$</exclude-pattern>
+
+    <!-- Exclude specific errors or warnings -->
+    <rule ref="Internal.NoCodeFound">
+        <exclude-pattern>resources/views/*\.php$</exclude-pattern>
+    </rule>
+    <rule ref="Generic.Files.LineLength.TooLong">
+        <exclude-pattern>lang/*\.php$</exclude-pattern>
+    </rule>
+    <rule ref="PSR1.Methods.CamelCapsMethodName.NotCamelCaps">
+        <exclude-pattern>tests/*\.php$</exclude-pattern>
+    </rule>
+
+    <arg value="s" />
+    <arg value="-report=source" />
+</ruleset>

@@ -18,22 +18,56 @@ class DeviceSeeder extends Seeder
 
         DB::table('devices')->insert([
             'id' => (string) Str::ulid(),
-            'commercial_name' => 'One Hyper',
-            'tech_name' => 'motorola-one-hyper',
-            'brand_id' => $brands[1]->id,
+            'commercial_name' => 'Galaxy Z Flip',
+            'brand_id' => $brands[2]->id,
             'device_type_id' => $deviceType,
-            'url'=> 'www.gsmarena.com/motorola_one_hyper-9944.php',
+            'url' => 'https://www.gsmarena.com/samsung_galaxy_z_flip-10054.php',
             'created_at' => now(),
             'updated_at' => now(),
         ]);
 
         DB::table('devices')->insert([
             'id' => (string) Str::ulid(),
-            'commercial_name' => 'Galaxy Z Flip',
-            'tech_name' => 'SM-F700F/DS',
+            'commercial_name' => 'One Hyper',
+            'brand_id' => $brands[1]->id,
+            'device_type_id' => $deviceType,
+            'url' => 'https://www.gsmarena.com/motorola_one_hyper-9944.php',
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+        DB::table('devices')->insert([
+            'id' => (string) Str::ulid(),
+            'commercial_name' => 'J2 Prime',
             'brand_id' => $brands[2]->id,
             'device_type_id' => $deviceType,
-            'url'=> 'www.gsmarena.com/samsung_galaxy_z_flip-10054.php',
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+        DB::table('devices')->insert([
+            'id' => (string) Str::ulid(),
+            'commercial_name' => 'A20',
+            'brand_id' => $brands[2]->id,
+            'device_type_id' => $deviceType,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+        DB::table('devices')->insert([
+            'id' => (string) Str::ulid(),
+            'commercial_name' => 'S02S',
+            'brand_id' => $brands[2]->id,
+            'device_type_id' => $deviceType,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+        DB::table('devices')->insert([
+            'id' => (string) Str::ulid(),
+            'commercial_name' => 'A03',
+            'brand_id' => $brands[2]->id,
+            'device_type_id' => $deviceType,
             'created_at' => now(),
             'updated_at' => now(),
         ]);

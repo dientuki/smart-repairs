@@ -15,12 +15,6 @@ return new class extends Migration
             $table->ulid('id')->primary();
             $table->string('name');
             $table->string('hash_filename')->nullable();
-            /*
-            $table->string('express_check');
-            $table->string('express_check_default')->boolean()->default(false);
-            $table->string('extra_check');
-            $table->string('extra_check_default')->boolean()->default(true);
-            */
             $table->timestamps();
         });
     }

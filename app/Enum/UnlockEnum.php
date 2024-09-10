@@ -7,11 +7,11 @@ use App\Traits\EnumAsArrayTrait;
 
 enum UnlockEnum: string implements HasLabel
 {
+    use EnumAsArrayTrait;
+
     case None = 'none';
     case Code = 'code';
     case Pattern = 'pattern';
-
-    use EnumAsArrayTrait;
 
     public function getLabel(): string
     {
@@ -20,5 +20,16 @@ enum UnlockEnum: string implements HasLabel
             self::Code => __('Code'),
             self::Pattern => __('Pattern'),
         };
+    }
+
+    /**
+     * Obtiene el valor por defecto para el enum.
+     *
+     * @return DiscountEnum
+     */
+    public static function default(): self
+    {
+        // Cambia 'None' por el valor que quieras como predeterminado
+        return self::None;
     }
 }

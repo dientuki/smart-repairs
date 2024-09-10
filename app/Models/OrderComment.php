@@ -2,25 +2,26 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class OrderComment extends ModelWithTeam
 {
-    use HasFactory;
-
     protected $fillable = ['order_id', 'comment', 'team_id', 'user_id', 'is_public', 'was_edited'];
 
-    public function user() {
+    public function user(): BelongsTo
+    {
         return $this->belongsTo(User::class);
     }
 
-    public static function updateVisibility(string $commentId, bool $status): bool {
+    public static function updateVisibility(string $commentId, bool $status): bool
+    {
         $comment = OrderComment::find($commentId);
         $comment->is_public = $status;
         return $comment->save();
     }
 
-    public static function updateText(string $commentId, string $text): bool {
+    public static function updateText(string $commentId, string $text): bool
+    {
         $comment = OrderComment::find($commentId);
         $comment->comment = $text;
         $comment->was_edited = true;
