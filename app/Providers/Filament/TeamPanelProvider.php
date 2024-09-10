@@ -2,6 +2,7 @@
 
 namespace App\Providers\Filament;
 
+use App\Filament\Pages\Billing;
 use App\Filament\Team\Pages\Tenancy\EditTeamProfile;
 use App\Filament\Team\Pages\Tenancy\RegisterTeam;
 use App\Models\Team;
@@ -40,6 +41,7 @@ class TeamPanelProvider extends PanelProvider
             ->discoverPages(in: app_path('Filament/Team/Pages'), for: 'App\\Filament\\Team\\Pages')
             ->pages([
                 Pages\Dashboard::class,
+                //Billing::class,
             ])
             ->discoverWidgets(in: app_path('Filament/Team/Widgets'), for: 'App\\Filament\\Team\\Widgets')
             ->widgets([
