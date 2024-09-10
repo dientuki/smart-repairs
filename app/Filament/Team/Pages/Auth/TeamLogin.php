@@ -11,55 +11,53 @@ use Illuminate\Validation\ValidationException;
 
 class TeamLogin extends Login
 {
-
   /**
    * @var view-string
    */
-  protected static string $view = 'filament.team.pages.auth.login';
+    protected static string $view = 'filament.team.pages.auth.login';
 
 
-  public function authenticate(): ?LoginResponse
-  {
-      try {
-          $this->rateLimit(5);
-      } catch (TooManyRequestsException $exception) {
-          $this->getRateLimitedNotification($exception)?->send();
+    public function authenticate(): ?LoginResponse
+    {
+        try {
+            $this->rateLimit(5);
+        } catch (TooManyRequestsException $exception) {
+            $this->getRateLimitedNotification($exception)?->send();
 
-          return null;
-      }
+            return null;
+        }
 
-      $data = $this->form->getState();
+        $data = $this->form->getState();
 
-      if (! Filament::auth()->attempt($this->getCredentialsFromFormData($data), $data['remember'] ?? false)) {
-          $this->throwFailureValidationException();
-      }
+        if (! Filament::auth()->attempt($this->getCredentialsFromFormData($data), $data['remember'] ?? false)) {
+            $this->throwFailureValidationException();
+        }
 
-      $user = Filament::auth()->user();
+        $user = Filament::auth()->user();
 
-      if (
-          ($user instanceof FilamentUser) &&
-          (! $user->canAccessPanel(Filament::getCurrentPanel()))
-      ) {
-          Filament::auth()->logout();
+        if (
+            ($user instanceof FilamentUser) &&
+            (! $user->canAccessPanel(Filament::getCurrentPanel()))
+        ) {
+            Filament::auth()->logout();
 
-          $this->throwFailureValidationException();
-      }
+            $this->throwFailureValidationException();
+        }
 
-      if (!$user->hasActiveTenant) {
-        Filament::auth()->logout();
-        $this->throwFailureTenantException();
-      }
+        if (!$user->hasActiveTenant) {
+            Filament::auth()->logout();
+            $this->throwFailureTenantException();
+        }
 
-      session()->regenerate();
+        session()->regenerate();
 
-      return app(LoginResponse::class);
-  }
+        return app(LoginResponse::class);
+    }
 
-  protected function throwFailureTenantException(): never
-  {
-    throw ValidationException::withMessages([
+    protected function throwFailureTenantException(): never
+    {
+        throw ValidationException::withMessages([
         'tenant' => __('subscription.inactive'),
-    ]);
-  }
-
+        ]);
+    }
 }
