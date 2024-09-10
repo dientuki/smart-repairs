@@ -16,6 +16,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Collection;
 use OwenIt\Auditing\Contracts\Auditable;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 
 class User extends Authenticatable implements FilamentUser, HasTenants, Auditable
 {
@@ -67,7 +68,6 @@ class User extends Authenticatable implements FilamentUser, HasTenants, Auditabl
      */
     public function getTenants(Panel $panel): Collection
     {
-        //return $this->teams
         return $this->teams->where('subscription.is_active', true);
     }
 
@@ -90,6 +90,13 @@ class User extends Authenticatable implements FilamentUser, HasTenants, Auditabl
     public function canAccessPanel(Panel $panel): bool
     {
         return true;
+    }
+
+    public function hasActiveTenant(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => $this->teams->where('subscription.is_active', true)->isNotEmpty()
+        );
     }
 
     /**

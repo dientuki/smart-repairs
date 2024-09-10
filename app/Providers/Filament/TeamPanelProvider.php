@@ -3,6 +3,7 @@
 namespace App\Providers\Filament;
 
 use App\Filament\Pages\Billing;
+use App\Filament\Team\Pages\Auth\TeamLogin;
 use App\Filament\Team\Pages\Tenancy\EditTeamProfile;
 use App\Filament\Team\Pages\Tenancy\RegisterTeam;
 use App\Models\Team;
@@ -32,7 +33,7 @@ class TeamPanelProvider extends PanelProvider
             ->default()
             ->id('team')
             ->path('team')
-            ->login()
+            ->login(TeamLogin::class)
             ->domain('team.localhost')
             ->colors([
                 'primary' => Color::Amber,

@@ -17,4 +17,5 @@ return [
   'no_plans_available' => 'No plans available',
   'return_to' => 'Return to Dashboard',
   'it_looks_like_no_active_subscription' => 'It looks like you do not have an active subscription. You may choose one of the subscription plans below to get started. Subscription plans may be changed or cancelled at your convenience.',
+  'inactive' => 'Paga che, no seas raton'
 ];
