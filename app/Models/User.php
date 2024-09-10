@@ -78,7 +78,7 @@ class User extends Authenticatable implements FilamentUser, HasTenants, Auditabl
      */
     public function teams(): BelongsToMany
     {
-        return $this->belongsToMany(Team::class)->withPivot('rol');
+        return $this->belongsToMany(Team::class);
     }
 
     public function canAccessTenant(Model $tenant): bool
