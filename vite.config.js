@@ -11,7 +11,10 @@ export default defineConfig({
     },
     plugins: [
         laravel({
-            input: ['board/page.tsx'],
+            input: [
+                'board/page.tsx',
+                'resources/sass/app.scss',
+            ],
             refresh: true,
         }),
         react(),

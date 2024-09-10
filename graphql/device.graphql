@@ -1,0 +1,38 @@
+extend type Query {
+    devices: [Device!] @all
+    devicesByBrandWithTmpOrder(orderId: String!): [Device!]!
+        @field(resolver: "DeviceQueries@getDevicesByBrandWithTmpOrder")
+        @namespace(field: "App\\GraphQL\\Queries")
+    devicesByTypeAndBrand(brandId: String!, typeId: String!): [Device!]!
+        @field(resolver: "DeviceQueries@getDevicesByTypeAndBrand")
+        @namespace(field: "App\\GraphQL\\Queries")
+    devicesByDeviceUnit(deviceUnitId: String!): [Device!]!
+        @field(resolver: "DeviceQueries@getDevicesByDeviceUnit")
+        @namespace(field: "App\\GraphQL\\Queries")
+}
+
+extend type Mutation {
+    addDevice(device: DeviceInput): Device!
+        @field(resolver: "DeviceMutations@create")
+        @namespace(field: "App\\GraphQL\\Mutations")
+    updateDevice(device: DeviceInput): Boolean
+        @field(resolver: "DeviceMutations@update")
+        @namespace(field: "App\\GraphQL\\Mutations")
+}
+
+input DeviceInput {
+    id: ID @rules(apply: ["nullable", "ulid"])
+    commercialname: String! @rules(apply: ["required"])
+    brandid: ID! @rules(apply: ["required", "ulid", "exists:brands,id"])
+    typeid: ID! @rules(apply: ["required", "ulid", "exists:device_types,id"])
+    url: String @rules(apply: ["url"])
+}
+
+type Device {
+    id: ID!
+    commercial_name: String!
+    brand: Brand!
+    deviceType: DeviceType!
+    url: String
+    label: String
+}

@@ -2,15 +2,14 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class DeviceAttachment extends ModelAuditable
 {
-    use HasFactory;
-
     protected $fillable = [ 'name', 'file', 'device_id' ];
 
-    public function device() {
+    public function device(): BelongsTo
+    {
         return $this->belongsTo(Device::class);
     }
 }

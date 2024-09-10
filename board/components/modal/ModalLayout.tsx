@@ -2,15 +2,32 @@ import { ReactNode } from "react";
 import { DNA } from "react-loader-spinner";
 
 interface ModalLayoutProps {
+  title?: ReactNode;
   children: ReactNode;
+  width?: string;
+  height?: string;
+  minHeight?: string;
 }
 
-function ModalLayout(props: ModalLayoutProps) {
-
+export const ModalLayout: React.FC<ModalLayoutProps> = ({
+  title,
+  children,
+  width = '80vw',
+  height = '80vh',
+  minHeight
+}) => {
   return (
-    <div className="h-[80vh] w-[80vw] transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl m-auto cursor-auto">
-      {props.children ?
-        props.children :
+    <div
+      className="transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl m-auto cursor-auto relative"
+      style={{
+        width,
+        height: minHeight ? undefined : height, // Usar height solo si minHeight no está definido
+        minHeight: minHeight || undefined // Usar minHeight si está definido
+      }}
+    >
+      {title && <>{title}</>}
+      {children ?
+        children :
         <DNA
         visible={true}
         height="120"
@@ -21,5 +38,3 @@ function ModalLayout(props: ModalLayoutProps) {
     </div>
   );
 }
-
-export default ModalLayout;

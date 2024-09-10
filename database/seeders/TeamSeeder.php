@@ -13,9 +13,23 @@ class TeamSeeder extends Seeder
      */
     public function run(): void
     {
+        $packages = DB::table('packages')->get();
+
         DB::table('teams')->insert([
             'id' => (string) Str::ulid(),
             'name' => 'Laboratronica',
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+        DB::table('teams')->insert([
+            'id' => (string) Str::ulid(),
+            'name' => 'Dientuki\'s Corp',
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+        DB::table('teams')->insert([
+            'id' => (string) Str::ulid(),
+            'name' => 'Moncho',
             'created_at' => now(),
             'updated_at' => now(),
         ]);

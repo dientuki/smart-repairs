@@ -3,30 +3,26 @@ scalar DateTime @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\Date
 
 "Indicates what fields are available at the top level of a query operation."
 type Query {
-    brands: [Brand!] @all
-    orders(team_id: ID @eq): [Orders!]!
-        @field(resolver: "Order@getActiveOrders")
-        @namespace(field: "App\\Models")
-    order(id: ID @eq): Order! @find
+    brands: [Brand!] @all @orderBy(column: "name", direction: ASC)
+    deviceTypes: [DeviceType!] @all @orderBy(column: "name", direction: ASC)
 }
 
-type Mutation {
-    updateOrderStatus(id: String, status: String!): Boolean!
-        @field(resolver: "OrderMutation@updateStatus")
-        @namespace(field: "App\\GraphQL\\Mutations")
-    updateCommentVisibility(commentId: String, isPublic: Boolean!): Boolean!
-        @field(resolver: "CommentMutation@updateVisibility")
-        @namespace(field: "App\\GraphQL\\Mutations")
-    updateComment(commentId: String, text: String): Boolean!
-        @field(resolver: "CommentMutation@updateText")
-        @namespace(field: "App\\GraphQL\\Mutations")
-    deleteComment(commentId: String): Boolean!
-        @field(resolver: "CommentMutation@delete")
-        @namespace(field: "App\\GraphQL\\Mutations")
-    addComment(orderId: String, isPublic: Boolean, comment: String): Comment!
-        @field(resolver: "CommentMutation@create")
-        @namespace(field: "App\\GraphQL\\Mutations")
+type ErrorPayload {
+    status: Boolean
+    message: String
+    code: String
 }
+
+#import budget.graphql
+#import comment.graphql
+#import customer.graphql
+#import device.graphql
+#import deviceTypeCheck.graphql
+#import deviceUnit.graphql
+#import deviceVersion.graphql
+#import serviceJob.graphql
+#import order.graphql
+#import part.graphql
 
 type Brand {
     "Unique primary key."
@@ -34,70 +30,27 @@ type Brand {
     "Non-unique name."
     name: String!
     imageUrl: String!
+    label: String!
 }
 
-type Order {
-    id: ID!
-    status: String!,
-    customer: Customer!
-    device_unit: DeviceUnit!
-    created_at: DateTime!
-    observation: String!
-    comments: [Comment!]
-}
-
-type Orders {
-    id: ID!
-    team_id: ID!
-    status: String!,
-    customer: Customer!
-    device_unit: DeviceUnit!
-    created_at: DateTime!
-    observation: String!
-    comments: [Comment!]
-}
-
-type Comment {
-    id: ID!
-    comment: String!
-    created_at: DateTime!
-    is_public: Boolean
-    user: User
-    user_id: ID!
-    was_edited: Boolean
-}
-
-type User {
-    id: ID!
-    name: String!
-    email: String!
-}
-
-type Customer {
-    id: ID!
-    first_name: String!
-    last_name: String!
-}
-
-type DeviceUnit {
-    id: ID!
-    serial: String!
-    device_id: String!
-    device: Device!
-    unlock_type: String!
-    unlock_code: String
-}
-
-type Device {
+type DeviceRepaired {
     id: ID!
     commercial_name: String!
     tech_name: String!
     brand: Brand!
-    device_type: DeviceType!
+    deviceType: DeviceType!
+    deviceUnit: DeviceUnit!
 }
 
 type DeviceType {
     id: ID!
     name: String!
     imageUrl: String!
+    label: String!
+}
+
+type User {
+    id: ID!
+    name: String!
+    email: String!
 }

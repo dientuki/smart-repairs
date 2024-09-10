@@ -2,9 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Models\Order;
-use App\Models\OrderComment;
-use App\Models\User;
+use App\Models\Device;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -14,21 +12,31 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
-
         $this->call([
             UserSeeder::class,
+            AdminSeeder::class,
+            PackageSeeder::class,
             TeamSeeder::class,
+            ResourceSeeder::class,
+            PackageResourceSeeder::class,
             TeamUserSeeder::class,
             DeviceTypeSeeder::class,
             BrandSeeder::class,
             ModuleCategorySeeder::class,
             PartSeeder::class,
             DeviceSeeder::class,
+            DeviceVersionSeeder::class,
+            DeviceVersionPartSeeder::class,
+            DeviceTypeCheckSeeder::class,
+            DeviceUnitSeeder::class,
             CustomerSeeder::class,
             OrderSeeder::class,
-            DeviceUnitSeeder::class,
             OrderCommentSeeder::class,
+            SupplierSeeder::class,
+            SupplierContactSeeder::class,
+            StockSeeder::class,
+            ServiceJobSeeder::class,
+            SubscriptionSeeder::class,
         ]);
     }
 }

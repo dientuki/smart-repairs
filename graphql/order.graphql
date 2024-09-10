@@ -1,0 +1,61 @@
+extend type Query {
+    orders: [Orders!]!
+        @field(resolver: "OrderQueries@getActiveOrders")
+        @namespace(field: "App\\GraphQL\\Queries")
+    order(id: ID @eq): Order! @find
+}
+
+extend type Mutation {
+    addOrder(order: OrderInput): Boolean
+        @field(resolver: "OrderMutations@create")
+        @namespace(field: "App\\GraphQL\\Mutations")
+    updateOrderStatus(id: String, status: String!): Boolean!
+        @field(resolver: "OrderMutations@updateStatus")
+        @namespace(field: "App\\GraphQL\\Mutations")
+}
+
+input OrderInput {
+    customerid: String!
+    observation: String!
+    damages: [DamageInput!]
+    damagedescription: String
+    features: [FeatureInput!]
+    featuredescription: String
+    tempdeviceunitid: String!
+    deviceid: String!
+}
+
+input DamageInput {
+    value: String!
+    checked: Boolean!
+}
+
+input FeatureInput {
+    value: String
+    checked: Boolean
+}
+
+type Order {
+    id: ID!
+    status: String!,
+    customer: Customer!
+    device: Device!
+    deviceUnit: DeviceUnit
+    created_at: DateTime!
+    observation: String!
+    comments: [Comment!]
+    author: User!
+    hasBudget: Boolean!
+}
+
+type Orders {
+    id: ID!
+    team_id: ID!
+    status: String!,
+    customer: Customer!
+    device: Device!
+    deviceUnit: DeviceUnit
+    created_at: DateTime!
+    observation: String!
+    comments: [Comment!]
+}

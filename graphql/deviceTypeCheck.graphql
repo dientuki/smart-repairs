@@ -1,0 +1,11 @@
+extend type Query {
+    deviceTypeChecks: [DeviceTypeCheck]
+        @field(resolver: "DeviceTypeCheckQueries@getDeviceChecksByTeam")
+        @namespace(field: "App\\GraphQL\\Queries")
+}
+
+type DeviceTypeCheck {
+    device_type_id: String
+    damages: [String]
+    features: [String]
+}

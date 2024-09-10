@@ -16,7 +16,6 @@ type Props = {
 function OrderCard({ order, index, id, innerRef, draggableProps, dragHandleProps }: Props) {
   const openCard = () => Modal.open(ViewCardModal, { order: order.$id });
 
-
   return (
     <div
         ref={innerRef}
@@ -34,8 +33,8 @@ function OrderCard({ order, index, id, innerRef, draggableProps, dragHandleProps
       </div>
       <div className="p-1 flex-col mt-2">
         <div>{order.brand} {order.deviceCommercialName}</div>
-        <div>{order.deviceType}: {order.deviceTechName}</div>
-        <div>Imei: {order.deviceSerial}</div>
+        {order.deviceTechName && <div>{order.deviceType}: {order.deviceTechName}</div> }
+        {order.deviceSerial && <div>Imei: {order.deviceSerial}</div> }
         <div><UserCircleIcon className="h-4 w-4 inline-block" /> {order.customerFullName}</div>
         <div className="flex justify-between">
           <div><ChatBubbleOvalLeftEllipsisIcon className="h-4 w-4 inline-block" />{order.commentsQuantity}</div>

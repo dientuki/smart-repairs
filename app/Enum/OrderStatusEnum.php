@@ -7,6 +7,8 @@ use App\Traits\EnumAsArrayTrait;
 
 enum OrderStatusEnum: string implements HasLabel
 {
+    use EnumAsArrayTrait;
+
     case ForBudgeting = 'for budgeting';
     case Budgeting = 'budgeting';
     case Budgeted = 'budgeted';
@@ -15,9 +17,8 @@ enum OrderStatusEnum: string implements HasLabel
     case Repaired = 'repaired';
     case Ready = 'ready';
 
-    use EnumAsArrayTrait;
-
-    public function getLabel(): string {
+    public function getLabel(): string
+    {
         return match ($this) {
             self::ForBudgeting => __('For budgeting'),
             self::Budgeting => __('Budgeting'),
@@ -29,7 +30,19 @@ enum OrderStatusEnum: string implements HasLabel
         };
     }
 
-    public static function isValid(string $value): bool {
+    public static function isValid(string $value): bool
+    {
         return in_array($value, array_column(self::cases(), 'value'), true);
+    }
+
+    /**
+     * Obtiene el valor por defecto para el enum.
+     *
+     * @return DiscountEnum
+     */
+    public static function default(): self
+    {
+        // Cambia 'None' por el valor que quieras como predeterminado
+        return self::ForBudgeting;
     }
 }
