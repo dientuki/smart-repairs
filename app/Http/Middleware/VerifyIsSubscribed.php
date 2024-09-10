@@ -21,8 +21,9 @@ class VerifyIsSubscribed
 
         if (!filament()->getTenant()->subscription->is_active) {
             return redirect()->route(
-            'filament.'.filament()->getCurrentPanel()->getId().'.tenant.billing',
-            ['tenant'=> filament()->getTenant()->id]);
+                'filament.' . filament()->getCurrentPanel()->getId() . '.tenant.billing',
+                ['tenant' => filament()->getTenant()->id]
+            );
         }
 
         return $next($request);

@@ -12,10 +12,11 @@ class SubscriptionsProvider implements Provider
     public function getRouteAction(): string | Closure
     {
         return function (): RedirectResponse {
-            dd(  filament()->getTenant() );
+            dd(filament()->getTenant());
             return redirect()->route(
-                'filament.'.filament()->getCurrentPanel()->getId().'.tenant.billing',
-                ['tenant'=> filament()->getTenant()->id]);
+                'filament.' . filament()->getCurrentPanel()->getId() . '.tenant.billing',
+                ['tenant' => filament()->getTenant()->id]
+            );
         };
     }
 

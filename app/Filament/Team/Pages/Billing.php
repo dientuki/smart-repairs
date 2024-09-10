@@ -13,7 +13,6 @@ use Illuminate\Support\Facades\Route;
 
 class Billing extends Page
 {
-
     use HasTopbar;
     use HasMaxWidth;
 
@@ -38,7 +37,13 @@ class Billing extends Page
 
     public static function getRouteName(?string $panel = null): string
     {
-        return ( $panel ? $panel->getId() : Filament::getCurrentPanel()->getId()) ? "filament." . ( $panel ? $panel->getId() : Filament::getCurrentPanel()->getId()) .  ".tenant.billing": 'filament.tenant.billing'; ;
+        // Obtén el panel correcto utilizando Filament
+        $panel = $panel ? Filament::getPanel($panel) : Filament::getCurrentPanel();
+
+        // Verifica si se pudo obtener un panel antes de generar el nombre de la ruta
+        return $panel
+            ? "filament." . $panel->getId() . ".tenant.billing"
+            : 'filament.tenant.billing';
     }
 
     public function getMaxWidth(): MaxWidth | string | null
@@ -58,7 +63,5 @@ class Billing extends Page
     {
         $this->user = Filament::auth()->getUser();
         $this->tenant = Filament::getTenant();
-
-        //dd($this->user->getRoleInTeam('getRoleInTeam'));
     }
 }
