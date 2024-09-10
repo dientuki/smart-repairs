@@ -37,6 +37,7 @@ class DatabaseSeeder extends Seeder
             StockSeeder::class,
             ServiceJobSeeder::class,
             SubscriptionSeeder::class,
+            SimpleServiceJobSeeder::class,
         ]);
     }
 }

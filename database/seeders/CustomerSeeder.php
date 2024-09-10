@@ -13,13 +13,15 @@ class CustomerSeeder extends Seeder
      */
     public function run(): void
     {
+        $teams = DB::table('teams')->get();
+
         DB::table('customers')->insert([
             'id' => (string) Str::ulid(),
             'first_name' => 'Juan Alberto',
             'last_name' => 'Perez',
             'email' => 'juan@perez.com',
             'phone' => '1324',
-            'team_id' => DB::table('teams')->first()->id,
+            'team_id' => $teams[0]->id,
             'created_at' => now(),
             'updated_at' => now(),
         ]);
@@ -29,7 +31,17 @@ class CustomerSeeder extends Seeder
             'last_name' => 'Silca',
             'email' => 'calusilva@gmail.com',
             'phone' => '1324',
-            'team_id' => DB::table('teams')->first()->id,
+            'team_id' => $teams[0]->id,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+        DB::table('customers')->insert([
+            'id' => (string) Str::ulid(),
+            'first_name' => 'Pepe Lucho',
+            'last_name' => 'Vico',
+            'email' => 'pepe@gmail.com',
+            'phone' => '1324',
+            'team_id' => $teams[2]->id,
             'created_at' => now(),
             'updated_at' => now(),
         ]);

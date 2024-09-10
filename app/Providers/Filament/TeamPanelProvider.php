@@ -63,7 +63,7 @@ class TeamPanelProvider extends PanelProvider
             ->authMiddleware([
                 Authenticate::class,
             ])
-            ->tenant(Team::class, ownershipRelationship: 'teams')
+            ->tenant(Team::class)
             ->tenantRegistration(RegisterTeam::class)
             ->tenantProfile(EditTeamProfile::class)
             ->tenantMenuItems([
