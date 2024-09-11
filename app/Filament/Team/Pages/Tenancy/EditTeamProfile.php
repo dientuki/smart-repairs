@@ -39,7 +39,7 @@ class EditTeamProfile extends EditTenantProfile
                         ->defaultItems(1)
                         ->label(__('resource.phone'))
                         ->simple(
-                    TextInput::make('phones')
+                            TextInput::make('phones')
                                 ->suffixIcon('heroicon-m-phone')
                                 ->tel()
                                 ->required(),
@@ -48,8 +48,7 @@ class EditTeamProfile extends EditTenantProfile
                         ->directory('teams')
                         ->acceptedFileTypes(['image/svg+xml', 'image/jpeg', 'image/png', 'image/webp'])
                         ->label(__('resource.logo'))
-                    ]
-                )
+                    ])
             ]);
     }
 }

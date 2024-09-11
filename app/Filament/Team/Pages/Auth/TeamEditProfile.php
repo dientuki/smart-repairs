@@ -39,5 +39,4 @@ class TeamEditProfile extends EditProfile
             ),
         ];
     }
-
 }
