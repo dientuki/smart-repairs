@@ -34,6 +34,10 @@ class TeamPanelProvider extends PanelProvider
             ->id('team')
             ->path('team')
             ->login(TeamLogin::class)
+            ->registration()
+            ->passwordReset()
+            ->profile()
+            ->brandName('Filament Demo')
             ->domain('team.localhost')
             ->colors([
                 'primary' => Color::Amber,
@@ -72,7 +76,6 @@ class TeamPanelProvider extends PanelProvider
                 //take a look https://filamentphp.com/docs/3.x/panels/tenancy#conditionally-hiding-tenant-menu-items
             ])
             ->tenantBillingProvider(new SubscriptionsProvider())
-            ->requiresTenantSubscription()
-            ->registration();
+            ->requiresTenantSubscription();
     }
 }
