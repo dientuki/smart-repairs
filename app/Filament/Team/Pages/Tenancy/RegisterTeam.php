@@ -8,6 +8,7 @@ use App\Models\Team;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Pages\Tenancy\RegisterTenant;
+use Filament\Actions\Action;
 
 class RegisterTeam extends RegisterTenant
 {
@@ -19,7 +20,14 @@ class RegisterTeam extends RegisterTenant
     public static function getLabel(): string
     {
         // Implement the logic for getting the label here
-        return 'Team name';
+        return __('pages.team_creation');
+    }
+
+    public function getRegisterFormAction(): Action
+    {
+        return Action::make('register')
+            ->label(__('pages.create'))
+            ->submit('register');
     }
 
     public function form(Form $form): Form
@@ -27,10 +35,11 @@ class RegisterTeam extends RegisterTenant
         return $form
             ->schema([
                 TextInput::make('name')
-                    ->label('Team name')
+                    ->label(__('pages.team'))
                     ->maxLength(255)
                     ->required()
-                    ->helperText('The name of the team')
+                    ->hint(__('pages.team_hint'))
+                    ->helperText(__('pages.team_helper'))
                     ->autofocus(),
             ]);
     }

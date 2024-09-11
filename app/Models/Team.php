@@ -3,13 +3,30 @@
 namespace App\Models;
 
 use App\Models\Admin\Subscription;
+use App\Traits\HasImageTrait;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Team extends ModelAuditable
 {
-    protected $fillable = ['name'];
+    use HasImageTrait;
+
+    protected $fillable = [
+        'name',
+        'email',
+        'phones',
+        'address',
+        'website',
+        'hash_filename',
+    ];
+
+    protected function casts(): array
+    {
+        return [
+            'phones' => 'array',
+        ];
+    }
 
     /**
      * Retrieve the members of the team.
