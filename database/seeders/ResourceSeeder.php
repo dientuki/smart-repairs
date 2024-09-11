@@ -15,7 +15,7 @@ class ResourceSeeder extends Seeder
     {
         DB::table('resources')->insert([
             'id' => (string) Str::ulid(),
-            'resource' => 'simpleprice',
+            'resource' => 'simpleservicejob',
             'description' => 'Simple price',
             'created_at' => now(),
             'updated_at' => now(),

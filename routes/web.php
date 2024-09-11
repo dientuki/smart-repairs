@@ -7,12 +7,3 @@ use Illuminate\Support\Facades\Cookie;
 Route::get('/', function () {
     return view('welcome');
 });
-
-Route::group(['middleware' => 'auth'], function () {
-    Route::get('/board/', function () {
-        Cookie::queue('team_id', auth()->user()->teams->first()->id);
-        return view('board');
-    });
-});
-
-Auth::routes();

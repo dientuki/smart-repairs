@@ -3,6 +3,7 @@
 namespace App\Providers\Filament;
 
 use App\Filament\Pages\Billing;
+use App\Filament\Team\Pages\Auth\TeamEditProfile;
 use App\Filament\Team\Pages\Auth\TeamLogin;
 use App\Filament\Team\Pages\Tenancy\EditTeamProfile;
 use App\Filament\Team\Pages\Tenancy\RegisterTeam;
@@ -34,20 +35,26 @@ class TeamPanelProvider extends PanelProvider
             ->id('team')
             ->path('team')
             ->login(TeamLogin::class)
+            ->registration()
+            ->passwordReset()
+            ->profile(TeamEditProfile::class)
             ->domain('team.localhost')
             ->colors([
-                'primary' => Color::Amber,
+                'danger' => Color::Rose,
+                'gray' => Color::Gray,
+                'info' => Color::Blue,
+                'primary' => Color::Indigo,
+                'success' => Color::Emerald,
+                'warning' => Color::Orange,
             ])
             ->discoverResources(in: app_path('Filament/Team/Resources'), for: 'App\\Filament\\Team\\Resources')
             ->discoverPages(in: app_path('Filament/Team/Pages'), for: 'App\\Filament\\Team\\Pages')
             ->pages([
                 Pages\Dashboard::class,
-                //Billing::class,
             ])
             ->discoverWidgets(in: app_path('Filament/Team/Widgets'), for: 'App\\Filament\\Team\\Widgets')
             ->widgets([
                 Widgets\AccountWidget::class,
-                Widgets\FilamentInfoWidget::class,
             ])
             ->middleware([
                 EncryptCookies::class,
@@ -72,7 +79,6 @@ class TeamPanelProvider extends PanelProvider
                 //take a look https://filamentphp.com/docs/3.x/panels/tenancy#conditionally-hiding-tenant-menu-items
             ])
             ->tenantBillingProvider(new SubscriptionsProvider())
-            ->requiresTenantSubscription()
-            ->registration();
+            ->requiresTenantSubscription();
     }
 }

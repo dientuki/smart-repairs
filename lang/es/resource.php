@@ -30,6 +30,7 @@ return [
     'screen_printing' => 'Serigrafía',
     'observations' => 'Observaciones',
     'url' => 'Url',
+    'logo' => 'Logo',
     'damages' => 'Daños',
     'features' => 'Características',
     'version' => 'Versión',

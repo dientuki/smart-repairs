@@ -38,7 +38,7 @@ class BrandResource extends KnowledgeResource
                 FileUpload::make('hash_filename')
                     ->directory('logos')
                     ->acceptedFileTypes(['image/svg+xml'])
-                    ->label(__('resource.image'))
+                    ->label(__('resource.logo'))
             ]);
     }
 
@@ -47,7 +47,7 @@ class BrandResource extends KnowledgeResource
         return $table
             ->columns([
                 TextColumn::make('name')->translateLabel(),
-                ImageColumn::make('hash_filename')->label(__('resource.image')),
+                ImageColumn::make('hash_filename')->label(__('resource.logo')),
             ])
             ->filters([
                 //
