@@ -6,6 +6,7 @@ namespace App\Models;
 
 use App\Traits\IdAttributeUppercaseTrait;
 use Filament\Models\Contracts\FilamentUser;
+use Filament\Models\Contracts\HasAvatar;
 use Filament\Models\Contracts\HasTenants;
 use Filament\Panel;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
@@ -17,8 +18,9 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Collection;
 use OwenIt\Auditing\Contracts\Auditable;
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Support\Facades\Storage;
 
-class User extends Authenticatable implements FilamentUser, HasTenants, Auditable
+class User extends Authenticatable implements FilamentUser, HasTenants, Auditable, HasAvatar
 {
     use HasFactory;
     use Notifiable;
@@ -35,6 +37,7 @@ class User extends Authenticatable implements FilamentUser, HasTenants, Auditabl
         'name',
         'email',
         'password',
+        'avatar_url',
     ];
 
     /**
@@ -58,6 +61,11 @@ class User extends Authenticatable implements FilamentUser, HasTenants, Auditabl
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function getFilamentAvatarUrl(): ?string
+    {
+        return Storage::url($this->avatar_url);
     }
 
     /**

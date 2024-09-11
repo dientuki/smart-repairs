@@ -3,6 +3,7 @@
 namespace App\Providers\Filament;
 
 use App\Filament\Pages\Billing;
+use App\Filament\Team\Pages\Auth\TeamEditProfile;
 use App\Filament\Team\Pages\Auth\TeamLogin;
 use App\Filament\Team\Pages\Tenancy\EditTeamProfile;
 use App\Filament\Team\Pages\Tenancy\RegisterTeam;
@@ -36,7 +37,7 @@ class TeamPanelProvider extends PanelProvider
             ->login(TeamLogin::class)
             ->registration()
             ->passwordReset()
-            ->profile()
+            ->profile(TeamEditProfile::class)
             ->brandName('Filament Demo')
             ->domain('team.localhost')
             ->colors([
