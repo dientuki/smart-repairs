@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class TeamSeeder extends Seeder
@@ -13,11 +14,16 @@ class TeamSeeder extends Seeder
      */
     public function run(): void
     {
-        $packages = DB::table('packages')->get();
+        Storage::deleteDirectory('teams');
 
         DB::table('teams')->insert([
             'id' => (string) Str::ulid(),
-            'name' => 'Laboratronica',
+            'name' => 'Laboratronica Argentina',
+            'website' => 'https://www.laboratronicaargentina.com',
+            'email' => 'laboratronicaargentina@gmail.com',
+            'address' => 'Córdoba 108 dto 3, Campana, Buenos Aires, Argentina',
+            'phones' => json_encode(['3489-5261992']),
+            'hash_filename' => Storage::putFile('teams', 'resources/seeders/labo.png'),
             'created_at' => now(),
             'updated_at' => now(),
         ]);

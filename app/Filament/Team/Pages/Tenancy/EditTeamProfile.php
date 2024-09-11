@@ -13,7 +13,7 @@ class EditTeamProfile extends EditTenantProfile
 {
     public static function getLabel(): string
     {
-        return 'Team profile';
+        return __('pages.team_edit');
     }
 
     public function form(Form $form): Form
@@ -22,6 +22,7 @@ class EditTeamProfile extends EditTenantProfile
             ->schema([
                 Grid::make(2)->schema([
                     TextInput::make('name')
+                        ->translateLabel()
                         ->required(),
                     TextInput::make('address')
                         ->label(__('resource.address'))

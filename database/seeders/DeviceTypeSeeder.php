@@ -14,6 +14,8 @@ class DeviceTypeSeeder extends Seeder
      */
     public function run(): void
     {
+        Storage::deleteDirectory('device-types');
+
         $jpgFiles = [
             ['resources/seeders/phone.webp', 'Mobile'],
             ['resources/seeders/tablet.jpg', 'Tablet'],

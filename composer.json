@@ -78,6 +78,10 @@
         "phpmnd": [
             "phpmnd app/ bootstrap/ config/ database/ lang/ resources/views/ routes/ tests/"
         ],
+        "phpmnds": [
+            "phpmnd app/ bootstrap/ config/ database/ lang/ resources/views/ routes/ tests/ --strings"
+        ],
+
         "clear": [
             "@php artisan route:cache",
             "@php artisan cache:clear",

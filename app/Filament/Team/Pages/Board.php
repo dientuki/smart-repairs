@@ -6,6 +6,7 @@ use Filament\Pages\Page;
 use Filament\Panel\Concerns\HasTopbar;
 use Filament\Pages\Concerns\HasMaxWidth;
 use Filament\Support\Enums\MaxWidth;
+use Illuminate\Contracts\Support\Htmlable;
 
 class Board extends Page
 {
@@ -19,6 +20,17 @@ class Board extends Page
     protected static string $view = 'filament.team.pages.board';
 
     protected array $extraBodyAttributes = ['class' => 'overflow-y-scroll'];
+
+    public function getTitle(): string | Htmlable
+    {
+        // Implement the logic for getting the label here
+        return __('pages.board');
+    }
+
+    public static function getNavigationLabel(): string
+    {
+        return __('pages.board');
+    }
 
     public function getMaxWidth(): MaxWidth | string | null
     {
