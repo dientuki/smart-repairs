@@ -46,8 +46,8 @@ class EditTeamProfile extends EditTenantProfile
                         ),
                     FileUpload::make('hash_filename')
                         ->directory('teams')
-                        ->acceptedFileTypes(['image/svg+xml'])
-                        ->label(__('resource.image'))
+                        ->acceptedFileTypes(['image/svg+xml', 'image/jpeg', 'image/png', 'image/webp'])
+                        ->label(__('resource.logo'))
                     ]
                 )
             ]);

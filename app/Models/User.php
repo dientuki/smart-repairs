@@ -4,6 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 
+use App\Traits\HasImageTrait;
 use App\Traits\IdAttributeUppercaseTrait;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Models\Contracts\HasAvatar;
@@ -27,6 +28,7 @@ class User extends Authenticatable implements FilamentUser, HasTenants, Auditabl
     use \OwenIt\Auditing\Auditable;
     use HasUlids;
     use IdAttributeUppercaseTrait;
+    use HasImageTrait;
 
     /**
      * The attributes that are mass assignable.
@@ -65,7 +67,7 @@ class User extends Authenticatable implements FilamentUser, HasTenants, Auditabl
 
     public function getFilamentAvatarUrl(): ?string
     {
-        return Storage::url($this->avatar_url);
+        return $this->avatar_url ? Storage::url($this->avatar_url) : null ;
     }
 
     /**

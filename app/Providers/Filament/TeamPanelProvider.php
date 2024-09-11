@@ -9,6 +9,7 @@ use App\Filament\Team\Pages\Tenancy\EditTeamProfile;
 use App\Filament\Team\Pages\Tenancy\RegisterTeam;
 use App\Models\Team;
 use App\Providers\SubscriptionsProvider;
+use Filament\Facades\Filament;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
@@ -38,7 +39,6 @@ class TeamPanelProvider extends PanelProvider
             ->registration()
             ->passwordReset()
             ->profile(TeamEditProfile::class)
-            ->brandName('Filament Demo')
             ->domain('team.localhost')
             ->colors([
                 'primary' => Color::Amber,

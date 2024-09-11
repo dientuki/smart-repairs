@@ -47,7 +47,7 @@ trait HasImageTrait
     public function imageUrl(): Attribute
     {
         return Attribute::make(
-            get: fn ($value, $attributes) => Storage::url($attributes[$this->imageField])
+            get: fn ($value, $attributes) => $attributes[$this->imageField] ?? null ? Storage::url($attributes[$this->imageField]) : null
         );
     }
 }
