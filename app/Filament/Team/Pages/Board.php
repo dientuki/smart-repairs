@@ -18,6 +18,8 @@ class Board extends Page
 
     protected static string $view = 'filament.team.pages.board';
 
+    protected array $extraBodyAttributes = ['class' => 'overflow-y-scroll'];
+
     public function getMaxWidth(): MaxWidth | string | null
     {
         return MaxWidth::FiveExtraLarge;

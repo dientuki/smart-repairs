@@ -15,27 +15,30 @@
         @vite('board/page.tsx')
     @endpush
 
-    <div class="fi-simple-layout flex min-h-screen flex-col items-center">
+    <div class="fi-layout flex flex-col min-h-screen w-full overflow-x-clip gap-2 ">
 
-        @if (($hasTopbar ?? true) && filament()->auth()->check())
-            <div
-                class="absolute end-0 top-0 flex h-16 items-center gap-x-4 pe-4 md:pe-6 lg:pe-8"
-            >
-            asdf
-                @if (filament()->hasDatabaseNotifications())
-                    @livewire(Filament\Livewire\DatabaseNotifications::class, ['lazy' => true])
-                @endif
+        <div class="fi-topbar sticky top-0 z-20 overflow-x-clip flex flex-row justify-between bg-white dark:bg-gray-900  shadow-sm ring-1 ring-gray-950/5 dark:ring-white/10">
 
-                <x-filament-panels::user-menu />
+        <div class="fi-sidebar-header flex h-16 items-center px-6 ">
+                <x-filament-panels::logo />
             </div>
-        @endif
 
-        <div
-            class="fi-simple-main-ctn"
+            @if (($hasTopbar ?? true) && filament()->auth()->check())
+                <div
+                    class="flex h-16 items-center gap-x-4 px-4  md:px-6 lg:px-8"
+                >
+                    <div class="ms-auto flex items-center gap-x-4">
+                        @if (filament()->hasDatabaseNotifications())
+                            @livewire(Filament\Livewire\DatabaseNotifications::class, ['lazy' => true])
+                        @endif
 
-        >
-        sdgdfg
+                        <x-filament-panels::user-menu />
+                    </div>
+                </div>
+            @endif
+
         </div>
 
+        <main class="fi-main mx-auto h-full w-full " id="app" ></main>
     </div>
 </x-filament-panels::layout.base>

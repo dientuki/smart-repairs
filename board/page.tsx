@@ -1,5 +1,4 @@
 import ReactDOM from 'react-dom/client';
-import Header from "@/components/Header";
 import Board from "@/components/board/Board";
 import Modal from "@/components/modal/Modal";
 import { ModalContainer } from "react-modal-global";
@@ -16,7 +15,6 @@ const appElement = document.getElementById('app');
 if (appElement) {
     ReactDOM.createRoot(appElement).render(
         <I18nextProvider i18n={i18n}>
-            <Header />
             <Board />
             <AddButton />
             <Suspense>
