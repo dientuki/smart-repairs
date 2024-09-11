@@ -4,9 +4,19 @@ namespace App\Filament\Team\Pages\Auth;
 
 use Filament\Forms\Components\FileUpload;
 use Filament\Pages\Auth\EditProfile;
+use Filament\Forms\Components\Component;
 
 class TeamEditProfile extends EditProfile
 {
+    protected function getAvatarFormComponent(): Component
+    {
+        return FileUpload::make('avatar_url')
+                ->directory('avatar')
+                ->hiddenLabel()
+                ->avatar()
+                ->extraAttributes(['class' => 'mx-auto']);
+    }
+
     /**
      * @return array<int | string, string | Form>
      */
@@ -16,11 +26,9 @@ class TeamEditProfile extends EditProfile
             'form' => $this->form(
                 $this->makeForm()
                     ->schema([
+                        $this->getAvatarFormComponent(),
                         $this->getNameFormComponent(),
                         $this->getEmailFormComponent(),
-                        FileUpload::make('avatar_url')
-                          ->directory('avatar')
-                          ->avatar(),
                         $this->getPasswordFormComponent(),
                         $this->getPasswordConfirmationFormComponent(),
                     ])
