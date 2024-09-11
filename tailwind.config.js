@@ -3,6 +3,7 @@ export default {
   content: [
     "./board/**/*.{js,jsx,ts,tsx}",
   ],
+  darkMode: 'class',
   theme: {
     extend: {},
   },

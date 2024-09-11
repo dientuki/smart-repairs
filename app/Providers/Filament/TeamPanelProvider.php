@@ -9,7 +9,6 @@ use App\Filament\Team\Pages\Tenancy\EditTeamProfile;
 use App\Filament\Team\Pages\Tenancy\RegisterTeam;
 use App\Models\Team;
 use App\Providers\SubscriptionsProvider;
-use Filament\Facades\Filament;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
@@ -41,18 +40,21 @@ class TeamPanelProvider extends PanelProvider
             ->profile(TeamEditProfile::class)
             ->domain('team.localhost')
             ->colors([
-                'primary' => Color::Amber,
+                'danger' => Color::Rose,
+                'gray' => Color::Gray,
+                'info' => Color::Blue,
+                'primary' => Color::Indigo,
+                'success' => Color::Emerald,
+                'warning' => Color::Orange,
             ])
             ->discoverResources(in: app_path('Filament/Team/Resources'), for: 'App\\Filament\\Team\\Resources')
             ->discoverPages(in: app_path('Filament/Team/Pages'), for: 'App\\Filament\\Team\\Pages')
             ->pages([
                 Pages\Dashboard::class,
-                //Billing::class,
             ])
             ->discoverWidgets(in: app_path('Filament/Team/Widgets'), for: 'App\\Filament\\Team\\Widgets')
             ->widgets([
                 Widgets\AccountWidget::class,
-                Widgets\FilamentInfoWidget::class,
             ])
             ->middleware([
                 EncryptCookies::class,
