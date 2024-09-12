@@ -40,7 +40,7 @@ function OrderCard({ order, index, id, innerRef, draggableProps, dragHandleProps
         <div className="flex gap-3">
           <div className="flex flex-row gap-2"><Icon icon={ChatBubbleOvalLeftEllipsisIcon} />{order.commentsQuantity}</div>
           <div className="flex flex-row gap-2"><Icon icon={PaperClipIcon} />0</div>
-          <div className="flex flex-row gap-2"><Icon icon={CalendarIcon} />{order.createdAtDate.toLocaleDateString()}<Icon icon={ClockIcon} />{order.createdAtDate.toLocaleTimeString()}</div>
+          <div className="flex flex-row gap-2"><Icon icon={CalendarIcon} />{order.createdAtDate.toLocaleDateString()}<Icon icon={ClockIcon} />{order.createdAtDate.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })}</div>
         </div>
         <div>
             {order.observation}
