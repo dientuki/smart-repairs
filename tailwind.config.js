@@ -5,7 +5,24 @@ export default {
   ],
   darkMode: 'class',
   theme: {
+    accentColor: {},
+    backgroundColor: {},
+    borderColor: {},
+    caretColor: {},
+    colors: {},
+    divideColor: {},
+    gradientColorStops: {},
+    outlineColor: {},
+    placeholderColor: {},
+    ringColor: {},
+    ringOffsetColor: {},
+    textColor: {},
+    boxShadowColor: {},
+    fontFamily: {},
     extend: {},
+  },
+  corePlugins: {
+
   },
   plugins: [],
 }

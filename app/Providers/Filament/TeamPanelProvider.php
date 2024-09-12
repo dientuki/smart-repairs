@@ -40,12 +40,12 @@ class TeamPanelProvider extends PanelProvider
             ->profile(TeamEditProfile::class)
             ->domain('team.localhost')
             ->colors([
-                'danger' => Color::Rose,
-                'gray' => Color::Gray,
-                'info' => Color::Blue,
-                'primary' => Color::Indigo,
+                'danger' => Color::Red,
+                'gray' => Color::Stone,
+                'info' => Color::Indigo,
+                'primary' => Color::Sky,
                 'success' => Color::Emerald,
-                'warning' => Color::Orange,
+                'warning' => Color::Yellow,
             ])
             ->discoverResources(in: app_path('Filament/Team/Resources'), for: 'App\\Filament\\Team\\Resources')
             ->discoverPages(in: app_path('Filament/Team/Pages'), for: 'App\\Filament\\Team\\Pages')

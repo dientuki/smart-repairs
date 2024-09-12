@@ -5,17 +5,17 @@ declare(strict_types=1);
 namespace App\GraphQL\Mutations;
 
 use App\Models\OrderComment;
-use App\Traits\TeamContextTrait;
+use App\Traits\UserDataTrait;
 use Nuwave\Lighthouse\Execution\ResolveInfo;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 
 final readonly class CommentMutation
 {
-    use TeamContextTrait;
+    use UserDataTrait;
 
     private function isMyComment(string $commentId): bool
     {
-        $user = auth()->user();
+        $user = $this->getUserId();
         $comment = OrderComment::find($commentId);
 
         return $user && $user->id === $comment->user_id;
@@ -63,13 +63,13 @@ final readonly class CommentMutation
 
     public function create(null $root, array $args, GraphQLContext $context, ResolveInfo $resolveInfo): mixed
     {
-        $team_id = $this->getTeamIdFromContext($context);
+        $team_id = $this->getTeamId();
 
         return OrderComment::create([
             'order_id' => $args['orderId'],
             'team_id' => $team_id,
             'comment' => strip_tags($args['comment']),
-            'user_id' => auth()->user()->id,
+            'user_id' => $this->getUserId(),
             'is_public' => $args['isPublic'],
         ]);
     }

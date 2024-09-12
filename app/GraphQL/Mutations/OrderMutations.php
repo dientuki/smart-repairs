@@ -8,14 +8,14 @@ use App\Enum\OrderStatusEnum;
 use App\Models\Order;
 use App\Models\OrderCheck;
 use App\Models\TemporaryDeviceUnit;
-use App\Traits\TeamContextTrait;
+use App\Traits\UserDataTrait;
 use Illuminate\Support\Facades\DB;
 use Nuwave\Lighthouse\Execution\ResolveInfo;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 
 final readonly class OrderMutations
 {
-    use TeamContextTrait;
+    use UserDataTrait;
 
     /**
      * Return a value for the field.
@@ -33,7 +33,7 @@ final readonly class OrderMutations
         //$phone = $args['phone'];
 
         $order = Order::find($args['id']);
-        $team_id = $this->getTeamIdFromContext($context);
+        $team_id = $this->getTeamId();
 
         if ($order && $order->team_id === $team_id) {
             return Order::updateStatus($args['id'], $args['status']);
@@ -45,7 +45,7 @@ final readonly class OrderMutations
 
     public function create(null $root, array $args, GraphQLContext $context, ResolveInfo $resolveInfo): bool
     {
-        $team_id = $this->getTeamIdFromContext($context);
+        $team_id = $this->getTeamId();
         //dd($args['order']);
 
         try {

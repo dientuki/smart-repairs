@@ -13,7 +13,6 @@ export default defineConfig({
         laravel({
             input: [
                 'board/page.tsx',
-                'resources/sass/app.scss',
             ],
             refresh: true,
         }),
