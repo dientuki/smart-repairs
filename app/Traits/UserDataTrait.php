@@ -14,7 +14,6 @@ trait UserDataTrait
             }
 
             throw new \Exception('Team not found');
-
         } catch (\Exception $e) {
             throw new \Exception('Team not found');
         }
@@ -34,5 +33,4 @@ trait UserDataTrait
             throw new \Exception('User not found');
         }
     }
-
 }
