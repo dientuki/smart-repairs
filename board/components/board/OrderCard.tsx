@@ -4,6 +4,7 @@ import { ChatBubbleOvalLeftEllipsisIcon, PaperClipIcon, CalendarIcon, UserCircle
 import { DraggableProvidedDragHandleProps, DraggableProvidedDraggableProps } from "react-beautiful-dnd"
 import Modal from "@/components/modal/Modal";
 import ViewCardModal from "@/components/modal/ViewCardModal";
+import Icon from "@/components/Icon";
 
 type Props = {
     order: Order,
@@ -31,15 +32,15 @@ function OrderCard({ order, index, id, innerRef, draggableProps, dragHandleProps
             {order.deviceCommercialName}
         </div>
       </div>
-      <div className="flex flex-col gap-0.5 p-2 text-sm text-gray-950 dark:text-white">
+      <div className="flex flex-col gap-1 p-2 text-sm text-gray-950 dark:text-white">
         <div className="font-semibold">{order.brand} {order.deviceCommercialName}</div>
         {order.deviceTechName && <div>{order.deviceType}: {order.deviceTechName}</div> }
         {order.deviceSerial && <div>Imei: {order.deviceSerial}</div> }
-        <div><UserCircleIcon className="h-4 w-4 inline-block" /> {order.customerFullName}</div>
-        <div className="flex justify-between">
-          <div><ChatBubbleOvalLeftEllipsisIcon className="h-4 w-4 inline-block" />{order.commentsQuantity}</div>
-          <div><PaperClipIcon className="h-4 w-4 inline-block" />0</div>
-          <div><CalendarIcon className="h-4 w-4 inline-block" />{order.createdAtDate.toLocaleDateString()} <ClockIcon className="h-4 w-4 inline-block" />{order.createdAtDate.toLocaleTimeString()}</div>
+        <div className="flex flex-row gap-2"><Icon icon={UserCircleIcon} />{order.customerFullName}</div>
+        <div className="flex gap-3">
+          <div className="flex flex-row gap-2"><Icon icon={ChatBubbleOvalLeftEllipsisIcon} />{order.commentsQuantity}</div>
+          <div className="flex flex-row gap-2"><Icon icon={PaperClipIcon} />0</div>
+          <div className="flex flex-row gap-2"><Icon icon={CalendarIcon} />{order.createdAtDate.toLocaleDateString()}<Icon icon={ClockIcon} />{order.createdAtDate.toLocaleTimeString()}</div>
         </div>
         <div>
             {order.observation}
