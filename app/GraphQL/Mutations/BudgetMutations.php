@@ -9,7 +9,7 @@ use App\Models\Budget;
 use App\Models\BudgetItem;
 use App\Models\Order;
 use App\Models\ServiceJob;
-use App\Traits\TeamContextTrait;
+use App\Traits\UserDataTrait;
 use Exception;
 use Illuminate\Support\Facades\DB;
 use Nuwave\Lighthouse\Execution\ResolveInfo;
@@ -17,7 +17,7 @@ use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 
 final readonly class BudgetMutations
 {
-    use TeamContextTrait;
+    use UserDataTrait;
 
     /**
      * Return a value for the field.
@@ -39,7 +39,7 @@ final readonly class BudgetMutations
 
             $budget = Budget::updateOrCreate(
                 ['order_id' => $args['orderId']],
-                ['user_id' => auth()->user()->id]
+                ['user_id' => $this->getUserId()]
             );
 
             foreach ($args['budgetItems'] as $key => $budgetItem) {

@@ -5,19 +5,18 @@ declare(strict_types=1);
 namespace App\GraphQL\Queries;
 
 use App\Models\Order;
+use App\Traits\UserDataTrait;
+use Filament\Facades\Filament;
 
 final readonly class OrderQueries
 {
+    use UserDataTrait;
+
     public function getActiveOrders()
     {
         //@todo improve https://www.answeroverflow.com/m/1136334340888989927#solution-1136340488786559106
-        $team = auth()->user()->teams;
+        $team_id = $this->getTeamId();
 
-        $teamIds = [];
-        foreach ($team as $t) {
-            $teamIds[] = $t->id;
-        }
-
-        return Order::whereIn('team_id', $teamIds)->where('status', '!=', 'ready')->get();
+        return Order::where('team_id', $team_id)->where('status', '!=', 'ready')->get();
     }
 }

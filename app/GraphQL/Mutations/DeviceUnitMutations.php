@@ -12,14 +12,14 @@ use App\Models\DeviceUnit;
 use App\Models\DeviceVersion;
 use App\Models\Order;
 use App\Models\TemporaryDeviceUnit;
-use App\Traits\TeamContextTrait;
+use App\Traits\UserDataTrait;
 use Exception;
 use Nuwave\Lighthouse\Execution\ResolveInfo;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 
 final readonly class DeviceUnitMutations
 {
-    use TeamContextTrait;
+    use UserDataTrait;
 
     /**
      * Return a value for the field.
@@ -33,7 +33,7 @@ final readonly class DeviceUnitMutations
     public function create(null $root, array $args, GraphQLContext $context, ResolveInfo $resolveInfo): mixed
     {
         // TODO implement the resolver
-        $team_id = $this->getTeamIdFromContext($context);
+        $team_id = $this->getTeamId();
 
         return DeviceUnit::create([
             'device_version_id' => $args['deviceunit']['deviceVersionId'],
@@ -47,7 +47,7 @@ final readonly class DeviceUnitMutations
     public function update(null $root, array $args, GraphQLContext $context, ResolveInfo $resolveInfo): bool
     {
         $deviceUnit = DeviceUnit::find($args['deviceUnitId']);
-        $team_id = $this->getTeamIdFromContext($context);
+        $team_id = $this->getTeamId();
 
         if ($deviceUnit && $deviceUnit->team_id === $team_id) {
             $deviceUnit->serial = $args['deviceunit']['serial'];
@@ -144,7 +144,7 @@ final readonly class DeviceUnitMutations
 
     public function confirmDeviceUnit(null $root, array $args, GraphQLContext $context, ResolveInfo $resolveInfo): mixed
     {
-        $team_id = $this->getTeamIdFromContext($context);
+        $team_id = $this->getTeamId();
         $order = Order::where('id', $args['input']['order'])->first();
         $tmpOrder = TemporaryDeviceUnit::where('order_id', $args['input']['order'])->first();
 

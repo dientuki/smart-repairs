@@ -3,16 +3,16 @@
 namespace App\GraphQL\Queries;
 
 use App\Models\Order;
-use App\Traits\TeamContextTrait;
+use App\Traits\UserDataTrait;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 
 class PartQueries
 {
-    use TeamContextTrait;
+    use UserDataTrait;
 
     public function getPartsByOrder(null $root, array $args, GraphQLContext $context): mixed
     {
-        $team_id = $this->getTeamIdFromContext($context);
+        $team_id = $this->getTeamId();
 
         $order = Order::find($args['orderId']);
 

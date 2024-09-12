@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace App\GraphQL\Mutations;
 
 use App\Models\Customer;
-use App\Traits\TeamContextTrait;
+use App\Traits\UserDataTrait;
 use Nuwave\Lighthouse\Execution\ResolveInfo;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 
 final readonly class CustomerMutations
 {
-    use TeamContextTrait;
+    use UserDataTrait;
 
     /**
      * Return a value for the field.
@@ -24,7 +24,7 @@ final readonly class CustomerMutations
      */
     public function create(null $root, array $args, GraphQLContext $context, ResolveInfo $resolveInfo): mixed
     {
-        $team_id = $this->getTeamIdFromContext($context);
+        $team_id = $this->getTeamId();
 
         return Customer::create([
             'first_name' => $args['customer']['firstname'],
@@ -38,7 +38,7 @@ final readonly class CustomerMutations
     public function update(null $root, array $args, GraphQLContext $context, ResolveInfo $resolveInfo): bool
     {
         $customer = Customer::find($args['customerId']);
-        $team_id = $this->getTeamIdFromContext($context);
+        $team_id = $this->getTeamId();
 
         if ($customer && $customer->team_id === $team_id) {
             $customer->first_name = $args['customer']['firstname'];
