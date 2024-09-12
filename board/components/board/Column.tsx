@@ -35,7 +35,7 @@ function Column( { id, orders, index }: Props ) {
                 <div
                   {...provided.droppableProps}
                   ref={provided.innerRef}
-                  className={` ${snapshot.isDraggingOver ? "bg-green-200" : ""}`}
+                  className={` ${snapshot.isDraggingOver ? "bg-green-200" : "bg-red-200"} h-full` }
                 >
                     <div className="fi-sidebar-item-button relative flex items-center justify-between gap-x-3 rounded-t-lg py-2 px-3 outline-none transition duration-75 bg-gray-50 dark:bg-white/5">
                       <h2 className="fi-ta-header-heading text-base font-semibold leading-6 text-gray-950 dark:text-white">
