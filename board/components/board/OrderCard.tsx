@@ -21,18 +21,18 @@ function OrderCard({ order, index, id, innerRef, draggableProps, dragHandleProps
         ref={innerRef}
         {...draggableProps}
         {...dragHandleProps}
-        className="flex flex-col rounded-md bg-white drop-shadow-sm overflow-hidden"
+        className="flex flex-col rounded-xl bg-white shadow-sm ring-1 ring-gray-950/5 dark:bg-white/5 dark:ring-white/10 overflow-hidden"
         draggable
         onClick={openCard}
     >
       <div className="relative w-full aspect-video bg-cover bg-no-repeat" style={{backgroundImage: `url(${order.deviceTypeImage})`}}>
         <img src={order.brandImage} alt={order.brand} className="absolute top-2 left-2 h-8 w-auto object-contain" />
-        <div className="absolute bottom-2 right-2 text-base text-white bg-gray-800/50  px-1 py-0.5 rounded">
+        <div className="absolute bottom-2 right-2 text-sm font-medium outline-none transition duration-75 bg-gray-50 dark:bg-gray-950 text-gray-950 dark:text-white  px-2 py-1 rounded-lg ring-1 ring-gray-950/5 dark:ring-white/10 bg-opacity-55 dark:bg-opacity-55 ">
             {order.deviceCommercialName}
         </div>
       </div>
-      <div className="p-1 flex-col mt-2">
-        <div>{order.brand} {order.deviceCommercialName}</div>
+      <div className="flex flex-col gap-0.5 p-2 text-sm text-gray-950 dark:text-white">
+        <div className="font-semibold">{order.brand} {order.deviceCommercialName}</div>
         {order.deviceTechName && <div>{order.deviceType}: {order.deviceTechName}</div> }
         {order.deviceSerial && <div>Imei: {order.deviceSerial}</div> }
         <div><UserCircleIcon className="h-4 w-4 inline-block" /> {order.customerFullName}</div>
