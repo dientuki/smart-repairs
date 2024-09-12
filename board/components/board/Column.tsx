@@ -1,5 +1,6 @@
 import { Draggable, Droppable } from "react-beautiful-dnd"
 import OrderCard from "@/components/board/OrderCard"
+import { infoStyles } from "@/globalStyles"
 
 type Props = {
     id: TypedColumn,
@@ -10,12 +11,12 @@ type Props = {
 const idToColumnText: {
     [key in TypedColumn]: string
 } = {
-    "for budgeting": "para presupuesto",
-    budgeting: "presupuestando",
-    budgeted: "presupuestado",
-    "to do": "para reparar",
-    repairing: "reparando",
-    repaired: "reparado",
+    "for budgeting": "Para presupuesto",
+    budgeting: "Presupuestando",
+    budgeted: "Presupuestado",
+    "to do": "Para reparar",
+    repairing: "Reparando",
+    repaired: "Reparado",
 }
 
 function Column( { id, orders, index }: Props ) {
@@ -26,6 +27,7 @@ function Column( { id, orders, index }: Props ) {
             {...provided.draggableProps}
             {...provided.dragHandleProps}
             ref={provided.innerRef}
+            className="fi-sidebar-item-button relative overflow-hidden rounded-t-lg outline-none transition duration-75 hover:bg-gray-100 focus-visible:bg-gray-100 dark:hover:bg-white/5 dark:focus-visible:bg-white/5 bg-gray-100 dark:bg-white/5 ring-1 ring-gray-950/5 dark:ring-white/10"
           >
             {/* order list */}
             <Droppable droppableId={index.toString()} type="card" direction="vertical">
@@ -33,13 +35,15 @@ function Column( { id, orders, index }: Props ) {
                 <div
                   {...provided.droppableProps}
                   ref={provided.innerRef}
-                  className={`p-2 rounded-2xl shadow-sm ${snapshot.isDraggingOver ? "bg-green-200" : "bg-gray-500/100"}`}
+                  className={` ${snapshot.isDraggingOver ? "bg-green-200" : ""}`}
                 >
-                    <h2 className="flex justify-between text-xl font-bold p-2">
-                        {idToColumnText[id]}
-                        <span className="text-gray-500 bg-gray-200 rounded-full px-2 py-1 text-base font-normal">{orders.length}</span>
-                    </h2>
-                    <div className="space-y-2">
+                    <div className="fi-sidebar-item-button relative flex items-center justify-between gap-x-3 rounded-t-lg py-2 px-3 outline-none transition duration-75 bg-gray-50 dark:bg-white/5">
+                      <h2 className="fi-ta-header-heading text-base font-semibold leading-6 text-gray-950 dark:text-white">
+                          {idToColumnText[id]}
+                      </h2>
+                      <span style={infoStyles} className="fi-badge flex items-center justify-center gap-x-1 rounded-md text-xs font-medium ring-1 ring-inset px-2 min-w-[theme(spacing.6)] py-1 fi-color-custom bg-custom-50 text-custom-600 ring-custom-600/10 dark:bg-custom-400/10 dark:text-custom-400 dark:ring-custom-400/30 fi-color-primary">{orders.length}</span>
+                    </div>
+                    <div className="space-y-2 p-2">
                         {orders.map((order, index) => (
                             <Draggable
                                 key={order.$id}
