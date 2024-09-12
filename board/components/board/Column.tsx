@@ -27,7 +27,7 @@ function Column( { id, orders, index }: Props ) {
             {...provided.draggableProps}
             {...provided.dragHandleProps}
             ref={provided.innerRef}
-            className="fi-sidebar-item-button relative overflow-hidden rounded-t-lg outline-none transition duration-75 hover:bg-gray-100 focus-visible:bg-gray-100 dark:hover:bg-white/5 dark:focus-visible:bg-white/5 bg-gray-100 dark:bg-white/5 ring-1 ring-gray-950/5 dark:ring-white/10"
+            className="fi-sidebar-item-button relative overflow-hidden rounded-lg outline-none transition duration-75 hover:bg-gray-100 focus-visible:bg-gray-100 dark:hover:bg-white/5 dark:focus-visible:bg-white/5 bg-white dark:bg-gray-900 ring-1 ring-gray-950/5 dark:ring-white/10"
           >
             {/* order list */}
             <Droppable droppableId={index.toString()} type="card" direction="vertical">
