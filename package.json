@@ -11,7 +11,7 @@
         "@headlessui/react": "^2.1.5",
         "@heroicons/react": "^2.1.5",
         "@tanstack/react-table": "^8.20.5",
-        "@mui/material": "^6.0.2",
+        "@mui/material": "^6.1.0",
         "@vitejs/plugin-react": "^4.2.1",
         "dotenv": "^16.4.5",
         "i18next": "^23.15.0",
