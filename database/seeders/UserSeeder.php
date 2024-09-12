@@ -39,6 +39,7 @@ class UserSeeder extends Seeder
             'name' => 'HP662 Pantone 6C 101',
             'email' => 'moncho@gmail.com',
             'password' => Hash::make('1234'),
+            'avatar_url' => Storage::putFile('avatar', 'resources/seeders/moncho.jpg'),
             'created_at' => now(),
             'updated_at' => now(),
         ]);
