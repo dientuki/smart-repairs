@@ -11,7 +11,7 @@ export const DeviceCheck = () => {
   };
 
   return (
-    <div className="rounded-xl shadow-sm ring-1 ring-gray-950/5 dark:ring-white/10">
+    <div className="rounded-xl shadow-sm ring-1 ring-gray-950/5 dark:ring-white/10 bg-white dark:bg-white/5">
       <div className="flex flex-row justify-between gap-3 cursor-pointer p-3" onClick={toggleClasses}>
         <div className="flex  items-center gap-3">
           Validaciones
