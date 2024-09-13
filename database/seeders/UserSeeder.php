@@ -51,5 +51,13 @@ class UserSeeder extends Seeder
             'created_at' => now(),
             'updated_at' => now(),
         ]);
+        DB::table('users')->insert([
+            'id' => (string) Str::ulid(),
+            'name' => 'Full 2 Zarate',
+            'email' => 'full2@gmail.com',
+            'password' => Hash::make('1234'),
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
     }
 }
