@@ -9,7 +9,7 @@ import { ActionButton, InputField } from "@/components/form";
 import { BudgetModal } from "@/components/budget";
 import { Field, Input, Label } from "@headlessui/react";
 import Icon from "@/components/Icon";
-import { Bars3BottomLeftIcon, DevicePhoneMobileIcon } from "@heroicons/react/20/solid";
+import { Bars3BottomLeftIcon, DevicePhoneMobileIcon } from "@heroicons/react/24/outline";
 
 
 type ModalParams = {

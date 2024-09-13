@@ -1,10 +1,12 @@
 'use client'
 
-import { ChatBubbleOvalLeftEllipsisIcon, PaperClipIcon, CalendarIcon, UserCircleIcon, ClockIcon } from "@heroicons/react/20/solid";
+import { ChatBubbleOvalLeftEllipsisIcon, PaperClipIcon, CalendarIcon, ClockIcon, IdentificationIcon } from "@heroicons/react/24/outline";
 import { DraggableProvidedDragHandleProps, DraggableProvidedDraggableProps } from "react-beautiful-dnd"
 import Modal from "@/components/modal/Modal";
 import Icon from "@/components/Icon";
 import ViewCardModal from "../viewCardModal/ViewCardModal";
+import { TypedColumn } from "@/types/enums";
+import { Order } from "@/typings";
 
 type Props = {
     order: Order,
@@ -36,7 +38,7 @@ function OrderCard({ order, index, id, innerRef, draggableProps, dragHandleProps
         <div className="font-semibold">{order.brand} {order.deviceCommercialName}</div>
         {order.deviceTechName && <div>{order.deviceType}: {order.deviceTechName}</div> }
         {order.deviceSerial && <div>Imei: {order.deviceSerial}</div> }
-        <div className="flex flex-row gap-2"><Icon icon={UserCircleIcon} />{order.customerFullName}</div>
+        <div className="flex flex-row gap-2"><Icon icon={IdentificationIcon} />{order.customerFullName}</div>
         <div className="flex gap-3">
           <div className="flex flex-row gap-2"><Icon icon={ChatBubbleOvalLeftEllipsisIcon} />{order.commentsQuantity}</div>
           <div className="flex flex-row gap-2"><Icon icon={PaperClipIcon} />0</div>

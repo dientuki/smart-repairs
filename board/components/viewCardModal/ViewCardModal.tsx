@@ -9,7 +9,7 @@ import { ActionButton, InputField } from "@/components/form";
 import { BudgetModal } from "@/components/budget";
 import { Field, Input, Label } from "@headlessui/react";
 import Icon from "@/components/Icon";
-import { DevicePhoneMobileIcon } from "@heroicons/react/20/solid";
+import { DevicePhoneMobileIcon } from "@heroicons/react/24/outline";
 import { Description } from "./Description";
 import { Diagnosis } from "./Diagnosis";
 
@@ -60,8 +60,8 @@ function ViewCardModal() {
                   <p className="my-2">Fecha de entrada: {order.createdAtDate?.toDateString()} {order.createdAtDate?.toLocaleTimeString()}</p>
                   <p className="my-2">Cliente: {order.customerFullName}</p>
                   <p className="my-2">Whatsap: <a target="_blank" href={`https://wa.me/${order.customerPhone}`}>whatsap</a></p>
-                  <p className="my-2">Tecnico: Usuario</p>
-                  <p className="my-2">Vendedor: {order.author}</p>
+                  <p className="my-2">Tecnico: {order.assignee}</p>
+                  <p className="my-2">Vendedor: {order.creator}</p>
                 </div>
                 <div className="border border-gray-300 p-3 rounded mt-4">
                   <p className="my-2">Desbloqueo: Codigo/patron</p>

@@ -1,6 +1,6 @@
 import { useOrderStore } from "@/store/OrderStore";
 import { Textarea } from "@headlessui/react";
-import { LockClosedIcon, LockOpenIcon } from "@heroicons/react/20/solid";
+import { LockClosedIcon, LockOpenIcon } from "@heroicons/react/24/outline";
 import { useState } from "react";
 import Avatar from 'react-avatar';
 

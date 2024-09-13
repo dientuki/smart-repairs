@@ -4,7 +4,7 @@ import { useBoardStore } from "@/store/BoardStore";
 import { useOrderStore } from "@/store/OrderStore";
 import { Textarea } from "@headlessui/react";
 import Avatar from "react-avatar";
-import { LockClosedIcon, LockOpenIcon } from "@heroicons/react/20/solid";
+import { LockClosedIcon, LockOpenIcon } from "@heroicons/react/24/outline";
 
 type Props = {
   orderId: string

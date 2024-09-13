@@ -1,6 +1,6 @@
 import { useOrderStore } from "@/store/OrderStore";
 import Icon from "../Icon";
-import { DocumentTextIcon } from "@heroicons/react/20/solid";
+import { DocumentTextIcon } from "@heroicons/react/24/outline";
 
 export const Diagnosis = () => {
   const { order } = useOrderStore();
