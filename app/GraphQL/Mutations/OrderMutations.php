@@ -45,9 +45,6 @@ final readonly class OrderMutations
 
     public function create(null $root, array $args, GraphQLContext $context, ResolveInfo $resolveInfo): bool
     {
-        $team_id = $this->getTeamId();
-        //dd($args['order']);
-
         try {
             DB::beginTransaction();
 
@@ -55,8 +52,8 @@ final readonly class OrderMutations
                 'status' => OrderStatusEnum::ForBudgeting,
                 'observation' => $args['order']['observation'],
                 'customer_id' => $args['order']['customerid'],
-                'team_id' => $team_id,
-                'user_id' => auth()->user()->id,
+                'team_id' => $this->getTeamId(),
+                'created_by' => $this->getUserId(),
                 'device_id' => $args['order']['deviceid']
             ]);
 

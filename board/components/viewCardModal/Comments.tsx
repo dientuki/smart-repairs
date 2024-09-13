@@ -4,7 +4,8 @@ import { useBoardStore } from "@/store/BoardStore";
 import { useOrderStore } from "@/store/OrderStore";
 import { Textarea } from "@headlessui/react";
 import Avatar from "react-avatar";
-import { LockClosedIcon, LockOpenIcon } from "@heroicons/react/24/outline";
+import { ChatBubbleOvalLeftEllipsisIcon, LockClosedIcon, LockOpenIcon } from "@heroicons/react/24/outline";
+import Icon from "../Icon";
 
 type Props = {
   orderId: string
@@ -65,7 +66,15 @@ function Comments({ orderId, comments }: Props) {
 
   return (
     <div>
-        <h3 className="mb-2 text-xl font-medium">Comentarios ({currentComments.length})</h3>
+      <div className="flex flex-row justify-between">
+        <div className="flex flex-row items-center gap-2">
+          <Icon size={7} icon={ChatBubbleOvalLeftEllipsisIcon} />
+          <span className="text-1xl font-bold tracking-tight sm:text-2xl">Comentarios ({currentComments.length})</span>
+        </div>
+        <div>Button</div>
+      </div>
+
+
 
         <div className="bg-yellow-200 py-2 px-1 rounded">
           <div className="flex items-center gap-3">

@@ -2,6 +2,7 @@ import { arrayToString } from "@/helper/stringHelpers";
 import { device, extra } from "@/helper/reduceHelpers";
 import { graphqlRequest, handleGraphQLErrors } from "@/helper/graphqlHelpers";
 import { TypedColumn } from "@/types/enums";
+import { userInfo } from "os";
 
 export const createOrder = async (newOrder: NewOrder) => {
 
@@ -58,6 +59,7 @@ export const getOrder = async (id: string) => {
                     was_edited
                     user {
                         name
+                        imageUrl
                     }
                 }
 
@@ -97,6 +99,7 @@ export const getOrder = async (id: string) => {
             isPublic: comment.is_public,
             userId: comment.user_id,
             userName: comment.user.name,
+            userImage: comment.user.imageUrl,
             wasEdited: comment.was_edited
         });
 

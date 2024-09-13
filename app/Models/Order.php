@@ -16,7 +16,8 @@ class Order extends ModelAuditable
     protected $fillable = [
         'customer_id',
         'team_id',
-        'user_id',
+        'created_by',
+        'assigned_to',
         'device_unit_id',
         'device_id',
         'diagnosis',

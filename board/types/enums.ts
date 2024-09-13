@@ -24,3 +24,12 @@ export enum TypedColumn {
   Repairing = "Repairing",
   Repaired = "Repaired",
 }
+
+export enum StyleColor {
+  Danger = 'danger',
+  Gray = 'gray',
+  Info = 'info',
+  Primary = 'primary',
+  Success = 'success',
+  Warning = 'warning',
+}

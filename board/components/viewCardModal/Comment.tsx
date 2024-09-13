@@ -45,7 +45,8 @@ function Comment({ comment, onDelete }: Props) {
   return (
     <div>
         <div className="flex items-center gap-3">
-            <Avatar name={commentData.userName} round={true} size="36" />
+
+            <Avatar name={commentData.userName} round={true} size="24" src={commentData.userImage} />
 
             <div>{commentData.createdAtDate?.toDateString()} {commentData.createdAtDate?.toLocaleTimeString()}</div>
 

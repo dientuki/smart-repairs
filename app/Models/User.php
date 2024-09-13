@@ -41,7 +41,7 @@ class User extends Authenticatable implements FilamentUser, HasTenants, Auditabl
         'name',
         'email',
         'password',
-        'avatar_url',
+        'hash_filename',
     ];
 
     /**
@@ -69,7 +69,7 @@ class User extends Authenticatable implements FilamentUser, HasTenants, Auditabl
 
     public function getFilamentAvatarUrl(): ?string
     {
-        return $this->avatar_url ? Storage::url($this->avatar_url) : null ;
+        return $this->hash_filename ? Storage::url($this->hash_filename) : null ;
     }
 
     /**

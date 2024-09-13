@@ -1,6 +1,6 @@
 import { useModalWindow } from "react-modal-global";
 import { useOrderStore } from "@/store/OrderStore";
-import Comments from "@/components/Comments";
+import Comments from "@/components/viewCardModal/Comments";
 import { useEffect } from "react";
 import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";

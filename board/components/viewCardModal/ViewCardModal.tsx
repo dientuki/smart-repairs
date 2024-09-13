@@ -1,17 +1,20 @@
 import { useModalWindow } from "react-modal-global";
 import { useOrderStore } from "@/store/OrderStore";
-import Comments from "@/components/Comments";
+import Comments from "@/components/viewCardModal/Comments";
 import { useEffect } from "react";
 import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
 import { Modal, UpdateDeviceUnitModal, ModalLayout } from "@/components/modal";
-import { ActionButton, InputField } from "@/components/form";
+import { ActionButton } from "@/components/form";
 import { BudgetModal } from "@/components/budget";
-import { Field, Input, Label } from "@headlessui/react";
 import Icon from "@/components/Icon";
-import { DevicePhoneMobileIcon } from "@heroicons/react/24/outline";
+import { DevicePhoneMobileIcon, HashtagIcon } from "@heroicons/react/24/outline";
 import { Description } from "./Description";
 import { Diagnosis } from "./Diagnosis";
+import { Details } from "./Details";
+import { DeviceCheck } from "./DeviceCheck";
+import { dynamicStyles } from "@/helper/componentsHelpers";
+import { StyleColor } from "@/types/enums";
 
 
 type ModalParams = {
@@ -47,43 +50,32 @@ function ViewCardModal() {
             </h2>
             <div className="flex flex-row border-t border-gray-200 dark:border-white/10 px-5 py-3 text-base">
               <div className="basis-3/4 pr-6 overflow-y-scroll mr-3">
-                <p className="hidden">
-                  <b>Serie:</b> {order.deviceSerial ? order.deviceSerial : "Serial number not available"}
-                </p>
+                <div className="flex flex-row items-center gap-2">
+                  <Icon size={7} icon={HashtagIcon} />
+                  <span className="text-1xl font-bold tracking-tight sm:text-2xl"><b>Serie:</b> {order.deviceSerial ? order.deviceSerial : "Serial number not available"}</span>
+                </div>
                 <Description />
                 <Diagnosis />
                 <Comments orderId={order.$id} comments={order.comments?.length ? order.comments : []}/>
               </div>
-              <div className="basis-1/4">
-                <p>Estado: {order.status}</p>
-                <div className="border border-gray-300 p-3 rounded mt-4">
-                  <p className="my-2">Fecha de entrada: {order.createdAtDate?.toDateString()} {order.createdAtDate?.toLocaleTimeString()}</p>
-                  <p className="my-2">Cliente: {order.customerFullName}</p>
-                  <p className="my-2">Whatsap: <a target="_blank" href={`https://wa.me/${order.customerPhone}`}>whatsap</a></p>
-                  <p className="my-2">Tecnico: {order.assignee}</p>
-                  <p className="my-2">Vendedor: {order.creator}</p>
-                </div>
-                <div className="border border-gray-300 p-3 rounded mt-4">
-                  <p className="my-2">Desbloqueo: Codigo/patron</p>
-                  <p className="my-2">Validaciones: Usuario</p>
-                </div>
-                <div>
-                  <ActionButton
-                    onClick={handleUpdateDeviceUnit}
-                    customClass="w-full mt-4"
-                    type="button">
-                      { order.deviceUnitId ? t('button.update') : t('button.validate') } {t('device')}
-                  </ActionButton>
-                  <ActionButton
-                    customClass="w-full mt-4"
-                    disabled={order.deviceUnitId == null && !order.hasBudget}
-                    onClick={handleBudgetModal}
-                    type="button">
-                      { t('button.quote') }
-                  </ActionButton>
-
-                </div>
-
+              <div className="basis-1/4 flex flex-col gap-3">
+                <div style={dynamicStyles(StyleColor.Info)} className="text-center justify-center gap-x-1 rounded-md text-base font-medium ring-1 ring-inset px-2  py-1 bg-custom-50 text-custom-600 ring-custom-600/10 dark:bg-custom-400/10 dark:text-custom-400 dark:ring-custom-400/30">{t(`status.${order.status}`)}</div>
+                <Details />
+                <DeviceCheck />
+                <DeviceCheck />
+                <ActionButton
+                  onClick={handleUpdateDeviceUnit}
+                  customClass="w-full"
+                  type="button">
+                    { order.deviceUnitId ? t('button.update') : t('button.validate') } {t('device')}
+                </ActionButton>
+                <ActionButton
+                  customClass="w-full"
+                  disabled={order.deviceUnitId == null && !order.hasBudget}
+                  onClick={handleBudgetModal}
+                  type="button">
+                    { t('button.quote') }
+                </ActionButton>
               </div>
             </div>
           </div>
