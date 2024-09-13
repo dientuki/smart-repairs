@@ -5,6 +5,7 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 
 use App\Traits\HasImageTrait;
+use App\Traits\HasTeamTrait;
 use App\Traits\IdAttributeUppercaseTrait;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Models\Contracts\HasAvatar;
@@ -19,6 +20,7 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Collection;
 use OwenIt\Auditing\Contracts\Auditable;
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\Storage;
 
 class User extends Authenticatable implements FilamentUser, HasTenants, Auditable, HasAvatar
@@ -88,7 +90,7 @@ class User extends Authenticatable implements FilamentUser, HasTenants, Auditabl
      */
     public function teams(): BelongsToMany
     {
-        return $this->belongsToMany(Team::class);
+        return $this->belongsToMany(Team::class, 'team_user', 'user_id', 'team_id');
     }
 
     public function canAccessTenant(Model $tenant): bool
@@ -120,4 +122,5 @@ class User extends Authenticatable implements FilamentUser, HasTenants, Auditabl
 
         return $team ? $team->pivot->rol : null;
     }
+
 }

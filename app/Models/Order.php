@@ -3,13 +3,16 @@
 namespace App\Models;
 
 use App\Enum\OrderStatusEnum;
+use App\Traits\HasTeamTrait;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
-class Order extends ModelWithTeam
+class Order  extends ModelAuditable
 {
+    use HasTeamTrait;
+
     protected $fillable = [
         'customer_id',
         'team_id',

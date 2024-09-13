@@ -2,11 +2,14 @@
 
 namespace App\Models;
 
+use App\Traits\HasTeamTrait;
 use Filament\Facades\Filament;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class SupplierContact extends ModelWithTeam
+class SupplierContact extends ModelAuditable
 {
+    use HasTeamTrait;
+
     protected $fillable = [
         'supplier_id',
         'team_id',

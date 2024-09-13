@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Models;
+namespace App\Traits;
 
 use App\Models\Team;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class ModelWithTeam extends ModelAuditable
+trait HasTeamTrait
 {
     /**
-     * Method to define the relationship with the Team model.
+     * Define the relationship with the Team model.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */

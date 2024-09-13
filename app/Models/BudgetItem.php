@@ -2,10 +2,13 @@
 
 namespace App\Models;
 
+use App\Traits\HasTeamTrait;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class BudgetItem extends ModelWithTeam
+class BudgetItem extends ModelAuditable
 {
+    use HasTeamTrait;
+
     protected $fillable = [
         'budget_id',
         'part_id',
