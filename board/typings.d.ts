@@ -1,8 +1,8 @@
+import { TypedColumn } from "./types/enums";
+
 interface Board {
     columns: Map<TypedColumn, Colum>;
 }
-
-type TypedColumn = "for budgeting" | "budgeting" | "budgeted" | "to do" | "repairing" | "repaired";
 
 interface Column {
     id: TypedColumn;

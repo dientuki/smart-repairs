@@ -55,6 +55,15 @@
         }
     },
 
+    "status": {
+        "ForBudgeting": "Para presupuesto",
+        "Budgeting": "Presupuestando",
+        "Budgeted": "Presupuestado",
+        "ToDo": "Para reparar",
+        "Repairing": "Reparando",
+        "Repaired": "Reparado"
+    },
+
     "unlock_type" : {
         "none": "ninguno",
         "code": "codigo de desbloqueo",

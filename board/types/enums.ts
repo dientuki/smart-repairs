@@ -15,3 +15,12 @@ export enum DiscountType {
   Percentage = 'Percentage',
   Amount = 'Amount',
 }
+
+export enum TypedColumn {
+  ForBudgeting = "ForBudgeting",
+  Budgeting = "Budgeting",
+  Budgeted = "Budgeted",
+  ToDo = "ToDo",
+  Repairing = "Repairing",
+  Repaired = "Repaired",
+}

@@ -9,13 +9,13 @@ enum OrderStatusEnum: string implements HasLabel
 {
     use EnumAsArrayTrait;
 
-    case ForBudgeting = 'for budgeting';
-    case Budgeting = 'budgeting';
-    case Budgeted = 'budgeted';
-    case ToDo = 'to do';
-    case Repairing = 'repairing';
-    case Repaired = 'repaired';
-    case Ready = 'ready';
+    case ForBudgeting = 'ForBudgeting';
+    case Budgeting = 'Budgeting';
+    case Budgeted = 'Budgeted';
+    case ToDo = 'ToDo';
+    case Repairing = 'Repairing';
+    case Repaired = 'Repaired';
+    case Ready = 'Ready';
 
     public function getLabel(): string
     {
