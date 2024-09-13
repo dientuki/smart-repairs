@@ -4,6 +4,49 @@
 @tailwind components;
 @tailwind utilities;
 
+/*
+.modal {
+    z-index: 100;
+}
+*/
+
+.modal {
+	position: fixed;
+	inset: 0;
+	z-index: 40; /* Cambia el z-index a 40 */
+	background-color: rgba(17, 24, 39, 0.5); /* bg-gray-950/50 en Tailwind */
+	/* Para el modo oscuro, puedes usar una clase adicional o manejarlo con JavaScript */
+	transition: 250ms ease-in-out opacity;
+    opacity: 1;
+}
+.modal:not(.modal--active) {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.dark .modal {
+	background-color: rgba(17, 24, 39, 0.75); /* dark:bg-gray-950/75 en Tailwind */
+}
+
+.modal__container {
+	position: absolute;
+	inset: 0;
+
+	display: grid;
+	cursor: pointer;
+
+	overflow: auto;
+	overscroll-behavior: contain;
+}
+
+.modal:not(.modal--active) .modal__container {
+	overflow: hidden;
+}
+
+.modal__inner {
+	display: grid;
+}
+
 textarea {
     field-sizing: content;
 }
