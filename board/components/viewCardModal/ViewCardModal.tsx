@@ -9,7 +9,9 @@ import { ActionButton, InputField } from "@/components/form";
 import { BudgetModal } from "@/components/budget";
 import { Field, Input, Label } from "@headlessui/react";
 import Icon from "@/components/Icon";
-import { Bars3BottomLeftIcon, DevicePhoneMobileIcon } from "@heroicons/react/20/solid";
+import { DevicePhoneMobileIcon } from "@heroicons/react/20/solid";
+import { Description } from "./Description";
+import { Diagnosis } from "./Diagnosis";
 
 
 type ModalParams = {
@@ -48,19 +50,8 @@ function ViewCardModal() {
                 <p className="hidden">
                   <b>Serie:</b> {order.deviceSerial ? order.deviceSerial : "Serial number not available"}
                 </p>
-                <div className="flex flex-row items-center gap-2">
-                  <Icon size={6} icon={Bars3BottomLeftIcon} />
-                  <span className="text-1xl font-bold tracking-tight sm:text-2xl">Descripcion inicial del problema</span>
-                </div>
-                <div>
-                  <p className="border border-gray-300 p-3 rounded min-h-20">{order.observation}</p>
-                  <Field className="display-block h-20">
-                    <Label className="first-letter:uppercase block mb-2 text-base font-medium text-gray-900">Diagnosticar</Label>
-                    <Input name="observation" className="float-left w-3/4 rounded-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block text-base border-gray-300 p-2.5"  />
-                    <ActionButton className="w-1/4 float-right">diagnosticar</ActionButton>
-                  </Field>
-                </div>
-
+                <Description />
+                <Diagnosis />
                 <Comments orderId={order.$id} comments={order.comments?.length ? order.comments : []}/>
               </div>
               <div className="basis-1/4">

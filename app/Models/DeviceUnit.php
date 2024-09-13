@@ -6,7 +6,7 @@ use App\Traits\HasTeamTrait;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class DeviceUnit  extends ModelAuditable
+class DeviceUnit extends ModelAuditable
 {
     use HasTeamTrait;
 

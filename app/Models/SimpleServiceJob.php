@@ -4,7 +4,7 @@ namespace App\Models;
 
 use App\Traits\HasTeamTrait;
 
-class SimpleServiceJob  extends ModelAuditable
+class SimpleServiceJob extends ModelAuditable
 {
     use HasTeamTrait;
 

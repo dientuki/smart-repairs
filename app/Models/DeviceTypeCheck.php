@@ -5,7 +5,7 @@ namespace App\Models;
 use App\Traits\HasTeamTrait;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class DeviceTypeCheck  extends ModelAuditable
+class DeviceTypeCheck extends ModelAuditable
 {
     use HasTeamTrait;
 

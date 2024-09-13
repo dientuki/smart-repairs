@@ -122,5 +122,4 @@ class User extends Authenticatable implements FilamentUser, HasTenants, Auditabl
 
         return $team ? $team->pivot->rol : null;
     }
-
 }

@@ -1,3 +1,4 @@
+
 import { ReactNode } from "react";
 import { DNA } from "react-loader-spinner";
 
@@ -18,7 +19,7 @@ export const ModalLayout: React.FC<ModalLayoutProps> = ({
 }) => {
   return (
     <div
-      className="transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl m-auto cursor-auto relative"
+      className="transform overflow-hidden m-auto cursor-auto relative  rounded-xl bg-white shadow-sm ring-1 ring-gray-950/5 dark:bg-gray-900 dark:ring-white/10"
       style={{
         width,
         height: minHeight ? undefined : height, // Usar height solo si minHeight no está definido

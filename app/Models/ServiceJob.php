@@ -5,7 +5,7 @@ namespace App\Models;
 use App\Traits\HasTeamTrait;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 
-class ServiceJob  extends ModelAuditable
+class ServiceJob extends ModelAuditable
 {
     use HasTeamTrait;
 

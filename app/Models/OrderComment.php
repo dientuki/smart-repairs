@@ -5,7 +5,7 @@ namespace App\Models;
 use App\Traits\HasTeamTrait;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class OrderComment  extends ModelAuditable
+class OrderComment extends ModelAuditable
 {
     use HasTeamTrait;
 

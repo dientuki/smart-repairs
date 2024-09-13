@@ -6,7 +6,7 @@ use App\Traits\HasTeamTrait;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
-class Stock extends  ModelAuditable
+class Stock extends ModelAuditable
 {
     use HasTeamTrait;
 

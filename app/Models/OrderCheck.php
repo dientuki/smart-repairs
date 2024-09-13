@@ -4,7 +4,7 @@ namespace App\Models;
 
 use App\Traits\HasTeamTrait;
 
-class OrderCheck  extends ModelAuditable
+class OrderCheck extends ModelAuditable
 {
     use HasTeamTrait;
 
