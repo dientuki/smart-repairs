@@ -47,9 +47,14 @@ class Order extends ModelAuditable
         return $this->hasMany(OrderComment::class)->orderBy('created_at', 'asc');
     }
 
-    public function author(): BelongsTo
+    public function creator(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'user_id', 'id');
+        return $this->belongsTo(User::class, 'created_by', 'id');
+    }
+
+    public function assignee(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'assigned_to', 'id');
     }
 
     public function budget(): HasOne

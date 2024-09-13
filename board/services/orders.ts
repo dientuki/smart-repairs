@@ -37,7 +37,10 @@ export const getOrder = async (id: string) => {
                 observation
                 hasBudget
 
-                author {
+                creator {
+                    name
+                }
+                assignee {
                     name
                 }
 
@@ -105,7 +108,8 @@ export const getOrder = async (id: string) => {
         $id: response.data.order.id,
         createdAt: response.data.order.created_at,
         createdAtDate: new Date(response.data.order.created_at),
-        author: response.data.order.author.name,
+        creator: response.data.order.creator.name,
+        assignee: response.data.order.assignee?.name,
         status: response.data.order.status,
         brand: response.data.order.device.brand.name,
         brandImage: response.data.order.device.brand.imageUrl,
