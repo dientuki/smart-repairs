@@ -33,3 +33,9 @@ export enum ButtonType {
   Submit = 'submit',
   Reset = 'reset',
 }
+
+export enum PackageType {
+  Basic = 'Basico',
+  Medium = 'Medio',
+  Full = 'Full',
+}

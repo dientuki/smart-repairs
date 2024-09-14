@@ -10,6 +10,7 @@ interface User {
   id: string;
   name: string;
   imageUrl: string;
+  package: string;
 }
 
 interface Board {
