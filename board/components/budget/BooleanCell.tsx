@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-export const BooleanCell = ({ getValue, row, column, table }: BooleanCellProps ) => {
+export const BooleanCell = ({ getValue, row, table }: BooleanCellProps ) => {
   const initialValue = getValue();
   const [value, setValue] = useState(initialValue);
 

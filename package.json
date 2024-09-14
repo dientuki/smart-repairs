@@ -3,7 +3,10 @@
     "type": "module",
     "scripts": {
         "dev": "vite",
-        "build": "vite build"
+        "build": "vite build",
+        "linter": "eslint board/",
+        "linter-fix": "eslint board/ --fix",
+        "linter-report": "eslint --format=html board/ > eslint-report.html"
     },
     "dependencies": {
         "@emotion/react": "^11.13.3",
