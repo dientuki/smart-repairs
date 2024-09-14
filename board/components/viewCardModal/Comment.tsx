@@ -1,13 +1,11 @@
 import { useOrderStore } from "@/store/OrderStore";
 import { Textarea } from "@headlessui/react";
-
 import { useState } from "react";
 import Avatar from 'react-avatar';
-import Icon from "../Icon";
-import { ActionButton } from "../form";
+import { ActionButton } from "@/components/form";
 import { useTranslation } from "react-i18next";
 import { StyleColor } from "@/types/enums";
-import { LockStatus } from "./LockStatus";
+import { LockStatus } from "@/components/viewCardModal";
 
 
 type Props = {
@@ -15,7 +13,7 @@ type Props = {
   onDelete: React.MouseEventHandler<HTMLButtonElement>
 }
 
-function Comment({ comment, onDelete }: Props) {
+export const Comment = ({ comment, onDelete }: Props) => {
   const [isEditing, setIsEditing] = useState(false);
   const [commentData, setCommentData] = useState(comment);
   const { updateCommentVisibility, updateComment } = useOrderStore();
@@ -95,5 +93,3 @@ function Comment({ comment, onDelete }: Props) {
     </div>
   )
 };
-
-export default Comment
