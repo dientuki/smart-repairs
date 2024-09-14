@@ -3,6 +3,10 @@ import { Textarea } from "@headlessui/react";
 import { LockClosedIcon, LockOpenIcon } from "@heroicons/react/24/outline";
 import { useState } from "react";
 import Avatar from 'react-avatar';
+import Icon from "../Icon";
+import { ActionButton } from "../form";
+import { useTranslation } from "react-i18next";
+import { StyleColor } from "@/types/enums";
 
 
 type Props = {
@@ -14,6 +18,7 @@ function Comment({ comment, onDelete }: Props) {
   const [isEditing, setIsEditing] = useState(false);
   const [commentData, setCommentData] = useState(comment);
   const { updateCommentVisibility, updateComment } = useOrderStore();
+  const { t } = useTranslation();
   let text:string = commentData.comment;
 
   const toogleVisibility = () => {
@@ -44,34 +49,47 @@ function Comment({ comment, onDelete }: Props) {
 
   return (
     <div>
-        <div className="flex items-center gap-3">
+        <div className="flex flex-row items-center gap-2">
 
-            <Avatar name={commentData.userName} round={true} size="24" src={commentData.userImage} />
+            <Avatar name={commentData.userName} round={true} size="28" src={commentData.userImage} />
 
             <div>{commentData.createdAtDate?.toDateString()} {commentData.createdAtDate?.toLocaleTimeString()}</div>
 
             {commentData.wasEdited && <div className="text-gray-500">Editado</div>}
 
             <div className="cursor-pointer" onClick={toogleVisibility} >{commentData.isPublic ?
-              <><LockOpenIcon className="h-4 w-4 inline-block" /> Publico</>:
-              <><LockClosedIcon className="h-4 w-4 inline-block" /> Privado</>
+              <><Icon icon={LockOpenIcon} size={4} additionalClasses="inline-block"/> Publico</>:
+              <><Icon icon={LockClosedIcon} size={4} additionalClasses="inline-block"/> Privado</>
             }
             </div>
 
         </div>
 
-        <div className="ml-12">
-          <Textarea
-            className="w-full p-2 border border-gray-300 rounded h-auto"
-            defaultValue={commentData.comment}
-            onClick={editComment}
-            onChange={handleChange}
-          />
-          <div className="mt-2 flex items-center gap-3">
+        <div className="flex flex-col gap-3 ml-9">
+          <div className="flex rounded-lg shadow-sm ring-1 transition duration-75 bg-white dark:bg-white/5 [&:not(:has(.fi-ac-action:focus))]:focus-within:ring-2 ring-gray-950/10 dark:ring-white/20 [&:not(:has(.fi-ac-action:focus))]:focus-within:ring-primary-600 dark:[&:not(:has(.fi-ac-action:focus))]:focus-within:ring-primary-500 overflow-hidden">
+            <Textarea
+              className="block h-full w-full border-none bg-transparent px-3 py-1.5 text-base text-gray-950 placeholder:text-gray-400 focus:ring-0 disabled:text-gray-500 disabled:[-webkit-text-fill-color:theme(colors.gray.500)] disabled:placeholder:[-webkit-text-fill-color:theme(colors.gray.400)] dark:text-white dark:placeholder:text-gray-500 dark:disabled:text-gray-400 dark:disabled:[-webkit-text-fill-color:theme(colors.gray.400)] dark:disabled:placeholder:[-webkit-text-fill-color:theme(colors.gray.500)]  "
+              defaultValue={commentData.comment}
+              onClick={editComment}
+              onChange={handleChange}
+            />
+          </div>
+          <div className="flex flex-row items-center gap-3">
               { isEditing ?
-                <button className="rounded-md bg-sky-600 px-3 py-1.5 text-base font-bold leading-6 text-white shadow-sm hover:bg-sky-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-600" onClick={saveComment}>Guardar</button> :
-                <button className="rounded-md bg-sky-600 px-3 py-1.5 text-base font-bold leading-6 text-white shadow-sm hover:bg-sky-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-600" onClick={editComment}>Editar</button>}
-              <button className="rounded-md bg-red-600 px-3 py-1.5 text-base font-bold leading-6 text-white shadow-sm hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600" onClick={onDelete}>Borrar</button>
+                <ActionButton
+                  onClick={saveComment}>
+                    { t('button.save') }
+                </ActionButton> :
+                <ActionButton
+                  onClick={editComment}>
+                    { t('button.edit') }
+                </ActionButton>
+              }
+              <ActionButton
+                onClick={onDelete}
+                style={StyleColor.Danger}>
+                  { t('button.delete') }
+              </ActionButton>
           </div>
 
         </div>

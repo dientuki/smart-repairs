@@ -1,13 +1,13 @@
 import React from 'react';
 import { Button } from '@headlessui/react';
 import { combineClasses, dynamicStyles } from "@/helper/componentsHelpers";
-import { StyleColor } from "@/types/enums";
+import { ButtonType, StyleColor } from "@/types/enums";
 
 interface ActionButtonProps {
   customClass?: string; // Can contain multiple classes separated by spaces
   children: React.ReactNode; // The content of the button
   onClick?: () => void; // Function to execute on click
-  type?: 'button' | 'submit' | 'reset'; // Button type
+  type?: ButtonType; // Button type
   disabled?: boolean;
   style?: StyleColor;
 }
@@ -16,7 +16,7 @@ export const ActionButton: React.FC<ActionButtonProps> = ({
   customClass = 'w-1/4',
   children,
   onClick,
-  type = 'button',
+  type = ButtonType.Button,
   style = StyleColor.Primary,
   disabled = false
 }) => {

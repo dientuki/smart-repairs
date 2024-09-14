@@ -43,13 +43,17 @@ function ViewCardModal() {
   return (
     <ModalLayout>
       {(modal.params.order == order.$id) &&
-          <div className="h-full text-gray-950 dark:text-white">
+
+          <div className="h-full text-gray-950 dark:text-white flex flex-col">
+
             <h2 className="flex flex-row items-center gap-2 px-5 py-3 text-2xl font-bold tracking-tight sm:text-3xl">
               <Icon size={7} icon={DevicePhoneMobileIcon} />
               <span>{order.brand} {order.deviceCommercialName}{order.deviceTechName && ` (${order.deviceTechName})`}</span>
             </h2>
-            <div className="flex flex-row border-t border-gray-200 dark:border-white/10 px-5 py-3 text-base">
-              <div className="basis-3/4 pr-6 overflow-y-scroll mr-3">
+
+            <div className="flex flex-row flex-grow border-t border-gray-200 dark:border-white/10 px-5 py-3 text-base min-h-0">
+
+              <div className="basis-3/4 pr-4 mr-3 flex flex-col gap-6 overflow-y-scroll min-h-full max-h-full">
                 <div className="flex flex-row items-center gap-2">
                   <Icon size={7} icon={HashtagIcon} />
                   <span className="text-1xl font-bold tracking-tight sm:text-2xl"><b>Serie:</b> {order.deviceSerial ? order.deviceSerial : "Serial number not available"}</span>
@@ -57,23 +61,23 @@ function ViewCardModal() {
                 <Description />
                 <Diagnosis />
                 <Comments orderId={order.$id} comments={order.comments?.length ? order.comments : []}/>
+                <Comments orderId={order.$id} comments={order.comments?.length ? order.comments : []}/>
               </div>
-              <div className="basis-1/4 flex flex-col gap-3">
+
+              <div className="basis-1/4 flex flex-col gap-4 overflow-y-scroll min-h-full max-h-full pr-2 pl-1">
                 <div style={dynamicStyles(StyleColor.Info)} className="text-center justify-center gap-x-1 rounded-md text-base font-medium ring-1 ring-inset px-2  py-1 bg-custom-50 text-custom-600 ring-custom-600/10 dark:bg-custom-400/10 dark:text-custom-400 dark:ring-custom-400/30">{t(`status.${order.status}`)}</div>
                 <Details />
                 <DeviceCheck />
                 <DeviceCheck />
                 <ActionButton
                   onClick={handleUpdateDeviceUnit}
-                  customClass="w-full"
-                  type="button">
+                  customClass="w-full">
                     { order.deviceUnitId ? t('button.update') : t('button.validate') } {t('device')}
                 </ActionButton>
                 <ActionButton
                   customClass="w-full"
                   disabled={order.deviceUnitId == null && !order.hasBudget}
-                  onClick={handleBudgetModal}
-                  type="button">
+                  onClick={handleBudgetModal}>
                     { t('button.quote') }
                 </ActionButton>
               </div>
