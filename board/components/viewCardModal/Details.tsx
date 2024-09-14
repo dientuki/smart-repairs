@@ -16,7 +16,7 @@ export const Details = () => {
       </div>
       <div className="flex items-center justify-between w-full">
       <p className="w-1/3">Whatsap</p>
-          <a target="_blank" href={`https://wa.me/${order.customerPhone}`} title="Llamar a guasa" className="w-2/3 flex flex-row gap-1 items-center ">
+          <a target="_blank" href={`https://wa.me/${order.customerPhone}`} title="Llamar a guasa" className="w-2/3 flex flex-row gap-1 items-center " rel="noreferrer">
             <Avatar unstyled={true} name="Whatsap" maxInitials={1} round={false} size="28" src="/icons/whatsapp.svg" />
             <span className="truncate">{order.customerPhone}</span>
           </a>

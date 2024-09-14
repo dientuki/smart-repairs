@@ -37,7 +37,7 @@ interface OrderComment {
 
 interface NewOrder {
   customerId: string | null | undefined;
-  observation: String;
+  observation: string;
   damages: [damage];
   damageDescription: string;
   features: [feature];

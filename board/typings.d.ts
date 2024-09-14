@@ -84,10 +84,10 @@ interface Images {
 
 interface Step3data {
     damages: [damage];
-    damageDescription: String;
+    damageDescription: string;
     features: [feature];
-    featureDescription: String;
-    observation: String;
+    featureDescription: string;
+    observation: string;
 }
 
 
@@ -108,7 +108,7 @@ interface DeviceType {
 }
 
 interface DeviceCheck {
-    deviceTypeId: String,
+    deviceTypeId: string,
     damages: [damage];
     features: [feature];
 }
