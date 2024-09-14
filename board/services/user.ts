@@ -12,5 +12,5 @@ export const getCurrentUser = async(): Promise<User> => {
     `);
     handleGraphQLErrors(response.errors);
 
-    return response.data.user as User;
+    return response.data.currentUser as User;
 }
