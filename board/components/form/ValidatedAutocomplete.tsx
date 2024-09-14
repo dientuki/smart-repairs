@@ -1,6 +1,17 @@
 import { Field, Label } from "@headlessui/react";
-import { Autocomplete, TextField, Skeleton, createFilterOptions } from '@mui/material';
-import { Controller, Control, FieldValues, RegisterOptions, FieldErrors } from 'react-hook-form';
+import {
+  Autocomplete,
+  TextField,
+  Skeleton,
+  createFilterOptions,
+} from "@mui/material";
+import {
+  Controller,
+  Control,
+  FieldValues,
+  RegisterOptions,
+  FieldErrors,
+} from "react-hook-form";
 import ErrorMessage from "./ErrorMessage";
 
 // Define el tipo para las opciones del Autocomplete
@@ -16,10 +27,14 @@ interface ValidatedAutocompleteProps {
 
   rules?: RegisterOptions;
   errors?: FieldErrors<FieldValues>;
-  value?: OptionType | null,
+  value?: OptionType | null;
   disableClearable?: boolean;
   disabled?: boolean;
-  onChange?: (event: React.SyntheticEvent, newValue: OptionType | null, reason?: string) => void;
+  onChange?: (
+    event: React.SyntheticEvent,
+    newValue: OptionType | null,
+    reason?: string,
+  ) => void;
   filterOptions?: (options: any, params: any) => OptionType[];
 }
 
@@ -28,10 +43,12 @@ const defaultFilterOptions = (options: OptionType[], params: any) => {
 
   const { inputValue } = params;
   // Suggest the creation of a new value
-  const isExisting = options.some((option: OptionType) => inputValue === option.label);
-  if (inputValue !== '' && !isExisting) {
+  const isExisting = options.some(
+    (option: OptionType) => inputValue === option.label,
+  );
+  if (inputValue !== "" && !isExisting) {
     filtered.push({
-      id: 'new',
+      id: "new",
       label: inputValue,
     });
   }
@@ -52,17 +69,20 @@ const ValidatedAutocomplete: React.FC<ValidatedAutocompleteProps> = ({
   filterOptions = defaultFilterOptions,
   value,
   disabled = false,
-  errors }) => {
+  errors,
+}) => {
   return (
     <Field>
-      <Label className="first-letter:uppercase block mb-2 text-base font-medium text-gray-900">{label}</Label>
+      <Label className='first-letter:uppercase block mb-2 text-base font-medium text-gray-900'>
+        {label}
+      </Label>
       {isLoading && !disabled ? (
-        <Skeleton variant="rectangular" height={40} />
+        <Skeleton variant='rectangular' height={40} />
       ) : (
         <Controller
           name={name}
           control={control}
-          defaultValue=""
+          defaultValue=''
           rules={rules}
           render={() => (
             <Autocomplete
@@ -82,10 +102,12 @@ const ValidatedAutocomplete: React.FC<ValidatedAutocompleteProps> = ({
               renderInput={(params) => (
                 <TextField
                   {...params}
-                  size="small"
+                  size='small'
                   className={`bg-gray-50 border border-gray-300 text-gray-900 text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ${
-                errors?.[name] ? 'bg-red-50 border-red-500 text-red-900 placeholder-red-700 focus:ring-red-500 focus:border-red-500' : ''
-              }`}
+                    errors?.[name]
+                      ? "bg-red-50 border-red-500 text-red-900 placeholder-red-700 focus:ring-red-500 focus:border-red-500"
+                      : ""
+                  }`}
                 />
               )}
             />

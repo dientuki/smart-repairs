@@ -1,4 +1,4 @@
-import { create } from 'zustand'
+import { create } from "zustand";
 
 interface BrandStore {
   brands: OptionType[];
@@ -28,5 +28,4 @@ export const useBrandStore = create<BrandStore>((set) => ({
       }
     });
   },
-
 }));

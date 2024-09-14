@@ -1,9 +1,8 @@
 import { graphqlRequest, handleGraphQLErrors } from "@/helper/graphqlHelpers";
 import { extra } from "@/helper/reduceHelpers";
 
-export const createDevice = async(device: NewDevice) => {
-
-    const response = await graphqlRequest(`
+export const createDevice = async (device: NewDevice) => {
+  const response = await graphqlRequest(`
                 mutation {
                     addDevice(device: {
                         typeid: "${device.typeid}"
@@ -16,13 +15,13 @@ export const createDevice = async(device: NewDevice) => {
                 }
             `);
 
-    handleGraphQLErrors(response.errors);
+  handleGraphQLErrors(response.errors);
 
-    return response.data.addDevice.id;
-}
+  return response.data.addDevice.id;
+};
 
-export const updateDevice = async(device: NewDevice) => {
-    const response = await graphqlRequest(`
+export const updateDevice = async (device: NewDevice) => {
+  const response = await graphqlRequest(`
                 mutation {
                     updateDevice(device: {
                         id: "${device.id}"
@@ -34,13 +33,16 @@ export const updateDevice = async(device: NewDevice) => {
                 }
             `);
 
-    handleGraphQLErrors(response.errors);
+  handleGraphQLErrors(response.errors);
 
-    return response.data.updateDevice;
-}
+  return response.data.updateDevice;
+};
 
-export const getDevicesByTypeAndBrand = async(type:string, brand:string): Promise<OptionType[]> => {
-    const response = await graphqlRequest(`
+export const getDevicesByTypeAndBrand = async (
+  type: string,
+  brand: string,
+): Promise<OptionType[]> => {
+  const response = await graphqlRequest(`
         query {
             devicesByTypeAndBrand(typeId: "${type}", brandId: "${brand}") {
                     id
@@ -50,7 +52,7 @@ export const getDevicesByTypeAndBrand = async(type:string, brand:string): Promis
         }
     `);
 
-    handleGraphQLErrors(response.errors);
+  handleGraphQLErrors(response.errors);
 
-    return extra(response.data.devicesByTypeAndBrand);
-}
+  return extra(response.data.devicesByTypeAndBrand);
+};

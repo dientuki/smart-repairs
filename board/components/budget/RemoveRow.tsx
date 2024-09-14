@@ -8,12 +8,12 @@ export const RemoveRow = ({ row, table }) => {
   };
 
   return (
-    <div className="flex justify-center items-center">
-      { row.index > 1 &&
-        <button className="text-red-500 hover:text-red-600" onClick={removeRow}>
-            <XCircleIcon className="h-5 w-5" />
+    <div className='flex justify-center items-center'>
+      {row.index > 1 && (
+        <button className='text-red-500 hover:text-red-600' onClick={removeRow}>
+          <XCircleIcon className='h-5 w-5' />
         </button>
-      }
+      )}
     </div>
-  )
-}
+  );
+};

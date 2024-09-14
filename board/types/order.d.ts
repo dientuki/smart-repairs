@@ -8,19 +8,19 @@ interface Order {
   assigneeAvatar: string | undefined;
   diagnosis: string | undefined;
   status: TypedColumn;
-  brand: string,
-  brandImage: string,
-  deviceType: string,
-  deviceUnitId: string | null,
-  deviceTypeImage?: string,
-  deviceCommercialName: string,
-  deviceTechName?: string,
-  deviceSerial?: string,
-  customerFullName: string,
-  customerPhone?: string,
-  observation: string,
-  comments?: OrderComment[],
-  commentsQuantity?: number,
+  brand: string;
+  brandImage: string;
+  deviceType: string;
+  deviceUnitId: string | null;
+  deviceTypeImage?: string;
+  deviceCommercialName: string;
+  deviceTechName?: string;
+  deviceSerial?: string;
+  customerFullName: string;
+  customerPhone?: string;
+  observation: string;
+  comments?: OrderComment[];
+  commentsQuantity?: number;
   hasBudget: boolean;
 }
 

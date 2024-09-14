@@ -1,8 +1,8 @@
 import { graphqlRequest, handleGraphQLErrors } from "@/helper/graphqlHelpers";
 import { extra } from "@/helper/reduceHelpers";
 
-export const getDiscounts = async(): Promise<OptionType[]> => {
-    const response = await graphqlRequest(`
+export const getDiscounts = async (): Promise<OptionType[]> => {
+  const response = await graphqlRequest(`
         query {
             discounts {
                 id
@@ -11,13 +11,13 @@ export const getDiscounts = async(): Promise<OptionType[]> => {
             }
         }
     `);
-    handleGraphQLErrors(response.errors);
+  handleGraphQLErrors(response.errors);
 
-    return extra(response.data.discounts);
-}
+  return extra(response.data.discounts);
+};
 
-export const getServices = async(): Promise<OptionType[]> => {
-    const response = await graphqlRequest(`
+export const getServices = async (): Promise<OptionType[]> => {
+  const response = await graphqlRequest(`
         query {
             services {
                 id
@@ -26,7 +26,7 @@ export const getServices = async(): Promise<OptionType[]> => {
             }
         }
     `);
-    handleGraphQLErrors(response.errors);
+  handleGraphQLErrors(response.errors);
 
-    return extra(response.data.services);
-}
+  return extra(response.data.services);
+};

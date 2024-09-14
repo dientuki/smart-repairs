@@ -1,18 +1,17 @@
 import { TypedColumn } from "@/types/enums";
 
 export const updateStatus = async (taskId: string, columnId: TypedColumn) => {
-
-  const data = await fetch('/graphql', {
-    method: 'POST',
+  const data = await fetch("/graphql", {
+    method: "POST",
     headers: {
-        'Content-Type': 'application/json',
+      "Content-Type": "application/json",
     },
     body: JSON.stringify({
-        query: `
+      query: `
             mutation {
               updateOrderStatus(id: "${taskId}", status: "${columnId}")
           }
-        `
-    })
+        `,
+    }),
   });
-}
+};
