@@ -1,7 +1,3 @@
-import { TypedColumn } from "./types/enums";
-
-
-
 interface DeviceInfo {
     id: string;
     label: string;
