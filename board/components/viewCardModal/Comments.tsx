@@ -41,7 +41,7 @@ function Comments({ orderId, comments }: Props) {
     const comment = await addComment(newComment);
     setComments(currentComments => [...currentComments, comment]);
 
-    for (let [key, column] of board.columns.entries()) {
+    for (const [key, column] of board.columns.entries()) {
       const order = column.orders.findIndex((order: Order) => order.$id === orderId);
       if (order != -1) {
         board.columns.get(key).orders[order].commentsQuantity++;
@@ -58,7 +58,7 @@ function Comments({ orderId, comments }: Props) {
     setComments(currentComments => currentComments.filter(comment => comment.id !== id));
     deleteComment(id);
 
-    for (let [key, column] of board.columns.entries()) {
+    for (const [key, column] of board.columns.entries()) {
       const order = column.orders.findIndex((order: Order) => order.$id === orderId);
       if (order != -1) {
         board.columns.get(key).orders[order].commentsQuantity--;

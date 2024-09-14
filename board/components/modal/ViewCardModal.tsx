@@ -68,7 +68,7 @@ function ViewCardModal() {
                 <div className="border border-gray-300 p-3 rounded mt-4">
                   <p className="my-2">Fecha de entrada: {order.createdAtDate?.toDateString()} {order.createdAtDate?.toLocaleTimeString()}</p>
                   <p className="my-2">Cliente: {order.customerFullName}</p>
-                  <p className="my-2">Whatsap: <a target="_blank" href={`https://wa.me/${order.customerPhone}`}>whatsap</a></p>
+                  <p className="my-2">Whatsap: <a target="_blank" href={`https://wa.me/${order.customerPhone}`} rel="noreferrer">whatsap</a></p>
                   <p className="my-2">Tecnico: Usuario</p>
                   <p className="my-2">Vendedor: {order.author}</p>
                 </div>

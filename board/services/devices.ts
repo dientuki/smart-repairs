@@ -39,7 +39,7 @@ export const updateDevice = async(device: NewDevice) => {
     return response.data.updateDevice;
 }
 
-export const getDevicesByTypeAndBrand = async(type:String, brand:String): Promise<OptionType[]> => {
+export const getDevicesByTypeAndBrand = async(type:string, brand:string): Promise<OptionType[]> => {
     const response = await graphqlRequest(`
         query {
             devicesByTypeAndBrand(typeId: "${type}", brandId: "${brand}") {
