@@ -39,7 +39,7 @@
         "email": "email",
         "firstname": "nombre",
         "lastname": "apellido",
-        "observation": "observación",
+        "observation": "falla presentada",
         "phone": "telefono",
         "serial": "numero de imei\/serie",
         "type": "tipo de equipo",
@@ -47,6 +47,16 @@
         "unlock_code": "codigo de desbloqueo",
         "unlock_type": "tipo de desbloqueo",
         "url": "url"
+    },
+
+    "order" : {
+        "comment": "comentario",
+        "comments": "comentarios",
+        "description": "descripción inicial del problema",
+        "diagnosis": "diagnostico",
+        "no_diagnosis": "sin diagnostico",
+        "serial": "numero de imei\/serie",
+        "no_serial": "no disponible"
     },
 
     "private": "privado",

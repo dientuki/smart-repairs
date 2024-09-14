@@ -47,6 +47,7 @@ type Order {
     creator: User!
     assignee: User
     hasBudget: Boolean!
+    diagnosis: String
 }
 
 type Orders {

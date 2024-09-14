@@ -73,7 +73,7 @@ export const Comments = ({ orderId, comments }: Props) => {
       <div className="flex flex-row justify-between">
         <div className="flex flex-row items-center gap-2">
           <Icon size={7} icon={ChatBubbleOvalLeftEllipsisIcon} />
-          <span className="text-1xl font-bold tracking-tight sm:text-2xl">Comentarios ({currentComments.length})</span>
+          <span className="text-1xl font-bold tracking-tight sm:text-2xl">{t('comments')} ({currentComments.length})</span>
         </div>
         <div>Button</div>
       </div>
