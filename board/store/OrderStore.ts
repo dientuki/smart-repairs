@@ -14,7 +14,7 @@ interface CreateOrderSelectedData {
 }
 interface OrderStore {
     order: Order,
-    tmpOrder: any,
+    tmpOrder: NewOrder,
     getOrder: (id: string) => Promise<void>,
 
     updateCommentVisibility: (commentId: string, isPublic: boolean) => void
@@ -43,7 +43,7 @@ interface OrderStore {
 
 export const useOrderStore = create<OrderStore>((set) => ({
   order: {} as Order,
-  tmpOrder: null,
+  tmpOrder:  {} as NewOrder,
   getOrder: async(id: string) => {
     const order = await getOrder(id);
     set({ order });
@@ -132,7 +132,7 @@ export const useOrderStore = create<OrderStore>((set) => ({
 
   clearAfterCreateOrder: () => {
     set({
-      tmpOrder: null,
+      tmpOrder: {} as NewOrder,
       createOrderSelectedData: {
         customer: null,
         deviceId: null,

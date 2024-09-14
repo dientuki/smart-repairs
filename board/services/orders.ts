@@ -2,7 +2,6 @@ import { arrayToString } from "@/helper/stringHelpers";
 import { device, extra } from "@/helper/reduceHelpers";
 import { graphqlRequest, handleGraphQLErrors } from "@/helper/graphqlHelpers";
 import { TypedColumn } from "@/types/enums";
-import { userInfo } from "os";
 
 export const createOrder = async (newOrder: NewOrder) => {
 
@@ -40,9 +39,11 @@ export const getOrder = async (id: string) => {
 
                 creator {
                     name
+                    imageUrl
                 }
                 assignee {
                     name
+                    imageUrl
                 }
 
                 customer {
@@ -111,7 +112,7 @@ export const getOrder = async (id: string) => {
         $id: response.data.order.id,
         createdAt: response.data.order.created_at,
         createdAtDate: new Date(response.data.order.created_at),
-        creator: response.data.order.creator.name,
+        author: response.data.order.creator.name,
         assignee: response.data.order.assignee?.name,
         status: response.data.order.status,
         brand: response.data.order.device.brand.name,
