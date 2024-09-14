@@ -6,7 +6,8 @@
         "build": "vite build",
         "linter": "eslint board/",
         "linter-fix": "eslint board/ --fix",
-        "linter-report": "eslint --format=html board/ > eslint-report.html"
+        "linter-report": "eslint --format=html board/ > eslint-report.html",
+        "prettier": "prettier --write board/**/*.{js,ts,jsx,tsx}"
     },
     "dependencies": {
         "@emotion/react": "^11.13.3",
