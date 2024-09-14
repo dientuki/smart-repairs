@@ -1,5 +1,5 @@
-import { create } from 'zustand'
-import { getDiscounts, getServices } from '@/services/serviceJobs'; // Asegúrate de que la ruta sea correcta
+import { create } from "zustand";
+import { getDiscounts, getServices } from "@/services/serviceJobs"; // Asegúrate de que la ruta sea correcta
 import { clearState } from "@/helper/storeHelpers";
 
 interface ServiceJobStore {
@@ -13,25 +13,25 @@ interface ServiceJobStore {
 }
 
 const defaultState = {
-    discounts: [] as OptionType[],
-    services: [] as OptionType[],
+  discounts: [] as OptionType[],
+  services: [] as OptionType[],
 };
 
 export const useServiceJobStore = create<ServiceJobStore>((set) => ({
-    discounts: defaultState.discounts,
-    services: defaultState.services,
+  discounts: defaultState.discounts,
+  services: defaultState.services,
 
-    clear: (keys: string | string[]) => clearState(keys, defaultState, set),
+  clear: (keys: string | string[]) => clearState(keys, defaultState, set),
 
-    setDiscounts: (discounts: OptionType[]) => set({ discounts }),
-    setServices: (services: OptionType[]) => set({ services }),
+  setDiscounts: (discounts: OptionType[]) => set({ discounts }),
+  setServices: (services: OptionType[]) => set({ services }),
 
-    getDiscounts: async () => {
-        const discount = await getDiscounts();
-        set({ discounts: discount });
-    },
-    getServices: async () => {
-        const service = await getServices();
-        set({ services: service });
-    }
+  getDiscounts: async () => {
+    const discount = await getDiscounts();
+    set({ discounts: discount });
+  },
+  getServices: async () => {
+    const service = await getServices();
+    set({ services: service });
+  },
 }));

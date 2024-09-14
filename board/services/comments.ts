@@ -1,6 +1,9 @@
 import { graphqlRequest } from "@/helper/graphqlHelpers";
 
-export const updateCommentVisibility = (commentId: string, isPublic: boolean) => {
+export const updateCommentVisibility = (
+  commentId: string,
+  isPublic: boolean,
+) => {
   graphqlRequest(`
     mutation {
       updateCommentVisibility(commentId: "${commentId}", isPublic: ${isPublic})
@@ -14,7 +17,7 @@ export const updateComment = (commentId: string, text: string) => {
       updateComment(commentId: "${commentId}", text: "${text}")
     }
   `);
-}
+};
 
 export const deleteComment = (commentId: string) => {
   graphqlRequest(`
@@ -22,10 +25,9 @@ export const deleteComment = (commentId: string) => {
       deleteComment(commentId: "${commentId}")
     }
   `);
-}
+};
 
-export const addComment = async (newComment:NewOrderComment) => {
-
+export const addComment = async (newComment: NewOrderComment) => {
   const data = await graphqlRequest(`
             mutation {
               addComment(
@@ -49,13 +51,13 @@ export const addComment = async (newComment:NewOrderComment) => {
   const json = await data.json();
 
   return {
-          id: json.data.addComment.id,
-          comment: json.data.addComment.comment,
-          createdAt: json.data.addComment.created_at,
-          createdAtDate: new Date(json.data.addComment.created_at),
-          isPublic: json.data.addComment.is_public,
-          userId: json.data.addComment.user_id,
-          userName: json.data.addComment.user.name,
-          wasEdited: json.data.addComment.was_edited
-      } as OrderComment;
-}
+    id: json.data.addComment.id,
+    comment: json.data.addComment.comment,
+    createdAt: json.data.addComment.created_at,
+    createdAtDate: new Date(json.data.addComment.created_at),
+    isPublic: json.data.addComment.is_public,
+    userId: json.data.addComment.user_id,
+    userName: json.data.addComment.user.name,
+    wasEdited: json.data.addComment.was_edited,
+  } as OrderComment;
+};

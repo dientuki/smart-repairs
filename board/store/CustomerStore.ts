@@ -1,8 +1,12 @@
-import { create } from 'zustand'
-import { createCustomer, getCustomers, updateCustomer } from "@/services/customers";
+import { create } from "zustand";
+import {
+  createCustomer,
+  getCustomers,
+  updateCustomer,
+} from "@/services/customers";
 import { extra } from "@/helper/reduceHelpers";
-import { OperationStatus } from '@/types/enums';
-import { useOrderStore } from './OrderStore';
+import { OperationStatus } from "@/types/enums";
+import { useOrderStore } from "./OrderStore";
 
 interface CustomerStore {
   customers: OptionType[];
@@ -22,13 +26,16 @@ export const useCustomerStore = create<CustomerStore>((set) => ({
     set({ customers });
   },
 
-  updateOrCreateCustomer: async (customer: CustomerInput): Promise<OperationStatus> => {
-    const setCreateOrderSelectedData = useOrderStore.getState().setCreateOrderSelectedData;
+  updateOrCreateCustomer: async (
+    customer: CustomerInput,
+  ): Promise<OperationStatus> => {
+    const setCreateOrderSelectedData =
+      useOrderStore.getState().setCreateOrderSelectedData;
 
     if (!customer.id) {
       const addedCustomer = await createCustomer(customer);
-      customer.id = addedCustomer
-      customer.label = `${customer.firstname} ${customer.lastname}`
+      customer.id = addedCustomer;
+      customer.label = `${customer.firstname} ${customer.lastname}`;
       set((state) => ({
         customers: [...state.customers, extra([customer])[0]],
       }));
@@ -37,11 +44,11 @@ export const useCustomerStore = create<CustomerStore>((set) => ({
       return OperationStatus.CREATED;
     } else {
       const updatedCustomer = await updateCustomer(customer);
-      customer.label = `${customer.firstname} ${customer.lastname}`
+      customer.label = `${customer.firstname} ${customer.lastname}`;
       if (updatedCustomer) {
         set((state) => ({
           customers: state.customers.map((c) =>
-            c.id === updatedCustomer.id ? extra([customer])[0] : c
+            c.id === updatedCustomer.id ? extra([customer])[0] : c,
           ),
         }));
         setCreateOrderSelectedData({ customer: extra([customer])[0] });

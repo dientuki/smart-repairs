@@ -1,4 +1,4 @@
-import { create } from 'zustand'
+import { create } from "zustand";
 
 interface DeviceTypeStore {
   deviceTypes: OptionType[];
@@ -15,7 +15,9 @@ export const useDeviceTypeStore = create<DeviceTypeStore>((set) => ({
 
   updateDeviceTypeInStore: (deviceType: OptionType) => {
     set((state) => {
-      const existingIndex = state.deviceTypes.findIndex((b) => b.id === deviceType.id);
+      const existingIndex = state.deviceTypes.findIndex(
+        (b) => b.id === deviceType.id,
+      );
 
       if (existingIndex >= 0) {
         // Update
@@ -28,5 +30,4 @@ export const useDeviceTypeStore = create<DeviceTypeStore>((set) => ({
       }
     });
   },
-
 }));
