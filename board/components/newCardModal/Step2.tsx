@@ -9,7 +9,12 @@ import { InputField, SimpleAutocomplete, ValidatedAutocomplete } from "@/compone
 import { capitalizeFirstLetter } from "@/helper/stringHelpers";
 import { Modal, NewDeviceUnitModal, PatternLockModal } from "@/components/modal";
 import { useDeviceStore, useOrderStore, useBrandStore, useDeviceTypeStore } from "@/store";
-import { UnlockType } from "@/types/enums";
+
+enum UnlockType {
+  NONE = 'none',
+  CODE = 'code',
+  PATTERN = 'pattern',
+}
 
 const filter = createFilterOptions<OptionType>();
 type Step2Props = {
