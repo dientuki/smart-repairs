@@ -68,38 +68,6 @@ interface DeviceRepared {
     deviceId?: string;
 }
 
-interface Order {
-    $id: string;
-    createdAt: timestamp;
-    createdAtDate: Date;
-    author: string;
-    status: TypedColumn;
-    brand: string,
-    brandImage: string,
-    deviceType: string,
-    deviceUnitId: string | null,
-    deviceTypeImage?: string,
-    deviceCommercialName: string,
-    deviceTechName?: string,
-    deviceSerial?: string,
-    customerFullName: string,
-    customerPhone?: string,
-    observation: string,
-    comments?: OrderComment[],
-    commentsQuantity?: number,
-    hasBudget: boolean;
-}
-
-interface OrderComment {
-    id: string;
-    comment: string;
-    createdAt: string;
-    createdAtDate: Date;
-    isPublic: boolean;
-    userId: string;
-    userName: string;
-    wasEdited: boolean;
-}
 
 interface NewOrderComment {
     comment: string;
@@ -112,16 +80,7 @@ interface Images {
     fileId: string;
 }
 
-interface NewOrder {
-    customerId: String | null | undefined;
-    observation: String;
-    damages: [damage];
-    damageDescription: String;
-    features: [feature];
-    featureDescription: String;
-    tempDeviceUnitId: String;
-    deviceid: String;
-}
+
 
 interface Step3data {
     damages: [damage];
@@ -131,15 +90,7 @@ interface Step3data {
     observation: String;
 }
 
-interface damage {
-    value: string;
-    checked: boolean;
-}
 
-interface feature {
-    value: string;
-    checked: boolean;
-}
 
 interface checks {
     damages: [damage];
