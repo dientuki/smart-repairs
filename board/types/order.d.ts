@@ -6,6 +6,7 @@ interface Order {
   creatorAvatar: string;
   assignee: string | null;
   assigneeAvatar: string | null;
+  diagnosis: string | null;
   status: TypedColumn;
   brand: string,
   brandImage: string,

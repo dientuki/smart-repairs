@@ -36,6 +36,7 @@ export const getOrder = async (id: string) => {
                 created_at
                 observation
                 hasBudget
+                diagnosis
 
                 creator {
                     name
@@ -116,6 +117,7 @@ export const getOrder = async (id: string) => {
         creatorAvatar: response.data.order.creator.imageUrl,
         assignee: response.data.order.assignee?.name,
         assigneeAvatar: response.data.order.assignee?.imageUrl,
+        diagnosis: response.data.order.diagnosis,
         status: response.data.order.status,
         brand: response.data.order.device.brand.name,
         brandImage: response.data.order.device.brand.imageUrl,

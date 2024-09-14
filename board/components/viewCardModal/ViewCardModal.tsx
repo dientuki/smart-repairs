@@ -52,7 +52,7 @@ export const ViewCardModal = () => {
               <div className="basis-3/4 pr-4 mr-3 flex flex-col gap-6 overflow-y-scroll min-h-full max-h-full">
                 <div className="flex flex-row items-center gap-2">
                   <Icon size={7} icon={HashtagIcon} />
-                  <span className="text-1xl font-bold tracking-tight sm:text-2xl"><b>Serie:</b> {order.deviceSerial ? order.deviceSerial : "Serial number not available"}</span>
+                  <span className="text-1xl font-bold tracking-tight sm:text-2xl first-letter:uppercase"><b>{t('order.serial')}:</b> {order.deviceSerial ? order.deviceSerial : t('order.no_serial')}</span>
                 </div>
                 <Description />
                 <Diagnosis />
