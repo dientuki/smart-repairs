@@ -14,6 +14,7 @@ class UserQueries
             'id' => $this->getUserId(),
             'name' => $this->getUserName(),
             'imageUrl' => $this->getUserImageUrl(),
+            'package' => $this->getTeamPackage(),
         ];
     }
 }

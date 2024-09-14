@@ -7,6 +7,7 @@ export const getCurrentUser = async(): Promise<User> => {
                 id
                 name
                 imageUrl
+                package
             }
         }
     `);
