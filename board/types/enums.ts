@@ -4,12 +4,6 @@ export enum OperationStatus {
   NO_CHANGE = 'NO_CHANGE',
 }
 
-export enum UnlockType {
-  NONE = 'none',
-  CODE = 'code',
-  PATTERN = 'pattern',
-}
-
 export enum DiscountType {
   None = 'None',
   Percentage = 'Percentage',
@@ -32,4 +26,10 @@ export enum StyleColor {
   Primary = 'primary',
   Success = 'success',
   Warning = 'warning',
+}
+
+export enum ButtonType {
+  Button = 'button',
+  Submit = 'submit',
+  Reset = 'reset',
 }
