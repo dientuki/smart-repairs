@@ -61,7 +61,6 @@ function ViewCardModal() {
                 <Description />
                 <Diagnosis />
                 <Comments orderId={order.$id} comments={order.comments?.length ? order.comments : []}/>
-                <Comments orderId={order.$id} comments={order.comments?.length ? order.comments : []}/>
               </div>
 
               <div className="basis-1/4 flex flex-col gap-4 overflow-y-scroll min-h-full max-h-full pr-2 pl-1">

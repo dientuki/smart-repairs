@@ -26,7 +26,7 @@ class OrderSeeder extends Seeder
             'customer_id' => $customers[0]->id,
             'status' => OrderStatusEnum::Budgeting,
             'team_id' => $team,
-            'created_by' => $users[4]->id,
+            'created_by' => $users[0]->id,
             'assigned_to' => $users[3]->id,
             'device_id' => $devices[0]->id,
             'device_unit_id' => $devicesUnit[0]->id,

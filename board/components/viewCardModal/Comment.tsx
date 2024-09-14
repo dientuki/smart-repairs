@@ -1,12 +1,13 @@
 import { useOrderStore } from "@/store/OrderStore";
 import { Textarea } from "@headlessui/react";
-import { LockClosedIcon, LockOpenIcon } from "@heroicons/react/24/outline";
+
 import { useState } from "react";
 import Avatar from 'react-avatar';
 import Icon from "../Icon";
 import { ActionButton } from "../form";
 import { useTranslation } from "react-i18next";
 import { StyleColor } from "@/types/enums";
+import { LockStatus } from "./LockStatus";
 
 
 type Props = {
@@ -48,27 +49,23 @@ function Comment({ comment, onDelete }: Props) {
   };
 
   return (
-    <div>
+    <div className="flex flex-col gap-1">
         <div className="flex flex-row items-center gap-2">
 
-            <Avatar name={commentData.userName} round={true} size="28" src={commentData.userImage} />
+            <Avatar name={commentData.userName} round={true} size="28" maxInitials={2} src={commentData.userImage} />
 
             <div>{commentData.createdAtDate?.toDateString()} {commentData.createdAtDate?.toLocaleTimeString()}</div>
 
             {commentData.wasEdited && <div className="text-gray-500">Editado</div>}
 
-            <div className="cursor-pointer" onClick={toogleVisibility} >{commentData.isPublic ?
-              <><Icon icon={LockOpenIcon} size={4} additionalClasses="inline-block"/> Publico</>:
-              <><Icon icon={LockClosedIcon} size={4} additionalClasses="inline-block"/> Privado</>
-            }
-            </div>
+            <LockStatus toggleVisibility={toogleVisibility} status={commentData.isPublic} />
 
         </div>
 
         <div className="flex flex-col gap-3 ml-9">
           <div className="flex rounded-lg shadow-sm ring-1 transition duration-75 bg-white dark:bg-white/5 [&:not(:has(.fi-ac-action:focus))]:focus-within:ring-2 ring-gray-950/10 dark:ring-white/20 [&:not(:has(.fi-ac-action:focus))]:focus-within:ring-primary-600 dark:[&:not(:has(.fi-ac-action:focus))]:focus-within:ring-primary-500 overflow-hidden">
             <Textarea
-              className="block h-full w-full border-none bg-transparent px-3 py-1.5 text-base text-gray-950 placeholder:text-gray-400 focus:ring-0 disabled:text-gray-500 disabled:[-webkit-text-fill-color:theme(colors.gray.500)] disabled:placeholder:[-webkit-text-fill-color:theme(colors.gray.400)] dark:text-white dark:placeholder:text-gray-500 dark:disabled:text-gray-400 dark:disabled:[-webkit-text-fill-color:theme(colors.gray.400)] dark:disabled:placeholder:[-webkit-text-fill-color:theme(colors.gray.500)]  "
+              className="block h-full w-full border-none bg-transparent px-3 py-1.5 text-base text-gray-950 placeholder:text-gray-400 focus:ring-0 disabled:text-gray-500  dark:text-white dark:placeholder:text-gray-500 dark:disabled:text-gray-400 dark:disabled:[-webkit-text-fill-color:theme(colors.gray.400)] dark:disabled:placeholder:[-webkit-text-fill-color:theme(colors.gray.500)]  "
               defaultValue={commentData.comment}
               onClick={editComment}
               onChange={handleChange}

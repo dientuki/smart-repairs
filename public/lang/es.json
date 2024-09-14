@@ -49,6 +49,9 @@
         "url": "url"
     },
 
+    "private": "privado",
+    "public": "publico",
+
     "toast": {
         "error": {
             "data": "Error de datos",

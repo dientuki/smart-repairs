@@ -2,7 +2,10 @@ interface Order {
   $id: string;
   createdAt: timestamp;
   createdAtDate: Date;
-  author: string;
+  creator: string;
+  creatorAvatar: string;
+  assignee: string | null;
+  assigneeAvatar: string | null;
   status: TypedColumn;
   brand: string,
   brandImage: string,

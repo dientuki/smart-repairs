@@ -8,6 +8,7 @@ import { ChatBubbleOvalLeftEllipsisIcon, LockClosedIcon, LockOpenIcon } from "@h
 import Icon from "../Icon";
 import { ActionButton } from "../form";
 import { useTranslation } from "react-i18next";
+import { LockStatus } from "./LockStatus";
 
 type Props = {
   orderId: string
@@ -68,7 +69,7 @@ function Comments({ orderId, comments }: Props) {
   };
 
   return (
-    <div className="flex flex-col gap-1">
+    <div className="flex flex-col gap-2">
       <div className="flex flex-row justify-between">
         <div className="flex flex-row items-center gap-2">
           <Icon size={7} icon={ChatBubbleOvalLeftEllipsisIcon} />
@@ -81,29 +82,25 @@ function Comments({ orderId, comments }: Props) {
 
         <div className="flex flex-col gap-2">
           <div className="flex items-center gap-2">
-              <Avatar name="Juan Farias" round={true} size="28" />
+              <Avatar name="Juan Farias" round={true} size="28" maxInitials={2} />
               <div className="w-full flex rounded-lg shadow-sm ring-1 transition duration-75 bg-white dark:bg-white/5 [&:not(:has(.fi-ac-action:focus))]:focus-within:ring-2 ring-gray-950/10 dark:ring-white/20 [&:not(:has(.fi-ac-action:focus))]:focus-within:ring-primary-600 dark:[&:not(:has(.fi-ac-action:focus))]:focus-within:ring-primary-500 overflow-hidden">
                 <Textarea
-                  className="block h-full w-full border-none bg-transparent px-3 py-1.5 text-base text-gray-950 placeholder:text-gray-400 focus:ring-0 disabled:text-gray-500 disabled:[-webkit-text-fill-color:theme(colors.gray.500)] disabled:placeholder:[-webkit-text-fill-color:theme(colors.gray.400)] dark:text-white dark:placeholder:text-gray-500 dark:disabled:text-gray-400 dark:disabled:[-webkit-text-fill-color:theme(colors.gray.400)] dark:disabled:placeholder:[-webkit-text-fill-color:theme(colors.gray.500)]  "
+                  className="block h-full w-full border-none bg-transparent px-3 py-1.5 text-base text-gray-950 placeholder:text-gray-400 focus:ring-0 disabled:text-gray-500  dark:text-white dark:placeholder:text-gray-500 dark:disabled:text-gray-400 dark:disabled:[-webkit-text-fill-color:theme(colors.gray.400)] dark:disabled:placeholder:[-webkit-text-fill-color:theme(colors.gray.500)]  "
                   name="description" onChange={handleChange} defaultValue={text}
                 />
               </div>
           </div>
-          <div className="flex items-center gap-3 ml-9">
+          <div className="flex items-center gap-2 ml-9">
             <ActionButton
               onClick={saveComment}>
                 { t('button.save') }
             </ActionButton>
-            <div className="cursor-pointer" onClick={toogleVisibility} >{isPublic ?
-                <><LockOpenIcon className="h-4 w-4 inline-block" /> Publico</>:
-                <><LockClosedIcon className="h-4 w-4 inline-block" /> Privado</>
-              }
-            </div>
+            <LockStatus toggleVisibility={toogleVisibility} status={isPublic} />
           </div>
 
         </div>
 
-        <div className="flex flex-col gap-4 mt-3">
+        <div className="flex flex-col gap-2 mt-4">
           {currentComments && currentComments.map((comment) => (
               <Comment
                 key={comment.id}
