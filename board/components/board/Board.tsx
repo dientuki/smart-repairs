@@ -28,7 +28,7 @@ export const Board = () => {
   }, []);
 
   const handleOnDragEnd = (result: DropResult) => {
-    const { destination, source, type } = result;
+    const { destination, source } = result;
 
 
     // if destination is null, return early

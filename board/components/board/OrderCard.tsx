@@ -26,6 +26,7 @@ export const OrderCard = ({ order, index, id, innerRef, draggableProps, dragHand
         className="flex flex-col rounded-xl bg-white shadow-sm ring-1 ring-gray-950/5 dark:bg-white/5 dark:ring-white/10 overflow-hidden"
         draggable
         onClick={openCard}
+        id={`${id}-${index}`}
     >
       <div className="relative w-full aspect-video bg-cover bg-no-repeat" style={{backgroundImage: `url(${order.deviceTypeImage})`}}>
         <img src={order.brandImage} alt={order.brand} className="absolute top-2 left-2 h-8 w-auto object-contain" />
