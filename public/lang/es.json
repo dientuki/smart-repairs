@@ -20,7 +20,9 @@
         "save": "Guardar",
         "update": "Actualizar",
         "validate": "Validar",
-        "quote": "Presupuestar"
+        "quote": "Presupuestar",
+        "edit": "Editar",
+        "delete": "Eliminar"
     },
 
     "device": "equipo",
@@ -47,12 +49,24 @@
         "url": "url"
     },
 
+    "private": "privado",
+    "public": "publico",
+
     "toast": {
         "error": {
             "data": "Error de datos",
             "network": "Error de red",
             "form": "Error de formulario"
         }
+    },
+
+    "status": {
+        "ForBudgeting": "Para presupuesto",
+        "Budgeting": "Presupuestando",
+        "Budgeted": "Presupuestado",
+        "ToDo": "Para reparar",
+        "Repairing": "Reparando",
+        "Repaired": "Reparado"
     },
 
     "unlock_type" : {

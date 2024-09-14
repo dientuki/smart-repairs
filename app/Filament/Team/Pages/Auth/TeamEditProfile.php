@@ -10,7 +10,7 @@ class TeamEditProfile extends EditProfile
 {
     protected function getAvatarFormComponent(): Component
     {
-        return FileUpload::make('avatar_url')
+        return FileUpload::make('hash_filename')
                 ->directory('avatar')
                 ->hiddenLabel()
                 ->avatar()

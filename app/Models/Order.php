@@ -3,17 +3,21 @@
 namespace App\Models;
 
 use App\Enum\OrderStatusEnum;
+use App\Traits\HasTeamTrait;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
-class Order extends ModelWithTeam
+class Order extends ModelAuditable
 {
+    use HasTeamTrait;
+
     protected $fillable = [
         'customer_id',
         'team_id',
-        'user_id',
+        'created_by',
+        'assigned_to',
         'device_unit_id',
         'device_id',
         'diagnosis',
@@ -44,9 +48,14 @@ class Order extends ModelWithTeam
         return $this->hasMany(OrderComment::class)->orderBy('created_at', 'asc');
     }
 
-    public function author(): BelongsTo
+    public function creator(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'user_id', 'id');
+        return $this->belongsTo(User::class, 'created_by', 'id');
+    }
+
+    public function assignee(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'assigned_to', 'id');
     }
 
     public function budget(): HasOne

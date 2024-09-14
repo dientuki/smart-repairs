@@ -2,9 +2,7 @@
 
 namespace App\Models;
 
-use Filament\Facades\Filament;
-
-class StockSupplier extends ModelWithTeam
+class StockSupplier extends ModelAuditable
 {
     protected $fillable = [
         'stock_id',

@@ -1,12 +1,26 @@
+import { dynamicStyles } from "@/helper/componentsHelpers";
+import { StyleColor } from "@/types/enums";
 import React from 'react';
 
 interface IconProps {
   icon: React.ElementType;
+  size?: number;  // Tamaño opcional, por defecto será 5
   additionalClasses?: string;
+  style?: StyleColor;
 }
 
-const Icon: React.FC<IconProps> = ({ icon: IconComponent, additionalClasses = '' }) => {
-  return <IconComponent className={`h-5 w-5 text-gray-400 dark:text-gray-500 ${additionalClasses}`} />;
+const Icon: React.FC<IconProps> = ({
+  style = StyleColor.Gray,
+  icon: IconComponent,
+  size = 5,
+  additionalClasses = ''
+}) => {
+  return (
+    <IconComponent
+      style={dynamicStyles(style)}
+      className={`h-${size} w-${size} text-custom-400 dark:text-custom-500 ${additionalClasses}`}
+    />
+  );
 };
 
 export default Icon;

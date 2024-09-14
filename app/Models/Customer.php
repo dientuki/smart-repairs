@@ -2,10 +2,13 @@
 
 namespace App\Models;
 
+use App\Traits\HasTeamTrait;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 
-class Customer extends ModelWithTeam
+class Customer extends ModelAuditable
 {
+    use HasTeamTrait;
+
     protected $fillable = ['first_name', 'last_name', 'phone', 'email', 'team_id'];
 
     /**

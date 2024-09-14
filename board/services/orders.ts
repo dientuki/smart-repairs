@@ -1,6 +1,7 @@
 import { arrayToString } from "@/helper/stringHelpers";
 import { device, extra } from "@/helper/reduceHelpers";
 import { graphqlRequest, handleGraphQLErrors } from "@/helper/graphqlHelpers";
+import { TypedColumn } from "@/types/enums";
 
 export const createOrder = async (newOrder: NewOrder) => {
 
@@ -36,8 +37,13 @@ export const getOrder = async (id: string) => {
                 observation
                 hasBudget
 
-                author {
+                creator {
                     name
+                    imageUrl
+                }
+                assignee {
+                    name
+                    imageUrl
                 }
 
                 customer {
@@ -54,6 +60,7 @@ export const getOrder = async (id: string) => {
                     was_edited
                     user {
                         name
+                        imageUrl
                     }
                 }
 
@@ -93,6 +100,7 @@ export const getOrder = async (id: string) => {
             isPublic: comment.is_public,
             userId: comment.user_id,
             userName: comment.user.name,
+            userImage: comment.user.imageUrl,
             wasEdited: comment.was_edited
         });
 
@@ -104,7 +112,10 @@ export const getOrder = async (id: string) => {
         $id: response.data.order.id,
         createdAt: response.data.order.created_at,
         createdAtDate: new Date(response.data.order.created_at),
-        author: response.data.order.author.name,
+        creator: response.data.order.creator.name,
+        creatorAvatar: response.data.order.creator.imageUrl,
+        assignee: response.data.order.assignee?.name,
+        assigneeAvatar: response.data.order.assignee?.imageUrl,
         status: response.data.order.status,
         brand: response.data.order.device.brand.name,
         brandImage: response.data.order.device.brand.imageUrl,
@@ -194,7 +205,14 @@ export const getOrders = async () => {
     }, new Map<TypedColumn, Column>());
 
     // if column doesn have inprogress or done or order, create that column
-    const columnTypes: TypedColumn[] = ["for budgeting", "budgeting", "budgeted", "to do", "repairing", "repaired"];
+    const columnTypes: TypedColumn[] = [
+        TypedColumn.ForBudgeting,
+        TypedColumn.Budgeting,
+        TypedColumn.Budgeted,
+        TypedColumn.ToDo,
+        TypedColumn.Repairing,
+        TypedColumn.Repaired
+      ];
     for (const columnType of columnTypes) {
         if (!columns.get(columnType)) {
             columns.set(columnType, {

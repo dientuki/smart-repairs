@@ -1,3 +1,4 @@
+import { StyleColor } from "@/types/enums";
 
 // Function to clean classes by removing the last part after the last dash
 const cleanClass = (cls: string) => {
@@ -20,4 +21,13 @@ export const combineClasses = (defaultClasses: string, customClasses: string) =>
 
   // Combine custom classes with filtered default classes
   return [...customClassList, ...filteredDefaultClasses].join(' ');
+};
+
+export const dynamicStyles = (style: StyleColor): React.CSSProperties & Record<string, string> => {
+  const keys = ['50', '400', '500', '600'];
+
+  return keys.reduce((acc, key) => {
+    acc[`--c-${key}`] = `var(--${style}-${key})`;
+    return acc;
+  }, {} as Record<string, string>);
 };

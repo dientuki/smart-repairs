@@ -1,4 +1,3 @@
-import "react-modal-global/styles/modal.scss" // Imports essential styles for `ModalContainer`.
 import { ModalLayout } from "@/components/modal";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";

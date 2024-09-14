@@ -2,13 +2,14 @@
 
 namespace App\Models;
 
-use Filament\Facades\Filament;
+use App\Traits\HasTeamTrait;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 
-class Stock extends ModelWithTeam
+class Stock extends ModelAuditable
 {
+    use HasTeamTrait;
+
     protected $fillable = ['part_id', 'team_id', 'quantity', 'warning', 'price'];
 
     public function part(): BelongsTo

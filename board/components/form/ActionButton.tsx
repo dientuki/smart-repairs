@@ -1,30 +1,36 @@
 import React from 'react';
 import { Button } from '@headlessui/react';
-import { combineClasses } from "@/helper/componentsHelpers";
+import { combineClasses, dynamicStyles } from "@/helper/componentsHelpers";
+import { ButtonType, StyleColor } from "@/types/enums";
 
 interface ActionButtonProps {
   customClass?: string; // Can contain multiple classes separated by spaces
   children: React.ReactNode; // The content of the button
   onClick?: () => void; // Function to execute on click
-  type?: 'button' | 'submit' | 'reset'; // Button type
+  type?: ButtonType; // Button type
   disabled?: boolean;
+  style?: StyleColor;
 }
 
 export const ActionButton: React.FC<ActionButtonProps> = ({
   customClass = 'w-1/4',
   children,
   onClick,
-  type = 'button',
+  type = ButtonType.Button,
+  style = StyleColor.Primary,
   disabled = false
 }) => {
 
-  const defaultClasses = "text-center rounded-md bg-sky-600 px-3 py-1.5 text-base font-bold leading-6 text-white shadow-sm hover:bg-sky-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-600 focus:ring-4 focus:outline-none focus:ring-sky-300"
+
+  const defaultClasses = "relative grid-flow-col items-center justify-center font-semibold outline-none transition duration-75 focus-visible:ring-2 rounded-lg fi-color-custom fi-btn-color-danger fi-color-danger fi-size-md fi-btn-size-md gap-1.5 px-3 py-2 text-sm inline-grid shadow-sm bg-custom-600 text-white hover:bg-custom-500 focus-visible:ring-custom-500/50 dark:bg-custom-500 dark:hover:bg-custom-400 dark:focus-visible:ring-custom-400/50 fi-ac-action fi-ac-btn-action"
 
 
   return (
     <Button
+      style={dynamicStyles(style)}
       as="button"
       className={combineClasses(defaultClasses, customClass)}
+
       onClick={onClick}
       disabled={disabled}
       type={type}

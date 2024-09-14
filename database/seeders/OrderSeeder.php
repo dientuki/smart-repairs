@@ -16,7 +16,7 @@ class OrderSeeder extends Seeder
     {
         $customers = DB::table('customers')->get();
         $team = DB::table('teams')->first()->id;
-        $user = DB::table('users')->first()->id;
+        $users = DB::table('users')->get();
         $devicesUnit = DB::table('device_units')->get();
         $devices = DB::table('devices')->get();
 
@@ -26,7 +26,8 @@ class OrderSeeder extends Seeder
             'customer_id' => $customers[0]->id,
             'status' => OrderStatusEnum::Budgeting,
             'team_id' => $team,
-            'user_id' => $user,
+            'created_by' => $users[0]->id,
+            'assigned_to' => $users[3]->id,
             'device_id' => $devices[0]->id,
             'device_unit_id' => $devicesUnit[0]->id,
             'created_at' => now(),
@@ -39,7 +40,7 @@ class OrderSeeder extends Seeder
             'customer_id' => $customers[0]->id,
             'status' => OrderStatusEnum::Budgeting,
             'team_id' => $team,
-            'user_id' => $user,
+            'created_by' => $users[4]->id,
             'device_id' => $devices[1]->id,
             'device_unit_id' => $devicesUnit[2]->id,
             'created_at' => now(),
@@ -52,7 +53,7 @@ class OrderSeeder extends Seeder
             'customer_id' => $customers[1]->id,
             'status' => OrderStatusEnum::ToDo,
             'team_id' => $team,
-            'user_id' => $user,
+            'created_by' => $users[4]->id,
             'device_id' => $devices[0]->id,
             'device_unit_id' => $devicesUnit[1]->id,
             'created_at' => now(),

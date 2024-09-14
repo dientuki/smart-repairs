@@ -4,7 +4,11 @@ import { useBoardStore } from "@/store/BoardStore";
 import { useOrderStore } from "@/store/OrderStore";
 import { Textarea } from "@headlessui/react";
 import Avatar from "react-avatar";
-import { LockClosedIcon, LockOpenIcon } from "@heroicons/react/20/solid";
+import { ChatBubbleOvalLeftEllipsisIcon, LockClosedIcon, LockOpenIcon } from "@heroicons/react/24/outline";
+import Icon from "../Icon";
+import { ActionButton } from "../form";
+import { useTranslation } from "react-i18next";
+import { LockStatus } from "./LockStatus";
 
 type Props = {
   orderId: string
@@ -17,6 +21,7 @@ function Comments({ orderId, comments }: Props) {
   const [currentComments, setComments] = useState(comments);
   const [isPublic, setIsPublic] = useState(false);
   const [text, setText] = useState('');
+  const { t } = useTranslation();
 
   const toogleVisibility = () => setIsPublic(!isPublic);
 
@@ -27,7 +32,7 @@ function Comments({ orderId, comments }: Props) {
   const saveComment = async() => {
     if (text === '') return;
 
-    const newComment:NewOrderComment = {
+    const newComment: NewOrderComment = {
       orderId: orderId,
       comment: text,
       isPublic: isPublic,
@@ -64,26 +69,38 @@ function Comments({ orderId, comments }: Props) {
   };
 
   return (
-    <div>
-        <h3 className="mb-2 text-xl font-medium">Comentarios ({currentComments.length})</h3>
+    <div className="flex flex-col gap-2">
+      <div className="flex flex-row justify-between">
+        <div className="flex flex-row items-center gap-2">
+          <Icon size={7} icon={ChatBubbleOvalLeftEllipsisIcon} />
+          <span className="text-1xl font-bold tracking-tight sm:text-2xl">Comentarios ({currentComments.length})</span>
+        </div>
+        <div>Button</div>
+      </div>
 
-        <div className="bg-yellow-200 py-2 px-1 rounded">
-          <div className="flex items-center gap-3">
-              <Avatar name="Juan Farias" round={true} size="36" />
-              <Textarea className="w-full p-2 border border-gray-300 rounded h-auto" name="description" onChange={handleChange} defaultValue={text} />
+
+
+        <div className="flex flex-col gap-2">
+          <div className="flex items-center gap-2">
+              <Avatar name="Juan Farias" round={true} size="28" maxInitials={2} />
+              <div className="w-full flex rounded-lg shadow-sm ring-1 transition duration-75 bg-white dark:bg-white/5 [&:not(:has(.fi-ac-action:focus))]:focus-within:ring-2 ring-gray-950/10 dark:ring-white/20 [&:not(:has(.fi-ac-action:focus))]:focus-within:ring-primary-600 dark:[&:not(:has(.fi-ac-action:focus))]:focus-within:ring-primary-500 overflow-hidden">
+                <Textarea
+                  className="block h-full w-full border-none bg-transparent px-3 py-1.5 text-base text-gray-950 placeholder:text-gray-400 focus:ring-0 disabled:text-gray-500  dark:text-white dark:placeholder:text-gray-500 dark:disabled:text-gray-400    "
+                  name="description" onChange={handleChange} defaultValue={text}
+                />
+              </div>
           </div>
-          <div className="flex items-center gap-3 ml-12 mt-2">
-            <button className="rounded-md bg-sky-600 px-3 py-1.5 text-base font-bold leading-6 text-white shadow-sm hover:bg-sky-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-600" onClick={saveComment}>Guardar</button>
-            <div className="cursor-pointer" onClick={toogleVisibility} >{isPublic ?
-                <><LockOpenIcon className="h-4 w-4 inline-block" /> Publico</>:
-                <><LockClosedIcon className="h-4 w-4 inline-block" /> Privado</>
-              }
-            </div>
+          <div className="flex items-center gap-2 ml-9">
+            <ActionButton
+              onClick={saveComment}>
+                { t('button.save') }
+            </ActionButton>
+            <LockStatus toggleVisibility={toogleVisibility} status={isPublic} />
           </div>
 
         </div>
 
-        <div className="flex flex-col gap-5 mt-3">
+        <div className="flex flex-col gap-2 mt-4">
           {currentComments && currentComments.map((comment) => (
               <Comment
                 key={comment.id}

@@ -2,7 +2,11 @@
 
 namespace App\Models;
 
-class SimpleServiceJob extends ModelWithTeam
+use App\Traits\HasTeamTrait;
+
+class SimpleServiceJob extends ModelAuditable
 {
+    use HasTeamTrait;
+
     protected $fillable = ['name', 'price', 'team_id'];
 }
