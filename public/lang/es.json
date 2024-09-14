@@ -50,13 +50,20 @@
     },
 
     "order" : {
+        "assigned_to": "tecnico",
+        "assign_to_me": "asignar a mi",
         "comment": "comentario",
         "comments": "comentarios",
+        "created_at": "creado",
+        "created_by": "vendedor",
+        "customer": "cliente",
         "description": "descripción inicial del problema",
         "diagnosis": "diagnostico",
         "no_diagnosis": "sin diagnostico",
         "serial": "numero de imei\/serie",
-        "no_serial": "no disponible"
+        "no_serial": "no disponible",
+        "unassigned": "sin tecnico",
+        "whatsapp": "whatsapp"
     },
 
     "private": "privado",
