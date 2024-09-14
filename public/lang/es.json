@@ -20,7 +20,9 @@
         "save": "Guardar",
         "update": "Actualizar",
         "validate": "Validar",
-        "quote": "Presupuestar"
+        "quote": "Presupuestar",
+        "edit": "Editar",
+        "delete": "Eliminar"
     },
 
     "device": "equipo",
