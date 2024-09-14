@@ -1,14 +1,16 @@
 'use client';
 
-import { useBoardStore } from "@/store/BoardStore";
+import { useBoardStore, useUserStore } from "@/store";
 import { useEffect } from 'react';
 import { DragDropContext, DropResult, Droppable } from 'react-beautiful-dnd';
-import Column from "@/components/board/Column";
+import { Column } from "@/components/board";
 import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
+import { TypedColumn } from "@/types/enums";
 
-function Board() {
+export const Board = () => {
   const { board, getBoard, setBoardState, updateStatus } = useBoardStore();
+  const { getCurrentUser } = useUserStore();
   const { t } = useTranslation();
 
   useEffect(() => {
@@ -17,6 +19,13 @@ function Board() {
       toast.error(t(`toast.error.${e.message}`));
     });
   }, [getBoard]);
+
+  useEffect(() => {
+    getCurrentUser().catch((e: any) => {
+      console.log(e.message);
+      toast.error(t(`toast.error.${e.message}`));
+    })
+  }, []);
 
   const handleOnDragEnd = (result: DropResult) => {
     const { destination, source, type } = result;
@@ -102,5 +111,3 @@ function Board() {
     </Droppable>
   </DragDropContext>
 }
-
-export default Board

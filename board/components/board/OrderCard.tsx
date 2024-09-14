@@ -6,7 +6,6 @@ import Modal from "@/components/modal/Modal";
 import Icon from "@/components/Icon";
 import ViewCardModal from "../viewCardModal/ViewCardModal";
 import { TypedColumn } from "@/types/enums";
-import { Order } from "@/typings";
 
 type Props = {
     order: Order,
@@ -16,7 +15,7 @@ type Props = {
     draggableProps: DraggableProvidedDraggableProps,
     dragHandleProps: DraggableProvidedDragHandleProps | null | undefined
 }
-function OrderCard({ order, index, id, innerRef, draggableProps, dragHandleProps }: Props) {
+export const OrderCard = ({ order, index, id, innerRef, draggableProps, dragHandleProps }: Props) => {
   const openCard = () => Modal.open(ViewCardModal, { order: order.$id });
 
   return (
@@ -51,5 +50,3 @@ function OrderCard({ order, index, id, innerRef, draggableProps, dragHandleProps
     </div>
   )
 }
-
-export default OrderCard

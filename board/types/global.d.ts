@@ -5,3 +5,18 @@ interface OptionType {
     [key: string]: string | null;
   };
 }
+
+interface User {
+  id: string;
+  name: string;
+  imageUrl: string;
+}
+
+interface Board {
+  columns: Map<TypedColumn, Colum>;
+}
+
+interface Column {
+  id: TypedColumn;
+  orders: Order[];
+}

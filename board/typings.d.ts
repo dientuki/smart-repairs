@@ -1,13 +1,6 @@
 import { TypedColumn } from "./types/enums";
 
-interface Board {
-    columns: Map<TypedColumn, Colum>;
-}
 
-interface Column {
-    id: TypedColumn;
-    orders: Order[];
-}
 
 interface DeviceInfo {
     id: string;

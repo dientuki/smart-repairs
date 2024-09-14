@@ -33,4 +33,34 @@ trait UserDataTrait
             throw new \Exception('User not found');
         }
     }
+
+    private function getUserName()
+    {
+        try {
+            $user = auth()->guard('web')->user();
+
+            if ($user) {
+                return $user->name;
+            }
+
+            throw new \Exception('User not found');
+        } catch (\Exception $e) {
+            throw new \Exception('User not found');
+        }
+    }
+
+    private function getUserImageUrl()
+    {
+        try {
+            $user = auth()->guard('web')->user();
+
+            if ($user) {
+                return $user->imageUrl;
+            }
+
+            throw new \Exception('User not found');
+        } catch (\Exception $e) {
+            throw new \Exception('User not found');
+        }
+    }
 }
