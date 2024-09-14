@@ -1,5 +1,5 @@
 import { Draggable, Droppable } from "react-beautiful-dnd"
-import OrderCard from "@/components/board/OrderCard"
+import { OrderCard } from "@/components/board"
 import { StyleColor, TypedColumn } from "@/types/enums"
 import { useTranslation } from "react-i18next"
 import { dynamicStyles } from "@/helper/componentsHelpers"
@@ -10,7 +10,7 @@ type Props = {
     index: number
 }
 
-function Column( { id, orders, index }: Props ) {
+export const Column = ( { id, orders, index }: Props ) => {
   const { t } = useTranslation();
   return (
     <Draggable key={id} draggableId={id} index={index} isDragDisabled={true}>
@@ -65,5 +65,3 @@ function Column( { id, orders, index }: Props ) {
     </Draggable>
   )
 }
-
-export default Column

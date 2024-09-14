@@ -7,3 +7,4 @@ export { useDeviceStore } from '@/store/DeviceStore';
 export { useDeviceTypeStore } from '@/store/DeviceTypeStore';
 export { useOrderStore } from '@/store/OrderStore';
 export { useServiceJobStore } from '@/store/ServiceJobStore';
+export { useUserStore } from '@/store/UserStore';
