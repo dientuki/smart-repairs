@@ -2,9 +2,9 @@
 
 import { ChatBubbleOvalLeftEllipsisIcon, PaperClipIcon, CalendarIcon, ClockIcon, IdentificationIcon } from "@heroicons/react/24/outline";
 import { DraggableProvidedDragHandleProps, DraggableProvidedDraggableProps } from "react-beautiful-dnd"
-import Modal from "@/components/modal/Modal";
+import { Modal } from "@/components/modal";
 import Icon from "@/components/Icon";
-import ViewCardModal from "../viewCardModal/ViewCardModal";
+import { ViewCardModal}  from "@/components/viewCardModal";
 import { TypedColumn } from "@/types/enums";
 
 type Props = {

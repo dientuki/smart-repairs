@@ -1,5 +1,5 @@
 import { useOrderStore } from "@/store/OrderStore";
-import Icon from "../Icon";
+import Icon from "@/components/Icon";
 import { DocumentTextIcon } from "@heroicons/react/24/outline";
 
 export const Diagnosis = () => {

@@ -1,22 +1,22 @@
 import { useState } from "react";
-import Comment from "./Comment";
-import { useBoardStore } from "@/store/BoardStore";
-import { useOrderStore } from "@/store/OrderStore";
+import { useBoardStore, useOrderStore } from "@/store";
 import { Textarea } from "@headlessui/react";
 import Avatar from "react-avatar";
-import { ChatBubbleOvalLeftEllipsisIcon, LockClosedIcon, LockOpenIcon } from "@heroicons/react/24/outline";
-import Icon from "../Icon";
-import { ActionButton } from "../form";
+import { ChatBubbleOvalLeftEllipsisIcon } from "@heroicons/react/24/outline";
+import Icon from "@/components/Icon";
+import { ActionButton } from "@/components/form";
 import { useTranslation } from "react-i18next";
 import { LockStatus } from "./LockStatus";
+import { Comment } from "@/components/viewCardModal";
 
 type Props = {
   orderId: string
   comments: OrderComment[]
 }
 
-function Comments({ orderId, comments }: Props) {
+export const Comments = ({ orderId, comments }: Props) => {
   const { board, setBoardState } = useBoardStore();
+  const { user } = useOrderStore();
   const { addComment, deleteComment } = useOrderStore();
   const [currentComments, setComments] = useState(comments);
   const [isPublic, setIsPublic] = useState(false);
@@ -112,5 +112,3 @@ function Comments({ orderId, comments }: Props) {
     </div>
   )
 }
-
-export default Comments

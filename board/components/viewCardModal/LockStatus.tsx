@@ -1,5 +1,5 @@
 import { LockClosedIcon, LockOpenIcon } from "@heroicons/react/24/outline";
-import Icon from "../Icon";
+import Icon from "@/components/Icon";
 import { useTranslation } from "react-i18next";
 
 interface LockStatusProps {

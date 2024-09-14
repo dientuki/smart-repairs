@@ -1,6 +1,5 @@
 import { useModalWindow } from "react-modal-global";
 import { useOrderStore } from "@/store/OrderStore";
-import Comments from "@/components/viewCardModal/Comments";
 import { useEffect } from "react";
 import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
@@ -9,19 +8,16 @@ import { ActionButton } from "@/components/form";
 import { BudgetModal } from "@/components/budget";
 import Icon from "@/components/Icon";
 import { DevicePhoneMobileIcon, HashtagIcon } from "@heroicons/react/24/outline";
-import { Description } from "./Description";
-import { Diagnosis } from "./Diagnosis";
-import { Details } from "./Details";
-import { DeviceCheck } from "./DeviceCheck";
 import { dynamicStyles } from "@/helper/componentsHelpers";
 import { StyleColor } from "@/types/enums";
+import { Comments, Description, Details, DeviceCheck, Diagnosis } from "@/components/viewCardModal";
 
 
 type ModalParams = {
   order: string;
 };
 
-function ViewCardModal() {
+export const ViewCardModal = () => {
   const modal = useModalWindow<ModalParams>();
   const { order, getOrder } = useOrderStore();
   const { t } = useTranslation();
@@ -86,5 +82,3 @@ function ViewCardModal() {
     </ModalLayout>
   )
 }
-
-export default ViewCardModal;
