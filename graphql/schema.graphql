@@ -32,7 +32,7 @@ type Brand {
     id: ID!
     "Non-unique name."
     name: String!
-    imageUrl: String!
+    imageUrl: String
     label: String!
 }
 
