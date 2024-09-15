@@ -1,5 +1,5 @@
 import { LockClosedIcon, LockOpenIcon } from "@heroicons/react/24/outline";
-import Icon from "@/components/Icon";
+import { Icon } from "@/components/Icon";
 import { useTranslation } from "react-i18next";
 
 interface LockStatusProps {
@@ -7,10 +7,7 @@ interface LockStatusProps {
   status: boolean;
 }
 
-export const LockStatus: React.FC<LockStatusProps> = ({
-  toggleVisibility,
-  status,
-}) => {
+export const LockStatus = ({ toggleVisibility, status }: LockStatusProps) => {
   const { t } = useTranslation();
 
   return (
@@ -20,13 +17,13 @@ export const LockStatus: React.FC<LockStatusProps> = ({
     >
       {status ? (
         <>
-          <Icon icon={LockOpenIcon} size={4} />{" "}
-          <div className='first-letter:uppercase'>{t("private")}</div>
+          <Icon icon={LockOpenIcon} size={4} />
+          <span className='ml-1 first-letter:uppercase'>{t("private")}</span>
         </>
       ) : (
         <>
-          <Icon icon={LockClosedIcon} size={4} />{" "}
-          <div className='first-letter:uppercase'>{t("public")}</div>
+          <Icon icon={LockClosedIcon} size={4} />
+          <span className='ml-1 first-letter:uppercase'>{t("public")}</span>
         </>
       )}
     </div>

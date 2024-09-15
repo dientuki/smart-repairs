@@ -1,9 +1,9 @@
 "use client";
 import { PlusCircleIcon } from "@heroicons/react/24/solid";
-import Modal from "@/components/modal/Modal";
+import { Modal } from "@/components/modal";
 import { NewCardModal } from "@/components/newCardModal/NewCardModal";
 
-function AddButton() {
+export const AddButton = () => {
   const openCard = () => {
     Modal.open(NewCardModal, { keepMounted: false });
   };
@@ -17,5 +17,3 @@ function AddButton() {
     </button>
   );
 }
-
-export default AddButton;
