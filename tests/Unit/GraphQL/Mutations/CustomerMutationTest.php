@@ -8,7 +8,6 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\Unit\GraphQL\TestCaseGraphQL;
 use Nuwave\Lighthouse\Testing\MakesGraphQLRequests;
 use PHPUnit\Framework\Attributes\Test;
-use Illuminate\Support\Str;
 
 class CustomerMutationTest extends TestCaseGraphQL
 {

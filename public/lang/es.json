@@ -35,6 +35,7 @@
         "characteristics": "características",
         "device": "equipo",
         "device_version": "version del equipo",
+        "diagnosis": "diagnostico",
         "commercial_name": "nombre comercial",
         "email": "email",
         "firstname": "nombre",
@@ -93,6 +94,7 @@
     },
 
     "validation": {
+        "maxLength": "El campo {{field}} debe ser menor o igual a {{length}} caracteres.",
         "regex": "El formato del campo {{field}} es inválido.",
         "required": "El campo {{field}} es requerido",
         "required_without": "El campo {{field}} es obligatorio cuando {{another}} no está presente.",
