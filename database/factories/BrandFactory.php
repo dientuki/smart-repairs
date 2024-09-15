@@ -13,7 +13,7 @@ class BrandFactory extends Factory
     {
         return [
             'name' => $this->faker->company,
-            'hash_filename' => $this->faker->imageUrl(),
+            'hash_filename' => $this->faker->optional()->imageUrl(),
         ];
     }
 }
