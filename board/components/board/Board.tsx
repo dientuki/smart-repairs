@@ -15,14 +15,12 @@ export const Board = () => {
 
   useEffect(() => {
     getBoard().catch((e: any) => {
-      console.log(e.message);
       toast.error(t(`toast.error.${e.message}`));
     });
   }, [getBoard]);
 
   useEffect(() => {
     getCurrentUser().catch((e: any) => {
-      console.log(e.message);
       toast.error(t(`toast.error.${e.message}`));
     });
   }, []);

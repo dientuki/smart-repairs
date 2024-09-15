@@ -4,9 +4,10 @@ import { DocumentTextIcon } from "@heroicons/react/24/outline";
 import { useTranslation } from "react-i18next";
 import { useForm, FieldValues, FieldErrors } from "react-hook-form";
 import { toast } from "react-toastify";
-import { InputField } from "@/components/form";
+import { ActionButton, InputField } from "@/components/form";
 import { useRef, useState } from "react";
 import { capitalizeFirstLetter } from "@/helper/stringHelpers";
+import { Loading } from "../Loading";
 
 export const Diagnosis = () => {
   const { order, updateDiagnosis } = useOrderStore();
@@ -21,6 +22,7 @@ export const Diagnosis = () => {
   const formRef = useRef<HTMLFormElement>(null);
 
   const handleRegistration = async (data: FieldValues) => {
+    if (isSubmitting) return;
     setIsSubmitting(true);
     try {
       const status = await updateDiagnosis(data.diagnosis);
@@ -35,6 +37,7 @@ export const Diagnosis = () => {
     } catch (error) {
       toast.error("Error en el formulario");
     } finally {
+      setIsEditing(false);
       setIsSubmitting(false);
     }
   };
@@ -76,13 +79,14 @@ export const Diagnosis = () => {
         </div>
         {(order.diagnosis || isEditing) && (
           <div className='flex gap-2'>
-            <button
-              className='btn-primary'
+            <ActionButton
               onClick={isEditing ? submitForm : handleEditClick}
+              customClass='w-auto'
               disabled={isSubmitting}
             >
+              <Loading disabled={!isSubmitting} />
               {isEditing ? t("button.send") : t("button.edit")}
-            </button>
+            </ActionButton>
           </div>
         )}
       </div>
