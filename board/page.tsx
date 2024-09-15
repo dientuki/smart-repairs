@@ -4,7 +4,7 @@ import Modal from "@/components/modal/Modal";
 import { ModalContainer } from "react-modal-global";
 import { Suspense } from "react";
 import "./global.css";
-import {AddButton} from "./components/AddButton";
+import { AddButton } from "./components/AddButton";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/ReactToastify.min.css";
 import { I18nextProvider } from "react-i18next";

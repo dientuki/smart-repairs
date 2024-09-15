@@ -16,4 +16,4 @@ export const AddButton = () => {
       <PlusCircleIcon className='h-14 w-14' />
     </button>
   );
-}
+};

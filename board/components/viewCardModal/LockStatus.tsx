@@ -17,12 +17,12 @@ export const LockStatus = ({ toggleVisibility, status }: LockStatusProps) => {
     >
       {status ? (
         <>
-          <Icon icon={LockOpenIcon} size={4} data-testid="lock-open-icon"/>
+          <Icon icon={LockOpenIcon} size={4} data-testid='lock-open-icon' />
           <span className='ml-1 first-letter:uppercase'>{t("private")}a</span>
         </>
       ) : (
         <>
-          <Icon icon={LockClosedIcon} size={4} data-testid="lock-closed-icon"/>
+          <Icon icon={LockClosedIcon} size={4} data-testid='lock-closed-icon' />
           <span className='ml-1 first-letter:uppercase'>{t("public")}v</span>
         </>
       )}

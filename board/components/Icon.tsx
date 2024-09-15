@@ -13,7 +13,7 @@ export const Icon = ({
   icon: IconComponent,
   additionalClasses = "",
   size = 5,
-  style = StyleColor.Gray
+  style = StyleColor.Gray,
 }: IconProps) => {
   return (
     <IconComponent

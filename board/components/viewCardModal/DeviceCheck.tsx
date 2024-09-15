@@ -3,7 +3,7 @@ import {
   ChevronUpIcon,
   XCircleIcon,
 } from "@heroicons/react/24/outline";
-import {Icon} from "@/components/Icon";
+import { Icon } from "@/components/Icon";
 import { StyleColor } from "@/types/enums";
 import { useState } from "react";
 
