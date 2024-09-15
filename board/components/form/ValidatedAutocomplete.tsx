@@ -12,7 +12,7 @@ import {
   RegisterOptions,
   FieldErrors,
 } from "react-hook-form";
-import ErrorMessage from "./ErrorMessage";
+import { ErrorMessage } from "@/components/form";
 
 // Define el tipo para las opciones del Autocomplete
 

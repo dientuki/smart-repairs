@@ -78,4 +78,17 @@ final readonly class OrderMutations
             return false;
         };
     }
+
+    public function updateDiagnosis(null $root, array $args, GraphQLContext $context, ResolveInfo $resolveInfo): bool
+    {
+        $order = Order::find($args['id']);
+
+        if ($order->team_id === $this->getTeamId()) {
+            $order->diagnosis = $args['diagnosis'];
+            $order->save();
+            return true;
+        }
+
+        return false;
+    }
 }

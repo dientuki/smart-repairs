@@ -1,5 +1,9 @@
 import { create } from "zustand";
-import { getOrder, getOrderCreationData } from "@/services/orders";
+import {
+  getOrder,
+  getOrderCreationData,
+  updateDiagnosis,
+} from "@/services/orders";
 import {
   addComment,
   updateCommentVisibility,
@@ -49,6 +53,8 @@ interface OrderStore {
   setTmpOrder: (data: any) => void;
   createOrder: () => Promise<void>;
   clearAfterCreateOrder: () => void;
+
+  updateDiagnosis: (diagnosis: string) => Promise<boolean>;
 }
 
 export const useOrderStore = create<OrderStore>((set) => ({
@@ -159,5 +165,16 @@ export const useOrderStore = create<OrderStore>((set) => ({
         temporaryDeviceUnitId: null,
       },
     });
+  },
+
+  updateDiagnosis: async (diagnosis: string): Promise<boolean> => {
+    const status = await updateDiagnosis(
+      useOrderStore.getState().order.$id,
+      diagnosis,
+    );
+    if (status) {
+      set({ order: { ...useOrderStore.getState().order, diagnosis } });
+    }
+    return status;
   },
 }));

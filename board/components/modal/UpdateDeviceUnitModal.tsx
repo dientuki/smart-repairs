@@ -160,7 +160,6 @@ function UpdateDeviceUnitModal() {
   };
 
   const handleError = (errors: FieldErrors<FieldValues>) => {
-    console.log("error");
     toast.error("Error en el formulario de error react");
   };
 

@@ -304,3 +304,22 @@ export const getOrderCreationData = async () => {
     devicesChecks: devicesChecks,
   };
 };
+
+export const updateDiagnosis = async (
+  id: string,
+  diagnosis: string,
+): Promise<boolean> => {
+  console.log(id, diagnosis);
+  const response = await graphqlRequest(`
+    mutation {
+      updateDiagnosis(
+        id: "${id}",
+        diagnosis: "${diagnosis}"
+      )
+    }
+  `);
+
+  handleGraphQLErrors(response.errors);
+
+  return response.data.updateDiagnosis;
+};
