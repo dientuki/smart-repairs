@@ -6,20 +6,14 @@ use App\Models\Team;
 use App\Models\User;
 use Tests\TestCase;
 use Illuminate\Contracts\Auth\Authenticatable;
-use Illuminate\Contracts\Console\Kernel;
 use Illuminate\Support\Facades\Auth;
+use Nuwave\Lighthouse\Testing\MakesGraphQLRequests;
 
 abstract class TestCaseGraphQL extends TestCase implements RequiresAuthenticationInterface
 {
+    use MakesGraphQLRequests;
+
     protected Team $team;
-    public function createApplication()
-    {
-        $app = require __DIR__ . '/../../../bootstrap/app.php';
-
-        $app->make(Kernel::class)->bootstrap();
-
-        return $app;
-    }
 
     protected function setUp(): void
     {
@@ -65,4 +59,16 @@ abstract class TestCaseGraphQL extends TestCase implements RequiresAuthenticatio
     {
         Auth::logout();
     }
+
+    // En una clase base TestCaseGraphQL
+    public function assertUserNotAuthenticated($query)
+    {
+        $this->logout();
+
+        $response = $this->graphQL($query);
+
+        $response->assertStatus(401); // O el código de estado HTTP que uses para no autorizado
+        $response->assertJson(['message' => 'Unauthenticated.']);
+    }
+
 }

@@ -113,9 +113,7 @@ class CustomerMutationTest extends TestCaseGraphQL
     #[Test]
     public function user_not_authenticated_cannot_access()
     {
-        $this->logout();
-
-        $response = $this->graphQL('
+        $query = '
             mutation {
                 addCustomer(customer: {
                     firstname: "John",
@@ -126,11 +124,8 @@ class CustomerMutationTest extends TestCaseGraphQL
                     id
                 }
             }
-        ');
+        ';
 
-        // Verificar que el usuario no autenticado no pueda acceder a los clientes
-        $response->assertStatus(401); // O el código de estado HTTP que uses para no autorizado
-
-        $response->assertJson(['message' => 'Unauthenticated.']);
+        $this->assertUserNotAuthenticated($query);
     }
 }
