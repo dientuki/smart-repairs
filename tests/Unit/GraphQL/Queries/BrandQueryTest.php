@@ -87,4 +87,31 @@ class BrandQueryTest extends TestCaseGraphQL
             ],
         ]);
     }
+
+    #[Test]
+    public function user_not_authenticated_cannot_access()
+    {
+        Brand::factory()->create(['name' => 'Adidas']);
+
+        $this->logout();
+
+        // Realizar la consulta GraphQL sin autenticación
+        $query = '
+        {
+            brands {
+                id
+                name
+                imageUrl
+                label
+            }
+        }
+        ';
+
+
+        $response = $this->graphQL($query);
+
+        // Verificar que el usuario no autenticado no pueda acceder a los clientes
+        $response->assertStatus(401); // O el código de estado HTTP que uses para no autorizado
+        $response->assertJson(['message' => 'Unauthenticated.']);
+    }
 }

@@ -27,7 +27,6 @@ class UserFactory extends Factory
             'name' => fake()->name(),
             'email' => fake()->unique()->safeEmail(),
             'email_verified_at' => now(),
-            'hash_filename' => $this->faker->optional()->boolean ? $this->faker->imageUrl() : null,
             'latest_team_id' => null,
             'password' => static::$password ??= Hash::make('password'),
             'remember_token' => Str::random(10),

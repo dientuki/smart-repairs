@@ -5,7 +5,6 @@ namespace Tests\Unit\GraphQL\Queries;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\Models\Customer;
 use App\Models\Team;
-use App\Models\User;
 use Illuminate\Support\Facades\Storage;
 use Nuwave\Lighthouse\Testing\MakesGraphQLRequests;
 use Tests\Unit\GraphQL\TestCaseGraphQL;
@@ -174,7 +173,7 @@ class CustomerQueryTest extends TestCaseGraphQL
     }
 
     #[Test]
-    public function test_user_not_authenticated_cannot_access_customers()
+    public function user_not_authenticated_cannot_access()
     {
         // Crear algunos clientes en la base de datos
         Customer::factory()->create(['first_name' => 'Alice', 'team_id' => $this->team->id]);

@@ -2,7 +2,6 @@
 
 namespace Tests\Unit\GraphQL;
 
-use App\Enum\RolEnum;
 use App\Models\Team;
 use App\Models\User;
 use Tests\TestCase;
@@ -10,7 +9,7 @@ use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Contracts\Console\Kernel;
 use Illuminate\Support\Facades\Auth;
 
-abstract class TestCaseGraphQL extends TestCase
+abstract class TestCaseGraphQL extends TestCase implements RequiresAuthenticationTest
 {
     protected Team $team;
     public function createApplication()
@@ -65,5 +64,11 @@ abstract class TestCaseGraphQL extends TestCase
     protected function logout()
     {
         Auth::logout();
+    }
+
+    public function user_not_authenticated_cannot_access()
+    {
+
+        $this->assertTrue(true);
     }
 }
