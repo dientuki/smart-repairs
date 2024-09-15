@@ -3,7 +3,7 @@ import { useBoardStore, useOrderStore, useUserStore } from "@/store";
 import { Textarea } from "@headlessui/react";
 import Avatar from "react-avatar";
 import { ChatBubbleOvalLeftEllipsisIcon } from "@heroicons/react/24/outline";
-import Icon from "@/components/Icon";
+import { Icon } from "@/components/Icon";
 import { ActionButton } from "@/components/form";
 import { useTranslation } from "react-i18next";
 import { LockStatus } from "./LockStatus";

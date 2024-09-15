@@ -4,7 +4,7 @@ import { PackageType, StyleColor } from "@/types/enums";
 import { UserCircleIcon } from "@heroicons/react/24/outline";
 import Avatar from "react-avatar";
 import { useTranslation } from "react-i18next";
-import Icon from "../Icon";
+import {Icon} from "@/components/Icon";
 
 export const OrderUsers = () => {
   const { order } = useOrderStore();

@@ -6,7 +6,7 @@ import { useTranslation } from "react-i18next";
 import { Modal, UpdateDeviceUnitModal, ModalLayout } from "@/components/modal";
 import { ActionButton } from "@/components/form";
 import { BudgetModal } from "@/components/budget";
-import Icon from "@/components/Icon";
+import {Icon} from "@/components/Icon";
 import {
   DevicePhoneMobileIcon,
   HashtagIcon,

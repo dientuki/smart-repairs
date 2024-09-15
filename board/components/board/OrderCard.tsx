@@ -12,7 +12,7 @@ import {
   DraggableProvidedDraggableProps,
 } from "react-beautiful-dnd";
 import { Modal } from "@/components/modal";
-import Icon from "@/components/Icon";
+import { Icon } from "@/components/Icon";
 import { ViewCardModal } from "@/components/viewCardModal";
 import { TypedColumn } from "@/types/enums";
 

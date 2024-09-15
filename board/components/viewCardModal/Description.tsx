@@ -1,6 +1,6 @@
 import { useOrderStore } from "@/store/OrderStore";
 import { Bars3BottomLeftIcon } from "@heroicons/react/24/outline";
-import Icon from "@/components/Icon";
+import { Icon } from "@/components/Icon";
 import { useTranslation } from "react-i18next";
 
 export const Description = () => {
