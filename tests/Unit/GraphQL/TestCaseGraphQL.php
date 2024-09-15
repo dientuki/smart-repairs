@@ -9,7 +9,7 @@ use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Contracts\Console\Kernel;
 use Illuminate\Support\Facades\Auth;
 
-abstract class TestCaseGraphQL extends TestCase implements RequiresAuthenticationTest
+abstract class TestCaseGraphQL extends TestCase implements RequiresAuthenticationInterface
 {
     protected Team $team;
     public function createApplication()
@@ -64,11 +64,5 @@ abstract class TestCaseGraphQL extends TestCase implements RequiresAuthenticatio
     protected function logout()
     {
         Auth::logout();
-    }
-
-    public function user_not_authenticated_cannot_access()
-    {
-
-        $this->assertTrue(true);
     }
 }
