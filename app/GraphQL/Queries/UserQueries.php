@@ -8,6 +8,7 @@ use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 class UserQueries
 {
     use UserDataTrait;
+
     public function getCurrentUser(null $root, array $args, GraphQLContext $context): mixed
     {
         return [
