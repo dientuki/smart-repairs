@@ -102,7 +102,7 @@ class CustomerMutationTest extends TestCaseGraphQL
                   ],
               ],
           ],
-      ]);
+        ]);
     }
 
     /**

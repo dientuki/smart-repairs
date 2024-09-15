@@ -63,7 +63,7 @@ class CustomerQueryTest extends TestCaseGraphQL
 
         // Crear dos equipos y asociar clientes
         $team1 = Team::factory()->create();
-        Customer::factory()->create(['first_name' => 'Alice', 'team_id' =>$this->team->id]);
+        Customer::factory()->create(['first_name' => 'Alice', 'team_id' => $this->team->id]);
         Customer::factory()->create(['first_name' => 'Bob', 'team_id' => $team1->id]);
 
         //$user = $this->authenticate([], $team1);
