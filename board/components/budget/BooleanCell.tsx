@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-export const BooleanCell = ({ getValue, row, column, table }: BooleanCellProps ) => {
+export const BooleanCell = ({ getValue, row, table }: BooleanCellProps) => {
   const initialValue = getValue();
   const [value, setValue] = useState(initialValue);
 
@@ -17,11 +17,11 @@ export const BooleanCell = ({ getValue, row, column, table }: BooleanCellProps )
   };
 
   return (
-    <label className="flex w-full cursor-pointer justify-center items-center">
+    <label className='flex w-full cursor-pointer justify-center items-center'>
       <input
-        type="checkbox"
-        className="sr-only peer"
-        checked={value}  // Asignar correctamente el valor booleano
+        type='checkbox'
+        className='sr-only peer'
+        checked={value} // Asignar correctamente el valor booleano
         onChange={handleChange}
         disabled={row.index == 0 ? true : false}
       />

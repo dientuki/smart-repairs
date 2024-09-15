@@ -1,9 +1,8 @@
 import { graphqlRequest, handleGraphQLErrors } from "@/helper/graphqlHelpers";
 import { extra } from "@/helper/reduceHelpers";
 
-export const getCustomers = async() => {
-
-    const response = await graphqlRequest(`
+export const getCustomers = async () => {
+  const response = await graphqlRequest(`
             query {
               customers {
                 id
@@ -15,12 +14,12 @@ export const getCustomers = async() => {
               }
             `);
 
-    handleGraphQLErrors(response.errors);
+  handleGraphQLErrors(response.errors);
 
-    return extra(response.data.customers);
-}
-export const createCustomer = async(customer: CustomerInput) => {
-    const response = await graphqlRequest(`
+  return extra(response.data.customers);
+};
+export const createCustomer = async (customer: CustomerInput) => {
+  const response = await graphqlRequest(`
                         mutation {
                             addCustomer(customer: {
                                 firstname: "${customer.firstname}"
@@ -33,13 +32,13 @@ export const createCustomer = async(customer: CustomerInput) => {
                         }
                     `);
 
-    handleGraphQLErrors(response.errors);
+  handleGraphQLErrors(response.errors);
 
-    return response.data.addCustomer.id;
-}
+  return response.data.addCustomer.id;
+};
 
-export const updateCustomer = async(customer: CustomerInput) => {
-    const response = await graphqlRequest(`
+export const updateCustomer = async (customer: CustomerInput) => {
+  const response = await graphqlRequest(`
         mutation {
             updateCustomer(customerId: "${customer.id}", customer: {
                 firstname: "${customer.firstname}"
@@ -50,7 +49,7 @@ export const updateCustomer = async(customer: CustomerInput) => {
         }
     `);
 
-    handleGraphQLErrors(response.errors);
+  handleGraphQLErrors(response.errors);
 
-    return response.data.updateCustomer;
+  return response.data.updateCustomer;
 };

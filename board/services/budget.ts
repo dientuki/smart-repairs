@@ -1,8 +1,12 @@
-import { graphqlRequest, handleGraphQLErrors, handlePayloadErrors } from "@/helper/graphqlHelpers";
+import {
+  graphqlRequest,
+  handleGraphQLErrors,
+  handlePayloadErrors,
+} from "@/helper/graphqlHelpers";
 import { extra } from "@/helper/reduceHelpers";
 import { arrayToString } from "@/helper/stringHelpers";
 
-export const getInitialValues = async(orderId: string): Promise<any> => {
+export const getInitialValues = async (orderId: string): Promise<any> => {
   const response = await graphqlRequest(`
       query {
           discounts {
@@ -43,11 +47,14 @@ export const getInitialValues = async(orderId: string): Promise<any> => {
     discounts: extra(response.data.discounts),
     services: extra(response.data.services),
     parts: extra(response.data.partsByOrder),
-    budget: response.data.budget
-  }
-}
+    budget: response.data.budget,
+  };
+};
 
-export const updateBudget = async(orderId: string, data: any) : Promise<boolean> => {
+export const updateBudget = async (
+  orderId: string,
+  data: any,
+): Promise<boolean> => {
   const response = await graphqlRequest(`
     mutation {
       updateBudget(
@@ -66,9 +73,8 @@ export const updateBudget = async(orderId: string, data: any) : Promise<boolean>
     }
   `);
 
-
   handleGraphQLErrors(response.errors);
   handlePayloadErrors(response.data.updateBudget);
 
-  return response.data.updateBudget.success
-}
+  return response.data.updateBudget.success;
+};

@@ -3,7 +3,11 @@
     "type": "module",
     "scripts": {
         "dev": "vite",
-        "build": "vite build"
+        "build": "vite build",
+        "linter": "eslint board/",
+        "linter-fix": "eslint board/ --fix",
+        "linter-report": "eslint --format=html board/ > eslint-report.html",
+        "prettier": "prettier --write board/**/*.{js,ts,jsx,tsx}"
     },
     "dependencies": {
         "@emotion/react": "^11.13.3",
@@ -40,11 +44,13 @@
         "axios": "^1.7.7",
         "bootstrap": "^5.2.3",
         "eslint": "^9.10.0",
+        "eslint-config-prettier": "^9.1.0",
         "eslint-plugin-i18next": "^6.1.0",
         "eslint-plugin-react": "^7.36.1",
         "globals": "^15.9.0",
         "laravel-vite-plugin": "^1.0",
         "postcss": "^8.4.47",
+        "prettier": "^3.3.3",
         "sass": "^1.78.0",
         "tailwindcss": "^3.4.11",
         "typescript": "^5.6.2",

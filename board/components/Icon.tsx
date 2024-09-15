@@ -1,20 +1,20 @@
 import { dynamicStyles } from "@/helper/componentsHelpers";
 import { StyleColor } from "@/types/enums";
-import React from 'react';
+import React from "react";
 
 interface IconProps {
   icon: React.ElementType;
-  size?: number;  // Tamaño opcional, por defecto será 5
   additionalClasses?: string;
+  size?: number;
   style?: StyleColor;
 }
 
-const Icon: React.FC<IconProps> = ({
-  style = StyleColor.Gray,
+export const Icon = ({
   icon: IconComponent,
+  additionalClasses = "",
   size = 5,
-  additionalClasses = ''
-}) => {
+  style = StyleColor.Gray,
+}: IconProps) => {
   return (
     <IconComponent
       style={dynamicStyles(style)}
@@ -22,5 +22,3 @@ const Icon: React.FC<IconProps> = ({
     />
   );
 };
-
-export default Icon;
