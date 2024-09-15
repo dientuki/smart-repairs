@@ -70,7 +70,7 @@ export const Diagnosis = () => {
 
   return (
     <div className='flex flex-col gap-2'>
-      <div className='flex flex-row justify-between items-center'>
+      <div className='flex flex-row justify-between items-center h-9'>
         <div className='flex flex-row items-center gap-2'>
           <Icon size={7} icon={DocumentTextIcon} />
           <span className='text-1xl font-bold tracking-tight sm:text-2xl first-letter:uppercase'>
