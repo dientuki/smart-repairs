@@ -15,10 +15,10 @@ export const handleUndefined = (value: string | undefined | null): string => {
     : value;
 };
 
-export const capitalizeFirstLetter = (value: string): string => {
-  if (typeof value !== "string" || value.length === 0) return value;
+export const capitalizeFirstLetter = (value: string | null): string | null => {
+  if (typeof value !== "string") return value;
 
-  return value.charAt(0).toUpperCase() + value.slice(1).toLowerCase();
+  return value.charAt(0).toUpperCase() + value.slice(1);
 };
 
 export const handleNew = (value: string | undefined | null): string | null => {
