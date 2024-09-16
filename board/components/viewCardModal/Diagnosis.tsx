@@ -108,7 +108,7 @@ export const Diagnosis = () => {
           rules={registerOptions.diagnosis}
           errors={errors}
           defaultValue={order.diagnosis}
-          placeholder={capitalizeFirstLetter(t("order.no_diagnosis"))}
+          placeholder={capitalizeFirstLetter(t("placeholder.diagnosis"))}
           onClick={() => {
             setIsEditing(true);
           }}

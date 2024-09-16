@@ -64,11 +64,15 @@
         "no_observation": "Describa el problema del equipo",
         "diagnosis": "diagnostico",
         "diagnosis_male": "el diagnostico",
-        "no_diagnosis": "sin diagnostico",
         "serial": "numero de imei\/serie",
         "no_serial": "no disponible",
         "unassigned": "sin tecnico",
         "whatsapp": "whatsapp"
+    },
+
+    "placeholder": {
+        "comment":"ingrese un comentario",
+        "diagnosis": "sin diagnostico"
     },
 
     "private": "privado",
@@ -80,7 +84,8 @@
             "generic": "Error generico",
             "network": "Error de red",
             "form": "Error en el formulario",
-            "update": "Error al actualizar {{record}}"
+            "update": "Error al actualizar {{record}}",
+            "add": "Error al agregar {{record}}"
         },
         "success": "{{record}} actualizado con exito",
         "success_female": "{{record}} actualizada con exito"

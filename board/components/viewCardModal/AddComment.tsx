@@ -23,30 +23,30 @@ export const AddComment = () => {
     formState: { errors },
     setValue,
     watch,
+    reset
   } = useForm<FieldValues>({
     defaultValues: {
       comment: "",
-      isPublic: false,
+      ispublic: false,
     },
   });
   const formRef = useRef<HTMLFormElement>(null);
-  const isPublic = watch("isPublic");
+  const ispublic = watch("ispublic");
 
   const handleRegistration = async (data: FieldValues) => {
     try {
       const status = await addComment(data as NewComment);
       if (status) {
-        //getBoard();
+        reset();
         toast.success(
           t("toast.success", {
-            context: "female",
-            record: t("order.observation_simple"),
+            record: t("order.comment"),
           }),
         );
       } else {
         toast.error(
-          t("toast.error.update", {
-            record: t("order.observation", { context: "female" }),
+          t("toast.error.add", {
+            record: t("order.comment"),
           }),
         );
       }
@@ -62,7 +62,7 @@ export const AddComment = () => {
   };
 
   const toggleVisibility = () => {
-    setValue("isPublic", !isPublic); // Cambiar el valor de isPublic
+    setValue("ispublic", !ispublic); // Cambiar el valor de ispublic
   };
 
   const submitForm = () => {
@@ -100,6 +100,7 @@ export const AddComment = () => {
             control={control}
             rules={registerOptions.comment}
             errors={errors}
+            rows={2}
             placeholder={capitalizeFirstLetter(t("placeholder.comment"))}
           />
         </form>
@@ -109,7 +110,7 @@ export const AddComment = () => {
           <Loading disabled={!isSubmitting} />
           {t("button.save")}
         </ActionButton>
-        <LockStatus toggleVisibility={toggleVisibility} status={isPublic} />
+        <LockStatus toggleVisibility={toggleVisibility} status={ispublic} />
       </div>
     </div>
   );
