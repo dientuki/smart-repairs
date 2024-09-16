@@ -25,5 +25,5 @@ type Comment {
 
 input CommentInput {
     comment: String! @rules(apply: ["required"])
-    isPublic: Boolean! @rules(apply: ["required"])
+    ispublic: Boolean! @rules(apply: ["required"])
 }

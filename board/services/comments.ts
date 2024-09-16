@@ -1,4 +1,5 @@
 import { graphqlRequest, handleGraphQLErrors } from "@/helper/graphqlHelpers";
+import { escapeGraphQLString } from "@/helper/stringHelpers";
 
 export const updateCommentVisibility = (
   commentId: string,
@@ -31,13 +32,14 @@ export const addComment = async (
   orderId: string,
   newComment: NewComment,
 ): Promise<OrderComment> => {
+
   const response = await graphqlRequest(`
             mutation {
               addComment(
                 orderId: "${orderId}",
                 comment: {
-                  comment: "${newComment.comment}"
-                  is_public: ${newComment.isPublic}
+                  comment: "${escapeGraphQLString(newComment.comment)}",
+                  ispublic: ${newComment.isPublic}
                 }
               ) {
                 id

@@ -70,7 +70,7 @@ final readonly class CommentMutation
             'team_id' => $team_id,
             'comment' => strip_tags($args['comment']['comment']),
             'user_id' => $this->getUserId(),
-            'is_public' => $args['comment']['isPublic'],
+            'is_public' => $args['comment']['ispublic'],
         ]);
     }
 }
