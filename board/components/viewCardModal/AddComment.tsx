@@ -1,4 +1,4 @@
-import { useOrderStore, useUserStore } from "@/store";
+import { useBoardStore, useOrderStore, useUserStore } from "@/store";
 import Avatar from "react-avatar";
 import { ActionButton, TextareaField } from "@/components/form";
 import { useRef, useState } from "react";
@@ -13,6 +13,7 @@ import { LockStatus } from "@/components/viewCardModal";
 export const AddComment = () => {
   const { user } = useUserStore();
   const { addComment } = useOrderStore();
+  const { getBoard } = useBoardStore();
   if (!user) return;
 
   const { t } = useTranslation();
@@ -38,8 +39,9 @@ export const AddComment = () => {
       const status = await addComment(data as NewComment);
       if (status) {
         reset();
+        getBoard();
         toast.success(
-          t("toast.success", {
+          t("toast.success.add", {
             record: t("order.comment"),
           }),
         );

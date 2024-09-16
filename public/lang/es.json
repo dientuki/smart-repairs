@@ -87,8 +87,12 @@
             "update": "Error al actualizar {{record}}",
             "add": "Error al agregar {{record}}"
         },
-        "success": "{{record}} actualizado con exito",
-        "success_female": "{{record}} actualizada con exito"
+        "success": {
+            "add" : "{{record}} agregado con exito",
+            "add_female": "{{record}} actualizada con exito",
+            "update": "{{record}} actualizado con exito",
+            "update_female": "{{record}} actualizada con exito"
+        }
     },
 
     "status": {
