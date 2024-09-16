@@ -19,7 +19,7 @@ export const graphqlRequest = async (query: string) => {
     });
 
     return await response.json();
-  } catch (error) {
+  } catch {
     throw new Error("network");
   }
 };
@@ -29,8 +29,6 @@ export const handleGraphQLErrors = (errors: GraphQLErrors | undefined) => {
     if (errors[0].extensions && errors[0].extensions.validation) {
       throw errors[0].extensions.validation;
     } else {
-      //throw new Error(errors[0].message);
-      //console.log(errors[0].message);
       throw new Error("data");
     }
   }

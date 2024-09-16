@@ -60,6 +60,7 @@
         "customer": "cliente",
         "description": "descripción inicial del problema",
         "diagnosis": "diagnostico",
+        "diagnosis_male": "el diagnostico",
         "no_diagnosis": "sin diagnostico",
         "serial": "numero de imei\/serie",
         "no_serial": "no disponible",
@@ -73,9 +74,12 @@
     "toast": {
         "error": {
             "data": "Error de datos",
+            "generic": "Error generico",
             "network": "Error de red",
-            "form": "Error de formulario"
-        }
+            "form": "Error en el formulario",
+            "update": "Error al actualizar {{record}}"
+        },
+        "success": "{{record}} actualizado con exito"
     },
 
     "status": {
