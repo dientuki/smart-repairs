@@ -51,6 +51,35 @@ class OrderMutationTest extends TestCaseGraphQL
     }
 
     #[Test]
+    public function update_diagnosis_with_empty_diagnosis_successfully()
+    {
+        $order = Order::factory()->create(['team_id' => $this->team->id]);
+
+        $response = $this->graphQL('
+            mutation {
+                updateDiagnosis(
+                    id: "' . $order->id . '",
+                    diagnosis: ""
+                )
+            }
+        ');
+
+
+        // Verificar que la mutación retornó true
+        $response->assertJson([
+            'data' => [
+                'updateDiagnosis' => true,
+            ],
+        ]);
+
+        // Verificar que los datos del cliente se han actualizado en la base de datos
+        $this->assertDatabaseHas('orders', [
+            'id' => $order->id,
+            'diagnosis' => null
+        ]);
+    }
+
+    #[Test]
     public function not_update_diagnosis_for_order_not_belongs_to_team()
     {
         $team = Team::factory()->create();

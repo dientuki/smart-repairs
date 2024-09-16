@@ -35,6 +35,7 @@ export const AddComment = () => {
   const ispublic = watch("ispublic");
 
   const handleRegistration = async (data: FieldValues) => {
+    setIsSubmitting(true);
     try {
       const status = await addComment(data as NewComment);
       if (status) {

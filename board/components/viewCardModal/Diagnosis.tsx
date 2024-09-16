@@ -8,7 +8,6 @@ import { ActionButton, InputField } from "@/components/form";
 import { useRef, useState } from "react";
 import { capitalizeFirstLetter } from "@/helper/stringHelpers";
 import { simpleError } from "@/helper/toastHelper";
-import { Loading } from "@/components/Loading";
 
 export const Diagnosis = () => {
   const { order, updateDiagnosis } = useOrderStore();
@@ -90,9 +89,8 @@ export const Diagnosis = () => {
             <ActionButton
               onClick={isEditing ? submitForm : handleEditClick}
               customClass='w-auto'
-              disabled={isSubmitting}
+              loading={isSubmitting}
             >
-              <Loading disabled={!isSubmitting} />
               {isEditing ? t("button.send") : t("button.edit")}
             </ActionButton>
           </div>

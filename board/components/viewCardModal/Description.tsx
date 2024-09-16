@@ -5,7 +5,6 @@ import { useTranslation } from "react-i18next";
 import { FieldValues, useForm } from "react-hook-form";
 import { useRef, useState } from "react";
 import { ActionButton, TextareaField } from "@/components/form";
-import { Loading } from "@/components/Loading";
 import { toast } from "react-toastify";
 import { simpleError } from "@/helper/toastHelper";
 import { capitalizeFirstLetter } from "@/helper/stringHelpers";
@@ -89,9 +88,8 @@ export const Description = () => {
             <ActionButton
               onClick={isEditing ? submitForm : handleEditClick}
               customClass='w-auto'
-              disabled={isSubmitting}
+              loading={isSubmitting}
             >
-              <Loading disabled={!isSubmitting} />
               {isEditing ? t("button.send") : t("button.edit")}
             </ActionButton>
           </div>
