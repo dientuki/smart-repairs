@@ -56,3 +56,8 @@ interface feature {
   value: string;
   checked: boolean;
 }
+
+interface NewComment {
+  comment: string;
+  ispublic: boolean;
+}

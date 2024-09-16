@@ -27,14 +27,17 @@ export const Diagnosis = () => {
     setIsSubmitting(true);
     try {
       const status = await updateDiagnosis(data.diagnosis);
+      const a = order.diagnosis === "" ? "add" : "update";
       if (status) {
-        toast.success(t("toast.success", { record: t("order.diagnosis") }));
+        toast.success(
+          t(`toast.success.${a}`, { record: t("order.diagnosis") }),
+        );
         if (data.diagnosis === "") {
           setIsEditing(false);
         }
       } else {
         toast.error(
-          t("toast.error.update", {
+          t(`toast.error.${a}`, {
             record: t("order.diagnosis", { context: "male" }),
           }),
         );
@@ -108,7 +111,7 @@ export const Diagnosis = () => {
           rules={registerOptions.diagnosis}
           errors={errors}
           defaultValue={order.diagnosis}
-          placeholder={capitalizeFirstLetter(t("order.no_diagnosis"))}
+          placeholder={capitalizeFirstLetter(t("placeholder.diagnosis"))}
           onClick={() => {
             setIsEditing(true);
           }}

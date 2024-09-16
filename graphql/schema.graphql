@@ -17,7 +17,7 @@ type ErrorPayload {
 }
 
 #import budget.graphql
-#import comment.graphql
+#import orderComment.graphql
 #import customer.graphql
 #import device.graphql
 #import deviceTypeCheck.graphql

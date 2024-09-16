@@ -32,7 +32,7 @@ export const Description = () => {
       if (status) {
         getBoard();
         toast.success(
-          t("toast.success", {
+          t("toast.success.add", {
             context: "female",
             record: t("order.observation_simple"),
           }),

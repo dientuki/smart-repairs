@@ -1,19 +1,19 @@
 extend type Mutation {
     updateCommentVisibility(commentId: String, isPublic: Boolean!): Boolean!
-        @field(resolver: "CommentMutation@updateVisibility")
+        @field(resolver: "OrderCommentMutation@updateVisibility")
         @namespace(field: "App\\GraphQL\\Mutations")
     updateComment(commentId: String, text: String): Boolean!
-        @field(resolver: "CommentMutation@updateText")
+        @field(resolver: "OrderCommentMutation@updateText")
         @namespace(field: "App\\GraphQL\\Mutations")
     deleteComment(commentId: String): Boolean!
-        @field(resolver: "CommentMutation@delete")
+        @field(resolver: "OrderCommentMutation@delete")
         @namespace(field: "App\\GraphQL\\Mutations")
-    addComment(orderId: String, isPublic: Boolean, comment: String): Comment!
-        @field(resolver: "CommentMutation@create")
+    addComment(orderId: String, comment: OrderCommentInput): OrderComment!
+        @field(resolver: "OrderCommentMutation@create")
         @namespace(field: "App\\GraphQL\\Mutations")
 }
 
-type Comment {
+type OrderComment {
     id: ID!
     comment: String!
     created_at: DateTime!
@@ -21,4 +21,9 @@ type Comment {
     user: User
     user_id: ID!
     was_edited: Boolean
+}
+
+input OrderCommentInput {
+    comment: String! @rules(apply: ["required"])
+    ispublic: Boolean! @rules(apply: ["required"])
 }

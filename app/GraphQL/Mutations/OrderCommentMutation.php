@@ -9,7 +9,7 @@ use App\Traits\UserDataTrait;
 use Nuwave\Lighthouse\Execution\ResolveInfo;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 
-final readonly class CommentMutation
+final readonly class OrderCommentMutation
 {
     use UserDataTrait;
 
@@ -68,9 +68,9 @@ final readonly class CommentMutation
         return OrderComment::create([
             'order_id' => $args['orderId'],
             'team_id' => $team_id,
-            'comment' => strip_tags($args['comment']),
+            'comment' => strip_tags($args['comment']['comment']),
             'user_id' => $this->getUserId(),
-            'is_public' => $args['isPublic'],
+            'is_public' => $args['comment']['ispublic'],
         ]);
     }
 }

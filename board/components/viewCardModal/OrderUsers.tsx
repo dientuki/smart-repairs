@@ -19,7 +19,7 @@ export const OrderUsers = () => {
     <>
       <div className='flex items-center justify-between w-full'>
         <p className='w-1/3 first-letter:uppercase'>{t("order.assigned_to")}</p>
-        <p className='w-2/3 flex flex-row gap-1 items-center'>
+        <div className='w-2/3 flex flex-row gap-1 items-center'>
           {order.assignee ? (
             <>
               <Avatar
@@ -39,7 +39,7 @@ export const OrderUsers = () => {
               </div>
             </>
           )}
-        </p>
+        </div>
       </div>
       <div
         style={dynamicStyles(StyleColor.Primary)}

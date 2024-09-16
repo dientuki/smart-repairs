@@ -35,7 +35,7 @@ interface OrderStore {
   updateCommentVisibility: (commentId: string, isPublic: boolean) => void;
   updateComment: (commentId: string, text: string) => void;
   deleteComment: (commentId: string) => void;
-  addComment: (newComment: NewOrderComment) => Promise<OrderComment>;
+  addComment: (newComment: NewComment) => Promise<boolean>;
 
   initializeOrderCreationData: () => Promise<void>;
   createOrderSelectedData: {
@@ -79,8 +79,20 @@ export const useOrderStore = create<OrderStore>((set) => ({
     await deleteComment(commentId);
   },
 
-  addComment: async (newComment: NewOrderComment) => {
-    return await addComment(newComment);
+  addComment: async (data: NewComment): Promise<boolean> => {
+    const comment = await addComment(useOrderStore.getState().order.$id, data);
+
+    if (comment) {
+      set((state) => ({
+        order: {
+          ...state.order,
+          comments: [...(state.order.comments || []), comment],
+        },
+      }));
+
+      return true;
+    }
+    return false;
   },
 
   initializeOrderCreationData: async () => {
