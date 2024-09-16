@@ -34,12 +34,12 @@ class OrderCommentMutationTest extends TestCaseGraphQL
 
         // Ejecutar la mutación GraphQL
         $response = $this->graphQL('
-            mutation
+            mutation {
                 addComment(
                     orderId: "' . $order->id . '",
                     comment: {
                         comment: "' . $commentData['comment'] . '",
-                        ispublic: ' . $commentData['ispublic'] . '
+                        ispublic: ' . $this->boolToString($commentData['ispublic']) . '
                     }
                 ) {
                     id
@@ -56,10 +56,9 @@ class OrderCommentMutationTest extends TestCaseGraphQL
             }
         ');
 
-        dd($response);
+        //dd($response->json());
 
         // Verificar la respuesta de GraphQL
-        /*
         $response->assertJson([
             'data' => [
                 'addComment' => [
@@ -68,7 +67,6 @@ class OrderCommentMutationTest extends TestCaseGraphQL
                 ]
             ]
         ]);
-        */
 
         // Verificar que el comentario fue creado en la base de datos
         $this->assertDatabaseHas('order_comments', [

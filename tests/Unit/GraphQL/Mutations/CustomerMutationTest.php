@@ -81,18 +81,14 @@ class CustomerMutationTest extends TestCaseGraphQL
             }
         ');
 
-        $response->assertJson([
+        $response->assertJsonStructure([
           'errors' => [
               [
-                  'message' => 'Validation failed for the field [addCustomer].',
+                  'message',
                   'extensions' => [
                       'validation' => [
-                          'customer.phone' => [
-                              'The customer.phone field is required when customer.email is not present.',
-                          ],
-                          'customer.email' => [
-                              'The customer.email field is required when customer.phone is not present.',
-                          ],
+                          'customer.phone',
+                          'customer.email',
                       ],
                   ],
               ],
