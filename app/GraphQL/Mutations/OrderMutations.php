@@ -91,4 +91,17 @@ final readonly class OrderMutations
 
         return false;
     }
+
+    public function updateObservation(null $root, array $args, GraphQLContext $context, ResolveInfo $resolveInfo): bool
+    {
+        $order = Order::find($args['id']);
+
+        if ($order->team_id === $this->getTeamId()) {
+            $order->observation = $args['observation'];
+            $order->save();
+            return true;
+        }
+
+        return false;
+    }
 }

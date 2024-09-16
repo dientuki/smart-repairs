@@ -3,6 +3,7 @@ import {
   getOrder,
   getOrderCreationData,
   updateDiagnosis,
+  updateObservation,
 } from "@/services/orders";
 import {
   addComment,
@@ -55,6 +56,7 @@ interface OrderStore {
   clearAfterCreateOrder: () => void;
 
   updateDiagnosis: (diagnosis: string) => Promise<boolean>;
+  updateObservation: (observation: string) => Promise<boolean>;
 }
 
 export const useOrderStore = create<OrderStore>((set) => ({
@@ -174,6 +176,17 @@ export const useOrderStore = create<OrderStore>((set) => ({
     );
     if (status) {
       set({ order: { ...useOrderStore.getState().order, diagnosis } });
+    }
+    return status;
+  },
+
+  updateObservation: async (observation: string): Promise<boolean> => {
+    const status = await updateObservation(
+      useOrderStore.getState().order.$id,
+      observation,
+    );
+    if (status) {
+      set({ order: { ...useOrderStore.getState().order, observation } });
     }
     return status;
   },

@@ -309,7 +309,6 @@ export const updateDiagnosis = async (
   id: string,
   diagnosis: string,
 ): Promise<boolean> => {
-  console.log(id, diagnosis);
   const response = await graphqlRequest(`
     mutation {
       updateDiagnosis(
@@ -322,4 +321,22 @@ export const updateDiagnosis = async (
   handleGraphQLErrors(response.errors);
 
   return response.data.updateDiagnosis;
+};
+
+export const updateObservation = async (
+  id: string,
+  observation: string,
+): Promise<boolean> => {
+  const response = await graphqlRequest(`
+    mutation {
+      updateObservation(
+        id: "${id}",
+        observation: "${observation}"
+      )
+    }
+  `);
+
+  handleGraphQLErrors(response.errors);
+
+  return response.data.updateObservation;
 };

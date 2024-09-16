@@ -1,4 +1,4 @@
-import { Field, Input, Label } from "@headlessui/react";
+import { Field, Label, Textarea } from "@headlessui/react";
 import {
   Controller,
   Control,
@@ -8,7 +8,7 @@ import {
 } from "react-hook-form";
 import { ErrorMessage } from "@/components/form";
 
-interface InputFieldProps {
+interface TextareaFieldProps {
   name: string;
   label: string;
   control: Control<FieldValues>;
@@ -16,25 +16,25 @@ interface InputFieldProps {
   disabled?: boolean;
   rules?: RegisterOptions;
   errors?: FieldErrors<FieldValues>;
-  icon?: React.ComponentType<React.SVGProps<SVGSVGElement>>;
   defaultValue?: string;
   placeholder?: string;
-  onClick?: (event: React.MouseEvent<HTMLInputElement>) => void;
+  rows?: number;
+  onClick?: (event: React.MouseEvent<HTMLTextAreaElement>) => void;
 }
 
-export const InputField = ({
+export const TextareaField = ({
   name,
   label,
   labelless = false,
   control,
   rules = {},
   errors,
-  icon: Icon,
   disabled = false,
   defaultValue = "",
   placeholder,
+  rows = 3,
   onClick,
-}: InputFieldProps) => {
+}: TextareaFieldProps) => {
   const hasError = Boolean(errors?.[name]);
 
   return (
@@ -60,20 +60,16 @@ export const InputField = ({
               }
               overflow-hidden`}
         >
-          {Icon && (
-            <div className='inline-flex items-center px-3 text-base text-gray-900 bg-gray-200 border rounded-e-0 border-gray-300 border-e-0 rounded-s-md'>
-              <Icon className='w-4 h-4 text-gray-500' aria-hidden='true' />
-            </div>
-          )}
           <Controller
             name={name}
             control={control}
             defaultValue={defaultValue || ""}
             rules={rules}
             render={({ field }) => (
-              <Input
+              <Textarea
                 {...field}
                 id={name}
+                rows={rows}
                 readOnly={disabled}
                 placeholder={placeholder}
                 onClick={onClick}

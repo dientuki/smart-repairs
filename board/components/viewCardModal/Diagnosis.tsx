@@ -7,8 +7,8 @@ import { toast } from "react-toastify";
 import { ActionButton, InputField } from "@/components/form";
 import { useRef, useState } from "react";
 import { capitalizeFirstLetter } from "@/helper/stringHelpers";
-import { Loading } from "../Loading";
 import { simpleError } from "@/helper/toastHelper";
+import { Loading } from "@/components/Loading";
 
 export const Diagnosis = () => {
   const { order, updateDiagnosis } = useOrderStore();
@@ -23,7 +23,7 @@ export const Diagnosis = () => {
   const formRef = useRef<HTMLFormElement>(null);
 
   const handleRegistration = async (data: FieldValues) => {
-    if (isSubmitting) return;
+    if (isSubmitting || data.diagnosis === order.diagnosis) return;
     setIsSubmitting(true);
     try {
       const status = await updateDiagnosis(data.diagnosis);

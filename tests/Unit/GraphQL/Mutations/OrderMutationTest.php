@@ -80,6 +80,66 @@ class OrderMutationTest extends TestCaseGraphQL
         ]);
     }
 
+    #[Test]
+    public function update_observations_for_order_belongs_to_team_successfully()
+    {
+        $newObservation = 'UpdatedObservation';
+        $order = Order::factory()->create(['team_id' => $this->team->id]);
+
+        $response = $this->graphQL('
+            mutation {
+                updateObservation(
+                    id: "' . $order->id . '",
+                    observation: "' . $newObservation . '"
+                )
+            }
+        ');
+
+
+        // Verificar que la mutación retornó true
+        $response->assertJson([
+            'data' => [
+                'updateObservation' => true,
+            ],
+        ]);
+
+        // Verificar que los datos del cliente se han actualizado en la base de datos
+        $this->assertDatabaseHas('orders', [
+            'id' => $order->id,
+            'observation' => $newObservation
+        ]);
+    }
+
+    #[Test]
+    public function not_observations_diagnosis_for_order_not_belongs_to_team()
+    {
+        $team = Team::factory()->create();
+        $order = Order::factory()->create(['team_id' => $team->id]);
+
+        $response = $this->graphQL('
+            mutation {
+                updateObservation(
+                    id: "' . $order->id . '",
+                    observation: "Lorem ipsum"
+                )
+            }
+        ');
+
+
+        // Verificar que la mutación retornó true
+        $response->assertJson([
+            'data' => [
+                'updateObservation' => false,
+            ],
+        ]);
+
+        // Verificar que los datos del cliente se han actualizado en la base de datos
+        $this->assertDatabaseHas('orders', [
+            'id' => $order->id,
+            'observation' => $order->observation
+        ]);
+    }
+
     /**
      * Test to ensure that an unauthenticated user cannot access the mutation.
      *
