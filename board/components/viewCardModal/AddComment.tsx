@@ -23,7 +23,7 @@ export const AddComment = () => {
     formState: { errors },
     setValue,
     watch,
-    reset
+    reset,
   } = useForm<FieldValues>({
     defaultValues: {
       comment: "",

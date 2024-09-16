@@ -32,7 +32,6 @@ export const addComment = async (
   orderId: string,
   newComment: NewComment,
 ): Promise<OrderComment> => {
-
   const response = await graphqlRequest(`
             mutation {
               addComment(
