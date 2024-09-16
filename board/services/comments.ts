@@ -3,15 +3,15 @@ import { escapeGraphQLString } from "@/helper/stringHelpers";
 
 export const updateComment = async (
   id: string,
-  udpateComment: CreateOrUpdateComment,
+  data: CreateOrUpdateComment,
 ): Promise<boolean> => {
   const response = await graphqlRequest(`
     mutation {
       updateComment(
         commentId: "${id}",
         comment: {
-          comment: "${escapeGraphQLString(udpateComment.comment)}",
-          ispublic: ${udpateComment.ispublic}
+          comment: "${escapeGraphQLString(data.comment)}",
+          ispublic: ${data.ispublic}
         }
       )
     }
@@ -32,15 +32,15 @@ export const deleteComment = (commentId: string) => {
 
 export const addComment = async (
   orderId: string,
-  newComment: CreateOrUpdateComment,
+  data: CreateOrUpdateComment,
 ): Promise<OrderComment> => {
   const response = await graphqlRequest(`
             mutation {
               addComment(
                 orderId: "${orderId}",
                 comment: {
-                  comment: "${escapeGraphQLString(newComment.comment)}",
-                  ispublic: ${newComment.ispublic}
+                  comment: "${escapeGraphQLString(data.comment)}",
+                  ispublic: ${data.ispublic}
                 }
               ) {
                 id

@@ -5,7 +5,7 @@ import {
   updateDiagnosis,
   updateObservation,
 } from "@/services/orders";
-import { addComment, deleteComment } from "@/services/comments";
+import { addComment, deleteComment, updateComment } from "@/services/comments";
 import { createOrder } from "@/services/orders";
 import {
   useCustomerStore,
@@ -66,33 +66,45 @@ export const useOrderStore = create<OrderStore>((set) => ({
 
   updateComment: async (
     id: string,
-    updateComment: CreateOrUpdateComment,
+    data: CreateOrUpdateComment,
   ): Promise<boolean> => {
-    const comment = await updateComment(id, updateComment);
-    if (comment) {
-      console.log("a");
-      /*
-      set((state) => ({
-        order: {
-          ...state.order,
-          comments: [comment, ...(state.order.comments || [])],
-        },
-      }));
-      */
+    // Llama a la función para actualizar el comentario en el backend
+    const updatedCommentData = await updateComment(id, data);
+
+    // Si la actualización fue exitosa
+    if (updatedCommentData) {
+      set((state) => {
+        // Obtén los comentarios actuales
+        const comments = state.order.comments || [];
+
+        // Actualiza el comentario correspondiente
+        const updatedComments = comments.map((comment) =>
+          comment.id === id
+            ? { ...comment, ...data }
+            : comment
+        );
+
+        return {
+          order: {
+            ...state.order,
+            comments: updatedComments,
+          },
+        };
+      });
+
       return true;
     }
+
     return false;
   },
+
 
   deleteComment: async (commentId: string) => {
     await deleteComment(commentId);
   },
 
-  addComment: async (newComment: CreateOrUpdateComment): Promise<boolean> => {
-    const comment = await addComment(
-      useOrderStore.getState().order.$id,
-      newComment,
-    );
+  addComment: async (data: CreateOrUpdateComment): Promise<boolean> => {
+    const comment = await addComment(useOrderStore.getState().order.$id, data);
 
     if (comment) {
       set((state) => ({

@@ -17,10 +17,9 @@ type Props = {
 export const Comment = ({ comment }: Props) => {
   const { user } = useUserStore();
   const { updateComment } = useOrderStore();
-  const [commentData, setCommentData] = useState(comment);
   const [isEditing, setIsEditing] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const isMyComment = commentData.userId === user?.id;
+  const isMyComment = comment.userId === user?.id;
   const { t } = useTranslation();
   const {
     handleSubmit,
@@ -30,24 +29,24 @@ export const Comment = ({ comment }: Props) => {
     watch,
   } = useForm<FieldValues>({
     defaultValues: {
-      comment: commentData.comment,
-      ispublic: commentData.isPublic,
+      comment: comment.comment,
+      ispublic: comment.isPublic,
     },
   });
   const ispublic = watch("ispublic");
   const formRef = useRef<HTMLFormElement>(null);
 
   const handleRegistration = async (data: FieldValues) => {
-    if (isSubmitting || data.comment === commentData.comment) return;
+    if (isSubmitting || data.comment === comment.comment) return;
     setIsSubmitting(true);
     try {
       const status = await updateComment(
-        commentData.id,
+        comment.id,
         data as CreateOrUpdateComment,
       );
       if (status) {
         toast.success(
-          t("toast.success.add", {
+          t("toast.success.update", {
             record: t("order.comment"),
           }),
         );
@@ -99,22 +98,22 @@ export const Comment = ({ comment }: Props) => {
     <div className='flex flex-col gap-2'>
       <div className='flex items-center gap-2'>
         <Avatar
-          name={commentData.userName}
+          name={comment.userName}
           round={true}
           size='28'
           maxInitials={2}
-          src={commentData.userImage}
+          src={comment.userImage}
         />
         <div>
-          {commentData.createdAtDate?.toDateString()}{" "}
-          {commentData.createdAtDate?.toLocaleTimeString()}
+          {comment.createdAtDate?.toDateString()}{" "}
+          {comment.createdAtDate?.toLocaleTimeString()}
         </div>
 
-        {commentData.wasEdited && <div className='text-gray-500'>Editado</div>}
+        {comment.wasEdited && <div className='text-gray-500'>Editado</div>}
 
         <LockStatus
           toggleVisibility={toggleVisibility}
-          status={commentData.isPublic}
+          status={comment.isPublic}
           disabled={!isMyComment}
         />
       </div>

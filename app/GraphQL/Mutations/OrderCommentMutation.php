@@ -18,13 +18,16 @@ final readonly class OrderCommentMutation
         $user = $this->getUserId();
         $comment = OrderComment::find($commentId);
 
-        return $user && $user->id === $comment->user_id;
+        return $user && $user === $comment->user_id;
     }
 
     public function update(null $root, array $args, GraphQLContext $context, ResolveInfo $resolveInfo): mixed
     {
         if ($this->isMyComment($args['commentId'])) {
-            return OrderComment::where('id', $args['commentId'])->update($args['comment']);
+            return OrderComment::where('id', $args['commentId'])->update([
+                'comment' => strip_tags($args['comment']['comment']),
+                'is_public' => $args['comment']['ispublic']
+            ]);
         }
 
         return false;
