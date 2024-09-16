@@ -2,13 +2,17 @@ import Avatar from "react-avatar";
 import { FieldValues, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";
-import { ActionButton, TextareaField } from "../form";
 import { capitalizeFirstLetter } from "@/helper/stringHelpers";
 import { useRef, useState } from "react";
 import { LockStatus } from "@/components/viewCardModal";
 import { StyleColor } from "@/types/enums";
 import { useOrderStore, useUserStore } from "@/store";
 import { simpleError } from "@/helper/toastHelper";
+import {
+  ActionButtonWithDialog,
+  ActionButton,
+  TextareaField,
+} from "@/components/form";
 
 type Props = {
   comment: OrderComment;
@@ -74,6 +78,10 @@ export const Comment = ({ comment }: Props) => {
 
   const handleEditClick = () => {
     setIsEditing(true);
+  };
+
+  const handleDeleteClick = () => {
+    alert("go to click");
   };
 
   const registerOptions = {
@@ -147,9 +155,13 @@ export const Comment = ({ comment }: Props) => {
           >
             {isEditing ? t("button.send") : t("button.edit")}
           </ActionButton>
-          <ActionButton style={StyleColor.Danger}>
+          <ActionButtonWithDialog
+            style={StyleColor.Danger}
+            confirmMessage={`¿Desea borrar ${t("item.name")}?`}
+            onConfirm={handleDeleteClick}
+          >
             {t("button.delete")}
-          </ActionButton>
+          </ActionButtonWithDialog>
         </div>
       )}
     </div>

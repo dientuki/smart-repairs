@@ -5,3 +5,5 @@ export { default as ValidatedAutocomplete } from "@/components/form/ValidatedAut
 export { ActionButton } from "@/components/form/ActionButton";
 export { ErrorMessage } from "@/components/form/ErrorMessage";
 export { TextareaField } from "@/components/form/TextareaField";
+export { withDialog } from "@/components/form/withDialog";
+export { ActionButtonWithDialog } from "@/components/form/ActionButtonWithDialog";

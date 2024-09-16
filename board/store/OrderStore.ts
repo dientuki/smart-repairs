@@ -79,9 +79,7 @@ export const useOrderStore = create<OrderStore>((set) => ({
 
         // Actualiza el comentario correspondiente
         const updatedComments = comments.map((comment) =>
-          comment.id === id
-            ? { ...comment, ...data }
-            : comment
+          comment.id === id ? { ...comment, ...data } : comment,
         );
 
         return {
@@ -97,7 +95,6 @@ export const useOrderStore = create<OrderStore>((set) => ({
 
     return false;
   },
-
 
   deleteComment: async (commentId: string) => {
     await deleteComment(commentId);
