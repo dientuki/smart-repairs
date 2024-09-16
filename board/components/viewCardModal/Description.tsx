@@ -9,9 +9,11 @@ import { Loading } from "@/components/Loading";
 import { toast } from "react-toastify";
 import { simpleError } from "@/helper/toastHelper";
 import { capitalizeFirstLetter } from "@/helper/stringHelpers";
+import { useBoardStore } from "@/store";
 
 export const Description = () => {
   const { order, updateObservation } = useOrderStore();
+  const { getBoard } = useBoardStore();
   const { t } = useTranslation();
   const {
     handleSubmit,
@@ -28,8 +30,8 @@ export const Description = () => {
     try {
       const status = await updateObservation(data.observation);
       if (status) {
+        getBoard();
         toast.success(
-          //dunno
           t("toast.success", {
             context: "female",
             record: t("order.observation_simple"),
