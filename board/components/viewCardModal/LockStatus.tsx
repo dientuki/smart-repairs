@@ -5,15 +5,16 @@ import { Icon } from "@/components/Icon";
 interface LockStatusProps {
   toggleVisibility: () => void;
   status: boolean;
+  disabled?: boolean;
 }
 
-export const LockStatus = ({ toggleVisibility, status }: LockStatusProps) => {
+export const LockStatus = ({ toggleVisibility, status, disabled = false }: LockStatusProps) => {
   const { t } = useTranslation();
 
   return (
     <div
-      className='flex flex-row items-center gap-1 cursor-pointer'
-      onClick={toggleVisibility}
+      className={`flex flex-row items-center gap-1 ${!disabled ? 'cursor-pointer' : ''}`}
+      onClick={!disabled ? toggleVisibility : undefined}
     >
       {status ? (
         <>

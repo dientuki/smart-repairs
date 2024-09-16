@@ -4,28 +4,37 @@ import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";
 import { ActionButton, TextareaField } from "../form";
 import { capitalizeFirstLetter } from "@/helper/stringHelpers";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { LockStatus } from "@/components/viewCardModal";
 import { StyleColor } from "@/types/enums";
+import { useUserStore } from "@/store";
 
 type Props = {
   comment: OrderComment;
 };
 
 export const Comment = ({ comment }: Props) => {
+  const { user } = useUserStore();
   const [commentData, setCommentData] = useState(comment);
   const [isEditing, setIsEditing] = useState(false);
+  const isMyComment = commentData.userId === user?.id;
   const { t } = useTranslation();
   const {
     handleSubmit,
     control,
     formState: { errors },
+    setValue,
+    watch
   } = useForm<FieldValues>({
     defaultValues: {
       comment: commentData.comment,
       ispublic: commentData.isPublic,
     },
   });
+  const ispublic = watch("ispublic");
+  const formRef = useRef<HTMLFormElement>(null);
+
+  console.log(commentData);
 
   const handleRegistration = async (data: FieldValues) => {
 
@@ -43,11 +52,18 @@ export const Comment = ({ comment }: Props) => {
   };
 
   const toggleVisibility = () => {
-    //setValue("ispublic", !ispublic); // Cambiar el valor de ispublic
+    setValue("ispublic", !ispublic);
+    submitForm();
+  };
+
+  const submitForm = () => {
+    if (formRef.current) {
+      formRef.current.requestSubmit();
+    }
   };
 
   return (
-    <div className='flex flex-col gap-2'>
+    <div className='flex flex-col gap-2'>s
       <div className='flex items-center gap-2'>
         <Avatar
           name={commentData.userName}
@@ -66,6 +82,7 @@ export const Comment = ({ comment }: Props) => {
         <LockStatus
           toggleVisibility={toggleVisibility}
           status={commentData.isPublic}
+          disabled={!isMyComment}
         />
       </div>
       <form
@@ -83,7 +100,8 @@ export const Comment = ({ comment }: Props) => {
           placeholder={capitalizeFirstLetter(t("placeholder.comment"))}
         />
       </form>
-      <div className='flex flex-row items-center gap-3 w-auto ml-9'>
+      {isMyComment && (
+        <div className='flex flex-row items-center gap-3 w-auto ml-9'>
           {isEditing ? (
             <ActionButton onClick={toggleVisibility}>
               {t("button.save")}
@@ -97,6 +115,7 @@ export const Comment = ({ comment }: Props) => {
             {t("button.delete")}
           </ActionButton>
         </div>
+      )}
     </div>
   );
 };
