@@ -19,7 +19,7 @@ if (appElement) {
       <AddButton />
       <Suspense>
         <ModalContainer controller={Modal} />
-        <ToastContainer position='bottom-right' newestOnTop />
+        <ToastContainer position='top-right' newestOnTop={false} />
       </Suspense>
     </I18nextProvider>,
   );
