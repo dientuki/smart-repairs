@@ -29,7 +29,9 @@ export const Diagnosis = () => {
       const status = await updateDiagnosis(data.diagnosis);
       const a = order.diagnosis === "" ? "add" : "update";
       if (status) {
-        toast.success(t(`toast.success.${a}`, { record: t("order.diagnosis") }));
+        toast.success(
+          t(`toast.success.${a}`, { record: t("order.diagnosis") }),
+        );
         if (data.diagnosis === "") {
           setIsEditing(false);
         }
