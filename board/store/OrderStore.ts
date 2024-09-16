@@ -5,12 +5,7 @@ import {
   updateDiagnosis,
   updateObservation,
 } from "@/services/orders";
-import {
-  addComment,
-  updateCommentVisibility,
-  updateComment,
-  deleteComment,
-} from "@/services/comments";
+import { addComment, deleteComment } from "@/services/comments";
 import { createOrder } from "@/services/orders";
 import {
   useCustomerStore,
@@ -32,10 +27,12 @@ interface OrderStore {
   tmpOrder: NewOrder;
   getOrder: (id: string) => Promise<void>;
 
-  updateCommentVisibility: (commentId: string, isPublic: boolean) => void;
-  updateComment: (commentId: string, text: string) => void;
+  updateComment: (
+    id: string,
+    updateComment: CreateOrUpdateComment,
+  ) => Promise<boolean>;
   deleteComment: (commentId: string) => void;
-  addComment: (newComment: NewComment) => Promise<boolean>;
+  addComment: (newComment: CreateOrUpdateComment) => Promise<boolean>;
 
   initializeOrderCreationData: () => Promise<void>;
   createOrderSelectedData: {
@@ -67,20 +64,35 @@ export const useOrderStore = create<OrderStore>((set) => ({
     set({ order });
   },
 
-  updateCommentVisibility: (commentId: string, isPublic: boolean) => {
-    updateCommentVisibility(commentId, isPublic);
-  },
-
-  updateComment: (commentId: string, text: string) => {
-    updateComment(commentId, text);
+  updateComment: async (
+    id: string,
+    updateComment: CreateOrUpdateComment,
+  ): Promise<boolean> => {
+    const comment = await updateComment(id, updateComment);
+    if (comment) {
+      console.log("a");
+      /*
+      set((state) => ({
+        order: {
+          ...state.order,
+          comments: [comment, ...(state.order.comments || [])],
+        },
+      }));
+      */
+      return true;
+    }
+    return false;
   },
 
   deleteComment: async (commentId: string) => {
     await deleteComment(commentId);
   },
 
-  addComment: async (data: NewComment): Promise<boolean> => {
-    const comment = await addComment(useOrderStore.getState().order.$id, data);
+  addComment: async (newComment: CreateOrUpdateComment): Promise<boolean> => {
+    const comment = await addComment(
+      useOrderStore.getState().order.$id,
+      newComment,
+    );
 
     if (comment) {
       set((state) => ({

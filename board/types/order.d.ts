@@ -49,7 +49,6 @@ interface RawOrderComment {
   was_edited: boolean;
 }
 
-
 interface NewOrder {
   customerId: string | null | undefined;
   observation: string;
@@ -71,7 +70,7 @@ interface feature {
   checked: boolean;
 }
 
-interface NewComment {
+interface CreateOrUpdateComment {
   comment: string;
   ispublic: boolean;
 }

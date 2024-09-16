@@ -1,23 +1,25 @@
 import { graphqlRequest, handleGraphQLErrors } from "@/helper/graphqlHelpers";
 import { escapeGraphQLString } from "@/helper/stringHelpers";
 
-export const updateCommentVisibility = (
-  commentId: string,
-  ispublic: boolean,
-) => {
-  graphqlRequest(`
+export const updateComment = async (
+  id: string,
+  udpateComment: CreateOrUpdateComment,
+): Promise<boolean> => {
+  const response = await graphqlRequest(`
     mutation {
-      updateCommentVisibility(commentId: "${commentId}", ispublic: ${ispublic})
+      updateComment(
+        commentId: "${id}",
+        comment: {
+          comment: "${escapeGraphQLString(udpateComment.comment)}",
+          ispublic: ${udpateComment.ispublic}
+        }
+      )
     }
   `);
-};
 
-export const updateComment = (commentId: string, text: string) => {
-  graphqlRequest(`
-    mutation {
-      updateComment(commentId: "${commentId}", text: "${text}")
-    }
-  `);
+  handleGraphQLErrors(response.errors);
+
+  return response.data.updateComment;
 };
 
 export const deleteComment = (commentId: string) => {
@@ -30,7 +32,7 @@ export const deleteComment = (commentId: string) => {
 
 export const addComment = async (
   orderId: string,
-  newComment: NewComment,
+  newComment: CreateOrUpdateComment,
 ): Promise<OrderComment> => {
   const response = await graphqlRequest(`
             mutation {

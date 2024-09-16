@@ -37,7 +37,7 @@ export const AddComment = () => {
   const handleRegistration = async (data: FieldValues) => {
     setIsSubmitting(true);
     try {
-      const status = await addComment(data as NewComment);
+      const status = await addComment(data as CreateOrUpdateComment);
       if (status) {
         resetField("comment");
         getBoard();

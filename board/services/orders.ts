@@ -107,7 +107,6 @@ export const getOrder = async (id: string) => {
     [],
   );
 
-
   return {
     $id: response.data.order.id,
     createdAt: response.data.order.created_at,
