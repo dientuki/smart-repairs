@@ -58,7 +58,10 @@
         "created_at": "creado",
         "created_by": "vendedor",
         "customer": "cliente",
-        "description": "descripción inicial del problema",
+        "observation": "descripción inicial del problema",
+        "observation_simple": "descripción del problema",
+        "observation_female": "la descripción del problema",
+        "no_observation": "Describa el problema del equipo",
         "diagnosis": "diagnostico",
         "diagnosis_male": "el diagnostico",
         "no_diagnosis": "sin diagnostico",
@@ -79,7 +82,8 @@
             "form": "Error en el formulario",
             "update": "Error al actualizar {{record}}"
         },
-        "success": "{{record}} actualizado con exito"
+        "success": "{{record}} actualizado con exito",
+        "success_female": "{{record}} actualizada con exito"
     },
 
     "status": {

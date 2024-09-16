@@ -29,7 +29,11 @@ export const Description = () => {
       const status = await updateObservation(data.observation);
       if (status) {
         toast.success(
-          t("toast.success.update", { record: t("order.observation") }),
+          //dunno
+          t("toast.success", {
+            context: "female",
+            record: t("order.observation_simple"),
+          }),
         );
         if (data.observation === "") {
           setIsEditing(false);
@@ -65,7 +69,7 @@ export const Description = () => {
 
   const registerOptions = {
     observation: {
-      required: t("validation.required", { field: t("field.observation") }),
+      required: t("validation.required", { field: t("order.observation") }),
     },
   };
 
