@@ -9,7 +9,7 @@ use App\Traits\UserDataTrait;
 use Nuwave\Lighthouse\Execution\ResolveInfo;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 
-final readonly class CommentMutation
+final readonly class OrderCommentMutation
 {
     use UserDataTrait;
 

@@ -59,5 +59,5 @@ interface feature {
 
 interface NewComment {
   comment: string;
-  isPublic: boolean;
+  ispublic: boolean;
 }

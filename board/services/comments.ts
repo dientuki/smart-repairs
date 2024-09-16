@@ -3,11 +3,11 @@ import { escapeGraphQLString } from "@/helper/stringHelpers";
 
 export const updateCommentVisibility = (
   commentId: string,
-  isPublic: boolean,
+  ispublic: boolean,
 ) => {
   graphqlRequest(`
     mutation {
-      updateCommentVisibility(commentId: "${commentId}", isPublic: ${isPublic})
+      updateCommentVisibility(commentId: "${commentId}", ispublic: ${ispublic})
     }
   `);
 };
@@ -39,7 +39,7 @@ export const addComment = async (
                 orderId: "${orderId}",
                 comment: {
                   comment: "${escapeGraphQLString(newComment.comment)}",
-                  ispublic: ${newComment.isPublic}
+                  ispublic: ${newComment.ispublic}
                 }
               ) {
                 id
