@@ -90,8 +90,8 @@ export const getOrder = async (id: string) => {
   handleGraphQLErrors(response.errors);
 
   const comments: OrderComment[] = response.data.order.comments.reduce(
-    (acc: OrderComment[], comment: any) => {
-      acc.push({
+    (acc: OrderComment[], comment: RawOrderComment) => [
+      {
         id: comment.id,
         comment: comment.comment,
         createdAt: comment.created_at,
@@ -101,12 +101,12 @@ export const getOrder = async (id: string) => {
         userName: comment.user.name,
         userImage: comment.user.imageUrl,
         wasEdited: comment.was_edited,
-      });
-
-      return acc;
-    },
+      },
+      ...acc,
+    ],
     [],
   );
+
 
   return {
     $id: response.data.order.id,

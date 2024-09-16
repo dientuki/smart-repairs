@@ -86,7 +86,7 @@ export const useOrderStore = create<OrderStore>((set) => ({
       set((state) => ({
         order: {
           ...state.order,
-          comments: [...(state.order.comments || []), comment],
+          comments: [comment, ...(state.order.comments || [])],
         },
       }));
 

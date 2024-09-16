@@ -36,6 +36,20 @@ interface OrderComment {
   wasEdited: boolean;
 }
 
+interface RawOrderComment {
+  id: string;
+  comment: string;
+  created_at: string;
+  is_public: boolean;
+  user_id: string;
+  user: {
+    name: string;
+    imageUrl: string;
+  };
+  was_edited: boolean;
+}
+
+
 interface NewOrder {
   customerId: string | null | undefined;
   observation: string;

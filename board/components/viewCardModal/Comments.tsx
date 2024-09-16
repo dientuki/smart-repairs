@@ -19,7 +19,6 @@ export const Comments = () => {
             {order?.comments?.length || 0})
           </span>
         </div>
-        <div>¿Button?</div>
       </div>
 
       <AddComment />

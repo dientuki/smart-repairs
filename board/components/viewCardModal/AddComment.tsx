@@ -24,7 +24,7 @@ export const AddComment = () => {
     formState: { errors },
     setValue,
     watch,
-    reset,
+    resetField,
   } = useForm<FieldValues>({
     defaultValues: {
       comment: "",
@@ -38,7 +38,7 @@ export const AddComment = () => {
     try {
       const status = await addComment(data as NewComment);
       if (status) {
-        reset();
+        resetField("comment");
         getBoard();
         toast.success(
           t("toast.success.add", {
