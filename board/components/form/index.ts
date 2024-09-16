@@ -4,3 +4,4 @@ export { default as SimpleAutocomplete } from "@/components/form/SimpleAutocompl
 export { default as ValidatedAutocomplete } from "@/components/form/ValidatedAutocomplete";
 export { ActionButton } from "@/components/form/ActionButton";
 export { ErrorMessage } from "@/components/form/ErrorMessage";
+export { TextareaField } from "@/components/form/TextareaField";

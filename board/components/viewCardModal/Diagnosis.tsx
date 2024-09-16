@@ -2,12 +2,13 @@ import { useOrderStore } from "@/store/OrderStore";
 import { Icon } from "@/components/Icon";
 import { DocumentTextIcon } from "@heroicons/react/24/outline";
 import { useTranslation } from "react-i18next";
-import { useForm, FieldValues, FieldErrors } from "react-hook-form";
+import { useForm, FieldValues } from "react-hook-form";
 import { toast } from "react-toastify";
 import { ActionButton, InputField } from "@/components/form";
 import { useRef, useState } from "react";
 import { capitalizeFirstLetter } from "@/helper/stringHelpers";
-import { Loading } from "../Loading";
+import { simpleError } from "@/helper/toastHelper";
+import { Loading } from "@/components/Loading";
 
 export const Diagnosis = () => {
   const { order, updateDiagnosis } = useOrderStore();
@@ -22,28 +23,32 @@ export const Diagnosis = () => {
   const formRef = useRef<HTMLFormElement>(null);
 
   const handleRegistration = async (data: FieldValues) => {
-    if (isSubmitting) return;
+    if (isSubmitting || data.diagnosis === order.diagnosis) return;
     setIsSubmitting(true);
     try {
       const status = await updateDiagnosis(data.diagnosis);
       if (status) {
-        toast.success("Diagnostico actualizado");
+        toast.success(t("toast.success", { record: t("order.diagnosis") }));
         if (data.diagnosis === "") {
           setIsEditing(false);
         }
       } else {
-        toast.error("Error al actualizar el diagnostico");
+        toast.error(
+          t("toast.error.update", {
+            record: t("order.diagnosis", { context: "male" }),
+          }),
+        );
       }
-    } catch (error) {
-      toast.error("Error en el formulario");
+    } catch (e: unknown) {
+      toast.error(t(`toast.error.${simpleError(e)}`));
     } finally {
       setIsEditing(false);
       setIsSubmitting(false);
     }
   };
 
-  const handleError = (_: FieldErrors<FieldValues>) => {
-    toast.error("Error en el formulario");
+  const handleError = () => {
+    toast.error(t("toast.error.form"));
   };
 
   const handleEditClick = () => {

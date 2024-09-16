@@ -58,6 +58,12 @@
   display: grid;
 }
 
+.Toastify__toast-body > div:first-letter{
+    text-transform: uppercase;
+}
+/*
 textarea {
   field-sizing: content;
 }
+
+*/

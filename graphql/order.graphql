@@ -15,6 +15,9 @@ extend type Mutation {
     updateDiagnosis(id: String!, diagnosis: String! @rules(apply: ["max:200"])): Boolean!
         @field(resolver: "OrderMutations@updateDiagnosis")
         @namespace(field: "App\\GraphQL\\Mutations")
+    updateObservation(id: String!, observation: String! @rules(apply: ["required"])): Boolean!
+        @field(resolver: "OrderMutations@updateObservation")
+        @namespace(field: "App\\GraphQL\\Mutations")
 }
 
 input OrderInput {

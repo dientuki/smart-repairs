@@ -58,8 +58,12 @@
         "created_at": "creado",
         "created_by": "vendedor",
         "customer": "cliente",
-        "description": "descripción inicial del problema",
+        "observation": "descripción inicial del problema",
+        "observation_simple": "descripción del problema",
+        "observation_female": "la descripción del problema",
+        "no_observation": "Describa el problema del equipo",
         "diagnosis": "diagnostico",
+        "diagnosis_male": "el diagnostico",
         "no_diagnosis": "sin diagnostico",
         "serial": "numero de imei\/serie",
         "no_serial": "no disponible",
@@ -73,9 +77,13 @@
     "toast": {
         "error": {
             "data": "Error de datos",
+            "generic": "Error generico",
             "network": "Error de red",
-            "form": "Error de formulario"
-        }
+            "form": "Error en el formulario",
+            "update": "Error al actualizar {{record}}"
+        },
+        "success": "{{record}} actualizado con exito",
+        "success_female": "{{record}} actualizada con exito"
     },
 
     "status": {
