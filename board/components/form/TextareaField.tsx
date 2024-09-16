@@ -36,7 +36,6 @@ export const TextareaField = ({
   onClick,
 }: TextareaFieldProps) => {
   const hasError = Boolean(errors?.[name]);
-  //const minHeight = `calc(${lineHeight} * ${rows} + ${paddingVertical} * 2)`;
 
   return (
     <Field>

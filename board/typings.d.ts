@@ -56,12 +56,6 @@ interface DeviceRepared {
   deviceId?: string;
 }
 
-interface NewOrderComment {
-  comment: string;
-  isPublic: boolean;
-  orderId: string;
-}
-
 interface Images {
   bucketId: string;
   fileId: string;

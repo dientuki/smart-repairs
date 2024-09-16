@@ -1,4 +1,4 @@
-import { graphqlRequest } from "@/helper/graphqlHelpers";
+import { graphqlRequest, handleGraphQLErrors } from "@/helper/graphqlHelpers";
 
 export const updateCommentVisibility = (
   commentId: string,
@@ -27,13 +27,18 @@ export const deleteComment = (commentId: string) => {
   `);
 };
 
-export const addComment = async (newComment: NewOrderComment) => {
-  const data = await graphqlRequest(`
+export const addComment = async (
+  orderId: string,
+  newComment: NewComment,
+): Promise<OrderComment> => {
+  const response = await graphqlRequest(`
             mutation {
               addComment(
-                comment: "${newComment.comment}",
-                orderId: "${newComment.orderId}",
-                isPublic: ${newComment.isPublic}
+                orderId: "${orderId}",
+                comment: {
+                  comment: "${newComment.comment}"
+                  is_public: ${newComment.isPublic}
+                }
               ) {
                 id
                 comment
@@ -43,21 +48,23 @@ export const addComment = async (newComment: NewOrderComment) => {
                 was_edited
                 user {
                     name
+                    imageUrl
                 }
               }
           }
         `);
 
-  const json = await data.json();
+  handleGraphQLErrors(response.errors);
 
   return {
-    id: json.data.addComment.id,
-    comment: json.data.addComment.comment,
-    createdAt: json.data.addComment.created_at,
-    createdAtDate: new Date(json.data.addComment.created_at),
-    isPublic: json.data.addComment.is_public,
-    userId: json.data.addComment.user_id,
-    userName: json.data.addComment.user.name,
-    wasEdited: json.data.addComment.was_edited,
-  } as OrderComment;
+    id: response.data.addComment.id,
+    comment: response.data.addComment.comment,
+    createdAt: response.data.addComment.created_at,
+    createdAtDate: new Date(response.data.addComment.created_at),
+    isPublic: response.data.addComment.is_public,
+    userId: response.data.addComment.user_id,
+    userName: response.data.addComment.user.name,
+    userImage: response.data.addComment.user.imageUrl,
+    wasEdited: response.data.addComment.was_edited,
+  };
 };

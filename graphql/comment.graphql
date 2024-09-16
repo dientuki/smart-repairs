@@ -8,7 +8,7 @@ extend type Mutation {
     deleteComment(commentId: String): Boolean!
         @field(resolver: "CommentMutation@delete")
         @namespace(field: "App\\GraphQL\\Mutations")
-    addComment(orderId: String, isPublic: Boolean, comment: String): Comment!
+    addComment(orderId: String, comment: CommentInput): Comment!
         @field(resolver: "CommentMutation@create")
         @namespace(field: "App\\GraphQL\\Mutations")
 }
@@ -21,4 +21,9 @@ type Comment {
     user: User
     user_id: ID!
     was_edited: Boolean
+}
+
+input CommentInput {
+    comment: String! @rules(apply: ["required"])
+    isPublic: Boolean! @rules(apply: ["required"])
 }

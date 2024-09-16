@@ -33,10 +33,8 @@ export const AddComment = () => {
   const isPublic = watch("isPublic");
 
   const handleRegistration = async (data: FieldValues) => {
-    console.log(data);
-    return;
     try {
-      //const status = await addComment(data);
+      const status = await addComment(data as NewComment);
       if (status) {
         //getBoard();
         toast.success(
