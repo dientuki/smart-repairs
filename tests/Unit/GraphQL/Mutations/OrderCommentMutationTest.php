@@ -21,7 +21,7 @@ class OrderCommentMutationTest extends TestCaseGraphQL
      * @return void
      */
     #[Test]
-    public function add_comment_successfully ()
+    public function add_comment_successfully()
     {
         // Crear orden (si no existe)
         $order = Order::factory()->create();
