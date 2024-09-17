@@ -255,7 +255,8 @@ class OrderCommentMutationTest extends TestCaseGraphQL
     }
 
     #[Test]
-    public function delete_my_comment_successfully(){
+    public function delete_my_comment_successfully()
+    {
         $order = Order::factory()->create();
         $orderComment = OrderComment::factory()->create([
             'order_id' => $order->id,
@@ -282,7 +283,8 @@ class OrderCommentMutationTest extends TestCaseGraphQL
     }
 
     #[Test]
-    public function cannot_delete_other_users_comments(){
+    public function cannot_delete_other_users_comments()
+    {
         $order = Order::factory()->create();
         $orderComment = OrderComment::factory()->create([
             'order_id' => $order->id,
