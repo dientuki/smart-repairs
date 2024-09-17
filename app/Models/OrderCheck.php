@@ -15,4 +15,9 @@ class OrderCheck extends ModelAuditable
         'features',
         'features_description'
     ];
+
+    public function order()
+    {
+        return $this->belongsTo(Order::class);
+    }
 }

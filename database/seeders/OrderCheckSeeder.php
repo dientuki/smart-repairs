@@ -15,6 +15,8 @@ class OrderCheckSeeder extends Seeder
     {
         $order = DB::table('orders')->get();
         $device_type_check = DB::table('device_type_checks')->get();
+        $newDamages = [];
+        $newFeaturess = [];
 
         $damages = json_decode($device_type_check[0]->damages, true);
         foreach ($damages as $index => $damage) {

@@ -17,7 +17,7 @@ import {
   Comments,
   Description,
   Details,
-  DeviceCheck,
+  ChecklistDisplay,
   Diagnosis,
 } from "@/components/viewCardModal";
 
@@ -84,8 +84,18 @@ export const ViewCardModal = () => {
                 {t(`status.${order.status}`)}
               </div>
               <Details />
-              <DeviceCheck />
-              <DeviceCheck />
+              <ChecklistDisplay
+                title={t("order.damages")}
+                checklist={[]}
+                extraDetails={order.orderCheck.damagesDescription}
+                error={t("order.damages_empty")}
+              />
+              <ChecklistDisplay
+                title={t("order.features")}
+                checklist={order.orderCheck.features}
+                extraDetails={order.orderCheck.featuresDescription}
+                error={t("order.damages_empty")}
+              />
               <ActionButton
                 onClick={handleUpdateDeviceUnit}
                 customClass='w-full'

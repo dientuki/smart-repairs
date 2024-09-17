@@ -9,7 +9,8 @@ interface OrderBase {
   observation: string;
 }
 
-interface OrderPreview extends OrderBase { // Order in boar
+interface OrderPreview extends OrderBase {
+  // Order in boar
   brandImage: string;
   commentsQuantity?: number;
   deviceTypeImage?: string;
@@ -18,7 +19,8 @@ interface OrderPreview extends OrderBase { // Order in boar
   deviceSerial?: string;
 }
 
-interface OrderExpanded extends OrderBase { // Order in card
+interface OrderExpanded extends OrderBase {
+  // Order in card
   creator: string;
   creatorAvatar: string;
   assignee: string | undefined;
@@ -28,6 +30,7 @@ interface OrderExpanded extends OrderBase { // Order in card
   customerPhone?: string;
   comments?: OrderComment[];
   deviceUnitId: string | null;
+  orderCheck: OrderCheck;
 }
 
 interface OrderComment {
@@ -79,4 +82,16 @@ interface feature {
 interface CreateOrUpdateComment {
   comment: string;
   ispublic: boolean;
+}
+
+interface OrderCheck {
+  damages: DamageFeatureDetail[];
+  damagesDescription?: string;
+  features: DamageFeatureDetail[];
+  featuresDescription?: string;
+}
+
+interface DamageFeatureDetail {
+  value: string;
+  checked: boolean;
 }
