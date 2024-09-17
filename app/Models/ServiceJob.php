@@ -9,7 +9,18 @@ class ServiceJob extends ModelAuditable
 {
     use HasTeamTrait;
 
-    protected $fillable = ['name', 'price', 'discount_type', 'team_id'];
+    protected $fillable = [
+        'name',
+        'price',
+        'discount_type',
+        'discount_value',
+        'team_id'
+    ];
+
+    public function budgetItems()
+    {
+        return $this->morphMany(BudgetItem::class, 'itemable');
+    }
 
     public function label(): Attribute
     {

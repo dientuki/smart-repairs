@@ -11,8 +11,8 @@ class BudgetItem extends ModelAuditable
 
     protected $fillable = [
         'budget_id',
-        'part_id',
-        'service_job_id',
+        'itemable_type',
+        'itemable_id',
         'quantity',
         'unit_price',
         'include_in_sum',
@@ -40,5 +40,10 @@ class BudgetItem extends ModelAuditable
     public function serviceJob(): BelongsTo
     {
         return $this->belongsTo(ServiceJob::class);
+    }
+
+    public function itemable()
+    {
+        return $this->morphTo();
     }
 }
