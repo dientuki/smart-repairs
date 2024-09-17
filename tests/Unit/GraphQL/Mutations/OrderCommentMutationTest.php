@@ -3,8 +3,6 @@
 namespace Tests\Unit\GraphQL\Mutations;
 
 use App\Models\Order;
-use App\Models\OrderComment;
-use App\Models\Team;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\Unit\GraphQL\TestCaseGraphQL;
 use Nuwave\Lighthouse\Testing\MakesGraphQLRequests;

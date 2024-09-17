@@ -2,7 +2,6 @@
 
 namespace Tests\Unit\GraphQL\Mutations;
 
-use App\Models\Customer;
 use App\Models\Order;
 use App\Models\Team;
 use Illuminate\Foundation\Testing\RefreshDatabase;
