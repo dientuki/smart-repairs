@@ -130,7 +130,7 @@ export const getOrder = async (id: string) => {
     observation: response.data.order.observation,
     hasBudget: response.data.order.hasBudget,
     comments: comments,
-  } as Order;
+  } as OrderExpanded;
 };
 
 export const getOrders = async () => {
