@@ -41,6 +41,6 @@ export enum PackageType {
 }
 
 export enum CountOperation {
-  Increment = 'increment',
-  Decrement = 'decrement',
+  Increment = "increment",
+  Decrement = "decrement",
 }

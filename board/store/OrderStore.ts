@@ -97,10 +97,17 @@ export const useOrderStore = create<OrderStore>((set) => ({
       set((state) => ({
         order: {
           ...state.order,
-          comments: state.order.comments?.filter((comment) => comment.id !== id),
+          comments: state.order.comments?.filter(
+            (comment) => comment.id !== id,
+          ),
         },
       }));
-      useBoardStore.getState().refreshCommentCount(useOrderStore.getState().order.$id, CountOperation.Decrement);
+      useBoardStore
+        .getState()
+        .refreshCommentCount(
+          useOrderStore.getState().order.$id,
+          CountOperation.Decrement,
+        );
       return true;
     }
     return false;
@@ -117,7 +124,9 @@ export const useOrderStore = create<OrderStore>((set) => ({
           comments: [comment, ...(state.order.comments || [])],
         },
       }));
-      useBoardStore.getState().refreshCommentCount(orderId, CountOperation.Increment);
+      useBoardStore
+        .getState()
+        .refreshCommentCount(orderId, CountOperation.Increment);
       return true;
     }
     return false;
