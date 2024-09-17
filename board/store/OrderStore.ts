@@ -12,7 +12,9 @@ import {
   useDeviceStore,
   useBrandStore,
   useDeviceTypeStore,
+  useBoardStore,
 } from "@/store";
+import { CountOperation } from "@/types/enums";
 
 interface CreateOrderSelectedData {
   customer?: OptionType | null;
@@ -98,13 +100,15 @@ export const useOrderStore = create<OrderStore>((set) => ({
           comments: state.order.comments?.filter((comment) => comment.id !== id),
         },
       }));
+      useBoardStore.getState().refreshCommentCount(useOrderStore.getState().order.$id, CountOperation.Decrement);
       return true;
     }
     return false;
   },
 
   addComment: async (data: CreateOrUpdateComment): Promise<boolean> => {
-    const comment = await addComment(useOrderStore.getState().order.$id, data);
+    const orderId = useOrderStore.getState().order.$id;
+    const comment = await addComment(orderId, data);
 
     if (comment) {
       set((state) => ({
@@ -113,7 +117,7 @@ export const useOrderStore = create<OrderStore>((set) => ({
           comments: [comment, ...(state.order.comments || [])],
         },
       }));
-
+      useBoardStore.getState().refreshCommentCount(orderId, CountOperation.Increment);
       return true;
     }
     return false;

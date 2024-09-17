@@ -39,3 +39,8 @@ export enum PackageType {
   Medium = "Medio",
   Full = "Full",
 }
+
+export enum CountOperation {
+  Increment = 'increment',
+  Decrement = 'decrement',
+}
