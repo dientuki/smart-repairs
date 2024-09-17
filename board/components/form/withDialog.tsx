@@ -14,7 +14,6 @@ export const withDialog = <P extends object>(
     const { record, onConfirm, ...restProps } = props;
 
     const handleClick = () => {
-      console.log("abrite");
       Modal.open(DeleteDialog, {
         layer: 5,
         record: record,

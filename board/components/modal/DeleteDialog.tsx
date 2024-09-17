@@ -19,14 +19,8 @@ export const DeleteDialog = () => {
 
   const handleConfirm = async () => {
     setLoading(true); // Establecer loading a true al iniciar la confirmación
-    try {
-      await modal.params.onConfirm(); // Ejecutar la función de confirmación
-    } catch (error) {
-      console.error("Error durante la confirmación", error);
-    } finally {
-      setLoading(false);
-      modal.close();
-    }
+    await modal.params.onConfirm(); // Ejecutar la función de confirmación
+    setLoading(false);
   };
 
   return (
@@ -41,7 +35,7 @@ export const DeleteDialog = () => {
           </div>
         </div>
         <h2 className='text-lg font-semibold leading-6 text-gray-950 dark:text-white'>
-          {t("dialog.delete")} {t(modal.params.record)}
+          {t("dialog.delete")} {modal.params.record}
         </h2>
         <div className='text-gray-500 dark:text-gray-400 mt-2'>
           {t("dialog.question")}
