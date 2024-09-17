@@ -50,6 +50,14 @@
   overscroll-behavior: contain;
 }
 
+.modal .modal__container:nth-child(n+2) {
+  background-color: rgba(17, 24, 39, .5);
+}
+
+.dark .modal .modal__container:nth-child(n+2) {
+  background-color: rgba(17, 24, 39, .75);
+}
+
 .modal:not(.modal--active) .modal__container {
   overflow: hidden;
 }

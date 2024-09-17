@@ -18,47 +18,28 @@ final readonly class OrderCommentMutation
         $user = $this->getUserId();
         $comment = OrderComment::find($commentId);
 
-        return $user && $user->id === $comment->user_id;
+        return $user && $user === $comment->user_id;
     }
 
-    /**
-     * Return a value for the field.
-     *
-     * @param  null  $root Always null, since this field has no parent.
-     * @param  array{}  $args The field arguments passed by the client.
-     * @param  \Nuwave\Lighthouse\Support\Contracts\GraphQLContext  $context Shared between all fields.
-     * @param  \GraphQL\Type\Definition\ResolveInfo  $resolveInfo Metadata for advanced query resolution.
-     * @return mixed The result of resolving the field, matching what was promised in the schema
-     */
-    public function updateVisibility(null $root, array $args, GraphQLContext $context, ResolveInfo $resolveInfo): mixed
+    public function update(null $root, array $args, GraphQLContext $context, ResolveInfo $resolveInfo): mixed
     {
-        // TODO implement the resolver
-
         if ($this->isMyComment($args['commentId'])) {
-            return OrderComment::updateVisibility($args['commentId'], $args['isPublic']);
+            return OrderComment::where('id', $args['commentId'])->update([
+                'comment' => strip_tags($args['comment']['comment']),
+                'is_public' => $args['comment']['ispublic']
+            ]);
         }
 
-        return null;
-    }
-
-    public function updateText(null $root, array $args, GraphQLContext $context, ResolveInfo $resolveInfo): mixed
-    {
-        // TODO implement the resolver
-        if ($this->isMyComment($args['commentId'])) {
-            return OrderComment::updateText($args['commentId'], $args['text']);
-        }
-
-        return null;
+        return false;
     }
 
     public function delete(null $root, array $args, GraphQLContext $context, ResolveInfo $resolveInfo): mixed
     {
-        // TODO implement the resolver
         if ($this->isMyComment($args['commentId'])) {
             return OrderComment::destroy($args['commentId']);
         }
 
-        return null;
+        return false;
     }
 
     public function create(null $root, array $args, GraphQLContext $context, ResolveInfo $resolveInfo): mixed

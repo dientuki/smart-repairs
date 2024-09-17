@@ -29,7 +29,7 @@ export const combineClasses = (
 export const dynamicStyles = (
   style: StyleColor,
 ): React.CSSProperties & Record<string, string> => {
-  const keys = ["50", "400", "500", "600"];
+  const keys = ["50", "100", "400", "500", "600"];
 
   return keys.reduce(
     (acc, key) => {

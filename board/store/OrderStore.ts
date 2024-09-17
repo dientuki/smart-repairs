@@ -5,19 +5,16 @@ import {
   updateDiagnosis,
   updateObservation,
 } from "@/services/orders";
-import {
-  addComment,
-  updateCommentVisibility,
-  updateComment,
-  deleteComment,
-} from "@/services/comments";
+import { addComment, deleteComment, updateComment } from "@/services/comments";
 import { createOrder } from "@/services/orders";
 import {
   useCustomerStore,
   useDeviceStore,
   useBrandStore,
   useDeviceTypeStore,
+  useBoardStore,
 } from "@/store";
+import { CountOperation } from "@/types/enums";
 
 interface CreateOrderSelectedData {
   customer?: OptionType | null;
@@ -32,10 +29,12 @@ interface OrderStore {
   tmpOrder: NewOrder;
   getOrder: (id: string) => Promise<void>;
 
-  updateCommentVisibility: (commentId: string, isPublic: boolean) => void;
-  updateComment: (commentId: string, text: string) => void;
-  deleteComment: (commentId: string) => void;
-  addComment: (newComment: NewComment) => Promise<boolean>;
+  updateComment: (
+    id: string,
+    updateComment: CreateOrUpdateComment,
+  ) => Promise<boolean>;
+  deleteComment: (id: string) => Promise<boolean>;
+  addComment: (newComment: CreateOrUpdateComment) => Promise<boolean>;
 
   initializeOrderCreationData: () => Promise<void>;
   createOrderSelectedData: {
@@ -67,29 +66,67 @@ export const useOrderStore = create<OrderStore>((set) => ({
     set({ order });
   },
 
-  updateCommentVisibility: (commentId: string, isPublic: boolean) => {
-    updateCommentVisibility(commentId, isPublic);
+  updateComment: async (
+    id: string,
+    data: CreateOrUpdateComment,
+  ): Promise<boolean> => {
+    const updatedCommentData = await updateComment(id, data);
+
+    if (updatedCommentData) {
+      set((state) => {
+        const comments = state.order.comments || [];
+        const updatedComments = comments.map((comment) =>
+          comment.id === id ? { ...comment, ...data } : comment,
+        );
+
+        return {
+          order: {
+            ...state.order,
+            comments: updatedComments,
+          },
+        };
+      });
+      return true;
+    }
+    return false;
   },
 
-  updateComment: (commentId: string, text: string) => {
-    updateComment(commentId, text);
+  deleteComment: async (id: string): Promise<boolean> => {
+    const status = await deleteComment(id);
+    if (status) {
+      set((state) => ({
+        order: {
+          ...state.order,
+          comments: state.order.comments?.filter(
+            (comment) => comment.id !== id,
+          ),
+        },
+      }));
+      useBoardStore
+        .getState()
+        .refreshCommentCount(
+          useOrderStore.getState().order.$id,
+          CountOperation.Decrement,
+        );
+      return true;
+    }
+    return false;
   },
 
-  deleteComment: async (commentId: string) => {
-    await deleteComment(commentId);
-  },
-
-  addComment: async (data: NewComment): Promise<boolean> => {
-    const comment = await addComment(useOrderStore.getState().order.$id, data);
+  addComment: async (data: CreateOrUpdateComment): Promise<boolean> => {
+    const orderId = useOrderStore.getState().order.$id;
+    const comment = await addComment(orderId, data);
 
     if (comment) {
       set((state) => ({
         order: {
           ...state.order,
-          comments: [...(state.order.comments || []), comment],
+          comments: [comment, ...(state.order.comments || [])],
         },
       }));
-
+      useBoardStore
+        .getState()
+        .refreshCommentCount(orderId, CountOperation.Increment);
       return true;
     }
     return false;

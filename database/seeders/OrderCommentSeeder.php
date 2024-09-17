@@ -15,7 +15,7 @@ class OrderCommentSeeder extends Seeder
     public function run(): void
     {
         $team = DB::table('teams')->first()->id;
-        $user = DB::table('users')->first()->id;
+        $users = DB::table('users')->get();
         $orders = DB::table('orders')->get();
 
         DB::table('order_comments')->insert([
@@ -23,7 +23,7 @@ class OrderCommentSeeder extends Seeder
             'order_id' => $orders[0]->id,
             'team_id' => $team,
             'comment' => 'Lo hice encender, pero no da ningun sonido, este es publico',
-            'user_id' => $user,
+            'user_id' => $users[0]->id,
             'is_public' => true,
             'created_at' => now(),
             'updated_at' => now(),
@@ -33,7 +33,7 @@ class OrderCommentSeeder extends Seeder
             'order_id' => $orders[0]->id,
             'team_id' => $team,
             'comment' => 'este es privado',
-            'user_id' => $user,
+            'user_id' => $users[4]->id,
             'is_public' => false,
             'created_at' => now(),
             'updated_at' => now(),

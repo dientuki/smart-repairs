@@ -2,7 +2,6 @@
 
 namespace Tests\Unit\GraphQL\Mutations;
 
-use App\Models\Customer;
 use App\Models\Order;
 use App\Models\Team;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -47,6 +46,35 @@ class OrderMutationTest extends TestCaseGraphQL
         $this->assertDatabaseHas('orders', [
             'id' => $order->id,
             'diagnosis' => $newDiagnosis
+        ]);
+    }
+
+    #[Test]
+    public function update_diagnosis_with_empty_diagnosis_successfully()
+    {
+        $order = Order::factory()->create(['team_id' => $this->team->id]);
+
+        $response = $this->graphQL('
+            mutation {
+                updateDiagnosis(
+                    id: "' . $order->id . '",
+                    diagnosis: ""
+                )
+            }
+        ');
+
+
+        // Verificar que la mutación retornó true
+        $response->assertJson([
+            'data' => [
+                'updateDiagnosis' => true,
+            ],
+        ]);
+
+        // Verificar que los datos del cliente se han actualizado en la base de datos
+        $this->assertDatabaseHas('orders', [
+            'id' => $order->id,
+            'diagnosis' => null
         ]);
     }
 

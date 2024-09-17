@@ -71,8 +71,8 @@ abstract class TestCaseGraphQL extends TestCase implements RequiresAuthenticatio
         $response->assertJson(['message' => 'Unauthenticated.']);
     }
 
-    public function boolToString(bool $value): string {
+    public function boolToString(bool $value): string
+    {
         return $value ? 'true' : 'false';
     }
-
 }

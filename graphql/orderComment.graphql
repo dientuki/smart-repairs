@@ -1,9 +1,6 @@
 extend type Mutation {
-    updateCommentVisibility(commentId: String, isPublic: Boolean!): Boolean!
-        @field(resolver: "OrderCommentMutation@updateVisibility")
-        @namespace(field: "App\\GraphQL\\Mutations")
-    updateComment(commentId: String, text: String): Boolean!
-        @field(resolver: "OrderCommentMutation@updateText")
+    updateComment(commentId: String, comment: OrderCommentInput): Boolean!
+        @field(resolver: "OrderCommentMutation@update")
         @namespace(field: "App\\GraphQL\\Mutations")
     deleteComment(commentId: String): Boolean!
         @field(resolver: "OrderCommentMutation@delete")

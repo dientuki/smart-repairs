@@ -1,44 +1,53 @@
-import { graphqlRequest, handleGraphQLErrors } from "@/helper/graphqlHelpers";
-import { escapeGraphQLString } from "@/helper/stringHelpers";
+import {
+  graphqlRequest,
+  handleGraphQLErrors,
+  escapeGraphQLString,
+} from "@/helper/graphqlHelpers";
 
-export const updateCommentVisibility = (
-  commentId: string,
-  ispublic: boolean,
-) => {
-  graphqlRequest(`
+export const updateComment = async (
+  id: string,
+  data: CreateOrUpdateComment,
+): Promise<boolean> => {
+  const response = await graphqlRequest(`
     mutation {
-      updateCommentVisibility(commentId: "${commentId}", ispublic: ${ispublic})
+      updateComment(
+        commentId: "${id}",
+        comment: {
+          comment: "${escapeGraphQLString(data.comment)}",
+          ispublic: ${data.ispublic}
+        }
+      )
     }
   `);
+
+  handleGraphQLErrors(response.errors);
+
+  return response.data.updateComment;
 };
 
-export const updateComment = (commentId: string, text: string) => {
-  graphqlRequest(`
+export const deleteComment = async (id: string): Promise<boolean> => {
+  const response = await graphqlRequest(`
     mutation {
-      updateComment(commentId: "${commentId}", text: "${text}")
+      deleteComment(commentId: "${id}")
     }
   `);
-};
 
-export const deleteComment = (commentId: string) => {
-  graphqlRequest(`
-    mutation {
-      deleteComment(commentId: "${commentId}")
-    }
-  `);
+  handleGraphQLErrors(response.errors);
+
+  return response.data.deleteComment;
 };
 
 export const addComment = async (
   orderId: string,
-  newComment: NewComment,
+  data: CreateOrUpdateComment,
 ): Promise<OrderComment> => {
   const response = await graphqlRequest(`
             mutation {
               addComment(
                 orderId: "${orderId}",
                 comment: {
-                  comment: "${escapeGraphQLString(newComment.comment)}",
-                  ispublic: ${newComment.ispublic}
+                  comment: "${escapeGraphQLString(data.comment)}",
+                  ispublic: ${data.ispublic}
                 }
               ) {
                 id

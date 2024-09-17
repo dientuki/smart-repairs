@@ -39,3 +39,10 @@ export const handlePayloadErrors = (errors: PayloadErrors) => {
     throw new Error(errors.message);
   }
 };
+
+export const escapeGraphQLString = (str: string) => {
+  return str
+    .replace(/\\/g, "\\\\") // Escapa los backslashes
+    .replace(/"/g, '\\"') // Escapa las comillas dobles
+    .replace(/\n/g, "\\n"); // Escapa los saltos de línea
+};

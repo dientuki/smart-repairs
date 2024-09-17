@@ -84,7 +84,7 @@ final readonly class OrderMutations
         $order = Order::find($args['id']);
 
         if ($order->team_id === $this->getTeamId()) {
-            $order->diagnosis = $args['diagnosis'];
+            $order->diagnosis = $args['diagnosis'] === '' ? null : $args['diagnosis'];
             $order->save();
             return true;
         }

@@ -17,7 +17,7 @@ return new class extends Migration
 
             $table->enum('status', OrderStatusEnum::getAllCasesAsArray())->default(OrderStatusEnum::default()->value);
             $table->text('observation')->nullable();
-            $table->text('diagnosis')->nullable();
+            $table->string('diagnosis')->nullable();
             $table->boolean('was_edited')->default(false);
             $table->foreignUlid('created_by')->constrained('users', 'id');
             $table->foreignUlid('assigned_to')->nullable()->constrained('users', 'id');
