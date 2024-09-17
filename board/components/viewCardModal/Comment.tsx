@@ -20,7 +20,7 @@ type Props = {
 
 export const Comment = ({ comment }: Props) => {
   const { user } = useUserStore();
-  const { updateComment } = useOrderStore();
+  const { updateComment, deleteComment } = useOrderStore();
   const [isEditing, setIsEditing] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const isMyComment = comment.userId === user?.id;
@@ -40,8 +40,15 @@ export const Comment = ({ comment }: Props) => {
   const ispublic = watch("ispublic");
   const formRef = useRef<HTMLFormElement>(null);
 
+  const isEqualOrderComment = (
+    obj1: FieldValues,
+    obj2: OrderComment,
+  ): boolean => {
+    return obj1.comment === obj2.comment && obj1.ispublic === obj2.isPublic;
+  };
+
   const handleRegistration = async (data: FieldValues) => {
-    if (isSubmitting || data.comment === comment.comment) return;
+    if (isSubmitting || isEqualOrderComment(data, comment)) return;
     setIsSubmitting(true);
     try {
       const status = await updateComment(
@@ -54,9 +61,6 @@ export const Comment = ({ comment }: Props) => {
             record: t("order.comment"),
           }),
         );
-        if (data.comment === "") {
-          setIsEditing(false);
-        }
       } else {
         toast.error(
           t("toast.error.update", {
@@ -80,8 +84,25 @@ export const Comment = ({ comment }: Props) => {
     setIsEditing(true);
   };
 
-  const handleDeleteClick = () => {
-    alert("go to click");
+  const handleDeleteClick = async () => {
+    try {
+      const status = await deleteComment(comment.id);
+      if (status) {
+        toast.success(
+          t("toast.success.delete", {
+            record: t("order.comment"),
+          }),
+        );
+      } else {
+        toast.error(
+          t("toast.error.delete", {
+            record: t("order.comment"),
+          }),
+        );
+      }
+    } catch (e: unknown) {
+      toast.error(t(`toast.error.${simpleError(e)}`));
+    }
   };
 
   const registerOptions = {
@@ -157,7 +178,7 @@ export const Comment = ({ comment }: Props) => {
           </ActionButton>
           <ActionButtonWithDialog
             style={StyleColor.Danger}
-            confirmMessage={`¿Desea borrar ${t("item.name")}?`}
+            record={t("order.comment")}
             onConfirm={handleDeleteClick}
           >
             {t("button.delete")}

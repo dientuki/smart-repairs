@@ -31,7 +31,7 @@ interface OrderStore {
     id: string,
     updateComment: CreateOrUpdateComment,
   ) => Promise<boolean>;
-  deleteComment: (commentId: string) => void;
+  deleteComment: (id: string) => Promise<boolean>;
   addComment: (newComment: CreateOrUpdateComment) => Promise<boolean>;
 
   initializeOrderCreationData: () => Promise<void>;
@@ -68,16 +68,11 @@ export const useOrderStore = create<OrderStore>((set) => ({
     id: string,
     data: CreateOrUpdateComment,
   ): Promise<boolean> => {
-    // Llama a la función para actualizar el comentario en el backend
     const updatedCommentData = await updateComment(id, data);
 
-    // Si la actualización fue exitosa
     if (updatedCommentData) {
       set((state) => {
-        // Obtén los comentarios actuales
         const comments = state.order.comments || [];
-
-        // Actualiza el comentario correspondiente
         const updatedComments = comments.map((comment) =>
           comment.id === id ? { ...comment, ...data } : comment,
         );
@@ -89,15 +84,14 @@ export const useOrderStore = create<OrderStore>((set) => ({
           },
         };
       });
-
       return true;
     }
-
     return false;
   },
 
-  deleteComment: async (commentId: string) => {
-    await deleteComment(commentId);
+  deleteComment: async (id: string): Promise<boolean> => {
+    const status = await deleteComment(id);
+    return status;
   },
 
   addComment: async (data: CreateOrUpdateComment): Promise<boolean> => {

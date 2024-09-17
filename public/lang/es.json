@@ -27,6 +27,11 @@
 
     "device": "equipo",
 
+    "dialog": {
+        "delete": "Borrar",
+        "question": "¿Está seguro/a de hacer esto?"
+    },
+
     "field": {
         "additional_characteristics": "características adicionales",
         "additional_damage": "daños adicionales",
@@ -85,11 +90,13 @@
             "network": "Error de red",
             "form": "Error en el formulario",
             "update": "Error al actualizar {{record}}",
-            "add": "Error al agregar {{record}}"
+            "add": "Error al agregar {{record}}",
+            "delete": "Error al eliminar {{record}}"
         },
         "success": {
             "add" : "{{record}} agregado con exito",
             "add_female": "{{record}} actualizada con exito",
+            "delete": "{{record}} eliminado con exito",
             "update": "{{record}} actualizado con exito",
             "update_female": "{{record}} actualizada con exito"
         }

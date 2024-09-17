@@ -1,10 +1,9 @@
 // withDialog.tsx
 import React from "react";
-import { DeleteDialog } from "../modal/DeleteDialog";
-import { Modal } from "../modal";
+import { Modal, DeleteDialog } from "@/components/modal";
 
 interface WithDialogProps {
-  confirmMessage: string;
+  record: string;
   onConfirm: () => void;
 }
 
@@ -12,13 +11,13 @@ export const withDialog = <P extends object>(
   WrappedComponent: React.ComponentType<P & WithDialogProps>,
 ) => {
   const EnhancedComponent = (props: P & WithDialogProps) => {
-    const { confirmMessage, onConfirm, ...restProps } = props;
+    const { record, onConfirm, ...restProps } = props;
 
     const handleClick = () => {
       console.log("abrite");
       Modal.open(DeleteDialog, {
         layer: 5,
-        title: confirmMessage,
+        record: record,
         onConfirm: onConfirm,
       });
     };
@@ -26,7 +25,7 @@ export const withDialog = <P extends object>(
     return (
       <WrappedComponent
         {...(restProps as P)}
-        confirmMessage={confirmMessage}
+        record={record}
         onConfirm={onConfirm}
         onClick={handleClick}
       />

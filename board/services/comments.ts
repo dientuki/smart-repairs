@@ -1,5 +1,8 @@
-import { graphqlRequest, handleGraphQLErrors } from "@/helper/graphqlHelpers";
-import { escapeGraphQLString } from "@/helper/stringHelpers";
+import {
+  graphqlRequest,
+  handleGraphQLErrors,
+  escapeGraphQLString,
+} from "@/helper/graphqlHelpers";
 
 export const updateComment = async (
   id: string,
@@ -22,12 +25,16 @@ export const updateComment = async (
   return response.data.updateComment;
 };
 
-export const deleteComment = (commentId: string) => {
-  graphqlRequest(`
+export const deleteComment = async (id: string): Promise<boolean> => {
+  const response = await graphqlRequest(`
     mutation {
-      deleteComment(commentId: "${commentId}")
+      deleteComment(commentId: "${id}")
     }
   `);
+
+  handleGraphQLErrors(response.errors);
+
+  return response.data.deleteComment;
 };
 
 export const addComment = async (
