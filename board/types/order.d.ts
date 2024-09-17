@@ -1,27 +1,36 @@
-interface Order {
+interface OrderBase {
   $id: string;
+  brand: string;
+  status: TypedColumn;
+  deviceType: string;
+  customerFullName: string;
   createdAt: timestamp;
   createdAtDate: Date;
-  creator: string;
-  creatorAvatar: string;
-  assignee: string | undefined;
-  assigneeAvatar: string | undefined;
-  diagnosis: string | undefined;
-  status: TypedColumn;
-  brand: string;
+  observation: string;
+}
+
+interface OrderPreview extends OrderBase {
+  // Order in boar
   brandImage: string;
-  deviceType: string;
-  deviceUnitId: string | null;
+  commentsQuantity?: number;
   deviceTypeImage?: string;
   deviceCommercialName: string;
   deviceTechName?: string;
   deviceSerial?: string;
-  customerFullName: string;
-  customerPhone?: string;
-  observation: string;
-  comments?: OrderComment[];
-  commentsQuantity?: number;
+}
+
+interface OrderExpanded extends OrderBase {
+  // Order in card
+  creator: string;
+  creatorAvatar: string;
+  assignee: string | undefined;
+  assigneeAvatar: string | undefined;
   hasBudget: boolean;
+  diagnosis: string | undefined;
+  customerPhone?: string;
+  comments?: OrderComment[];
+  deviceUnitId: string | null;
+  orderCheck: OrderCheck;
 }
 
 interface OrderComment {
@@ -73,4 +82,16 @@ interface feature {
 interface CreateOrUpdateComment {
   comment: string;
   ispublic: boolean;
+}
+
+interface OrderCheck {
+  damages: DamageFeatureDetail[];
+  damagesDescription?: string;
+  features: DamageFeatureDetail[];
+  featuresDescription?: string;
+}
+
+interface DamageFeatureDetail {
+  value: string;
+  checked: boolean;
 }

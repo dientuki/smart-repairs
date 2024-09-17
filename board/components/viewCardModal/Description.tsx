@@ -80,7 +80,7 @@ export const Description = () => {
         <div className='flex flex-row items-center gap-2'>
           <Icon size={7} icon={Bars3BottomLeftIcon} />
           <span className='text-1xl font-bold tracking-tight sm:text-2xl first-letter:uppercase'>
-            {t("order.description")}
+            {t("order.observation")}
           </span>
         </div>
         {(order.observation || isEditing) && (
@@ -102,7 +102,7 @@ export const Description = () => {
       >
         <TextareaField
           name='observation'
-          label={t("field.observation")}
+          label={t("order.observation")}
           labelless
           control={control}
           rules={registerOptions.observation}

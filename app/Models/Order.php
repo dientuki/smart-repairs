@@ -63,6 +63,11 @@ class Order extends ModelAuditable
         return $this->hasOne(Budget::class);
     }
 
+    public function orderCheck()
+    {
+        return $this->hasOne(OrderCheck::class);
+    }
+
     /**
      * Updates the status of an order.
      *

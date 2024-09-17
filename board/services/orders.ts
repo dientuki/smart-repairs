@@ -83,6 +83,13 @@ export const getOrder = async (id: string) => {
                         version
                     }
                 }
+
+                orderCheck {
+                  damages
+                  damages_description
+                  features
+                  features_description
+                }
             }
         }
     `);
@@ -130,7 +137,13 @@ export const getOrder = async (id: string) => {
     observation: response.data.order.observation,
     hasBudget: response.data.order.hasBudget,
     comments: comments,
-  } as Order;
+    orderCheck: {
+      damages: JSON.parse(response.data.order.orderCheck.damages),
+      damagesDescription: response.data.order.orderCheck.damages_description,
+      features: JSON.parse(response.data.order.orderCheck.features),
+      featuresDescription: response.data.order.orderCheck.features_description,
+    },
+  } as OrderExpanded;
 };
 
 export const getOrders = async () => {

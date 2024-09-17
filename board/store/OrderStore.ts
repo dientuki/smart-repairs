@@ -63,6 +63,7 @@ export const useOrderStore = create<OrderStore>((set) => ({
   tmpOrder: {} as NewOrder,
   getOrder: async (id: string) => {
     const order = await getOrder(id);
+    console.log(order);
     set({ order });
   },
 

@@ -54,6 +54,7 @@ type Order {
     assignee: User
     hasBudget: Boolean!
     diagnosis: String
+    orderCheck: OrderCheck
 }
 
 type Orders {
