@@ -1,5 +1,6 @@
 <?php
 
+use App\Enum\BudgetStatusEnum;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -17,8 +18,12 @@ return new class extends Migration
             $table->foreignUlid('order_id')->constrained();
             $table->foreignUlid('user_id')->constrained();
             $table->decimal('total', 12, 2)->nullable()->default(0);
+            $table->enum('status', BudgetStatusEnum::getAllCasesAsArray())->default(BudgetStatusEnum::default()->value);
+            $table->date('valid_until')->nullable();
 
             $table->timestamps();
+
+            $table->index(['order_id', 'user_id']);
         });
     }
 

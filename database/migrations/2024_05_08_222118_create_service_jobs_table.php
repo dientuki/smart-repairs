@@ -1,6 +1,7 @@
 <?php
 
 use App\Enum\DiscountEnum;
+use App\Enum\ServiceJobStatusEnum;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -14,10 +15,12 @@ return new class extends Migration
     {
         Schema::create('service_jobs', function (Blueprint $table) {
             $table->ulid('id')->primary();
+
             $table->string('name');
             $table->decimal('price', 15, 2);
             $table->enum('discount_type', DiscountEnum::getAllCasesAsArray())->default(DiscountEnum::default()->value);
-
+            $table->decimal('discount_value', 15, 2)->nullable();
+            $table->enum('status', ServiceJobStatusEnum::getAllCasesAsArray())->default(ServiceJobStatusEnum::default()->value);
             $table->foreignUlid('team_id')->constrained();
 
             $table->timestamps();

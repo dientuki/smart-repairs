@@ -3,9 +3,11 @@
 namespace App\Filament\Team\Resources;
 
 use App\Enum\DiscountEnum;
+use App\Enum\SimpleDiscountEnum;
 use App\Filament\Team\Resources\ServiceJobResource\Pages;
 use App\Models\ServiceJob;
 use App\Traits\RegistersNavigationTrait;
+use Filament\Facades\Filament;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
@@ -16,7 +18,7 @@ use Filament\Tables\Table;
 
 class ServiceJobResource extends Resource
 {
-    use RegistersNavigationTrait;
+    //use RegistersNavigationTrait;
 
     protected static ?string $model = ServiceJob::class;
 
@@ -35,7 +37,16 @@ class ServiceJobResource extends Resource
             ->schema([
                 TextInput::make('name'),
                 TextInput::make('price')->prefix('$'),
-                Select::make('discount_type')->options(DiscountEnum::class)
+                Select::make('discount_type')->options(function (callable $get) {
+                    $team = Filament::getTenant();
+
+                    if ($team->subscription->package->name === 'Basico') {
+                        return SimpleDiscountEnum::class; // Enum para precios mayores a 100
+                    }
+                    return DiscountEnum::class; // Enum para otros casos
+                })->reactive()
+                ->default(DiscountEnum::None->value),
+                TextInput::make('discount_value'),
             ]);
     }
 
@@ -46,6 +57,7 @@ class ServiceJobResource extends Resource
                 TextColumn::make('name'),
                 TextColumn::make('price')->money('ARS'),
                 TextColumn::make('discount_type'),
+                TextColumn::make('discount_value'),
             ])
             ->filters([
                 //
