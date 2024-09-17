@@ -86,7 +86,7 @@ export const ViewCardModal = () => {
               <Details />
               <ChecklistDisplay
                 title={t("order.damages")}
-                checklist={[]}
+                checklist={order.orderCheck.damages}
                 extraDetails={order.orderCheck.damagesDescription}
                 error={t("order.damages_empty")}
               />

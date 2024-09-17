@@ -23,7 +23,7 @@ export const Comments = () => {
 
       <AddComment />
       <div className='flex flex-col gap-2 mt-4'>
-        {order?.comments?.map((comment) => (
+        {order?.comments?.map((comment: OrderComment) => (
           <Comment key={comment.id} comment={comment} />
         ))}
       </div>
