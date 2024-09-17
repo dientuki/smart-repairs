@@ -91,7 +91,16 @@ export const useOrderStore = create<OrderStore>((set) => ({
 
   deleteComment: async (id: string): Promise<boolean> => {
     const status = await deleteComment(id);
-    return status;
+    if (status) {
+      set((state) => ({
+        order: {
+          ...state.order,
+          comments: state.order.comments?.filter((comment) => comment.id !== id),
+        },
+      }));
+      return true;
+    }
+    return false;
   },
 
   addComment: async (data: CreateOrUpdateComment): Promise<boolean> => {
