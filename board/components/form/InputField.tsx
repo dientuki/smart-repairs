@@ -5,8 +5,10 @@ import {
   FieldValues,
   FieldErrors,
   RegisterOptions,
+  FieldError,
 } from "react-hook-form";
 import { ErrorMessage } from "@/components/form";
+import { InputType } from "@/types/enums";
 
 interface InputFieldProps {
   name: string;
@@ -20,7 +22,44 @@ interface InputFieldProps {
   defaultValue?: string;
   placeholder?: string;
   onClick?: (event: React.MouseEvent<HTMLInputElement>) => void;
+  type?: InputType;
 }
+
+const getNestedError = (
+  errors: FieldErrors<FieldValues> | undefined,
+  name: string
+) => {
+  if (!errors) return { hasError: false, errorMessage: undefined };
+
+  const keys = name.split('.');
+  let error: FieldError | FieldErrors<FieldValues> | undefined = errors;
+
+  for (const key of keys) {
+    if (error === undefined || error === null) {
+      error = undefined;
+      break;
+    }
+
+    // Manejo de arrays
+    if (Array.isArray(error)) {
+      const index = parseInt(key, 10);
+      if (isNaN(index) || index >= error.length) {
+        error = undefined;
+        break;
+      }
+      error = error[index];
+    } else {
+      // Manejo de objetos
+      error = (error as { [key: string]: FieldError | FieldErrors<FieldValues> | undefined })[key];
+    }
+  }
+
+  return {
+    hasError: error !== undefined,
+    errorMessage: (error as FieldError)?.message,
+  };
+};
+
 
 export const InputField = ({
   name,
@@ -34,8 +73,21 @@ export const InputField = ({
   defaultValue = "",
   placeholder,
   onClick,
+  type = InputType.Text
 }: InputFieldProps) => {
-  const hasError = Boolean(errors?.[name]);
+
+
+
+  // Detectar si el name contiene una estructura anidada (usando un punto)
+  const isNested = name.includes('.');
+
+  // Obtener el mensaje de error adecuadamente
+  const { hasError, errorMessage } = isNested
+    ? getNestedError(errors, name)
+    : {
+        hasError: Boolean(errors?.[name]),
+        errorMessage: errors?.[name]?.message,
+      };
 
   return (
     <Field>
@@ -61,30 +113,33 @@ export const InputField = ({
               overflow-hidden`}
         >
           {Icon && (
-            <div className='inline-flex items-center px-3 text-base text-gray-900 bg-gray-200 border rounded-e-0 border-gray-300 border-e-0 rounded-s-md'>
+            <div className='items-center gap-x-3 ps-3 flex border-e border-gray-200 pe-3 dark:border-white/10'>
               <Icon className='w-4 h-4 text-gray-500' aria-hidden='true' />
             </div>
           )}
-          <Controller
-            name={name}
-            control={control}
-            defaultValue={defaultValue || ""}
-            rules={rules}
-            render={({ field }) => (
-              <Input
-                {...field}
-                id={name}
-                readOnly={disabled}
-                placeholder={placeholder}
-                onClick={onClick}
-                aria-invalid={hasError}
-                aria-describedby={hasError ? `${name}-error` : undefined}
-                className='block w-full border-none py-1.5 text-base text-gray-950 transition duration-75 placeholder:text-gray-400 focus:ring-0 disabled:text-gray-500 disabled:[-webkit-text-fill-color:theme(colors.gray.500)] disabled:placeholder:[-webkit-text-fill-color:theme(colors.gray.400)] dark:text-white dark:placeholder:text-gray-500 dark:disabled:text-gray-400 dark:disabled:[-webkit-text-fill-color:theme(colors.gray.400)] dark:disabled:placeholder:[-webkit-text-fill-color:theme(colors.gray.500)]  bg-white/0 ps-3 pe-3'
-              />
-            )}
-          />
+          <div className="min-w-0 flex-1">
+            <Controller
+              name={name}
+              control={control}
+              defaultValue={defaultValue || ""}
+              rules={rules}
+              render={({ field }) => (
+                <Input
+                  {...field}
+                  id={name}
+                  readOnly={disabled}
+                  placeholder={placeholder}
+                  onClick={onClick}
+                  type={type}
+                  aria-invalid={hasError}
+                  aria-describedby={hasError ? `${name}-error` : undefined}
+                  className='block w-full border-none py-1.5 text-base text-gray-950 transition duration-75 placeholder:text-gray-400 focus:ring-0 disabled:text-gray-500 disabled:[-webkit-text-fill-color:theme(colors.gray.500)] disabled:placeholder:[-webkit-text-fill-color:theme(colors.gray.400)] dark:text-white dark:placeholder:text-gray-500 dark:disabled:text-gray-400 dark:disabled:[-webkit-text-fill-color:theme(colors.gray.400)] dark:disabled:placeholder:[-webkit-text-fill-color:theme(colors.gray.500)]  bg-white/0 ps-3 pe-3'
+                />
+              )}
+            />
+          </div>
         </div>
-        <ErrorMessage message={errors?.[name]?.message} />
+        <ErrorMessage message={errorMessage} />
       </div>
     </Field>
   );
