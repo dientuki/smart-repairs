@@ -5,3 +5,5 @@ export { RemoveRow } from "./RemoveRow";
 export { AddRow } from "./AddRow";
 export { BooleanCell } from "./BooleanCell";
 export { BudgetModal } from "./BudgetModal";
+export { BudgetTable } from "./BudgetTable";
+export { StaticAutocomplete } from "./StaticAutocomplete";
