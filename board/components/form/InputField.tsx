@@ -27,11 +27,11 @@ interface InputFieldProps {
 
 const getNestedError = (
   errors: FieldErrors<FieldValues> | undefined,
-  name: string
+  name: string,
 ) => {
   if (!errors) return { hasError: false, errorMessage: undefined };
 
-  const keys = name.split('.');
+  const keys = name.split(".");
   let error: FieldError | FieldErrors<FieldValues> | undefined = errors;
 
   for (const key of keys) {
@@ -50,7 +50,11 @@ const getNestedError = (
       error = error[index];
     } else {
       // Manejo de objetos
-      error = (error as { [key: string]: FieldError | FieldErrors<FieldValues> | undefined })[key];
+      error = (
+        error as {
+          [key: string]: FieldError | FieldErrors<FieldValues> | undefined;
+        }
+      )[key];
     }
   }
 
@@ -59,7 +63,6 @@ const getNestedError = (
     errorMessage: (error as FieldError)?.message,
   };
 };
-
 
 export const InputField = ({
   name,
@@ -73,13 +76,10 @@ export const InputField = ({
   defaultValue = "",
   placeholder,
   onClick,
-  type = InputType.Text
+  type = InputType.Text,
 }: InputFieldProps) => {
-
-
-
   // Detectar si el name contiene una estructura anidada (usando un punto)
-  const isNested = name.includes('.');
+  const isNested = name.includes(".");
 
   // Obtener el mensaje de error adecuadamente
   const { hasError, errorMessage } = isNested
@@ -117,7 +117,7 @@ export const InputField = ({
               <Icon className='w-4 h-4 text-gray-500' aria-hidden='true' />
             </div>
           )}
-          <div className="min-w-0 flex-1">
+          <div className='min-w-0 flex-1'>
             <Controller
               name={name}
               control={control}

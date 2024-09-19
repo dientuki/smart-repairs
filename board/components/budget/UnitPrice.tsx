@@ -13,7 +13,7 @@ export const UnitPriceCell = ({
   return (
     <InputField
       name={name}
-      label="label"
+      label='label'
       labelless
       control={column.columnDef.meta.control}
       rules={column.columnDef.meta.rules}

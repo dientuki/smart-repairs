@@ -21,7 +21,7 @@ export const StaticAutocomplete = ({
   const errorMessage =
     column.columnDef.meta.errors.items?.[row.index]?.[column.id] ?? null;
 
-    /*
+  /*
   useEffect(() => {
     if (row.index == 0) {
       table.options.meta?.updateServiceId(row.index, options[0].id);

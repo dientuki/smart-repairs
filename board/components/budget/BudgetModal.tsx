@@ -11,12 +11,16 @@ import { BudgetTable } from "@/components/budget";
 export const BudgetModal = () => {
   const modal = useModalWindow();
   const [isLoading, setIsLoading] = useState(true);
-  const { handleSubmit, control, formState: { errors } } = useForm();
+  const {
+    handleSubmit,
+    control,
+    formState: { errors },
+  } = useForm();
 
   useEffect(() => {
     setTimeout(() => {
-      setIsLoading(false)
-    }, 100)
+      setIsLoading(false);
+    }, 100);
   }, []);
 
   const handleRegistration = (data: FieldValues) => {
@@ -25,7 +29,7 @@ export const BudgetModal = () => {
 
   const handleError = () => {
     //console.log(errors)
-    console.log('error', errors)
+    console.log("error", errors);
   };
 
   modal.on("close", () => {});
@@ -37,16 +41,14 @@ export const BudgetModal = () => {
       title={
         <h2 className='flex flex-row items-center gap-2 px-5 py-3 text-2xl font-bold tracking-tight sm:text-3xl border-b border-gray-200 dark:border-white/10'>
           <Icon size={7} icon={ReceiptPercentIcon} />
-          <span>
-            Presupuesto
-          </span>
+          <span>Presupuesto</span>
         </h2>
       }
     >
       {!isLoading && (
         <form
           onSubmit={handleSubmit(handleRegistration, handleError)}
-          className="px-5 py-3 flex flex-col flex-grow justify-between"
+          className='px-5 py-3 flex flex-col flex-grow justify-between'
         >
           <BudgetTable control={control} errors={errors} />
 
