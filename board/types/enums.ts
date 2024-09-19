@@ -34,6 +34,13 @@ export enum ButtonType {
   Reset = "reset",
 }
 
+export enum InputType {
+  Text = "text",
+  Number = "number",
+  Email = "email",
+  Tel = "tel",
+}
+
 export enum PackageType {
   Basic = "Basico",
   Medium = "Medio",

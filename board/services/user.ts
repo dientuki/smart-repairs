@@ -13,5 +13,11 @@ export const getCurrentUser = async (): Promise<User> => {
     `);
   handleGraphQLErrors(response.errors);
 
-  return response.data.currentUser as User;
+  const currentUserWithCurrency = {
+    ...response.data.currentUser,
+    currency: "$"
+  };
+
+  // Retornar el objeto con la propiedad currency
+  return currentUserWithCurrency as User;
 };

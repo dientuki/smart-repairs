@@ -14,6 +14,7 @@ interface User {
   name: string;
   imageUrl: string;
   package: string;
+  currency: string;
 }
 
 interface Board {
