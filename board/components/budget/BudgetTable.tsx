@@ -1,7 +1,25 @@
-import { createColumnHelper, flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table";
+import {
+  createColumnHelper,
+  flexRender,
+  getCoreRowModel,
+  useReactTable,
+} from "@tanstack/react-table";
 import { useEffect, useState } from "react";
-import { AddRow, BooleanCell, QuantityCell, RemoveRow, StaticAutocomplete, TotalPriceCell, UnitPriceCell } from "@/components/budget";
-import { Control, FieldErrors, FieldValues, useFieldArray } from "react-hook-form";
+import {
+  AddRow,
+  BooleanCell,
+  QuantityCell,
+  RemoveRow,
+  StaticAutocomplete,
+  TotalPriceCell,
+  UnitPriceCell,
+} from "@/components/budget";
+import {
+  Control,
+  FieldErrors,
+  FieldValues,
+  useFieldArray,
+} from "react-hook-form";
 import { capitalizeFirstLetter } from "@/helper/stringHelpers";
 import { t } from "i18next";
 import { PackageType, StyleColor } from "@/types/enums";
@@ -42,14 +60,14 @@ type TableProps = {
 
 const registerOptions = {
   morhphId: {
-    required: false
+    required: false,
   },
   quantity: {
-    required: true
+    required: true,
   },
   unitPrice: {
-    required: true
-  }
+    required: true,
+  },
 };
 
 const defaultData: Item[] = [
@@ -61,11 +79,10 @@ const defaultData: Item[] = [
     totalPrice: 0,
     includeInSum: true,
     morphType: MorphType.part,
-  }
-]
+  },
+];
 
 const columnHelper = createColumnHelper<Item>();
-
 
 export const BudgetTable = ({ control, errors }: TableProps) => {
   const [data, setData] = useState<Item[]>([]);
@@ -77,7 +94,7 @@ export const BudgetTable = ({ control, errors }: TableProps) => {
   }, []);
 
   useEffect(() => {
-    console.log('data', data)
+    console.log("data", data);
   }, [data]);
 
   const { remove } = useFieldArray({
@@ -85,81 +102,91 @@ export const BudgetTable = ({ control, errors }: TableProps) => {
     name: "items",
   });
 
-  columns.push(    columnHelper.accessor("morhphId", {
-    header: capitalizeFirstLetter(t("budget.description")),
-    cell: StaticAutocomplete,
-    meta: {
-      name: "items",
-      control: control,
-      rules: registerOptions.morhphId,
-      errors: errors,
-    },
-  }));
-
-  columns.push(columnHelper.accessor("quantity", {
-    header: capitalizeFirstLetter(t("budget.quantity")),
-    cell: QuantityCell,
-    meta: {
-      name: "items",
-      control: control,
-      rules: registerOptions.quantity,
-      errors: errors,
-      className: "w-20 text-center",
-    },
-  }));
-
-  columns.push(columnHelper.accessor("unitPrice", {
-    header: capitalizeFirstLetter(t("budget.unit_price")),
-    cell: UnitPriceCell,
-    meta: {
-      name: "items",
-      control: control,
-      rules: registerOptions.unitPrice,
-      errors: errors,
-      className: "w-40 text-center",
-    },
-  }));
-
-  columns.push(columnHelper.accessor("totalPrice", {
-    header: capitalizeFirstLetter(t("budget.total_price")),
-    cell: TotalPriceCell,
-    meta: {
-      className: "w-40 text-center",
-    },
-  }));
-
-  if (user?.package !== PackageType.Basic) {
-    columns.push(columnHelper.accessor("includeInSum", {
-      header: capitalizeFirstLetter(t("budget.sum")),
-      cell: BooleanCell,
+  columns.push(
+    columnHelper.accessor("morhphId", {
+      header: capitalizeFirstLetter(t("budget.description")),
+      cell: StaticAutocomplete,
       meta: {
         name: "items",
         control: control,
+        rules: registerOptions.morhphId,
+        errors: errors,
+      },
+    }),
+  );
+
+  columns.push(
+    columnHelper.accessor("quantity", {
+      header: capitalizeFirstLetter(t("budget.quantity")),
+      cell: QuantityCell,
+      meta: {
+        name: "items",
+        control: control,
+        rules: registerOptions.quantity,
+        errors: errors,
         className: "w-20 text-center",
       },
-    }));
-  };
+    }),
+  );
 
-  columns.push(columnHelper.display({
-    id: "itemId",
-    cell: RemoveRow,
-    meta: {
-      name: "items",
-      control: control,
-      className: "w-20",
-    },
-  }));
+  columns.push(
+    columnHelper.accessor("unitPrice", {
+      header: capitalizeFirstLetter(t("budget.unit_price")),
+      cell: UnitPriceCell,
+      meta: {
+        name: "items",
+        control: control,
+        rules: registerOptions.unitPrice,
+        errors: errors,
+        className: "w-40 text-center",
+      },
+    }),
+  );
 
-  const updatePrice = (
-    rowIndex: number,
-    columnId: string,
-    value: string
-  ) => {
+  columns.push(
+    columnHelper.accessor("totalPrice", {
+      header: capitalizeFirstLetter(t("budget.total_price")),
+      cell: TotalPriceCell,
+      meta: {
+        className: "w-40 text-center",
+      },
+    }),
+  );
+
+  if (user?.package !== PackageType.Basic) {
+    columns.push(
+      columnHelper.accessor("includeInSum", {
+        header: capitalizeFirstLetter(t("budget.sum")),
+        cell: BooleanCell,
+        meta: {
+          name: "items",
+          control: control,
+          className: "w-20 text-center",
+        },
+      }),
+    );
+  }
+
+  columns.push(
+    columnHelper.display({
+      id: "itemId",
+      cell: RemoveRow,
+      meta: {
+        name: "items",
+        control: control,
+        className: "w-20",
+      },
+    }),
+  );
+
+  const updatePrice = (rowIndex: number, columnId: string, value: string) => {
     setData((old) =>
       old.map((row, index) => {
         if (index === rowIndex) {
-          const newQuantity = columnId === "quantity" ? Number(value) : row.quantity;
-          const newPrice = columnId === "unitPrice" ? Number(value) : row.unitPrice;
+          const newQuantity =
+            columnId === "quantity" ? Number(value) : row.quantity;
+          const newPrice =
+            columnId === "unitPrice" ? Number(value) : row.unitPrice;
           const newPriceTotal = newQuantity * newPrice;
 
           return {
@@ -169,7 +196,7 @@ export const BudgetTable = ({ control, errors }: TableProps) => {
           };
         }
         return row;
-      })
+      }),
     );
   };
 
@@ -178,10 +205,7 @@ export const BudgetTable = ({ control, errors }: TableProps) => {
     setData(setFunc);
   };
 
-  const removeRow = (
-    remove: (index: number) => void,
-    rowIndex: number
-  ) => {
+  const removeRow = (remove: (index: number) => void, rowIndex: number) => {
     const setFilterFunc = (old: Item[]) =>
       old.filter((_row: Item, index: number) => index !== rowIndex);
 
@@ -194,18 +218,19 @@ export const BudgetTable = ({ control, errors }: TableProps) => {
     columns,
     getCoreRowModel: getCoreRowModel(),
     meta: {
-      updatePrice: (rowIndex: number, columnId: string, value: string) => updatePrice(rowIndex, columnId, value),
+      updatePrice: (rowIndex: number, columnId: string, value: string) =>
+        updatePrice(rowIndex, columnId, value),
       addRow: () => addRow(newItem),
       removeRow: (rowIndex: number) => removeRow(remove, rowIndex),
-    }
+    },
   });
 
   return (
-    <div className="divide-y divide-gray-200 overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-gray-950/5 dark:divide-white/10 dark:bg-gray-900 dark:ring-white/10">
+    <div className='divide-y divide-gray-200 overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-gray-950/5 dark:divide-white/10 dark:bg-gray-900 dark:ring-white/10'>
       <table className='w-full table-auto divide-y divide-gray-200 text-start dark:divide-white/5'>
         <thead className='divide-y divide-gray-200 dark:divide-white/5'>
           {table.getHeaderGroups().map((headerGroup) => (
-            <tr key={headerGroup.id} className="bg-gray-50 dark:bg-white/5">
+            <tr key={headerGroup.id} className='bg-gray-50 dark:bg-white/5'>
               {headerGroup.headers.map((header) => (
                 <th
                   key={header.id}
@@ -222,7 +247,7 @@ export const BudgetTable = ({ control, errors }: TableProps) => {
             </tr>
           ))}
         </thead>
-        <tbody className="divide-y divide-gray-200 whitespace-nowrap dark:divide-white/5">
+        <tbody className='divide-y divide-gray-200 whitespace-nowrap dark:divide-white/5'>
           {table.getRowModel().rows.map((row) => (
             <tr
               key={row.id}
@@ -230,22 +255,24 @@ export const BudgetTable = ({ control, errors }: TableProps) => {
             >
               {row.getVisibleCells().map((cell) => (
                 <td key={cell.id} className='p-2'>
-                  {flexRender(
-                    cell.column.columnDef.cell,
-                    cell.getContext(),
-                  )}
+                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
                 </td>
               ))}
             </tr>
           ))}
-          <tr className="bg-gray-50 dark:bg-white/5">
-            <td
-              colSpan={table.getCenterLeafColumns().length - 1}
-              align='right'
-            >
-              <ActionButton onClick={table.options.meta?.addRow} customClass="w-auto" style={StyleColor.Warning} >
-                <Icon icon={ExclamationTriangleIcon} size={6} style={StyleColor.Warning} />
-                {t('budget.add_foreign_part')}
+          <tr className='bg-gray-50 dark:bg-white/5'>
+            <td colSpan={table.getCenterLeafColumns().length - 1} align='right'>
+              <ActionButton
+                onClick={table.options.meta?.addRow}
+                customClass='w-auto'
+                style={StyleColor.Warning}
+              >
+                <Icon
+                  icon={ExclamationTriangleIcon}
+                  size={6}
+                  style={StyleColor.Warning}
+                />
+                {t("budget.add_foreign_part")}
               </ActionButton>
             </td>
             <td className='p-2'>
@@ -271,8 +298,7 @@ export const BudgetTable = ({ control, errors }: TableProps) => {
             <td colSpan={2}></td>
           </tr>
         </tfoot>
-
       </table>
     </div>
-  )
-}
+  );
+};

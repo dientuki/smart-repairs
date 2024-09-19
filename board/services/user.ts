@@ -15,7 +15,7 @@ export const getCurrentUser = async (): Promise<User> => {
 
   const currentUserWithCurrency = {
     ...response.data.currentUser,
-    currency: "$"
+    currency: "$",
   };
 
   // Retornar el objeto con la propiedad currency

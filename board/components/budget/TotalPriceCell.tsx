@@ -7,14 +7,8 @@ export const TotalPriceCell = ({
   column,
   table,
 }: InputCellProps) => {
-
   const name = `5`;
   const { user } = useUserStore();
 
-  return (
-    <FakeInput
-      value={name}
-      icon={user?.currency}
-    />
-  );
+  return <FakeInput value={name} icon={user?.currency} />;
 };
