@@ -3,11 +3,8 @@
 namespace App\Filament\Team\Resources;
 
 use App\Enum\DiscountEnum;
-use App\Enum\SimpleDiscountEnum;
-use App\Filament\Team\Resources\ServiceJobResource\Pages;
-use App\Models\ServiceJob;
-use App\Traits\RegistersNavigationTrait;
-use Filament\Facades\Filament;
+use App\Filament\Team\Resources\DiscountResource\Pages;
+use App\Models\Discount;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
@@ -18,24 +15,22 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ToggleColumn;
 use Filament\Tables\Table;
 
-class ServiceJobResource extends Resource
+class DiscountResource extends Resource
 {
-    protected static ?string $model = ServiceJob::class;
+    protected static ?string $model = Discount::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-wrench-screwdriver';
-
-    protected static ?int $navigationSort = 30;
-
-    public static function getModelLabel(): string
-    {
-        return __('resource.service_job');
-    }
+    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
                 TextInput::make('name'),
+                Select::make('type')
+                    ->options(DiscountEnum::class)
+                    ->required()
+                    ->default(DiscountEnum::default())
+                    ->selectablePlaceholder(false),
                 TextInput::make('price')->prefix('$'),
                 Toggle::make('is_active')
             ]);
@@ -47,6 +42,7 @@ class ServiceJobResource extends Resource
             ->columns([
                 TextColumn::make('name'),
                 TextColumn::make('price')->money('ARS'),
+                TextColumn::make('type'),
                 ToggleColumn::make('is_active')
             ])
             ->filters([
@@ -72,9 +68,9 @@ class ServiceJobResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListServiceJobs::route('/'),
-            'create' => Pages\CreateServiceJob::route('/create'),
-            'edit' => Pages\EditServiceJob::route('/{record}/edit'),
+            'index' => Pages\ListDiscounts::route('/'),
+            'create' => Pages\CreateDiscount::route('/create'),
+            'edit' => Pages\EditDiscount::route('/{record}/edit'),
         ];
     }
 }

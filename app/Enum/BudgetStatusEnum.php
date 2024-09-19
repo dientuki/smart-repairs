@@ -9,9 +9,9 @@ enum BudgetStatusEnum: string implements HasLabel
 {
     use EnumAsArrayTrait;
 
-    case Pending = 'Pending';
-    case Approved = 'Approved';
-    case Rejected = 'Rejected';
+    case Pending = 'pending';
+    case Approved = 'approved';
+    case Rejected = 'rejected';
 
     /**
      * @param string $value
