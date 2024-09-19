@@ -18,9 +18,11 @@ return new class extends Migration
 
             $table->string('name');
             $table->decimal('price', 15, 2);
-            $table->enum('discount_type', DiscountEnum::getAllCasesAsArray())->default(DiscountEnum::default()->value);
+            $table->enum('discount_type', DiscountEnum::getAllCasesAsArray())
+                ->default(DiscountEnum::default()->value);
             $table->decimal('discount_value', 15, 2)->nullable();
-            $table->enum('status', ServiceJobStatusEnum::getAllCasesAsArray())->default(ServiceJobStatusEnum::default()->value);
+            $table->enum('status', ServiceJobStatusEnum::getAllCasesAsArray())
+                ->default(ServiceJobStatusEnum::default()->value);
             $table->foreignUlid('team_id')->constrained();
 
             $table->timestamps();
