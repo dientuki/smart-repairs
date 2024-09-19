@@ -9,9 +9,8 @@ enum DiscountEnum: string implements HasLabel
 {
     use EnumAsArrayTrait;
 
-    case None = 'None';
-    case Percentage = 'Percentage';
-    case Amount = 'Amount';
+    case Percentage = 'percentage';
+    case Amount = 'amount';
 
     /**
      * @param string $value
@@ -20,7 +19,6 @@ enum DiscountEnum: string implements HasLabel
     public function getLabel(): string
     {
         return match ($this) {
-            self::None => __('None'),
             self::Percentage => __('Percentage'),
             self::Amount => __('Amount'),
         };
@@ -34,6 +32,6 @@ enum DiscountEnum: string implements HasLabel
     public static function default(): self
     {
         // Cambia 'None' por el valor que quieras como predeterminado
-        return self::None;
+        return self::Amount;
     }
 }
