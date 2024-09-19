@@ -51,7 +51,7 @@ export const ViewCardModal = () => {
   return (
     <ModalLayout>
       {modal.params.order == order.$id && (
-        <div className='h-full text-gray-950 dark:text-white flex flex-col'>
+        <div className='h-full flex flex-col'>
           <h2 className='flex flex-row items-center gap-2 px-5 py-3 text-2xl font-bold tracking-tight sm:text-3xl'>
             <Icon size={7} icon={DevicePhoneMobileIcon} />
             <span>
