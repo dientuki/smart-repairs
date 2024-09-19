@@ -21,12 +21,14 @@ export const StaticAutocomplete = ({
   const errorMessage =
     column.columnDef.meta.errors.items?.[row.index]?.[column.id] ?? null;
 
+    /*
   useEffect(() => {
     if (row.index == 0) {
       table.options.meta?.updateServiceId(row.index, options[0].id);
       table.options.meta?.updatePrice(row.index, "unitPrice", options[0].info);
     }
-  }, []);
+  }, [  ]);
+  */
 
   const handleOnChange = (newValue: OptionType | null, reason: string) => {
     if (reason === "clear") {

@@ -10,7 +10,7 @@ export const AddButton = () => {
 
   return (
     <button
-      className='text-green-500 hover:text-green-600 fixed bottom-5 right-5 z-50'
+      className='text-green-500 hover:text-green-600 fixed bottom-5 right-5 z-30'
       onClick={openCard}
     >
       <PlusCircleIcon className='h-14 w-14' />
