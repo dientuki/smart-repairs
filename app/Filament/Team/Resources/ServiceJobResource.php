@@ -10,6 +10,7 @@ use App\Traits\RegistersNavigationTrait;
 use Filament\Facades\Filament;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Toggle;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
@@ -47,6 +48,8 @@ class ServiceJobResource extends Resource
                 })->reactive()
                 ->default(DiscountEnum::None->value),
                 TextInput::make('discount_value'),
+                Toggle::make('status')
+
             ]);
     }
 

@@ -6,10 +6,11 @@
         "total_price": "precio total",
         "total": "total",
         "sum": "suma",
-        "new_item": "añadir item",
+        "item": "item",
         "error": {
             "can_add": "agrega un item antes"
-        }
+        },
+        "add_foreign_part": "Agregar parte de otro equipo"
     },
 
     "button": {
@@ -22,7 +23,8 @@
         "validate": "Validar",
         "quote": "Presupuestar",
         "edit": "Editar",
-        "delete": "Eliminar"
+        "delete": "Eliminar",
+        "add": "Añadir"
     },
 
     "device": "equipo",
