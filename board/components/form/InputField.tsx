@@ -18,7 +18,7 @@ interface InputFieldProps {
   disabled?: boolean;
   rules?: RegisterOptions;
   errors?: FieldErrors<FieldValues>;
-  icon?: React.ComponentType<React.SVGProps<SVGSVGElement>>;
+  icon?: React.ReactNode;
   defaultValue?: string;
   placeholder?: string;
   onClick?: (event: React.MouseEvent<HTMLInputElement>) => void;
@@ -71,7 +71,7 @@ export const InputField = ({
   control,
   rules = {},
   errors,
-  icon: Icon,
+  icon,
   disabled = false,
   defaultValue = "",
   placeholder,
@@ -112,9 +112,9 @@ export const InputField = ({
               }
               overflow-hidden`}
         >
-          {Icon && (
+          {icon && (
             <div className='items-center gap-x-3 ps-3 flex border-e border-gray-200 pe-3 dark:border-white/10'>
-              <Icon className='w-4 h-4 text-gray-500' aria-hidden='true' />
+              {icon}
             </div>
           )}
           <div className='min-w-0 flex-1'>

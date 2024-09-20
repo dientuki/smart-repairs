@@ -7,10 +7,20 @@ import { FieldValues, useForm } from "react-hook-form";
 import { ActionButton } from "@/components/form";
 import { ButtonType } from "@/types/enums";
 import { BudgetTable } from "@/components/budget";
+import { useBudgetStore } from "@/store";
+import { toast } from "react-toastify";
+import { t } from "i18next";
 
-export const BudgetModal = () => {
+type BudgetModalProps = {
+  order: string;
+};
+
+export const BudgetModal = ({ order }: BudgetModalProps) => {
   const modal = useModalWindow();
+  const { initialValues } = useBudgetStore();
   const [isLoading, setIsLoading] = useState(true);
+  const [budget, setBudget] = useState();
+  const [description, setDescription] = useState();
   const {
     handleSubmit,
     control,
@@ -18,9 +28,31 @@ export const BudgetModal = () => {
   } = useForm();
 
   useEffect(() => {
-    setTimeout(() => {
-      setIsLoading(false);
-    }, 100);
+    let isMounted = true;
+
+    const fetchInitialValues = async () => {
+      try {
+        const result = await initialValues(order);
+        if (isMounted) {
+          setBudget(result.budget);
+          setDescription(result.description);
+        }
+      } catch (e) {
+        if (isMounted) {
+          toast.error(t(`toast.error.${e.message}`));
+        }
+      } finally {
+        if (isMounted) {
+          setIsLoading(false); // Indicar que terminó la carga
+        }
+      }
+    };
+
+    fetchInitialValues();
+
+    return () => {
+      isMounted = false; // Limpieza del efecto
+    };
   }, []);
 
   const handleRegistration = (data: FieldValues) => {
@@ -50,7 +82,12 @@ export const BudgetModal = () => {
           onSubmit={handleSubmit(handleRegistration, handleError)}
           className='px-5 py-3 flex flex-col flex-grow justify-between'
         >
-          <BudgetTable control={control} errors={errors} />
+          <BudgetTable
+            control={control}
+            errors={errors}
+            budget={budget}
+            description={description}
+          />
 
           <ActionButton type={ButtonType.Submit}>Submit</ActionButton>
         </form>

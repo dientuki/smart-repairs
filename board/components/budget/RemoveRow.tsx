@@ -1,6 +1,4 @@
-import { XCircleIcon } from "@heroicons/react/16/solid";
 import { ActionButton } from "../form";
-import { Icon } from "../Icon";
 import { HiddenInputField } from "../form/HiddenInput";
 import { StyleColor } from "@/types/enums";
 import { t } from "i18next";
