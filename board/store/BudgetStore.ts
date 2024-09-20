@@ -36,7 +36,7 @@ export const useBudgetStore = create<BudgetStore>((set) => ({
 
     return {
       description: [...services, ...discounts, ...parts],
-      budget: budget,
+      budget: budget.length ? budget[0] : null,
     };
   },
 

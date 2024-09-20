@@ -10,7 +10,12 @@
         "error": {
             "can_add": "agrega un item antes"
         },
-        "add_foreign_part": "Agregar parte de otro equipo"
+        "add_foreign_part": "Agregar parte de otro equipo",
+        "type": {
+            "discount": "Descuento",
+            "servicejob": "Servicio",
+            "part": "Parte"
+        }
     },
 
     "button": {
