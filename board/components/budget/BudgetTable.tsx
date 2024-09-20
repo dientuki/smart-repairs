@@ -103,11 +103,7 @@ export const BudgetTable = ({
 }: TableProps) => {
   const [data, setData] = useState<Item[]>([]);
   const { user } = useUserStore();
-
   const columns = [];
-
-  console.log("budget", budget);
-  console.log("description", description);
 
   useEffect(() => {
     setData(budget || [...defaultData]);
@@ -290,18 +286,20 @@ export const BudgetTable = ({
               align='right'
               className='p-2'
             >
-              <ActionButton
-                onClick={table.options.meta?.addRow}
-                customClass='w-auto'
-                style={StyleColor.Warning}
-              >
-                <Icon
-                  icon={ExclamationTriangleIcon}
-                  size={6}
+              { user?.package !== PackageType.Basic &&
+                <ActionButton
+                  onClick={table.options.meta?.addRow}
+                  customClass='w-auto'
                   style={StyleColor.Warning}
-                />
-                {t("budget.add_foreign_part")}
-              </ActionButton>
+                >
+                  <Icon
+                    icon={ExclamationTriangleIcon}
+                    size={6}
+                    style={StyleColor.Warning}
+                  />
+                  {t("budget.add_foreign_part")}
+                </ActionButton>
+              }
             </td>
             <td className='p-2'>
               <AddRow table={table} />
