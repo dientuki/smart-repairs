@@ -9,7 +9,7 @@ type Query {
         @field(resolver: "UserQueries@getCurrentUser")
         @namespace(field: "App\\GraphQL\\Queries")
     morph: Morph
-        @field(resolver: "MorphQueries@getMorhp")
+        @field(resolver: "MorphQueries@getMorph")
         @namespace(field: "App\\GraphQL\\Queries")
 }
 
