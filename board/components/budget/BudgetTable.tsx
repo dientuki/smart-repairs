@@ -56,7 +56,7 @@ const newItem: Item = {
 type TableProps = {
   control: Control<FieldValues>;
   errors?: FieldErrors<FieldValues>;
-  budget: any | null;
+  budget?: any;
   description: any;
 };
 
@@ -95,7 +95,12 @@ const defaultData: Item[] = [
 
 const columnHelper = createColumnHelper<Item>();
 
-export const BudgetTable = ({ control, errors, budget, description }: TableProps) => {
+export const BudgetTable = ({
+  control,
+  errors,
+  budget,
+  description,
+}: TableProps) => {
   const [data, setData] = useState<Item[]>([]);
   const { user } = useUserStore();
 
@@ -104,15 +109,15 @@ export const BudgetTable = ({ control, errors, budget, description }: TableProps
   console.log("budget", budget);
   console.log("description", description);
 
-
-
   useEffect(() => {
-    setData([...defaultData]);
+    setData(budget || [...defaultData]);
   }, []);
 
+  /*
   useEffect(() => {
     console.log("data", data);
   }, [data]);
+  */
 
   const { remove } = useFieldArray({
     control,
@@ -129,6 +134,7 @@ export const BudgetTable = ({ control, errors, budget, description }: TableProps
         rulesId: registerOptions.itemId,
         rulesType: registerOptions.itemType,
         errors: errors,
+        data: description
       },
     }),
   );
