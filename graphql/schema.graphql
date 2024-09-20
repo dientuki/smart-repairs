@@ -8,6 +8,15 @@ type Query {
     currentUser: User!
         @field(resolver: "UserQueries@getCurrentUser")
         @namespace(field: "App\\GraphQL\\Queries")
+    morph: Morph
+        @field(resolver: "MorphQueries@getMorhp")
+        @namespace(field: "App\\GraphQL\\Queries")
+}
+
+type Morph {
+    part: String
+    discount: String
+    serviceJob: String
 }
 
 type ErrorPayload {
