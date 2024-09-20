@@ -31,38 +31,40 @@ export const device = (collection: any[]): OptionType[] => {
   }, []);
 };
 
-export const extra = (collection: any[]): OptionType[] => {
+export const extra = (
+  collection: any[],
+  additionalInfo?: Record<string, any>,
+): OptionType[] => {
+  if (collection.length === 0) return [];
+
   return collection.reduce((acc: OptionType[], item: any) => {
     const anyValues = Object.keys(item).filter(
       (key) => key !== "id" && key !== "label",
     );
 
+    let info: Record<string, any> = {};
+
     if (anyValues.length === 1) {
-      // Si hay solo una clave en ANY, usamos su valor como una cadena de texto para info.
       const key = anyValues[0];
       const value = item[key];
-
-      // Manejar el caso en que el valor es null.
-      acc.push({
-        id: item.id,
-        label: item.label,
-        info: value === null ? null : String(value), // Si el valor es null, info será null.
-      });
+      info[key] = value === null ? null : String(value);
     } else if (anyValues.length > 1) {
-      // Si hay más de una clave en ANY, usamos las claves y valores como un objeto para info.
-      const infoObject = anyValues.reduce(
-        (obj: Record<string, any>, key: string) => {
-          obj[key] = item[key];
-          return obj;
-        },
-        {},
-      );
-      acc.push({
-        id: item.id,
-        label: item.label,
-        info: infoObject,
-      });
+      info = anyValues.reduce((obj: Record<string, any>, key: string) => {
+        obj[key] = item[key];
+        return obj;
+      }, {});
     }
+
+    // Agregar additionalInfo si existe
+    if (additionalInfo) {
+      info = { ...info, ...additionalInfo };
+    }
+
+    acc.push({
+      id: item.id,
+      label: item.label,
+      info: info,
+    });
 
     return acc;
   }, []);

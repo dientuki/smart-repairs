@@ -7,7 +7,10 @@ import { extra } from "@/helper/reduceHelpers";
 import { arrayToString } from "@/helper/stringHelpers";
 import { PackageType } from "@/types/enums";
 
-export const getInitialValues = async (cpackage: string, orderId?: string): Promise<any> => {
+export const getInitialValues = async (
+  cpackage: string,
+  orderId?: string,
+): Promise<any> => {
   // Construir la consulta dinámicamente según si `orderId` está presente o no
   const query = `
     query {
@@ -27,7 +30,9 @@ export const getInitialValues = async (cpackage: string, orderId?: string): Prom
         label
         price
       }
-      ${orderId && cpackage !== PackageType.Basic ? `
+      ${
+        orderId && cpackage !== PackageType.Basic
+          ? `
         partsByOrder(orderId: "${orderId}") {
           id
           label
@@ -35,8 +40,12 @@ export const getInitialValues = async (cpackage: string, orderId?: string): Prom
           stock
           image
         }
-      ` : ''}
-      ${orderId ? `
+      `
+          : ""
+      }
+      ${
+        orderId
+          ? `
         budget(orderId: "${orderId}") {
           id
           total
@@ -48,23 +57,31 @@ export const getInitialValues = async (cpackage: string, orderId?: string): Prom
             include_in_sum
           }
         }
-      ` : ''}
+      `
+          : ""
+      }
     }
   `;
 
   const response = await graphqlRequest(query);
-  console.log(response);
 
   handleGraphQLErrors(response.errors);
 
   return {
-    discounts: extra(response.data.discounts),
-    services: extra(response.data.services),
-    parts: orderId ? extra(response.data.partsByOrder) : [],
-    budget: orderId ? response.data.budget : null,
+    discounts: extra(response.data.discounts, {
+      item_type: response.data.morph.discount,
+    }),
+    services: extra(response.data.services, {
+      item_type: response.data.morph.serviceJob,
+    }),
+    parts: response.data.partsByOrder
+      ? extra(response.data.partsByOrder, {
+          item_type: response.data.morph.part,
+        })
+      : [],
+    budget: response.data.budget ? response.data.budget : null,
   };
 };
-
 
 export const updateBudget = async (
   orderId: string,

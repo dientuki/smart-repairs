@@ -23,8 +23,8 @@ import {
 import { capitalizeFirstLetter } from "@/helper/stringHelpers";
 import { t } from "i18next";
 import { PackageType, StyleColor } from "@/types/enums";
-import { useUserStore } from "@/store";
-import { ActionButton } from "../form";
+import { useBudgetStore, useUserStore } from "@/store";
+import { ActionButton, FakeInput } from "../form";
 import { Icon } from "../Icon";
 import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
 
@@ -34,32 +34,40 @@ enum MorphType {
 }
 
 type Item = {
+  id: string;
   itemId: string;
-  morhphId: string;
+  itemType: string;
   quantity: number;
   unitPrice: number;
   totalPrice: number;
   includeInSum: boolean;
-  morphType: MorphType;
 };
 
 const newItem: Item = {
+  id: "",
   itemId: "",
-  morhphId: "",
+  itemType: "",
   quantity: 1,
   unitPrice: 0,
   totalPrice: 0,
   includeInSum: true,
-  morphType: MorphType.part,
 };
 
 type TableProps = {
   control: Control<FieldValues>;
   errors?: FieldErrors<FieldValues>;
+  budget: any | null;
+  description: any;
 };
 
 const registerOptions = {
-  morhphId: {
+  id: {
+    required: false,
+  },
+  itemId: {
+    required: false,
+  },
+  itemType: {
     required: false,
   },
   quantity: {
@@ -68,26 +76,35 @@ const registerOptions = {
   unitPrice: {
     required: true,
   },
+  includeInSum: {
+    required: true,
+  },
 };
 
 const defaultData: Item[] = [
   {
-    itemId: "init",
-    morhphId: "init",
+    id: "",
+    itemId: "",
+    itemType: "",
     quantity: 1,
     unitPrice: 0,
     totalPrice: 0,
     includeInSum: true,
-    morphType: MorphType.part,
   },
 ];
 
 const columnHelper = createColumnHelper<Item>();
 
-export const BudgetTable = ({ control, errors }: TableProps) => {
+export const BudgetTable = ({ control, errors, budget, description }: TableProps) => {
   const [data, setData] = useState<Item[]>([]);
   const { user } = useUserStore();
+
   const columns = [];
+
+  console.log("budget", budget);
+  console.log("description", description);
+
+
 
   useEffect(() => {
     setData([...defaultData]);
@@ -103,13 +120,14 @@ export const BudgetTable = ({ control, errors }: TableProps) => {
   });
 
   columns.push(
-    columnHelper.accessor("morhphId", {
+    columnHelper.accessor("itemId", {
       header: capitalizeFirstLetter(t("budget.description")),
       cell: StaticAutocomplete,
       meta: {
         name: "items",
         control: control,
-        rules: registerOptions.morhphId,
+        rulesId: registerOptions.itemId,
+        rulesType: registerOptions.itemType,
         errors: errors,
       },
     }),
@@ -169,7 +187,7 @@ export const BudgetTable = ({ control, errors }: TableProps) => {
 
   columns.push(
     columnHelper.display({
-      id: "itemId",
+      id: "id",
       cell: RemoveRow,
       meta: {
         name: "items",
@@ -261,7 +279,11 @@ export const BudgetTable = ({ control, errors }: TableProps) => {
             </tr>
           ))}
           <tr className='bg-gray-50 dark:bg-white/5'>
-            <td colSpan={table.getCenterLeafColumns().length - 1} align='right'>
+            <td
+              colSpan={table.getCenterLeafColumns().length - 1}
+              align='right'
+              className='p-2'
+            >
               <ActionButton
                 onClick={table.options.meta?.addRow}
                 customClass='w-auto'
@@ -286,14 +308,7 @@ export const BudgetTable = ({ control, errors }: TableProps) => {
               Total:
             </td>
             <td className='px-2 py-1' colSpan={1}>
-              <div className='relative flex items-center rounded-lg bg-gray-50 border text-gray-900 text-base border-gray-300 p-2.5'>
-                <div className='absolute inset-y-0 left-0 w-10 flex items-center justify-center bg-gray-200 rounded-l-lg pointer-events-none'>
-                  <span className='text-gray-500 sm:text-sm'>$</span>
-                </div>
-                <span className='ml-12 flex-grow text-base font-medium text-right'>
-                  total
-                </span>
-              </div>
+              <FakeInput value='58' icon={user?.currency} />
             </td>
             <td colSpan={2}></td>
           </tr>

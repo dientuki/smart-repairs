@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { useServiceJobStore } from "@/store";
+import { useServiceJobStore, useUserStore } from "@/store";
 import { getInitialValues, updateBudget } from "@/services/budget";
 import { clearState } from "@/helper/storeHelpers";
 
@@ -7,7 +7,9 @@ interface BudgetStore {
   parts: OptionType[];
   budget: any;
   clear: (keys: string | string[]) => void;
-  initialValues: (orderId: string) => Promise<void>;
+  initialValues: (
+    orderId?: string,
+  ) => Promise<{ description: any[]; budget: any }>;
   updateBudget: (orderId: string, data: any) => Promise<boolean>;
 }
 
@@ -22,19 +24,20 @@ export const useBudgetStore = create<BudgetStore>((set) => ({
 
   clear: (keys: string | string[]) => clearState(keys, defaultState, set),
 
-  initialValues: async (orderId: string) => {
-    //get discounts, services, parts; and set vars in store
-    const { discounts, services, parts, budget } =
-      await getInitialValues(orderId);
+  initialValues: async (
+    orderId?: string,
+  ): Promise<{ description: any[]; budget: any }> => {
+    const { user } = useUserStore.getState();
 
-    useServiceJobStore.getState().setDiscounts(discounts);
-    useServiceJobStore.getState().setServices(services);
+    const { discounts, services, parts, budget } = await getInitialValues(
+      user.package,
+      orderId,
+    );
 
-    set({ parts });
-    if (budget) {
-      console.log(budget);
-      set({ budget });
-    }
+    return {
+      description: [...services, ...discounts, ...parts],
+      budget: budget,
+    };
   },
 
   updateBudget: async (orderId: string, data: any): Promise<boolean> => {
