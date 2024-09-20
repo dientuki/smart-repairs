@@ -20,9 +20,9 @@ class ServiceJobQueries
     {
         $team_id = $this->getTeamId();
 
-        return ServiceJob::where(
-            ['is_active' => true],
-            ['team_id' => $team_id]
-        )->get();
+        return ServiceJob::where([
+            ['is_active', '=', true],
+            ['team_id', '=', $team_id]
+        ])->get();
     }
 }

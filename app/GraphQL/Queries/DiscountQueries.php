@@ -15,7 +15,7 @@ class DiscountQueries
         $team_id = $this->getTeamId();
 
         return Discount::where([
-            ['is_active' => true],
+            ['is_active', '=', true],
             ['team_id', '=', $team_id]
         ])->get();
     }
