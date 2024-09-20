@@ -18,9 +18,9 @@ export const FakeInput = ({ value, icon }: FakeInputProps) => {
       )}
       <div className='min-w-0 flex-1'>
         <div
-          className='block w-full border-none py-1.5 text-base text-gray-950 transition duration-75 placeholder:text-gray-400
+          className="block w-full border-none py-1.5 text-base text-gray-950 transition duration-75 placeholder:text-gray-400
             disabled:text-gray-500 dark:text-white dark:placeholder:text-gray-500 dark:disabled:text-gray-400
-            bg-white/0 ps-3 pe-3'
+            bg-white/0 ps-3 pe-3 min-h-10"
         >
           {value}
         </div>
