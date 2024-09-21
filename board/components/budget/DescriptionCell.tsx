@@ -1,5 +1,5 @@
 import { Autocomplete, TextField } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Controller } from "react-hook-form";
 import { FakeInput } from "../form";
 import { t } from "i18next";
@@ -12,13 +12,18 @@ export const DescriptionCell = ({
   column,
   table,
 }: DescriptionCellProps) => {
+  const value = getValue();
   const [type, setType] = useState<string>("");
   const options = column.columnDef.meta.data;
   const name = `${column.columnDef.meta?.name}.${row.id}.${column.id}`;
 
-  const handleOnChange = (newValue: OptionType | null, reason: string) => {
-    //console.log(newValue, 'changeg')
+  useEffect(() => {
+    if (value) {
+      setType(getType(value.info.item_type));
+    }
+  }, [value]);
 
+  const handleOnChange = (newValue: OptionType | null, reason: string) => {
     if (reason === "clear") {
       setType("");
       console.log("clear");
@@ -64,7 +69,7 @@ export const DescriptionCell = ({
                 field.onChange(newValue);
                 handleOnChange(newValue, reason);
               }}
-              value={field.value || null}
+              value={value || field.value || null}
               options={options}
               groupBy={(option) => option.info.item_type}
               getOptionLabel={(option) => option.label}

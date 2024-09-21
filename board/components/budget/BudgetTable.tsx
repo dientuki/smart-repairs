@@ -19,12 +19,11 @@ import {
   FieldErrors,
   FieldValues,
   useFieldArray,
-  useForm,
 } from "react-hook-form";
 import { capitalizeFirstLetter } from "@/helper/stringHelpers";
 import { t } from "i18next";
 import { PackageType, StyleColor } from "@/types/enums";
-import { useBudgetStore, useUserStore } from "@/store";
+import { useUserStore } from "@/store";
 import { ActionButton, FakeInput } from "../form";
 import { Icon } from "../Icon";
 import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
@@ -230,7 +229,7 @@ export const BudgetTable = ({
     );
   };
 
-  const addRow = (newItem: Item) => {
+  const addRow = () => {
     const setFunc = (old: Item[]) => [...old, newItem];
     setData(setFunc);
   };
