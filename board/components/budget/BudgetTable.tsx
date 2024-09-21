@@ -37,7 +37,7 @@ interface Item {
   totalPrice: number;
   includeInSum: boolean;
   total: number;
-};
+}
 
 const newItem: Item = {
   id: "",
@@ -110,43 +110,49 @@ export const BudgetTable = ({
   useEffect(() => {
     console.log(data);
 
-    const properData = data.filter(item => item.itemable != '');
+    const properData = data.filter((item) => item.itemable != "");
     if (data.length === 0 || properData.length === 0) {
       setTotal(0);
       return;
     }
 
-    const subTotal = properData.filter(item =>
-      item.includeInSum &&
-      (item.itemable.info.item_type.indexOf(Itemable.Part) !== -1 || item.itemable.info.item_type.indexOf(Itemable.ServiceJob) !== -1)
-    ).reduce((acc, item) => {
-      return acc + item.unitPrice; // O cualquier otra propiedad que quieras sumar
-    }, 0);
-
+    const subTotal = properData
+      .filter(
+        (item) =>
+          item.includeInSum &&
+          (item.itemable.info.item_type.indexOf(Itemable.Part) !== -1 ||
+            item.itemable.info.item_type.indexOf(Itemable.ServiceJob) !== -1),
+      )
+      .reduce((acc, item) => {
+        return acc + item.unitPrice; // O cualquier otra propiedad que quieras sumar
+      }, 0);
 
     const discountFixed = properData
-      .filter(item =>
-        item.includeInSum &&
-        item.itemable.info.item_type.indexOf(Itemable.Discount) !== -1 &&
-        item.itemable.info.type === DiscountType.Amount)
+      .filter(
+        (item) =>
+          item.includeInSum &&
+          item.itemable.info.item_type.indexOf(Itemable.Discount) !== -1 &&
+          item.itemable.info.type === DiscountType.Amount,
+      )
       .reduce((acc, item) => {
         return acc + item.unitPrice; // O cualquier otra propiedad que quieras sumar
       }, 0);
 
     const discountPercentage = properData
-      .filter(item =>
-        item.includeInSum &&
-        item.itemable.info.item_type.indexOf(Itemable.Discount) !== -1 &&
-        item.itemable.info.type === DiscountType.Percentage)
+      .filter(
+        (item) =>
+          item.includeInSum &&
+          item.itemable.info.item_type.indexOf(Itemable.Discount) !== -1 &&
+          item.itemable.info.type === DiscountType.Percentage,
+      )
       .reduce((acc, item) => {
         return acc + item.unitPrice; // O cualquier otra propiedad que quieras sumar
       }, 0);
 
-
-    console.log('s', subTotal);
-    console.log('f', discountFixed);
-    console.log('p', discountPercentage)
-/*
+    console.log("s", subTotal);
+    console.log("f", discountFixed);
+    console.log("p", discountPercentage);
+    /*
     let subtotal = 0;
     let discountPercentage = 0;
 

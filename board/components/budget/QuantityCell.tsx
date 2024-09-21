@@ -19,7 +19,10 @@ export const QuantityCell = ({
   };
 
   if (table.options.data[row.index].itemable) {
-    disabled = table.options.data[row.index].itemable.info.item_type.indexOf(Itemable.Part) === -1;
+    disabled =
+      table.options.data[row.index].itemable.info.item_type.indexOf(
+        Itemable.Part,
+      ) === -1;
   }
 
   return (
