@@ -1,10 +1,9 @@
 import { Autocomplete, TextField } from "@mui/material";
 import { useEffect, useState } from "react";
 import { Controller } from "react-hook-form";
-import { FakeInput } from "../form";
+import { FakeInput } from "@/components/form";
 import { t } from "i18next";
-import { Itemable } from "@/types/enums";
-import { BudgetColumns } from "@/types/budget";
+import { BudgetColumns, Itemable } from "@/types/budget";
 
 export const DescriptionCell = ({
   getValue,

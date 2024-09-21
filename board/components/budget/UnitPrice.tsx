@@ -1,6 +1,7 @@
 import { InputField } from "@/components/form";
 import { useUserStore } from "@/store";
-import { DiscountType, InputType, Itemable } from "@/types/enums";
+import { Itemable } from "@/types/budget";
+import { DiscountType, InputType } from "@/types/enums";
 
 export const UnitPriceCell = ({
   getValue,

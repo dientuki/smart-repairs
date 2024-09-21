@@ -6,6 +6,12 @@ export enum BudgetColumns {
   IncludeInSum = "includeInSum",
 }
 
+export enum Itemable {
+  Part = "Part",
+  ServiceJob = "ServiceJob",
+  Discount = "Discount",
+}
+
 interface BudgetItem {
   part_id?: string;
   service_job_id?: string;
@@ -18,6 +24,12 @@ interface Budget {
   id: string;
   total: number;
   items: BudgetItem[];
+}
+
+interface BudgetResumeData {
+  subtotal: number;
+  discount: number;
+  total: number;
 }
 
 interface InitialValues {

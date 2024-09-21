@@ -13,6 +13,7 @@ import {
   DescriptionCell,
   TotalPriceCell,
   UnitPriceCell,
+  BudgetResume
 } from "@/components/budget";
 import {
   Control,
@@ -22,12 +23,12 @@ import {
 } from "react-hook-form";
 import { capitalizeFirstLetter } from "@/helper/stringHelpers";
 import { t } from "i18next";
-import { DiscountType, Itemable, PackageType, StyleColor } from "@/types/enums";
+import { DiscountType, PackageType, StyleColor } from "@/types/enums";
 import { useUserStore } from "@/store";
-import { ActionButton, FakeInput } from "@/components/form";
+import { ActionButton } from "@/components/form";
 import { Icon } from "../Icon";
 import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
-import { BudgetColumns } from "@/types/budget";
+import { BudgetColumns, Itemable } from "@/types/budget";
 
 interface Item {
   id: string;
@@ -101,7 +102,11 @@ export const BudgetTable = ({
     control,
     name: "items",
   });
-  const [total, setTotal] = useState(0);
+  const [badgetResumeData, setBudgetResumeData] = useState<BudgetResumeData>({
+    subtotal: 0,
+    discount: 0,
+    total: 0
+  });
 
   useEffect(() => {
     setData(budget || [...defaultData]);
@@ -112,9 +117,15 @@ export const BudgetTable = ({
 
     const properData = data.filter((item) => item.itemable != "");
     if (data.length === 0 || properData.length === 0) {
-      setTotal(0);
+      setBudgetResumeData({
+        subtotal: 0,
+        discount: 0,
+        total: 0
+      });
       return;
     }
+
+    let d = 0;
 
     const subTotal = properData
       .filter(
@@ -124,7 +135,7 @@ export const BudgetTable = ({
             item.itemable.info.item_type.indexOf(Itemable.ServiceJob) !== -1),
       )
       .reduce((acc, item) => {
-        return acc + item.unitPrice; // O cualquier otra propiedad que quieras sumar
+        return acc + item.totalPrice; // O cualquier otra propiedad que quieras sumar
       }, 0);
 
     const discountFixed = properData
@@ -149,67 +160,15 @@ export const BudgetTable = ({
         return acc + item.unitPrice; // O cualquier otra propiedad que quieras sumar
       }, 0);
 
-    console.log("s", subTotal);
-    console.log("f", discountFixed);
-    console.log("p", discountPercentage);
-    /*
-    let subtotal = 0;
-    let discountPercentage = 0;
+    if (discountPercentage > 0) {
+      d = ((subTotal * discountPercentage)/100);
+    }
 
-    data.forEach(item => {
-      const { price } = item.price; // Obtenemos el price
-      const item_type = item.itemable.info.item_type;
-
-      if (item.includeInSum) {
-        if (item_type.indexOf(Itemable.Part) === -1 || item_type.indexOf(Itemable.ServiceJob) === -1) {
-          subtotal += price * item.quantity;
-        } else if (item_type.indexOf(Itemable.Discount) === -1){
-          if (item.itemable.info.type === DiscountType.Percentage) {
-            discountPercentage = price;
-          } else {
-            subtotal -= price;
-          }
-        }
-      }
+    setBudgetResumeData({
+      subtotal: subTotal,
+      discount: discountFixed + d,
+      total: subTotal - (discountFixed + d)
     });
-*/
-
-    /*
-    let discount: number = 0;
-
-    const subtotal: number = data
-      .filter((item, index) => index === 0 || (index > 1 && item.includeInSum))
-      .reduce((acc, item) => acc + item.totalPrice, 0);
-
-    const discountItem = data[1];
-
-    if (discountItem.serviceId && discountItem.includeInSum) {
-      const discountDetail = discounts.find(
-        (d) => d.id === discountItem.serviceId,
-      );
-
-      if (discountDetail && discountDetail.info) {
-        switch (discountDetail?.info.discount_type) {
-          case DiscountType.Percentage:
-            discount = (subtotal * discountItem.unitPrice) / 100; // Descuento porcentual
-            break;
-          case DiscountType.Amount:
-            discount = discountItem.unitPrice; // Descuento fijo
-            break;
-        }
-      }
-    }
-
-    const total = subtotal - discount;
-
-    if (data[1].totalPrice !== discount) {
-      const newData = [...data];
-      newData[1] = { ...newData[1], totalPrice: discount };
-      setData(newData);
-    }
-
-    setTotal(total);
-    */
   }, [data]);
 
   columns.push(
@@ -433,15 +392,11 @@ export const BudgetTable = ({
         </tbody>
         <tfoot>
           <tr className='bg-gray-50 dark:bg-white/5'>
-            <td className='px-2 py-1 text-right' colSpan={3}>
-              Total:
+            <td className='px-2 py-1 text-right' colSpan={2}>
+
             </td>
-            <td className='px-2 py-1' colSpan={1}>
-              <FakeInput
-                value={total}
-                icon={user?.currency}
-                className='text-right'
-              />
+            <td className='px-2 py-1 text-right' colSpan={2}>
+              <BudgetResume data={badgetResumeData} />
             </td>
             <td colSpan={2}></td>
           </tr>

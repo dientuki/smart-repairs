@@ -50,9 +50,3 @@ export enum CountOperation {
   Increment = "increment",
   Decrement = "decrement",
 }
-
-export enum Itemable {
-  Part = "Part",
-  ServiceJob = "ServiceJob",
-  Discount = "Discount",
-}

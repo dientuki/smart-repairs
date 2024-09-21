@@ -1,5 +1,5 @@
 interface FakeInputProps {
-  value: string; // Texto obligatorio
+  value: string | number; // Texto obligatorio
   icon?: React.ReactNode; // Icono opcional, puede ser un tag o string
   className?: string;
 }
