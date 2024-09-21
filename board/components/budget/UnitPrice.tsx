@@ -24,7 +24,6 @@ export const UnitPriceCell = ({
       Itemable.Discount,
     )
   ) {
-    console.log(table.options.data[row.index].itemable.info);
     if (
       table.options.data[row.index].itemable.info.type ===
       DiscountType.Percentage

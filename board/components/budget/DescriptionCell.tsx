@@ -31,7 +31,7 @@ export const DescriptionCell = ({
     } else {
       //console.log('no clear')
       setType(getType(newValue.info.item_type));
-      if (!newValue.info.item_type.includes(Itemable.Part)) {
+      if (newValue.info.item_type.indexOf(Itemable.Part) === -1) {
         table.options.meta?.updatePrice(row.index, BudgetColumns.Quantity, 1);
       }
       table.options.meta?.updatePrice(
