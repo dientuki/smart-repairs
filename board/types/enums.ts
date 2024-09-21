@@ -5,9 +5,8 @@ export enum OperationStatus {
 }
 
 export enum DiscountType {
-  None = "None",
-  Percentage = "Percentage",
-  Amount = "Amount",
+  Percentage = "percentage",
+  Amount = "amount",
 }
 
 export enum TypedColumn {
@@ -50,4 +49,10 @@ export enum PackageType {
 export enum CountOperation {
   Increment = "increment",
   Decrement = "decrement",
+}
+
+export enum Itemable {
+  Part = "Part",
+  ServiceJob = "ServiceJob",
+  Discount = "Discount",
 }

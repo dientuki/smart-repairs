@@ -1,14 +1,18 @@
 import { useUserStore } from "@/store";
-import { FakeInput } from "../form/FakeInput";
+import { FakeInput } from "@/components/form";
 
-export const TotalPriceCell = ({
-  getValue,
-  row,
-  column,
-  table,
-}: InputCellProps) => {
-  const name = `5`;
+interface TotalPriceProps {
+  getValue: () => any;
+}
+
+export const TotalPriceCell = ({ getValue }: TotalPriceProps) => {
   const { user } = useUserStore();
 
-  return <FakeInput value={name} icon={user?.currency} />;
+  return (
+    <FakeInput
+      value={getValue()}
+      icon={user?.currency}
+      className='text-right'
+    />
+  );
 };

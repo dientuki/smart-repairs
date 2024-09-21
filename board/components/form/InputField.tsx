@@ -22,7 +22,9 @@ interface InputFieldProps {
   defaultValue?: string;
   placeholder?: string;
   onClick?: (event: React.MouseEvent<HTMLInputElement>) => void;
+  onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
   type?: InputType;
+  forceValue?: string;
 }
 
 const getNestedError = (
@@ -73,10 +75,12 @@ export const InputField = ({
   errors,
   icon,
   disabled = false,
-  defaultValue = "",
+  defaultValue,
   placeholder,
   onClick,
+  onChange,
   type = InputType.Text,
+  forceValue,
 }: InputFieldProps) => {
   // Detectar si el name contiene una estructura anidada (usando un punto)
   const isNested = name.includes(".");
@@ -130,6 +134,13 @@ export const InputField = ({
                   readOnly={disabled}
                   placeholder={placeholder}
                   onClick={onClick}
+                  value={forceValue || field.value}
+                  onChange={(e) => {
+                    field.onChange(e);
+                    if (onChange) {
+                      onChange(e);
+                    }
+                  }}
                   type={type}
                   aria-invalid={hasError}
                   aria-describedby={hasError ? `${name}-error` : undefined}

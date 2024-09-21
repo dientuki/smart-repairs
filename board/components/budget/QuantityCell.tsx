@@ -1,5 +1,6 @@
-import { InputType } from "@/types/enums";
+import { InputType, Itemable } from "@/types/enums";
 import { InputField } from "@/components/form";
+import { t } from "i18next";
 
 export const QuantityCell = ({
   getValue,
@@ -7,19 +8,35 @@ export const QuantityCell = ({
   column,
   table,
 }: InputCellProps) => {
-  const initialValue = getValue();
+  const value = getValue();
   const name = `${column.columnDef.meta?.name}.${row.id}.${column.id}`;
+  const control = column.columnDef.meta.control;
+  let disabled = false;
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const q = parseFloat(e.target.value);
+    table.options.meta?.updatePrice(row.index, column.id, q);
+  };
+
+  if (table.options.data[row.index].itemable) {
+    disabled = !table.options.data[row.index].itemable.info.item_type.includes(
+      Itemable.Part,
+    );
+  }
 
   return (
     <InputField
       name={name}
-      label='label'
+      label={t("budget.quantity")}
       labelless
-      control={column.columnDef.meta.control}
+      control={control}
       rules={column.columnDef.meta.rules}
-      defaultValue={initialValue}
+      defaultValue='1'
+      forceValue={value || "1"}
       errors={column.columnDef.meta.errors}
       type={InputType.Number}
+      onChange={handleChange}
+      disabled={disabled}
     />
   );
 };

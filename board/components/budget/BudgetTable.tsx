@@ -10,7 +10,7 @@ import {
   BooleanCell,
   QuantityCell,
   RemoveRow,
-  StaticAutocomplete,
+  DescriptionCell,
   TotalPriceCell,
   UnitPriceCell,
 } from "@/components/budget";
@@ -19,6 +19,7 @@ import {
   FieldErrors,
   FieldValues,
   useFieldArray,
+  useForm,
 } from "react-hook-form";
 import { capitalizeFirstLetter } from "@/helper/stringHelpers";
 import { t } from "i18next";
@@ -27,30 +28,26 @@ import { useBudgetStore, useUserStore } from "@/store";
 import { ActionButton, FakeInput } from "../form";
 import { Icon } from "../Icon";
 import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
-
-enum MorphType {
-  service = "service",
-  part = "part",
-}
+import { BudgetColumns } from "@/types/budget";
 
 type Item = {
   id: string;
-  itemId: string;
-  itemType: string;
+  itemable: string;
   quantity: number;
   unitPrice: number;
   totalPrice: number;
   includeInSum: boolean;
+  total: 0;
 };
 
 const newItem: Item = {
   id: "",
-  itemId: "",
-  itemType: "",
+  itemable: "",
   quantity: 1,
   unitPrice: 0,
   totalPrice: 0,
   includeInSum: true,
+  total: 0,
 };
 
 type TableProps = {
@@ -64,10 +61,7 @@ const registerOptions = {
   id: {
     required: false,
   },
-  itemId: {
-    required: false,
-  },
-  itemType: {
+  itemable: {
     required: false,
   },
   quantity: {
@@ -84,12 +78,12 @@ const registerOptions = {
 const defaultData: Item[] = [
   {
     id: "",
-    itemId: "",
-    itemType: "",
+    itemable: "",
     quantity: 1,
     unitPrice: 0,
     totalPrice: 0,
     includeInSum: true,
+    total: 0,
   },
 ];
 
@@ -104,39 +98,35 @@ export const BudgetTable = ({
   const [data, setData] = useState<Item[]>([]);
   const { user } = useUserStore();
   const columns = [];
-
-  useEffect(() => {
-    setData(budget || [...defaultData]);
-  }, []);
-
-  /*
-  useEffect(() => {
-    console.log("data", data);
-  }, [data]);
-  */
-
   const { remove } = useFieldArray({
     control,
     name: "items",
   });
 
+  useEffect(() => {
+    setData([...defaultData]);
+  }, []);
+
+  useEffect(() => {
+    console.log("data", data);
+  }, [data]);
+
   columns.push(
-    columnHelper.accessor("itemId", {
+    columnHelper.accessor(BudgetColumns.Itemable, {
       header: capitalizeFirstLetter(t("budget.description")),
-      cell: StaticAutocomplete,
+      cell: DescriptionCell,
       meta: {
         name: "items",
         control: control,
-        rulesId: registerOptions.itemId,
-        rulesType: registerOptions.itemType,
+        rules: registerOptions.itemable,
         errors: errors,
-        data: description
+        data: description,
       },
     }),
   );
 
   columns.push(
-    columnHelper.accessor("quantity", {
+    columnHelper.accessor(BudgetColumns.Quantity, {
       header: capitalizeFirstLetter(t("budget.quantity")),
       cell: QuantityCell,
       meta: {
@@ -150,7 +140,7 @@ export const BudgetTable = ({
   );
 
   columns.push(
-    columnHelper.accessor("unitPrice", {
+    columnHelper.accessor(BudgetColumns.UnitPrice, {
       header: capitalizeFirstLetter(t("budget.unit_price")),
       cell: UnitPriceCell,
       meta: {
@@ -164,7 +154,7 @@ export const BudgetTable = ({
   );
 
   columns.push(
-    columnHelper.accessor("totalPrice", {
+    columnHelper.accessor(BudgetColumns.TotalPrice, {
       header: capitalizeFirstLetter(t("budget.total_price")),
       cell: TotalPriceCell,
       meta: {
@@ -175,7 +165,7 @@ export const BudgetTable = ({
 
   if (user?.package !== PackageType.Basic) {
     columns.push(
-      columnHelper.accessor("includeInSum", {
+      columnHelper.accessor(BudgetColumns.IncludeInSum, {
         header: capitalizeFirstLetter(t("budget.sum")),
         cell: BooleanCell,
         meta: {
@@ -200,13 +190,16 @@ export const BudgetTable = ({
   );
 
   const updatePrice = (rowIndex: number, columnId: string, value: string) => {
+    console.log("value", value, data);
     setData((old) =>
       old.map((row, index) => {
         if (index === rowIndex) {
           const newQuantity =
-            columnId === "quantity" ? Number(value) : row.quantity;
+            columnId === BudgetColumns.Quantity ? Number(value) : row.quantity;
           const newPrice =
-            columnId === "unitPrice" ? Number(value) : row.unitPrice;
+            columnId === BudgetColumns.UnitPrice
+              ? Number(value)
+              : row.unitPrice;
           const newPriceTotal = newQuantity * newPrice;
 
           return {
@@ -220,17 +213,48 @@ export const BudgetTable = ({
     );
   };
 
+  const resetRow = (rowIndex: number) => {
+    setData((old) =>
+      old.map((row, index) => {
+        if (index === rowIndex) {
+          return {
+            ...row,
+            quantity: 1,
+            unitPrice: 0,
+            totalPrice: 0,
+            itemable: "",
+          };
+        }
+        return row;
+      }),
+    );
+  };
+
   const addRow = (newItem: Item) => {
     const setFunc = (old: Item[]) => [...old, newItem];
     setData(setFunc);
   };
 
-  const removeRow = (remove: (index: number) => void, rowIndex: number) => {
+  const removeRow = (rowIndex: number) => {
     const setFilterFunc = (old: Item[]) =>
       old.filter((_row: Item, index: number) => index !== rowIndex);
 
     setData(setFilterFunc);
     remove(rowIndex);
+  };
+
+  const updateItem = (rowIndex: number, itemable: any) => {
+    setData((old) =>
+      old.map((row, index) => {
+        if (index === rowIndex) {
+          return {
+            ...row,
+            itemable,
+          };
+        }
+        return row;
+      }),
+    );
   };
 
   const table = useReactTable({
@@ -240,8 +264,10 @@ export const BudgetTable = ({
     meta: {
       updatePrice: (rowIndex: number, columnId: string, value: string) =>
         updatePrice(rowIndex, columnId, value),
-      addRow: () => addRow(newItem),
-      removeRow: (rowIndex: number) => removeRow(remove, rowIndex),
+      resetRow,
+      addRow: () => addRow(),
+      removeRow: (rowIndex: number) => removeRow(rowIndex),
+      updateItem,
     },
   });
 
@@ -286,7 +312,7 @@ export const BudgetTable = ({
               align='right'
               className='p-2'
             >
-              { user?.package !== PackageType.Basic &&
+              {user?.package !== PackageType.Basic && (
                 <ActionButton
                   onClick={table.options.meta?.addRow}
                   customClass='w-auto'
@@ -299,7 +325,7 @@ export const BudgetTable = ({
                   />
                   {t("budget.add_foreign_part")}
                 </ActionButton>
-              }
+              )}
             </td>
             <td className='p-2'>
               <AddRow table={table} />
@@ -312,7 +338,11 @@ export const BudgetTable = ({
               Total:
             </td>
             <td className='px-2 py-1' colSpan={1}>
-              <FakeInput value='58' icon={user?.currency} />
+              <FakeInput
+                value='58'
+                icon={user?.currency}
+                className='text-right'
+              />
             </td>
             <td colSpan={2}></td>
           </tr>

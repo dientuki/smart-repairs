@@ -69,6 +69,12 @@
 .Toastify__toast-body > div:first-letter{
     text-transform: uppercase;
 }
+
+input[type="number"] {
+  text-align: right;
+  padding-right: 10px; /* Ajusta el valor según sea necesario */
+}
+
 /*
 textarea {
   field-sizing: content;

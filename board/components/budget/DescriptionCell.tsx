@@ -3,40 +3,50 @@ import { useState } from "react";
 import { Controller } from "react-hook-form";
 import { FakeInput } from "../form";
 import { t } from "i18next";
+import { Itemable } from "@/types/enums";
+import { BudgetColumns } from "@/types/budget";
 
-export const StaticAutocomplete = ({
+export const DescriptionCell = ({
   getValue,
   row,
   column,
   table,
-}: StaticAutocomplete) => {
+}: DescriptionCellProps) => {
   const [type, setType] = useState<string>("");
   const options = column.columnDef.meta.data;
   const name = `${column.columnDef.meta?.name}.${row.id}.${column.id}`;
 
   const handleOnChange = (newValue: OptionType | null, reason: string) => {
-    console.log(newValue, 'changeg')
+    //console.log(newValue, 'changeg')
 
     if (reason === "clear") {
       setType("");
-      console.log('clear')
+      console.log("clear");
+      table.options.meta?.resetRow(row.index);
     } else {
-      console.log('no clear')
+      //console.log('no clear')
       setType(getType(newValue.info.item_type));
+      if (!newValue.info.item_type.includes(Itemable.Part)) {
+        table.options.meta?.updatePrice(row.index, BudgetColumns.Quantity, 1);
+      }
+      table.options.meta?.updatePrice(
+        row.index,
+        BudgetColumns.UnitPrice,
+        newValue.info.price,
+      );
+      table.options.meta?.updateItem(row.index, newValue);
     }
   };
 
   const getType = (str: string) => {
     const tmp = str.split("\\");
-    return t(`budget.type.${tmp[tmp.length - 1].toLowerCase()}`) ;
-  }
+    return t(`budget.type.${tmp[tmp.length - 1].toLowerCase()}`);
+  };
 
   return (
     <div className='flex flex-row items-center gap-3'>
       <div className='w-1/6'>
-        <FakeInput
-          value={type}
-        />
+        <FakeInput value={type} />
       </div>
       <div className='w-5/6'>
         <Controller
@@ -56,17 +66,16 @@ export const StaticAutocomplete = ({
               }}
               value={field.value || null}
               options={options}
-
               groupBy={(option) => option.info.item_type}
               getOptionLabel={(option) => option.label}
-
               renderGroup={(params) => (
                 <li key={params.key}>
-                  <div className="sticky -top-2 p-[4px_10px] bg-white">{getType(params.group)}</div>
+                  <div className='sticky -top-2 p-[4px_10px] bg-white'>
+                    {getType(params.group)}
+                  </div>
                   <ul>{params.children}</ul>
                 </li>
               )}
-
               renderInput={(params) => (
                 <TextField
                   {...params}
