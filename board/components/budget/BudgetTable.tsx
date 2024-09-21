@@ -22,21 +22,21 @@ import {
 } from "react-hook-form";
 import { capitalizeFirstLetter } from "@/helper/stringHelpers";
 import { t } from "i18next";
-import { PackageType, StyleColor } from "@/types/enums";
+import { DiscountType, Itemable, PackageType, StyleColor } from "@/types/enums";
 import { useUserStore } from "@/store";
 import { ActionButton, FakeInput } from "@/components/form";
 import { Icon } from "../Icon";
 import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
 import { BudgetColumns } from "@/types/budget";
 
-type Item = {
+interface Item {
   id: string;
-  itemable: string;
+  itemable: { [key: string]: { [key: string]: string } | string } | string;
   quantity: number;
   unitPrice: number;
   totalPrice: number;
   includeInSum: boolean;
-  total: 0;
+  total: number;
 };
 
 const newItem: Item = {
@@ -101,13 +101,109 @@ export const BudgetTable = ({
     control,
     name: "items",
   });
+  const [total, setTotal] = useState(0);
 
   useEffect(() => {
     setData(budget || [...defaultData]);
   }, []);
 
   useEffect(() => {
-    console.log("data", data);
+    console.log(data);
+
+    const properData = data.filter(item => item.itemable != '');
+    if (data.length === 0 || properData.length === 0) {
+      setTotal(0);
+      return;
+    }
+
+    const subTotal = properData.filter(item =>
+      item.includeInSum &&
+      (item.itemable.info.item_type.indexOf(Itemable.Part) !== -1 || item.itemable.info.item_type.indexOf(Itemable.ServiceJob) !== -1)
+    ).reduce((acc, item) => {
+      return acc + item.unitPrice; // O cualquier otra propiedad que quieras sumar
+    }, 0);
+
+
+    const discountFixed = properData
+      .filter(item =>
+        item.includeInSum &&
+        item.itemable.info.item_type.indexOf(Itemable.Discount) !== -1 &&
+        item.itemable.info.type === DiscountType.Amount)
+      .reduce((acc, item) => {
+        return acc + item.unitPrice; // O cualquier otra propiedad que quieras sumar
+      }, 0);
+
+    const discountPercentage = properData
+      .filter(item =>
+        item.includeInSum &&
+        item.itemable.info.item_type.indexOf(Itemable.Discount) !== -1 &&
+        item.itemable.info.type === DiscountType.Percentage)
+      .reduce((acc, item) => {
+        return acc + item.unitPrice; // O cualquier otra propiedad que quieras sumar
+      }, 0);
+
+
+    console.log('s', subTotal);
+    console.log('f', discountFixed);
+    console.log('p', discountPercentage)
+/*
+    let subtotal = 0;
+    let discountPercentage = 0;
+
+    data.forEach(item => {
+      const { price } = item.price; // Obtenemos el price
+      const item_type = item.itemable.info.item_type;
+
+      if (item.includeInSum) {
+        if (item_type.indexOf(Itemable.Part) === -1 || item_type.indexOf(Itemable.ServiceJob) === -1) {
+          subtotal += price * item.quantity;
+        } else if (item_type.indexOf(Itemable.Discount) === -1){
+          if (item.itemable.info.type === DiscountType.Percentage) {
+            discountPercentage = price;
+          } else {
+            subtotal -= price;
+          }
+        }
+      }
+    });
+*/
+
+    /*
+    let discount: number = 0;
+
+    const subtotal: number = data
+      .filter((item, index) => index === 0 || (index > 1 && item.includeInSum))
+      .reduce((acc, item) => acc + item.totalPrice, 0);
+
+    const discountItem = data[1];
+
+    if (discountItem.serviceId && discountItem.includeInSum) {
+      const discountDetail = discounts.find(
+        (d) => d.id === discountItem.serviceId,
+      );
+
+      if (discountDetail && discountDetail.info) {
+        switch (discountDetail?.info.discount_type) {
+          case DiscountType.Percentage:
+            discount = (subtotal * discountItem.unitPrice) / 100; // Descuento porcentual
+            break;
+          case DiscountType.Amount:
+            discount = discountItem.unitPrice; // Descuento fijo
+            break;
+        }
+      }
+    }
+
+    const total = subtotal - discount;
+
+    if (data[1].totalPrice !== discount) {
+      const newData = [...data];
+      newData[1] = { ...newData[1], totalPrice: discount };
+      setData(newData);
+    }
+
+    setTotal(total);
+    */
   }, [data]);
 
   columns.push(
@@ -189,7 +285,6 @@ export const BudgetTable = ({
   );
 
   const updatePrice = (rowIndex: number, columnId: string, value: string) => {
-    console.log("value", value, data);
     setData((old) =>
       old.map((row, index) => {
         if (index === rowIndex) {
@@ -312,7 +407,7 @@ export const BudgetTable = ({
             >
               {user?.package !== PackageType.Basic && (
                 <ActionButton
-                  onClick={table.options.meta?.addRow}
+                  onClick={AddRow}
                   customClass='w-auto'
                   style={StyleColor.Warning}
                 >
@@ -337,7 +432,7 @@ export const BudgetTable = ({
             </td>
             <td className='px-2 py-1' colSpan={1}>
               <FakeInput
-                value='58'
+                value={total}
                 icon={user?.currency}
                 className='text-right'
               />

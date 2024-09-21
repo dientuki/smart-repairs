@@ -12,17 +12,13 @@ export const RemoveRow = ({ getValue, row, column, table }: InputCellProps) => {
     meta?.removeRow(row.index);
   };
 
-  console.log(table.getRowCount())
-
   return (
     <>
-      { table.getRowCount() === 1 ?
-        <CancelButton
-          customClass='w-full'
-        >
+      {table.getRowCount() === 1 ? (
+        <CancelButton customClass='w-full'>
           {t("button.delete")} {t("budget.item")}
         </CancelButton>
-        :
+      ) : (
         <ActionButton
           onClick={removeRow}
           style={StyleColor.Danger}
@@ -30,8 +26,7 @@ export const RemoveRow = ({ getValue, row, column, table }: InputCellProps) => {
         >
           {t("button.delete")} {t("budget.item")}
         </ActionButton>
-
-      }
+      )}
       <HiddenInputField
         name={name}
         control={column.columnDef.meta.control}
