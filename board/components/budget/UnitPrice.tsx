@@ -1,6 +1,6 @@
 import { InputField } from "@/components/form";
 import { useUserStore } from "@/store";
-import { InputType } from "@/types/enums";
+import { DiscountType, InputType, Itemable } from "@/types/enums";
 
 export const UnitPriceCell = ({
   getValue,
@@ -9,8 +9,29 @@ export const UnitPriceCell = ({
   table,
 }: InputCellProps) => {
   const { user } = useUserStore();
-  const initialValue = getValue();
+  const value = getValue();
   const name = `${column.columnDef.meta?.name}.${row.id}.${column.id}`;
+  let currency = user?.currency;
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const q = parseFloat(e.target.value);
+    table.options.meta?.updatePrice(row.index, column.id, q);
+  };
+
+  if (
+    table.options.data[row.index].itemable &&
+    table.options.data[row.index].itemable.info.item_type.includes(
+      Itemable.Discount,
+    )
+  ) {
+    console.log(table.options.data[row.index].itemable.info);
+    if (
+      table.options.data[row.index].itemable.info.type ===
+      DiscountType.Percentage
+    ) {
+      currency = "%";
+    }
+  }
 
   return (
     <InputField
@@ -19,10 +40,12 @@ export const UnitPriceCell = ({
       labelless
       control={column.columnDef.meta.control}
       rules={column.columnDef.meta.rules}
-      defaultValue={initialValue}
+      defaultValue='0'
+      forceValue={value || "0"}
       errors={column.columnDef.meta.errors}
       type={InputType.Number}
-      icon={user?.currency}
+      icon={currency}
+      onChange={handleChange}
     />
   );
 };

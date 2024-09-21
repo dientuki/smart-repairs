@@ -1,3 +1,11 @@
+export enum BudgetColumns {
+  Itemable = "itemable",
+  Quantity = "quantity",
+  UnitPrice = "unitPrice",
+  TotalPrice = "totalPrice",
+  IncludeInSum = "includeInSum",
+}
+
 interface BudgetItem {
   part_id?: string;
   service_job_id?: string;
