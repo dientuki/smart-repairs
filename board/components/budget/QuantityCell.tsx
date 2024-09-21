@@ -1,6 +1,7 @@
-import { InputType, Itemable } from "@/types/enums";
+import { InputType } from "@/types/enums";
 import { InputField } from "@/components/form";
 import { t } from "i18next";
+import { Itemable } from "@/types/budget";
 
 export const QuantityCell = ({
   getValue,
