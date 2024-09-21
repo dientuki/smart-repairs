@@ -24,7 +24,7 @@ import { capitalizeFirstLetter } from "@/helper/stringHelpers";
 import { t } from "i18next";
 import { PackageType, StyleColor } from "@/types/enums";
 import { useUserStore } from "@/store";
-import { ActionButton, FakeInput } from "../form";
+import { ActionButton, FakeInput } from "@/components/form";
 import { Icon } from "../Icon";
 import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
 import { BudgetColumns } from "@/types/budget";
@@ -103,7 +103,7 @@ export const BudgetTable = ({
   });
 
   useEffect(() => {
-    setData([...defaultData]);
+    setData(budget || [...defaultData]);
   }, []);
 
   useEffect(() => {
@@ -261,11 +261,10 @@ export const BudgetTable = ({
     columns,
     getCoreRowModel: getCoreRowModel(),
     meta: {
-      updatePrice: (rowIndex: number, columnId: string, value: string) =>
-        updatePrice(rowIndex, columnId, value),
+      updatePrice,
       resetRow,
-      addRow: () => addRow(),
-      removeRow: (rowIndex: number) => removeRow(rowIndex),
+      addRow,
+      removeRow,
       updateItem,
     },
   });
