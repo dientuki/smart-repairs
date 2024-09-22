@@ -2,6 +2,7 @@ import { InputType } from "@/types/enums";
 import { InputField } from "@/components/form";
 import { t } from "i18next";
 import { Itemable } from "@/types/budget";
+import { useEffect, useState } from "react";
 
 export const QuantityCell = ({
   getValue,
@@ -9,15 +10,22 @@ export const QuantityCell = ({
   column,
   table,
 }: InputCellProps) => {
-  const value = getValue();
+  const initialValue = getValue()
+  const [value, setValue] = useState(initialValue)
   const name = `${column.columnDef.meta?.name}.${row.id}.${column.id}`;
   const control = column.columnDef.meta.control;
   let disabled = false;
 
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const q = parseFloat(e.target.value);
-    table.options.meta?.updatePrice(row.index, column.id, q);
+    //const q = parseFloat(e.target.value);
+    //table.options.meta?.updatePrice(row.index, column.id, q);
   };
+
+  useEffect(() => {
+    console.log(name, 'cambio')
+    setValue(initialValue)
+  }, [initialValue])
 
   if (table.options.data[row.index].itemable) {
     disabled =
