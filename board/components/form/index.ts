@@ -10,3 +10,4 @@ export { withDialog } from "@/components/form/withDialog";
 export { ActionButtonWithDialog } from "@/components/form/ActionButtonWithDialog";
 export { FakeInput } from "@/components/form/FakeInput";
 export { ToggleField } from "@/components/form/ToogleField";
+export { HiddenInput } from "@/components/form/HiddenInput";

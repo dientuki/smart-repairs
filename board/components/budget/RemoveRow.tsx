@@ -1,5 +1,5 @@
 import { ActionButton, CancelButton } from "../form";
-import { HiddenInputField } from "../form/HiddenInput";
+import { HiddenInput } from "../form/HiddenInput";
 import { StyleColor } from "@/types/enums";
 import { t } from "i18next";
 
@@ -27,7 +27,7 @@ export const RemoveRow = ({ getValue, row, column, table }: InputCellProps) => {
           {t("button.delete")} {t("budget.item")}
         </ActionButton>
       )}
-      <HiddenInputField
+      <HiddenInput
         name={name}
         control={column.columnDef.meta.control}
         rules={column.columnDef.meta.rules}

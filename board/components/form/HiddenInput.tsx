@@ -13,7 +13,7 @@ interface HiddenInputFieldProps {
   rules?: RegisterOptions;
 }
 
-export const HiddenInputField = ({
+export const HiddenInput = ({
   name,
   control,
   defaultValue = "",
@@ -25,7 +25,7 @@ export const HiddenInputField = ({
       control={control}
       defaultValue={defaultValue}
       rules={rules}
-      render={({ field }) => <Input {...field} type='hidden' />}
+      render={({ field }) => <Input {...field} value={field.value} type='hidden' />}
     />
   );
 };
