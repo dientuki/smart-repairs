@@ -113,8 +113,6 @@ export const BudgetTable = ({
   }, []);
 
   useEffect(() => {
-    console.log(data);
-
     const properData = data.filter((item) => item.itemable != "");
     if (data.length === 0 || properData.length === 0) {
       setBudgetResumeData({
@@ -125,7 +123,8 @@ export const BudgetTable = ({
       return;
     }
 
-    let d = 0;
+    let discountPercentageTotal = 0;
+    let hasUpdated = false;
 
     const subTotal = properData
       .filter(
@@ -149,26 +148,35 @@ export const BudgetTable = ({
         return acc + item.unitPrice; // O cualquier otra propiedad que quieras sumar
       }, 0);
 
-    const discountPercentage = properData
+    data
+      .filter((item) => item.itemable != "")
       .filter(
         (item) =>
           item.includeInSum &&
           item.itemable.info.item_type.indexOf(Itemable.Discount) !== -1 &&
-          item.itemable.info.type === DiscountType.Percentage,
+          item.itemable.info.type === DiscountType.Percentage
       )
-      .reduce((acc, item) => {
-        return acc + item.unitPrice; // O cualquier otra propiedad que quieras sumar
-      }, 0);
+      .forEach((item) => {
+        const discountPercentageValue = (subTotal * item.unitPrice) / 100;
+        console.log(item, discountPercentageValue);
+        discountPercentageTotal += discountPercentageValue;
 
-    if (discountPercentage > 0) {
-      d = ((subTotal * discountPercentage)/100);
-    }
+        // Actualiza directamente en `data`
+        if (item.totalPrice !== discountPercentageValue) {
+          item.totalPrice = discountPercentageValue; // Actualiza el totalPrice
+          hasUpdated = true; // Marca que hubo un cambio
+        }
+      });
 
     setBudgetResumeData({
       subtotal: subTotal,
-      discount: discountFixed + d,
-      total: subTotal - (discountFixed + d)
+      discount: discountFixed + discountPercentageTotal,
+      total: subTotal - (discountFixed + discountPercentageTotal)
     });
+
+    if (hasUpdated && discountPercentageTotal > 0) {
+      setData([...data]); // Crea una nueva referencia a `data` para evitar mutación
+    }
   }, [data]);
 
   columns.push(
@@ -398,7 +406,7 @@ export const BudgetTable = ({
             <td className='px-2 py-1 text-right' colSpan={2}>
               <BudgetResume data={badgetResumeData} />
             </td>
-            <td colSpan={2}></td>
+            <td colSpan={user?.package === PackageType.Basic ? 1 : 2}></td>
           </tr>
         </tfoot>
       </table>

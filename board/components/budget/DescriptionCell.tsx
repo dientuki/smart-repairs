@@ -25,19 +25,20 @@ export const DescriptionCell = ({
   const handleOnChange = (newValue: OptionType | null, reason: string) => {
     if (reason === "clear") {
       setType("");
-      console.log("clear");
       table.options.meta?.resetRow(row.index);
     } else {
-      //console.log('no clear')
       setType(getType(newValue.info.item_type));
+
       if (newValue.info.item_type.indexOf(Itemable.Part) === -1) {
         table.options.meta?.updatePrice(row.index, BudgetColumns.Quantity, 1);
       }
+
       table.options.meta?.updatePrice(
         row.index,
         BudgetColumns.UnitPrice,
         newValue.info.price,
       );
+
       table.options.meta?.updateItem(row.index, newValue);
     }
   };

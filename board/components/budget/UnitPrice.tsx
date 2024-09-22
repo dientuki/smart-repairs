@@ -2,6 +2,7 @@ import { InputField } from "@/components/form";
 import { useUserStore } from "@/store";
 import { Itemable } from "@/types/budget";
 import { DiscountType, InputType } from "@/types/enums";
+import { useEffect, useState } from "react";
 
 export const UnitPriceCell = ({
   getValue,
@@ -10,14 +11,21 @@ export const UnitPriceCell = ({
   table,
 }: InputCellProps) => {
   const { user } = useUserStore();
-  const value = getValue();
+
+  const initialValue = getValue()
+  const [value, setValue] = useState(initialValue)
+
   const name = `${column.columnDef.meta?.name}.${row.id}.${column.id}`;
   let currency = user?.currency;
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const q = parseFloat(e.target.value);
-    table.options.meta?.updatePrice(row.index, column.id, q);
+    //const q = parseFloat(e.target.value);
+    //table.options.meta?.updatePrice(row.index, column.id, q);
   };
+
+  useEffect(() => {
+    setValue(initialValue)
+  }, [initialValue])
 
   if (
     table.options.data[row.index].itemable &&
