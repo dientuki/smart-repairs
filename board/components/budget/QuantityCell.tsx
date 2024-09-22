@@ -1,7 +1,7 @@
 import { InputType } from "@/types/enums";
 import { InputField } from "@/components/form";
 import { t } from "i18next";
-import { Itemable } from "@/types/budget";
+import { Itemable } from "@/types/enums";
 import { useEffect, useState } from "react";
 
 export const QuantityCell = ({

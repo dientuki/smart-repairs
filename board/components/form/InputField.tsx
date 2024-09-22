@@ -23,6 +23,7 @@ interface InputFieldProps {
   placeholder?: string;
   onClick?: (event: React.MouseEvent<HTMLInputElement>) => void;
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onBlur?: (event: React.FocusEvent<HTMLInputElement>) => void;
   type?: InputType;
   forceValue?: string;
 }
@@ -81,6 +82,7 @@ export const InputField = ({
   onChange,
   type = InputType.Text,
   forceValue,
+  onBlur,
 }: InputFieldProps) => {
   // Detectar si el name contiene una estructura anidada (usando un punto)
   const isNested = name.includes(".");
@@ -134,13 +136,13 @@ export const InputField = ({
                   readOnly={disabled}
                   placeholder={placeholder}
                   onClick={onClick}
-                  value={forceValue || field.value}
                   onChange={(e) => {
                     field.onChange(e);
                     if (onChange) {
                       onChange(e);
                     }
                   }}
+                  onBlur={onBlur}
                   type={type}
                   aria-invalid={hasError}
                   aria-describedby={hasError ? `${name}-error` : undefined}

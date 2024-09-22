@@ -1,16 +1,4 @@
-export enum BudgetColumns {
-  Itemable = "itemable",
-  Quantity = "quantity",
-  UnitPrice = "unitPrice",
-  TotalPrice = "totalPrice",
-  IncludeInSum = "includeInSum",
-}
-
-export enum Itemable {
-  Part = "Part",
-  ServiceJob = "ServiceJob",
-  Discount = "Discount",
-}
+import { BudgetColumns } from "@/types/enums";
 
 interface BudgetItem {
   part_id?: string;
@@ -25,6 +13,11 @@ interface Budget {
   total: number;
   items: BudgetItem[];
 }
+
+interface UpdateField  {
+  columnId: BudgetColumns; // El enum que contiene las columnas
+  value: number; // El valor numérico que se debe actualizar
+};
 
 interface BudgetResumeData {
   subtotal: number;

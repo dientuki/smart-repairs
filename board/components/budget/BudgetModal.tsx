@@ -26,6 +26,14 @@ export const BudgetModal = ({ order }: BudgetModalProps) => {
     control,
     formState: { errors },
   } = useForm();
+  const [budgetResume, setBudgetResume] = useState(null);
+  const [budgetItems, setBudgetItems] = useState(null);
+
+  const handleBudgetChange = (newBudgetItems, newBudgetResume) => {
+    console.log("handleBudgetChange", newBudgetItems, newBudgetResume);
+    setBudgetResume(newBudgetResume); // Actualiza el estado en el padre
+    setBudgetItems(newBudgetItems);
+  };
 
   useEffect(() => {
     let isMounted = true;
@@ -56,7 +64,7 @@ export const BudgetModal = ({ order }: BudgetModalProps) => {
   }, []);
 
   const handleRegistration = (data: FieldValues) => {
-    console.log("Datos completos del formulario:", data);
+    console.log("Datos completos del formulario:",  budgetResume, budgetItems);
   };
 
   const handleError = () => {
@@ -87,6 +95,7 @@ export const BudgetModal = ({ order }: BudgetModalProps) => {
             errors={errors}
             budget={budget}
             description={description}
+            onBudgetChange={handleBudgetChange}
           />
 
           <ActionButton type={ButtonType.Submit}>Submit</ActionButton>

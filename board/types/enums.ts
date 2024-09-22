@@ -50,3 +50,17 @@ export enum CountOperation {
   Increment = "increment",
   Decrement = "decrement",
 }
+
+export enum BudgetColumns {
+  Itemable = "itemable",
+  Quantity = "quantity",
+  UnitPrice = "unitPrice",
+  TotalPrice = "totalPrice",
+  IncludeInSum = "includeInSum",
+}
+
+export enum Itemable {
+  Part = "Part",
+  ServiceJob = "ServiceJob",
+  Discount = "Discount",
+}

@@ -1,34 +1,14 @@
-import {
-  createColumnHelper,
-  flexRender,
-  getCoreRowModel,
-  useReactTable,
-} from "@tanstack/react-table";
-import { useEffect, useState } from "react";
-import {
-  AddRow,
-  BooleanCell,
-  QuantityCell,
-  RemoveRow,
-  DescriptionCell,
-  TotalPriceCell,
-  UnitPriceCell,
-  BudgetResume
-} from "@/components/budget";
-import {
-  Control,
-  FieldErrors,
-  FieldValues,
-  useFieldArray,
-} from "react-hook-form";
-import { capitalizeFirstLetter } from "@/helper/stringHelpers";
-import { t } from "i18next";
-import { DiscountType, PackageType, StyleColor } from "@/types/enums";
-import { useUserStore } from "@/store";
-import { ActionButton } from "@/components/form";
-import { Icon } from "../Icon";
+import { BudgetColumns, DiscountType, InputType, Itemable, PackageType, StyleColor } from "@/types/enums";
+import { ActionButton, CancelButton, FakeInput, InputField, HiddenInput } from "@/components/form";
+import { Icon } from "@/components/Icon";
 import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
-import { BudgetColumns, Itemable } from "@/types/budget";
+import { t } from "i18next";
+import { Control, FieldErrors, FieldValues, useFieldArray, useForm } from "react-hook-form";
+import { useEffect, useState } from "react";
+import { useUserStore } from "@/store";
+import { capitalizeFirstLetter } from "@/helper/stringHelpers";
+import { DescriptionCell } from "./DescriptionCell";
+import { BudgetResume } from "./BudgetResume";
 
 interface Item {
   id: string;
@@ -37,7 +17,7 @@ interface Item {
   unitPrice: number;
   totalPrice: number;
   includeInSum: boolean;
-  total: number;
+  type: string;
 }
 
 const newItem: Item = {
@@ -47,7 +27,6 @@ const newItem: Item = {
   unitPrice: 0,
   totalPrice: 0,
   includeInSum: true,
-  total: 0,
 };
 
 type TableProps = {
@@ -62,54 +41,60 @@ const registerOptions = {
     required: false,
   },
   itemable: {
-    required: false,
+    required: true,
   },
   quantity: {
     required: true,
+    min: 1,
   },
   unitPrice: {
     required: true,
+    min: 0,
   },
   includeInSum: {
     required: true,
-  },
+  }
 };
-
-const defaultData: Item[] = [
-  {
-    id: "",
-    itemable: "",
-    quantity: 1,
-    unitPrice: 0,
-    totalPrice: 0,
-    includeInSum: true,
-    total: 0,
-  },
-];
-
-const columnHelper = createColumnHelper<Item>();
 
 export const BudgetTable = ({
   control,
   errors,
   budget,
   description,
+  onBudgetChange
 }: TableProps) => {
   const [data, setData] = useState<Item[]>([]);
   const { user } = useUserStore();
-  const columns = [];
-  const { remove } = useFieldArray({
+  const { fields, append, update, remove } = useFieldArray({
     control,
     name: "items",
   });
+  const {getValues, register, setValue} = useForm();
   const [badgetResumeData, setBudgetResumeData] = useState<BudgetResumeData>({
     subtotal: 0,
     discount: 0,
     total: 0
   });
 
+  const defaultData: Item[] = [
+    {
+      id: "",
+      itemable: "",
+      quantity: 1,
+      unitPrice: 0,
+      totalPrice: 0,
+      includeInSum: true,
+      qdisabled: false,
+      type: "",
+      currency: user?.currency,
+    },
+  ];
+
   useEffect(() => {
-    setData(budget || [...defaultData]);
+    //setData(budget || [...defaultData]);
+    append(defaultData);
+    setData([...defaultData]);
+
   }, []);
 
   useEffect(() => {
@@ -125,6 +110,7 @@ export const BudgetTable = ({
 
     let discountPercentageTotal = 0;
     let hasUpdated = false;
+
 
     const subTotal = properData
       .filter(
@@ -158,7 +144,6 @@ export const BudgetTable = ({
       )
       .forEach((item) => {
         const discountPercentageValue = (subTotal * item.unitPrice) / 100;
-        console.log(item, discountPercentageValue);
         discountPercentageTotal += discountPercentageValue;
 
         // Actualiza directamente en `data`
@@ -168,147 +153,49 @@ export const BudgetTable = ({
         }
       });
 
-    setBudgetResumeData({
+    const newBudgetResumeData = {
       subtotal: subTotal,
       discount: discountFixed + discountPercentageTotal,
       total: subTotal - (discountFixed + discountPercentageTotal)
-    });
+    };
+
+    setBudgetResumeData(newBudgetResumeData);
+    onBudgetChange([...data], newBudgetResumeData);
 
     if (hasUpdated && discountPercentageTotal > 0) {
-      setData([...data]); // Crea una nueva referencia a `data` para evitar mutación
+      setData([...data]);// Crea una nueva referencia a `data` para evitar mutación
     }
-  }, [data]);
+  }, [data]); // Ejecuta cuando budgetResume cambie
 
-  columns.push(
-    columnHelper.accessor(BudgetColumns.Itemable, {
-      header: capitalizeFirstLetter(t("budget.description")),
-      cell: DescriptionCell,
-      meta: {
-        name: "items",
-        control: control,
-        rules: registerOptions.itemable,
-        errors: errors,
-        data: description,
-      },
-    }),
-  );
-
-  columns.push(
-    columnHelper.accessor(BudgetColumns.Quantity, {
+  const header = [
+    {
+      header: capitalizeFirstLetter(t("budget.description"))
+    },
+    {
       header: capitalizeFirstLetter(t("budget.quantity")),
-      cell: QuantityCell,
-      meta: {
-        name: "items",
-        control: control,
-        rules: registerOptions.quantity,
-        errors: errors,
-        className: "w-20 text-center",
-      },
-    }),
-  );
-
-  columns.push(
-    columnHelper.accessor(BudgetColumns.UnitPrice, {
+      className: "w-20 text-center"
+    },
+    {
       header: capitalizeFirstLetter(t("budget.unit_price")),
-      cell: UnitPriceCell,
-      meta: {
-        name: "items",
-        control: control,
-        rules: registerOptions.unitPrice,
-        errors: errors,
-        className: "w-40 text-center",
-      },
-    }),
-  );
-
-  columns.push(
-    columnHelper.accessor(BudgetColumns.TotalPrice, {
+      className: "w-40 text-center"
+    }        ,
+    {
       header: capitalizeFirstLetter(t("budget.total_price")),
-      cell: TotalPriceCell,
-      meta: {
-        className: "w-40 text-center",
-      },
-    }),
-  );
+      className: "w-40 text-center"
+    }
+  ];
 
   if (user?.package !== PackageType.Basic) {
-    columns.push(
-      columnHelper.accessor(BudgetColumns.IncludeInSum, {
-        header: capitalizeFirstLetter(t("budget.sum")),
-        cell: BooleanCell,
-        meta: {
-          name: "items",
-          control: control,
-          className: "w-20 text-center",
-        },
-      }),
-    );
+    header.push({
+      header: capitalizeFirstLetter(t("budget.sum")),
+      className: "w-20 text-center"
+    })
   }
 
-  columns.push(
-    columnHelper.display({
-      id: "id",
-      cell: RemoveRow,
-      meta: {
-        name: "items",
-        control: control,
-        className: "w-20",
-      },
-    }),
-  );
-
-  const updatePrice = (rowIndex: number, columnId: string, value: string) => {
-    setData((old) =>
-      old.map((row, index) => {
-        if (index === rowIndex) {
-          const newQuantity =
-            columnId === BudgetColumns.Quantity ? Number(value) : row.quantity;
-          const newPrice =
-            columnId === BudgetColumns.UnitPrice
-              ? Number(value)
-              : row.unitPrice;
-          const newPriceTotal = newQuantity * newPrice;
-
-          return {
-            ...row,
-            [columnId]: Number(value),
-            totalPrice: newPriceTotal,
-          };
-        }
-        return row;
-      }),
-    );
-  };
-
-  const resetRow = (rowIndex: number) => {
-    setData((old) =>
-      old.map((row, index) => {
-        if (index === rowIndex) {
-          return {
-            ...row,
-            quantity: 1,
-            unitPrice: 0,
-            totalPrice: 0,
-            itemable: "",
-          };
-        }
-        return row;
-      }),
-    );
-  };
-
-  const addRow = () => {
-    const setFunc = (old: Item[]) => [...old, newItem];
-    setData(setFunc);
-  };
-
-  const removeRow = (rowIndex: number) => {
-    const setFilterFunc = (old: Item[]) =>
-      old.filter((_row: Item, index: number) => index !== rowIndex);
-
-    setData(setFilterFunc);
-    remove(rowIndex);
-  };
+  header.push({
+    header: "",
+    className: "w-20"
+  })
 
   const updateItem = (rowIndex: number, itemable: any) => {
     setData((old) =>
@@ -322,67 +209,212 @@ export const BudgetTable = ({
         return row;
       }),
     );
+    //setTimeout(() => refreshRow(rowIndex), 100); // refreshRow(rowIndex);
   };
 
-  const table = useReactTable({
-    data,
-    columns,
-    getCoreRowModel: getCoreRowModel(),
-    meta: {
-      updatePrice,
-      resetRow,
-      addRow,
-      removeRow,
-      updateItem,
-    },
-  });
+  const getType = (str: string) => {
+    const tmp = str.split("\\");
+    return t(`budget.type.${tmp[tmp.length - 1].toLowerCase()}`);
+  };
+
+  const updateDescription = (rowIndex: number, itemable: any) => {
+    setData((old) =>
+      old.map((row, index) => {
+        if (index === rowIndex) {
+          const newRow = row;
+          newRow.itemable = itemable;
+          newRow.quantity = itemable.info.item_type.indexOf(Itemable.Part) === -1 ? 1 : row.quantity;
+          newRow.unitPrice = parseFloat(itemable.info.price);
+          newRow.qdisabled = itemable.info.item_type.indexOf(Itemable.Part) === -1 ? true: false;
+          newRow.currency = user?.currency;
+          newRow.totalPrice = newRow.quantity * newRow.unitPrice;
+          newRow.type = getType(itemable.info.item_type)
+
+          if (itemable.info.item_type.indexOf(Itemable.Discount) !== -1) {
+            if (itemable.info.type.indexOf(DiscountType.Percentage) !== -1) {
+              newRow.currency = '%';
+              newRow.totalPrice = row.totalPrice;
+            }
+          }
+
+          update(index, {
+            ...newRow
+          })
+          return {
+            ...newRow
+          };
+        }
+        return row;
+      }),
+    );
+  }
+
+  const refreshRow = (rowIndex: number) => {
+    console.log('blue');
+    update(rowIndex, {
+      ...data[rowIndex],
+    })
+  };
+
+  const removeRow = (rowIndex: number) => {
+    const setFilterFunc = (old: Item[]) =>
+      old.filter((_row: Item, index: number) => index !== rowIndex);
+
+    setData(setFilterFunc);
+    remove(rowIndex);
+  };
+
+  const updatePrice = (rowIndex: number, updates: UpdateField[]) => {
+    setData((prevData) =>
+      prevData.map((row, index) => {
+        if (index === rowIndex) {
+          console.log(data, updates);
+          let newQuantity = row.quantity; // Valor predeterminado: el valor actual
+          let newUnitPrice = row.unitPrice; // Valor predeterminado: el valor actual
+
+          // Iteramos sobre las actualizaciones para modificar los valores
+          updates.forEach(({ columnId, value }) => {
+            if (columnId === BudgetColumns.Quantity) {
+              newQuantity = value; // Actualiza la cantidad
+            } else if (columnId === BudgetColumns.UnitPrice) {
+              newUnitPrice = value; // Actualiza el precio unitario
+            }
+          });
+
+          // Calcula el nuevo precio total
+          const newTotalPrice = newQuantity * newUnitPrice;
+
+          return {
+            ...row,
+            quantity: parseInt(newQuantity, 10), // Actualizamos la cantidad
+            unitPrice: parseFloat(newUnitPrice), // Actualizamos el precio unitario
+            totalPrice: parseFloat(newTotalPrice), // Calculamos y actualizamos el precio total
+          };
+        }
+        return row;
+      })
+    );
+  };
+
+  const resetRow = (rowIndex: number) => {
+    setData((old) =>
+      old.map((row, index) => {
+        if (index === rowIndex) {
+          const newRow = defaultData;
+          newRow.includeInSum = row.includeInSum;
+
+          update(index, newRow);
+          return newRow; // Retorna newRow directamente, no { newRow }
+        }
+        return row;
+      }),
+    );
+  };
+
+
 
   return (
     <div className='divide-y divide-gray-200 overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-gray-950/5 dark:divide-white/10 dark:bg-gray-900 dark:ring-white/10'>
+
       <table className='w-full table-auto divide-y divide-gray-200 text-start dark:divide-white/5'>
         <thead className='divide-y divide-gray-200 dark:divide-white/5'>
-          {table.getHeaderGroups().map((headerGroup) => (
-            <tr key={headerGroup.id} className='bg-gray-50 dark:bg-white/5'>
-              {headerGroup.headers.map((header) => (
-                <th
-                  key={header.id}
-                  className={`${header.column.columnDef.meta?.className || ""} px-3 py-3.5`}
-                >
-                  {header.isPlaceholder
-                    ? null
-                    : flexRender(
-                        header.column.columnDef.header,
-                        header.getContext(),
-                      )}
-                </th>
-              ))}
-            </tr>
-          ))}
+          <tr className='bg-gray-50 dark:bg-white/5'>
+            {header.map((item, index) => (
+              <th
+                key={index}
+                className={`${item.className || ""} px-3 py-3.5`}
+              >
+                {item.header}
+              </th>
+            ))}
+          </tr>
         </thead>
         <tbody className='divide-y divide-gray-200 whitespace-nowrap dark:divide-white/5'>
-          {table.getRowModel().rows.map((row) => (
-            <tr
-              key={row.id}
-              className='[@media(hover:hover)]:transition [@media(hover:hover)]:duration-75 hover:bg-gray-50 dark:hover:bg-white/5'
-            >
-              {row.getVisibleCells().map((cell) => (
-                <td key={cell.id} className='p-2'>
-                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                </td>
-              ))}
+          {fields.map((field, index) => (
+            <tr key={field.id}>
+              <td>
+                <DescriptionCell
+                  control={control}
+                  errors={errors}
+                  rules={registerOptions.itemable}
+                  index={index}
+                  options={description}
+                  updateDescription={updateDescription}
+                  type={data[index].type}
+                  resetRow={resetRow}
+                />
+
+              </td>
+              <td>
+                <InputField
+                  name={`items.${index}.quantity`}
+                  label={t("budget.quantity")}
+                  labelless
+                  control={control}
+                  rules={registerOptions.quantity}
+                  errors={errors}
+                  defaultValue="1"
+                  type={InputType.Number}
+                  disabled={data[index].qdisabled}
+                  onChange={(e) => {
+                    updatePrice(index, [{columnId: BudgetColumns.Quantity, value: Number(e.target.value)}]);
+                  }}
+                />
+              </td>
+              <td>
+                <InputField
+                  name={`items.${index}.unitPrice`}
+                  label={t("budget.unitPrice")}
+                  labelless
+                  control={control}
+                  rules={registerOptions.unitPrice}
+                  errors={errors}
+                  defaultValue="0"
+                  type={InputType.Number}
+                  icon={data[index].currency}
+                  onChange={(e) => {
+                    updatePrice(index, [{columnId: BudgetColumns.UnitPrice, value: Number(e.target.value)}]);
+                  }}
+                />
+              </td>
+              <td>
+                <FakeInput
+                  value={data[index].totalPrice}
+                  icon={user?.currency}
+                  className='text-right'
+                />
+              </td>
+              <td>sum</td>
+              <td>
+              {data.length === 1 ? (
+                <CancelButton customClass='w-full'>
+                  {t("button.delete")} {t("budget.item")}
+                </CancelButton>
+              ) : (
+                <ActionButton
+                  onClick={() => removeRow(index)}
+                  style={StyleColor.Danger}
+                  customClass='w-full'
+                >
+                  {t("button.delete")} {t("budget.item")}
+                </ActionButton>
+              )}
+              </td>
             </tr>
           ))}
           <tr className='bg-gray-50 dark:bg-white/5'>
             <td
-              colSpan={table.getCenterLeafColumns().length - 1}
+              colSpan={header.length - 1}
               align='right'
               className='p-2'
             >
               {user?.package !== PackageType.Basic && (
                 <ActionButton
-                  onClick={AddRow}
                   customClass='w-auto'
                   style={StyleColor.Warning}
+                  onClick={() => {
+                    console.log('38')
+                  }}
                 >
                   <Icon
                     icon={ExclamationTriangleIcon}
@@ -394,7 +426,17 @@ export const BudgetTable = ({
               )}
             </td>
             <td className='p-2'>
-              <AddRow table={table} />
+              <ActionButton
+                onClick={() => {
+                  setData((old: Item[]) => [...old, ...defaultData]);
+                  append(defaultData);
+                }}
+                style={StyleColor.Primary}
+                customClass='w-full'
+                disabled={data.filter((item) => item.itemable === "").length > 0 ? true : false}
+              >
+              {t("button.add")} {t("budget.item")}
+            </ActionButton>
             </td>
           </tr>
         </tbody>
