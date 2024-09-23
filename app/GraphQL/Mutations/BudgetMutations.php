@@ -65,7 +65,7 @@ final readonly class BudgetMutations
                         'itemable_type' => $budgetItem['itemableType'],
                         'quantity' => $budgetItem['quantity'],
                         'unit_price' => $budgetItem['unitPrice'],
-                        'total_price' => $budgetItem['quantity'] * $budgetItem['unitPrice'],
+                        'item_total' => $budgetItem['quantity'] * $budgetItem['unitPrice'],
                         'include_in_sum' => $budgetItem['includeInSum']
                     ]
                 );
@@ -94,8 +94,7 @@ final readonly class BudgetMutations
                 foreach ($discountPercentageTotal as $discountPercentage) {
                     $discountTmp = round( ( ($subtotal * $discountPercentage['discount']) / 100), 2);
                     $discountValue += $discountTmp;
-                    BudgetItem::find($discountPercentage['id'])->update(['total_price' => $discountTmp]);
-                    //dd($discountTmp, BudgetItem::find($discountPercentage['id']));
+                    BudgetItem::find($discountPercentage['id'])->update(['item_total' => $discountTmp]);
                 }
             }
 

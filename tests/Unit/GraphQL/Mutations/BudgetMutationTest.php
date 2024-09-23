@@ -314,7 +314,7 @@ class BudgetMutationTest extends TestCaseGraphQL
         $this->assertDatabaseHas('budget_items', [
             'budget_id' => $budget->id, // Asegúrate de usar el ID correcto para el presupuesto
             'itemable_id' => $discount->id,
-            'total_price' => $discount,
+            'item_total' => $discountValue,
         ]);
 
         $this->assertDatabaseCount('budget_items', 2);
