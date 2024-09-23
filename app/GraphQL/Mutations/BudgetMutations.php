@@ -77,7 +77,11 @@ final readonly class BudgetMutations
                         $subtotal += ($item->unit_price * $item->quantity);
                         break;
                     case $discount:
-                        if (Discount::where('id', $budgetItem['itemableId'])->where('type', DiscountEnum::Percentage)->exists()) {
+                        if (
+                            Discount::where('id', $budgetItem['itemableId'])
+                                ->where('type', DiscountEnum::Percentage)
+                                ->exists()
+                        ) {
                             $discountPercentageTotal[] = [
                                 'id' => $item->id,
                                 'discount' => $item->unit_price,
@@ -92,7 +96,7 @@ final readonly class BudgetMutations
 
             if (count($discountPercentageTotal) > 0) {
                 foreach ($discountPercentageTotal as $discountPercentage) {
-                    $discountTmp = round( ( ($subtotal * $discountPercentage['discount']) / 100), 2);
+                    $discountTmp = round(( ($subtotal * $discountPercentage['discount']) / 100), 2);
                     $discountValue += $discountTmp;
                     BudgetItem::find($discountPercentage['id'])->update(['item_total' => $discountTmp]);
                 }

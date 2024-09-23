@@ -20,8 +20,9 @@ class BudgetMutationTest extends TestCaseGraphQL
     use MakesGraphQLRequests;
 
     #[Test]
-    public function create_budget_with_service_job() {
-        $randomPrice = number_format(rand(10,1000) / 100, 2, '.', '');
+    public function create_budget_with_service_job()
+    {
+        $randomPrice = number_format(rand(10, 1000) / 100, 2, '.', '');
         $serviceJob = ServiceJob::factory()->create([
             'price' => $randomPrice,
             'team_id' => $this->team->id
@@ -76,8 +77,9 @@ class BudgetMutationTest extends TestCaseGraphQL
     }
 
     #[Test]
-    public function cannot_create_budget_with_service_job_quantity_not_one() {
-        $randomPrice = number_format(rand(10,1000) / 100, 2, '.', '');
+    public function cannot_create_budget_with_service_job_quantity_not_one()
+    {
+        $randomPrice = number_format(rand(10, 1000) / 100, 2, '.', '');
         $serviceJob = ServiceJob::factory()->create([
             'price' => $randomPrice,
             'team_id' => $this->team->id
@@ -124,8 +126,9 @@ class BudgetMutationTest extends TestCaseGraphQL
     }
 
     #[Test]
-    public function cannot_create_budget_with_discount_quantity_not_one() {
-        $randomPrice = number_format(rand(10,1000) / 100, 2, '.', '');
+    public function cannot_create_budget_with_discount_quantity_not_one()
+    {
+        $randomPrice = number_format(rand(10, 1000) / 100, 2, '.', '');
         $discount = Discount::factory()->create([
             'price' => $randomPrice,
             'team_id' => $this->team->id
@@ -172,13 +175,14 @@ class BudgetMutationTest extends TestCaseGraphQL
     }
 
     #[Test]
-    public function create_budget_with_service_job_and_discount_fixed() {
+    public function create_budget_with_service_job_and_discount_fixed()
+    {
         $serviceJob = ServiceJob::factory()->create([
-            'price' => number_format(rand(900,1000) / 100, 2, '.', ''),
+            'price' => number_format(rand(900, 1000) / 100, 2, '.', ''),
             'team_id' => $this->team->id
         ]);
         $discount = Discount::factory()->create([
-            'price' => number_format(rand(100,200) / 100, 2, '.', ''),
+            'price' => number_format(rand(100, 200) / 100, 2, '.', ''),
             'team_id' => $this->team->id
         ]);
 
@@ -241,7 +245,8 @@ class BudgetMutationTest extends TestCaseGraphQL
     }
 
     #[Test]
-    public function create_budget_with_service_job_and_discount_percentage() {
+    public function create_budget_with_service_job_and_discount_percentage()
+    {
         $serviceJob = ServiceJob::factory()->create([
             'price' => 100, //number_format(rand(900,1000) / 100, 2, '.', ''),
             'team_id' => $this->team->id
