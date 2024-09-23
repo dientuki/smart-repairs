@@ -17,7 +17,7 @@ type BudgetModalProps = {
 
 export const BudgetModal = ({ order }: BudgetModalProps) => {
   const modal = useModalWindow();
-  const { initialValues } = useBudgetStore();
+  const { initialValues, updateBudget } = useBudgetStore();
   const [isLoading, setIsLoading] = useState(true);
   const [budget, setBudget] = useState();
   const [description, setDescription] = useState();
@@ -63,8 +63,18 @@ export const BudgetModal = ({ order }: BudgetModalProps) => {
     };
   }, []);
 
-  const handleRegistration = (data: FieldValues) => {
+  const handleRegistration = async (data: FieldValues) => {
     console.log("Datos completos del formulario:",  budgetResume, budgetItems);
+    //console.log({...budgetResume, order});
+
+    const updatedBudgetResume = { ...budgetResume, order };
+
+    const $result = await updateBudget(updatedBudgetResume, data);
+    if ($result) {
+      toast.success(t(`toast.success.form`));
+      modal.close();
+    }
+
   };
 
   const handleError = () => {
