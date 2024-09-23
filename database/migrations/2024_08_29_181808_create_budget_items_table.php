@@ -18,6 +18,7 @@ return new class extends Migration
             $table->morphs('itemable');
             $table->unsignedMediumInteger('quantity')->default(1);
             $table->decimal('unit_price', 12, 2);
+            $table->decimal('item_total', 12, 2)->nullable()->default(0);
             $table->boolean('include_in_sum')->default(true);
 
             $table->timestamps();
