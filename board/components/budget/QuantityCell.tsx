@@ -10,12 +10,11 @@ export const QuantityCell = ({
   column,
   table,
 }: InputCellProps) => {
-  const initialValue = getValue()
-  const [value, setValue] = useState(initialValue)
+  const initialValue = getValue();
+  const [value, setValue] = useState(initialValue);
   const name = `${column.columnDef.meta?.name}.${row.id}.${column.id}`;
   const control = column.columnDef.meta.control;
   let disabled = false;
-
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     //const q = parseFloat(e.target.value);
@@ -23,9 +22,9 @@ export const QuantityCell = ({
   };
 
   useEffect(() => {
-    console.log(name, 'cambio')
-    setValue(initialValue)
-  }, [initialValue])
+    console.log(name, "cambio");
+    setValue(initialValue);
+  }, [initialValue]);
 
   if (table.options.data[row.index].itemable) {
     disabled =

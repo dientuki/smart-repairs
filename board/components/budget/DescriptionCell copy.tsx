@@ -1,41 +1,45 @@
 import { Autocomplete, TextField } from "@mui/material";
 import { useEffect, useState } from "react";
-import {
-  Control,
-  Controller,
-  FieldErrors,
-  FieldValues,
-  RegisterOptions,
-} from "react-hook-form";
+import { Controller } from "react-hook-form";
 import { FakeInput } from "@/components/form";
 import { t } from "i18next";
-import { BudgetColumns, Itemable } from "@/types/enums";
+import { BudgetColumns, Itemable } from "@/types/budget";
 
-interface DescriptionCellProps {
-  control: Control<FieldValues>;
-  errors?: FieldErrors<FieldValues>;
-  rules?: RegisterOptions;
-  index: number;
-  options: OptionType[];
-  updateDescription: (rowIndex: number, item: any) => void;
-  type: string;
-}
 export const DescriptionCell = ({
-  control,
-  errors,
-  rules = {},
-  index,
-  options,
-  updateDescription,
-  type,
-  resetRow,
+  getValue,
+  row,
+  column,
+  table,
 }: DescriptionCellProps) => {
+  const value = getValue();
+  const [type, setType] = useState<string>("");
+  const options = column.columnDef.meta.data;
+  const name = `${column.columnDef.meta?.name}.${row.id}.${column.id}`;
+
+  useEffect(() => {
+    if (value) {
+      setType(getType(value.info.item_type));
+    }
+  }, [value]);
+
   const handleOnChange = (newValue: OptionType | null, reason: string) => {
     if (reason === "clear") {
-      console.log("resetRow");
-      resetRow(index);
+      setType("");
+      table.options.meta?.resetRow(row.index);
     } else {
-      updateDescription(index, newValue);
+      setType(getType(newValue.info.item_type));
+
+      if (newValue.info.item_type.indexOf(Itemable.Part) === -1) {
+        table.options.meta?.updatePrice(row.index, BudgetColumns.Quantity, 1);
+      }
+
+      table.options.meta?.updatePrice(
+        row.index,
+        BudgetColumns.UnitPrice,
+        newValue.info.price,
+      );
+
+      table.options.meta?.updateItem(row.index, newValue);
     }
   };
 
@@ -51,9 +55,9 @@ export const DescriptionCell = ({
       </div>
       <div className='w-5/6'>
         <Controller
-          name={`items.${index}.itemable`}
-          control={control}
-          rules={rules}
+          name={name}
+          control={column.columnDef.meta.control}
+          rules={column.columnDef.meta.rules}
           render={({ field }) => (
             <Autocomplete
               autoHighlight
@@ -65,8 +69,8 @@ export const DescriptionCell = ({
                 field.onChange(newValue);
                 handleOnChange(newValue, reason);
               }}
+              value={value || field.value || null}
               options={options}
-              value={field.value || null}
               groupBy={(option) => option.info.item_type}
               getOptionLabel={(option) => option.label}
               renderGroup={(params) => (
