@@ -15,6 +15,7 @@ class BudgetItem extends ModelAuditable
         'itemable_id',
         'quantity',
         'unit_price',
+        'item_total',
         'include_in_sum',
     ];
 
