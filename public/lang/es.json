@@ -8,7 +8,8 @@
         "sum": "suma",
         "item": "item",
         "error": {
-            "can_add": "agrega un item antes"
+            "can_add": "agrega un item antes",
+            "quantity": "la cantidad del servicio/descuento debe ser 1"
         },
         "add_foreign_part": "Agregar parte de otro equipo",
         "type": {

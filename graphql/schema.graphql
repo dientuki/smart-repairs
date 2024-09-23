@@ -23,6 +23,7 @@ type ErrorPayload {
     status: Boolean
     message: String
     code: String
+    i18nKey: String
 }
 
 #import budget.graphql
