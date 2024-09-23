@@ -40,12 +40,21 @@ export const useBudgetStore = create<BudgetStore>((set) => ({
     };
   },
 
-  updateBudget: async (orderId: string, data: any): Promise<boolean> => {
-    const filteredData = data
-      .filter((item: { serviceId: string }) => item.serviceId !== "")
-      .map(({ totalPrice, ...rest }) => rest);
+  updateBudget: async (budgetResume: any, budgetItems: any): Promise<boolean> => {
+    const normalizedItems = budgetItems.items.reduce((acc, item) => {
+      acc.push({
+        id: item.id,
+        itemableId: item.itemable.id,
+        itemableType: item.itemable.info.item_type,
+        quantity: item.quantity,
+        unitPrice: item.unitPrice,
+        totalPrice: item.totalPrice,
+        includeInSum: item.includeInSum,
+      });
+      return acc;
+    }, []);
 
-    const $status = await updateBudget(orderId, filteredData);
+    const $status = await updateBudget(budgetResume, normalizedItems);
     return $status;
   },
 }));

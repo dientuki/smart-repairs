@@ -84,14 +84,21 @@ export const getInitialValues = async (
 };
 
 export const updateBudget = async (
-  orderId: string,
-  data: any,
+  budgetResume: any,
+  budgetItems: any,
 ): Promise<boolean> => {
+  console.log(budgetResume, budgetItems);
   const response = await graphqlRequest(`
     mutation {
       updateBudget(
-        orderId: "${orderId}",
-        budgetItems: ${arrayToString(data)}
+        budgetResume: {
+          id: "${budgetResume.id}",
+          orderId: "${budgetResume.order}",
+          total: ${budgetResume.total},
+          subtotal: ${budgetResume.subtotal},
+          discount: ${budgetResume.discount},
+        },
+        budgetItems: ${arrayToString(budgetItems)}
       ) {
         __typename
         ... on UpdateBudgetPayload {

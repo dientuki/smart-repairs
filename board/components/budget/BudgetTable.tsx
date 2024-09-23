@@ -17,6 +17,7 @@ interface Item {
   unitPrice: number;
   totalPrice: number;
   includeInSum: boolean;
+  qdisabled: boolean;
   type: string;
 }
 
@@ -26,6 +27,7 @@ const newItem: Item = {
   quantity: 1,
   unitPrice: 0,
   totalPrice: 0,
+  qdisabled: false,
   includeInSum: true,
 };
 
