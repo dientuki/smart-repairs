@@ -18,5 +18,4 @@ class GraphQLBusinessException extends Exception
     {
         return $this->i18nKey;
     }
-
 }
