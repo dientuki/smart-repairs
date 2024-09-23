@@ -12,8 +12,8 @@ export const UnitPriceCell = ({
 }: InputCellProps) => {
   const { user } = useUserStore();
 
-  const initialValue = getValue()
-  const [value, setValue] = useState(initialValue)
+  const initialValue = getValue();
+  const [value, setValue] = useState(initialValue);
 
   const name = `${column.columnDef.meta?.name}.${row.id}.${column.id}`;
   let currency = user?.currency;
@@ -24,8 +24,8 @@ export const UnitPriceCell = ({
   };
 
   useEffect(() => {
-    setValue(initialValue)
-  }, [initialValue])
+    setValue(initialValue);
+  }, [initialValue]);
 
   if (
     table.options.data[row.index].itemable &&

@@ -14,10 +14,10 @@ interface Budget {
   items: BudgetItem[];
 }
 
-interface UpdateField  {
+interface UpdateField {
   columnId: BudgetColumns; // El enum que contiene las columnas
   value: number; // El valor numérico que se debe actualizar
-};
+}
 
 interface BudgetResumeData {
   subtotal: number;

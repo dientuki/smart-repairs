@@ -64,7 +64,7 @@ export const BudgetModal = ({ order }: BudgetModalProps) => {
   }, []);
 
   const handleRegistration = async (data: FieldValues) => {
-    console.log("Datos completos del formulario:",  budgetResume, budgetItems);
+    console.log("Datos completos del formulario:", budgetResume, budgetItems);
     //console.log({...budgetResume, order});
 
     const updatedBudgetResume = { ...budgetResume, order };
@@ -74,7 +74,6 @@ export const BudgetModal = ({ order }: BudgetModalProps) => {
       toast.success(t(`toast.success.form`));
       modal.close();
     }
-
   };
 
   const handleError = () => {

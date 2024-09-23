@@ -1,9 +1,28 @@
-import { BudgetColumns, DiscountType, InputType, Itemable, PackageType, StyleColor } from "@/types/enums";
-import { ActionButton, CancelButton, FakeInput, InputField, HiddenInput } from "@/components/form";
+import {
+  BudgetColumns,
+  DiscountType,
+  InputType,
+  Itemable,
+  PackageType,
+  StyleColor,
+} from "@/types/enums";
+import {
+  ActionButton,
+  CancelButton,
+  FakeInput,
+  InputField,
+  HiddenInput,
+} from "@/components/form";
 import { Icon } from "@/components/Icon";
 import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
 import { t } from "i18next";
-import { Control, FieldErrors, FieldValues, useFieldArray, useForm } from "react-hook-form";
+import {
+  Control,
+  FieldErrors,
+  FieldValues,
+  useFieldArray,
+  useForm,
+} from "react-hook-form";
 import { useEffect, useState } from "react";
 import { useUserStore } from "@/store";
 import { capitalizeFirstLetter } from "@/helper/stringHelpers";
@@ -55,7 +74,7 @@ const registerOptions = {
   },
   includeInSum: {
     required: true,
-  }
+  },
 };
 
 export const BudgetTable = ({
@@ -63,7 +82,7 @@ export const BudgetTable = ({
   errors,
   budget,
   description,
-  onBudgetChange
+  onBudgetChange,
 }: TableProps) => {
   const [data, setData] = useState<Item[]>([]);
   const { user } = useUserStore();
@@ -71,11 +90,11 @@ export const BudgetTable = ({
     control,
     name: "items",
   });
-  const {getValues, register, setValue} = useForm();
+  const { getValues, register, setValue } = useForm();
   const [badgetResumeData, setBudgetResumeData] = useState<BudgetResumeData>({
     subtotal: 0,
     discount: 0,
-    total: 0
+    total: 0,
   });
 
   const defaultData: Item[] = [
@@ -96,7 +115,6 @@ export const BudgetTable = ({
     //setData(budget || [...defaultData]);
     append(defaultData);
     setData([...defaultData]);
-
   }, []);
 
   useEffect(() => {
@@ -105,14 +123,13 @@ export const BudgetTable = ({
       setBudgetResumeData({
         subtotal: 0,
         discount: 0,
-        total: 0
+        total: 0,
       });
       return;
     }
 
     let discountPercentageTotal = 0;
     let hasUpdated = false;
-
 
     const subTotal = properData
       .filter(
@@ -142,7 +159,7 @@ export const BudgetTable = ({
         (item) =>
           item.includeInSum &&
           item.itemable.info.item_type.indexOf(Itemable.Discount) !== -1 &&
-          item.itemable.info.type === DiscountType.Percentage
+          item.itemable.info.type === DiscountType.Percentage,
       )
       .forEach((item) => {
         const discountPercentageValue = (subTotal * item.unitPrice) / 100;
@@ -158,46 +175,46 @@ export const BudgetTable = ({
     const newBudgetResumeData = {
       subtotal: subTotal,
       discount: discountFixed + discountPercentageTotal,
-      total: subTotal - (discountFixed + discountPercentageTotal)
+      total: subTotal - (discountFixed + discountPercentageTotal),
     };
 
     setBudgetResumeData(newBudgetResumeData);
     onBudgetChange([...data], newBudgetResumeData);
 
     if (hasUpdated && discountPercentageTotal > 0) {
-      setData([...data]);// Crea una nueva referencia a `data` para evitar mutación
+      setData([...data]); // Crea una nueva referencia a `data` para evitar mutación
     }
   }, [data]); // Ejecuta cuando budgetResume cambie
 
   const header = [
     {
-      header: capitalizeFirstLetter(t("budget.description"))
+      header: capitalizeFirstLetter(t("budget.description")),
     },
     {
       header: capitalizeFirstLetter(t("budget.quantity")),
-      className: "w-20 text-center"
+      className: "w-20 text-center",
     },
     {
       header: capitalizeFirstLetter(t("budget.unit_price")),
-      className: "w-40 text-center"
-    }        ,
+      className: "w-40 text-center",
+    },
     {
       header: capitalizeFirstLetter(t("budget.total_price")),
-      className: "w-40 text-center"
-    }
+      className: "w-40 text-center",
+    },
   ];
 
   if (user?.package !== PackageType.Basic) {
     header.push({
       header: capitalizeFirstLetter(t("budget.sum")),
-      className: "w-20 text-center"
-    })
+      className: "w-20 text-center",
+    });
   }
 
   header.push({
     header: "",
-    className: "w-20"
-  })
+    className: "w-20",
+  });
 
   const updateItem = (rowIndex: number, itemable: any) => {
     setData((old) =>
@@ -225,37 +242,43 @@ export const BudgetTable = ({
         if (index === rowIndex) {
           const newRow = row;
           newRow.itemable = itemable;
-          newRow.quantity = itemable.info.item_type.indexOf(Itemable.Part) === -1 ? 1 : row.quantity;
+          newRow.quantity =
+            itemable.info.item_type.indexOf(Itemable.Part) === -1
+              ? 1
+              : row.quantity;
           newRow.unitPrice = parseFloat(itemable.info.price);
-          newRow.qdisabled = itemable.info.item_type.indexOf(Itemable.Part) === -1 ? true: false;
+          newRow.qdisabled =
+            itemable.info.item_type.indexOf(Itemable.Part) === -1
+              ? true
+              : false;
           newRow.currency = user?.currency;
           newRow.totalPrice = newRow.quantity * newRow.unitPrice;
-          newRow.type = getType(itemable.info.item_type)
+          newRow.type = getType(itemable.info.item_type);
 
           if (itemable.info.item_type.indexOf(Itemable.Discount) !== -1) {
             if (itemable.info.type.indexOf(DiscountType.Percentage) !== -1) {
-              newRow.currency = '%';
+              newRow.currency = "%";
               newRow.totalPrice = row.totalPrice;
             }
           }
 
           update(index, {
-            ...newRow
-          })
+            ...newRow,
+          });
           return {
-            ...newRow
+            ...newRow,
           };
         }
         return row;
       }),
     );
-  }
+  };
 
   const refreshRow = (rowIndex: number) => {
-    console.log('blue');
+    console.log("blue");
     update(rowIndex, {
       ...data[rowIndex],
-    })
+    });
   };
 
   const removeRow = (rowIndex: number) => {
@@ -294,7 +317,7 @@ export const BudgetTable = ({
           };
         }
         return row;
-      })
+      }),
     );
   };
 
@@ -313,19 +336,13 @@ export const BudgetTable = ({
     );
   };
 
-
-
   return (
     <div className='divide-y divide-gray-200 overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-gray-950/5 dark:divide-white/10 dark:bg-gray-900 dark:ring-white/10'>
-
       <table className='w-full table-auto divide-y divide-gray-200 text-start dark:divide-white/5'>
         <thead className='divide-y divide-gray-200 dark:divide-white/5'>
           <tr className='bg-gray-50 dark:bg-white/5'>
             {header.map((item, index) => (
-              <th
-                key={index}
-                className={`${item.className || ""} px-3 py-3.5`}
-              >
+              <th key={index} className={`${item.className || ""} px-3 py-3.5`}>
                 {item.header}
               </th>
             ))}
@@ -345,7 +362,6 @@ export const BudgetTable = ({
                   type={data[index].type}
                   resetRow={resetRow}
                 />
-
               </td>
               <td>
                 <InputField
@@ -355,11 +371,16 @@ export const BudgetTable = ({
                   control={control}
                   rules={registerOptions.quantity}
                   errors={errors}
-                  defaultValue="1"
+                  defaultValue='1'
                   type={InputType.Number}
                   disabled={data[index].qdisabled}
                   onChange={(e) => {
-                    updatePrice(index, [{columnId: BudgetColumns.Quantity, value: Number(e.target.value)}]);
+                    updatePrice(index, [
+                      {
+                        columnId: BudgetColumns.Quantity,
+                        value: Number(e.target.value),
+                      },
+                    ]);
                   }}
                 />
               </td>
@@ -371,11 +392,16 @@ export const BudgetTable = ({
                   control={control}
                   rules={registerOptions.unitPrice}
                   errors={errors}
-                  defaultValue="0"
+                  defaultValue='0'
                   type={InputType.Number}
                   icon={data[index].currency}
                   onChange={(e) => {
-                    updatePrice(index, [{columnId: BudgetColumns.UnitPrice, value: Number(e.target.value)}]);
+                    updatePrice(index, [
+                      {
+                        columnId: BudgetColumns.UnitPrice,
+                        value: Number(e.target.value),
+                      },
+                    ]);
                   }}
                 />
               </td>
@@ -388,34 +414,30 @@ export const BudgetTable = ({
               </td>
               <td>sum</td>
               <td>
-              {data.length === 1 ? (
-                <CancelButton customClass='w-full'>
-                  {t("button.delete")} {t("budget.item")}
-                </CancelButton>
-              ) : (
-                <ActionButton
-                  onClick={() => removeRow(index)}
-                  style={StyleColor.Danger}
-                  customClass='w-full'
-                >
-                  {t("button.delete")} {t("budget.item")}
-                </ActionButton>
-              )}
+                {data.length === 1 ? (
+                  <CancelButton customClass='w-full'>
+                    {t("button.delete")} {t("budget.item")}
+                  </CancelButton>
+                ) : (
+                  <ActionButton
+                    onClick={() => removeRow(index)}
+                    style={StyleColor.Danger}
+                    customClass='w-full'
+                  >
+                    {t("button.delete")} {t("budget.item")}
+                  </ActionButton>
+                )}
               </td>
             </tr>
           ))}
           <tr className='bg-gray-50 dark:bg-white/5'>
-            <td
-              colSpan={header.length - 1}
-              align='right'
-              className='p-2'
-            >
+            <td colSpan={header.length - 1} align='right' className='p-2'>
               {user?.package !== PackageType.Basic && (
                 <ActionButton
                   customClass='w-auto'
                   style={StyleColor.Warning}
                   onClick={() => {
-                    console.log('38')
+                    console.log("38");
                   }}
                 >
                   <Icon
@@ -435,18 +457,20 @@ export const BudgetTable = ({
                 }}
                 style={StyleColor.Primary}
                 customClass='w-full'
-                disabled={data.filter((item) => item.itemable === "").length > 0 ? true : false}
+                disabled={
+                  data.filter((item) => item.itemable === "").length > 0
+                    ? true
+                    : false
+                }
               >
-              {t("button.add")} {t("budget.item")}
-            </ActionButton>
+                {t("button.add")} {t("budget.item")}
+              </ActionButton>
             </td>
           </tr>
         </tbody>
         <tfoot>
           <tr className='bg-gray-50 dark:bg-white/5'>
-            <td className='px-2 py-1 text-right' colSpan={2}>
-
-            </td>
+            <td className='px-2 py-1 text-right' colSpan={2}></td>
             <td className='px-2 py-1 text-right' colSpan={2}>
               <BudgetResume data={badgetResumeData} />
             </td>
