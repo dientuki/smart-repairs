@@ -41,7 +41,7 @@ export const useBudgetStore = create<BudgetStore>((set) => ({
   },
 
   updateBudget: async (
-    budgetResume: any,
+    orderId: string,
     budgetItems: any,
   ): Promise<boolean> => {
     const normalizedItems = budgetItems.items.reduce((acc, item) => {
@@ -51,13 +51,12 @@ export const useBudgetStore = create<BudgetStore>((set) => ({
         itemableType: item.itemable.info.item_type,
         quantity: item.quantity,
         unitPrice: item.unitPrice,
-        totalPrice: item.totalPrice,
         includeInSum: item.includeInSum,
       });
       return acc;
     }, []);
 
-    const $status = await updateBudget(budgetResume, normalizedItems);
+    const $status = await updateBudget(orderId, normalizedItems);
     return $status;
   },
 }));
