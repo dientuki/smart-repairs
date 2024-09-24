@@ -81,7 +81,7 @@ export const BudgetTable = ({
   control,
   errors,
   budget,
-  description
+  description,
 }: TableProps) => {
   const [data, setData] = useState<Item[]>([]);
   const { user } = useUserStore();
