@@ -1,3 +1,5 @@
+import { GraphQLBusinessError } from "@/helper/GraphQLBusinessError";
+
 type GraphQLErrors = GraphQLError[];
 
 type PayloadErrors = {
@@ -37,7 +39,7 @@ export const handleGraphQLErrors = (errors: GraphQLErrors | undefined) => {
 
 export const handlePayloadErrors = (errors: PayloadErrors) => {
   if (errors.status === false) {
-    throw new Error(errors.i18nKey);
+    throw new GraphQLBusinessError(errors.i18nKey);
   }
 };
 

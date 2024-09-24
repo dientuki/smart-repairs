@@ -81,8 +81,7 @@ export const BudgetTable = ({
   control,
   errors,
   budget,
-  description,
-  onBudgetChange,
+  description
 }: TableProps) => {
   const [data, setData] = useState<Item[]>([]);
   const { user } = useUserStore();
@@ -179,7 +178,6 @@ export const BudgetTable = ({
     };
 
     setBudgetResumeData(newBudgetResumeData);
-    onBudgetChange([...data], newBudgetResumeData);
 
     if (hasUpdated && discountPercentageTotal > 0) {
       setData([...data]); // Crea una nueva referencia a `data` para evitar mutación

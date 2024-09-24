@@ -10,6 +10,7 @@ import { BudgetTable } from "@/components/budget";
 import { useBudgetStore } from "@/store";
 import { toast } from "react-toastify";
 import { t } from "i18next";
+import { GraphQLBusinessError } from "@/helper/GraphQLBusinessError";
 
 type BudgetModalProps = {
   order: string;
@@ -26,14 +27,6 @@ export const BudgetModal = ({ order }: BudgetModalProps) => {
     control,
     formState: { errors },
   } = useForm();
-  const [budgetResume, setBudgetResume] = useState(null);
-  const [budgetItems, setBudgetItems] = useState(null);
-
-  const handleBudgetChange = (newBudgetItems, newBudgetResume) => {
-    console.log("handleBudgetChange", newBudgetItems, newBudgetResume);
-    setBudgetResume(newBudgetResume); // Actualiza el estado en el padre
-    setBudgetItems(newBudgetItems);
-  };
 
   useEffect(() => {
     let isMounted = true;
@@ -64,15 +57,15 @@ export const BudgetModal = ({ order }: BudgetModalProps) => {
   }, []);
 
   const handleRegistration = async (data: FieldValues) => {
-    console.log("Datos completos del formulario:", budgetResume, budgetItems);
-    //console.log({...budgetResume, order});
-
-    const updatedBudgetResume = { ...budgetResume, order };
-
-    const $result = await updateBudget(updatedBudgetResume, data);
-    if ($result) {
+    try {
+      await updateBudget(order, data);
       toast.success(t(`toast.success.form`));
       modal.close();
+    } catch (error) {
+      if (error instanceof GraphQLBusinessError) {
+        console.log('error graphql')
+        toast.error(t(error.i18nKey));
+      }
     }
   };
 
@@ -104,7 +97,6 @@ export const BudgetModal = ({ order }: BudgetModalProps) => {
             errors={errors}
             budget={budget}
             description={description}
-            onBudgetChange={handleBudgetChange}
           />
 
           <ActionButton type={ButtonType.Submit}>Submit</ActionButton>
