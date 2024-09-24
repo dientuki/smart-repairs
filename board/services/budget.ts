@@ -48,12 +48,15 @@ export const getInitialValues = async (
           ? `
         budget(orderId: "${orderId}") {
           id
-          total
+          subtotal
+          discount
           items {
-            part_id
-            service_job_id
+            id
+            itemable_id
+            itemable_type
             quantity
             unit_price
+            item_total
             include_in_sum
           }
         }
