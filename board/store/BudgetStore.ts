@@ -40,10 +40,7 @@ export const useBudgetStore = create<BudgetStore>((set) => ({
     };
   },
 
-  updateBudget: async (
-    orderId: string,
-    budgetItems: any,
-  ): Promise<boolean> => {
+  updateBudget: async (orderId: string, budgetItems: any): Promise<boolean> => {
     const normalizedItems = budgetItems.items.reduce((acc, item) => {
       acc.push({
         id: item.id,

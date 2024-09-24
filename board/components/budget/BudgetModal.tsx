@@ -63,7 +63,7 @@ export const BudgetModal = ({ order }: BudgetModalProps) => {
       modal.close();
     } catch (error) {
       if (error instanceof GraphQLBusinessError) {
-        console.log('error graphql')
+        console.log("error graphql");
         toast.error(t(error.i18nKey));
       }
     }
