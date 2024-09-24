@@ -35,15 +35,17 @@ input BudgetItemInput {
 
 type Budget {
     id: ID!
-    total: Float!
+    subtotal: Float!
+    discount: Float!
     items: [BudgetItem]
 }
 
 type BudgetItem {
-    id: ID!
-    part_id: ID
-    service_job_id: ID
+    id: String!
+    itemable_id: String!
+    itemable_type: String!
     quantity: Int!
     unit_price: Float!
+    item_total: Float!
     include_in_sum: Boolean!
 }
