@@ -17,7 +17,6 @@ return new class extends Migration
 
             $table->foreignUlid('order_id')->constrained();
             $table->foreignUlid('user_id')->constrained();
-            $table->decimal('total', 12, 2)->nullable()->default(0);
             $table->decimal('subtotal', 12, 2)->nullable()->default(0);
             $table->decimal('discount', 12, 2)->nullable()->default(0);
             $table->enum('status', BudgetStatusEnum::getAllCasesAsArray())->default(BudgetStatusEnum::default()->value);

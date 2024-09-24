@@ -70,7 +70,6 @@ class BudgetMutationTest extends TestCaseGraphQL
             'order_id' => $order->id, // Asegúrate de usar el ID correcto para el presupuesto
             'subtotal' => $randomPrice,
             'discount' => 0,
-            'total' => $randomPrice,
         ]);
 
         $this->assertDatabaseCount('budget_items', 1);
@@ -238,7 +237,6 @@ class BudgetMutationTest extends TestCaseGraphQL
             'order_id' => $order->id, // Asegúrate de usar el ID correcto para el presupuesto
             'subtotal' => $serviceJob->price,
             'discount' => $discount->price,
-            'total' => $serviceJob->price - $discount->price,
         ]);
 
         $this->assertDatabaseCount('budget_items', 2);
@@ -311,7 +309,6 @@ class BudgetMutationTest extends TestCaseGraphQL
             'order_id' => $order->id, // Asegúrate de usar el ID correcto para el presupuesto
             'subtotal' => $serviceJob->price,
             'discount' => $discountValue,
-            'total' => $serviceJob->price - $discountValue,
         ]);
 
         $budget = Budget::where('order_id', $order->id)->firstOrFail();

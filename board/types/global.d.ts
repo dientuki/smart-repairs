@@ -25,3 +25,7 @@ interface Column {
   id: TypedColumn;
   orders: Order[];
 }
+
+interface GraphQLBusinessError extends Error {
+  i18nKey: string;
+}

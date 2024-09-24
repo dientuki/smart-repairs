@@ -70,7 +70,6 @@ final readonly class BudgetMutations
                     ]
                 );
 
-
                 switch ($budgetItem['itemableType']) {
                     case $part:
                     case $serviceJob:
@@ -93,7 +92,6 @@ final readonly class BudgetMutations
                 }
             }
 
-
             if (count($discountPercentageTotal) > 0) {
                 foreach ($discountPercentageTotal as $discountPercentage) {
                     $discountTmp = round(( ($subtotal * $discountPercentage['discount']) / 100), 2);
@@ -102,10 +100,8 @@ final readonly class BudgetMutations
                 }
             }
 
-
             $budget->subtotal = $subtotal;
             $budget->discount = $discountValue;
-            $budget->total = $subtotal - $discountValue;
             $budget->save();
 
             DB::commit();
