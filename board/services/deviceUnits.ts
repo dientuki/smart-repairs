@@ -94,8 +94,7 @@ export async function addTemporaryDeviceUnit(
                     }
                 }
                 ... on ErrorPayload {
-                    message
-                    code
+                    i18nKey
                     status
                 }
             }

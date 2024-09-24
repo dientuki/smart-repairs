@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\GraphQL\Mutations;
 
+use App\Exceptions\GraphQLBusinessException;
 use App\Models\Brand;
 use App\Models\Device;
 use App\Models\DeviceType;
@@ -130,7 +131,7 @@ final readonly class DeviceUnitMutations
                     ],
                 ]
             ];
-        } catch (Exception $e) {
+        } catch (GraphQLBusinessException $e) {
             DB::rollBack();
 
             return [
@@ -138,6 +139,7 @@ final readonly class DeviceUnitMutations
                 'status' => false,
                 'message' => $e->getMessage(),
                 'code' => $e->getCode(),
+                'i18nKey' => $e->getI18nKey(),
             ];
         };
     }
@@ -208,7 +210,7 @@ final readonly class DeviceUnitMutations
             DB::commit();
 
             return true;
-        } catch (Exception $e) {
+        } catch (GraphQLBusinessException $e) {
             DB::rollBack();
 
             return [
@@ -216,6 +218,7 @@ final readonly class DeviceUnitMutations
                 'status' => false,
                 'message' => $e->getMessage(),
                 'code' => $e->getCode(),
+                'i18nKey' => $e->getI18nKey(),
             ];
         };
     }
