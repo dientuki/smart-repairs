@@ -10,7 +10,7 @@ import { PackageType } from "@/types/enums";
 export const getInitialValues = async (
   cpackage: string,
   orderId?: string,
-): Promise<any> => {
+): Promise<InitialValues> => {
   // Construir la consulta dinámicamente según si `orderId` está presente o no
   const query = `
     query {
@@ -87,7 +87,7 @@ export const getInitialValues = async (
 };
 
 export const updateBudget = async (
-  orderId: any,
+  orderId: string,
   budgetItems: any,
 ): Promise<boolean> => {
   const response = await graphqlRequest(`

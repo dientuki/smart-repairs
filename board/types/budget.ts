@@ -1,18 +1,44 @@
 import { BudgetColumns } from "@/types/enums";
 
 declare global {
-  interface BudgetItem {
-    part_id?: string;
-    service_job_id?: string;
+
+  interface ItemBase {
+    id: string;
     quantity: number;
+  }
+
+  interface DBItem extends ItemBase {
+    itemable_id: string;
+    itemable_type: string;
     unit_price: number;
+    item_total: number;
     include_in_sum: boolean;
   }
 
-  interface Budget {
+  interface ViewItem extends ItemBase {
+    itemable: OptionType[] | string;
+    unitPrice: number;
+    totalPrice: number;
+    qdisabled: boolean;
+    type: string;
+    currency: string;
+    includeInSum: boolean;
+  }
+
+  interface BudgetBase {
     id: string;
-    total: number;
-    items: BudgetItem[];
+    subtotal: number;
+    discount: number;
+  }
+
+  // DBBudget tiene un arreglo de DBItem
+  interface DBBudget extends BudgetBase {
+    items: DBItem[];
+  }
+
+  // ViewBudget tiene un arreglo de ViewItem
+  interface ViewBudget extends BudgetBase {
+    items: ViewItem[];
   }
 
   interface UpdateField {
