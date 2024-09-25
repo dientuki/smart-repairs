@@ -10,7 +10,7 @@ interface BudgetStore {
   clear: (keys: string | string[]) => void;
   initialValues: (
     orderId?: string,
-  ) => Promise<{ description: OptionType[]; budget: Budget | null }>;
+  ) => Promise<{ description: OptionType[]; budget: ViewBudget | undefined }>;
   updateBudget: (orderId: string, data: any) => Promise<boolean>;
 }
 
@@ -27,7 +27,7 @@ export const useBudgetStore = create<BudgetStore>((set) => ({
 
   initialValues: async (
     orderId?: string,
-  ): Promise<{ description: OptionType[]; budget: Budget | null }> => {
+  ): Promise<{ description: OptionType[]; budget: ViewBudget | undefined }> => {
     const { user } = useUserStore.getState();
 
     const { discounts, services, parts, budget: dbBudget } = await getInitialValues(
@@ -36,7 +36,7 @@ export const useBudgetStore = create<BudgetStore>((set) => ({
     );
     const description:OptionType[] = [...services, ...discounts, ...parts];
 
-    let viewBudget: ViewBudget | null = null;
+    let viewBudget: ViewBudget | undefined = undefined;
     if (dbBudget) {
       const items = dbBudget.items.reduce((acc: ViewItem[], item: DBItem) => {
         const itemable = description.find(desc => desc.id === item.itemable_id);
