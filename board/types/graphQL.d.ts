@@ -1,8 +1,13 @@
-interface GraphQLErrorExtension {
-  validation?: any;
+declare global {
+
+  interface GraphQLErrorExtension {
+    validation?: any;
+  }
+
+  interface GraphQLError {
+    message: string;
+    extensions?: GraphQLErrorExtension;
+  }
 }
 
-interface GraphQLError {
-  message: string;
-  extensions?: GraphQLErrorExtension;
-}
+export {}

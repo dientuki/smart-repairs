@@ -8,7 +8,6 @@ interface OptionType {
         [key: string]: string | null;
       };
 }
-
 interface User {
   id: string;
   name: string;
