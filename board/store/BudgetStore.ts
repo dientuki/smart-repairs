@@ -51,7 +51,7 @@ export const useBudgetStore = create<BudgetStore>((set) => ({
         id: item.id,
         itemableId: item.itemable.id,
         itemableType: item.itemable.info.item_type,
-        quantity: parseInt(item.quantity,10),
+        quantity: parseInt(item.quantity, 10),
         unitPrice: parseFloat(item.unitPrice),
         includeInSum: item.includeInSum,
       });

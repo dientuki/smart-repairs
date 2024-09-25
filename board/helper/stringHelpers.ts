@@ -6,7 +6,7 @@ function objectToString(object: { [key: string]: any }): string {
         return `${key}:${value}`;
       }
       if (typeof value === "string") {
-        value = value.replace(/\\/g, '\\\\'); // Escapa las barras invertidas
+        value = value.replace(/\\/g, "\\\\"); // Escapa las barras invertidas
       }
       // Si el valor es un string, lo envuelve en comillas
       return `${key}:"${value.replace(/"/g, '\\"')}"`; // Escapa comillas dentro de strings
@@ -16,9 +16,10 @@ function objectToString(object: { [key: string]: any }): string {
 
 export const arrayToString = (array: { [key: string]: any }[]): string => {
   // Genera el array como string usando la función objectToString
-  return "[" + array.map((object) => `{${objectToString(object)}}`).join(",") + "]";
+  return (
+    "[" + array.map((object) => `{${objectToString(object)}}`).join(",") + "]"
+  );
 };
-
 
 export const handleUndefined = (value: string | undefined | null): string => {
   return value === undefined || value === null || value === "undefined"
