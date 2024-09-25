@@ -34,6 +34,10 @@ export const useBudgetStore = create<BudgetStore>((set) => ({
       orderId,
     );
 
+    if (budget.length === 1) {
+      console.log(budget[0]);
+    }
+
     return {
       description: [...services, ...discounts, ...parts],
       budget: budget.length ? budget[0] : null,
@@ -41,13 +45,14 @@ export const useBudgetStore = create<BudgetStore>((set) => ({
   },
 
   updateBudget: async (orderId: string, budgetItems: any): Promise<boolean> => {
+    console.log("budgetItems", budgetItems);
     const normalizedItems = budgetItems.items.reduce((acc, item) => {
       acc.push({
         id: item.id,
         itemableId: item.itemable.id,
         itemableType: item.itemable.info.item_type,
-        quantity: item.quantity,
-        unitPrice: item.unitPrice,
+        quantity: parseInt(item.quantity,10),
+        unitPrice: parseFloat(item.unitPrice),
         includeInSum: item.includeInSum,
       });
       return acc;
