@@ -112,10 +112,10 @@ export const BudgetTable = ({
 
   useEffect(() => {
     //setData(budget || [...defaultData]);
-    console.log("budget", budget.items);
-    console.log("defaultData", defaultData);
-    append(budget?.items || defaultData);
-    setData(budget?.items || [...defaultData]);
+    //console.log("budget", budget.items);
+    //console.log("defaultData", defaultData);
+    append(defaultData);
+    setData([...defaultData]);
 
   }, []);
 

@@ -90,24 +90,6 @@ export const updateBudget = async (
   orderId: any,
   budgetItems: any,
 ): Promise<boolean> => {
-  console.log(`
-    mutation {
-      updateBudget(
-        orderId: "${orderId}",
-        budgetItems: ${arrayToString(budgetItems)}
-      ) {
-        __typename
-        ... on UpdateBudgetPayload {
-          success
-        }
-        ... on ErrorPayload {
-          status
-          i18nKey
-        }
-      }
-    }
-  `);
-
   const response = await graphqlRequest(`
     mutation {
       updateBudget(
