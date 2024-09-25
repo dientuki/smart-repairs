@@ -50,6 +50,19 @@ final readonly class BudgetMutations
             $discount = (new Discount())->getMorphClass();
             $serviceJob = (new ServiceJob())->getMorphClass();
 
+            // Obtener los budgetItems existentes
+            $existingItems = BudgetItem::where('budget_id', $budget->id)->get();
+            $existingItemIds = $existingItems->pluck('id')->toArray();
+
+            // Recopilar los IDs de los items que vienen en la solicitud
+            $incomingItemIds = array_filter(array_column($args['budgetItems'], 'id'));
+
+            // Identificar los items a eliminar
+            $itemsToDelete = array_diff($existingItemIds, $incomingItemIds);
+            if (!empty($itemsToDelete)) {
+                BudgetItem::destroy($itemsToDelete); // Borrar los items no presentes en la nueva solicitud
+            }
+
             foreach ($args['budgetItems'] as $key => $budgetItem) {
                 if (in_array($budgetItem['itemableType'], [$discount, $serviceJob])) {
                     if ($budgetItem['quantity'] != 1) {
@@ -57,9 +70,18 @@ final readonly class BudgetMutations
                     }
                 }
 
-                $item = BudgetItem::updateOrCreate(
-                    [
-                        'id' => $budgetItem['id'],
+                $item = BudgetItem::find($budgetItem['id']);
+                if ($item) {
+                    $item->update([
+                        'itemable_id' => $budgetItem['itemableId'],
+                        'itemable_type' => $budgetItem['itemableType'],
+                        'quantity' => $budgetItem['quantity'],
+                        'unit_price' => $budgetItem['unitPrice'],
+                        'item_total' => $budgetItem['quantity'] * $budgetItem['unitPrice'],
+                        'include_in_sum' => $budgetItem['includeInSum']
+                    ]);
+                } else {
+                    $item = BudgetItem::create([
                         'budget_id' => $budget->id,
                         'itemable_id' => $budgetItem['itemableId'],
                         'itemable_type' => $budgetItem['itemableType'],
@@ -67,8 +89,8 @@ final readonly class BudgetMutations
                         'unit_price' => $budgetItem['unitPrice'],
                         'item_total' => $budgetItem['quantity'] * $budgetItem['unitPrice'],
                         'include_in_sum' => $budgetItem['includeInSum']
-                    ]
-                );
+                    ]);
+                }
 
                 switch ($budgetItem['itemableType']) {
                     case $part:
