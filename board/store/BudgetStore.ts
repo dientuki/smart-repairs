@@ -33,19 +33,35 @@ export const useBudgetStore = create<BudgetStore>((set) => ({
       user.package,
       orderId,
     );
+    const description = [...services, ...discounts, ...parts];
 
-    if (budget.length === 1) {
-      console.log(budget[0]);
+    if (budget) {
+      budget.items = budget.items.reduce((acc, item) => {
+        // Aquí defines la lógica para transformar los elementos
+        const itemable = description.find(desc => desc.id === item.itemable_id);
+
+        acc.push({
+            id: item.id,
+            quantity: item.quantity,
+            unitPrice: item.unit_price,
+            totalPrice: item.item_total,
+            includeInSum: item.include_in_sum,
+            qdisabled: true,
+            type: 'Part',
+            currency: user?.currency,
+            itemable: itemable
+        });
+        return acc;
+      }, []);
     }
 
     return {
       description: [...services, ...discounts, ...parts],
-      budget: budget.length ? budget[0] : null,
+      budget: budget,
     };
   },
 
   updateBudget: async (orderId: string, budgetItems: any): Promise<boolean> => {
-    console.log("budgetItems", budgetItems);
     const normalizedItems = budgetItems.items.reduce((acc, item) => {
       acc.push({
         id: item.id,
