@@ -2,12 +2,18 @@ import { getCurrentUser } from "@/services/user";
 import { create } from "zustand";
 
 interface UserStore {
-  user: User | null;
+  user: User;
   getCurrentUser: () => Promise<void>;
 }
 
 export const useUserStore = create<UserStore>((set) => ({
-  user: null,
+  user: {
+    id: "",
+    name: "",
+    imageUrl: "",
+    package: "",
+    currency: "$",
+  },
 
   getCurrentUser: async () => {
     const user = await getCurrentUser();
