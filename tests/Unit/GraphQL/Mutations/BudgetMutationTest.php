@@ -324,7 +324,8 @@ class BudgetMutationTest extends TestCaseGraphQL
     }
 
     #[Test]
-    public function update_existing_item_in_budget(){
+    public function update_existing_item_in_budget()
+    {
         $randomPrice = number_format(rand(10, 1000) / 100, 2, '.', '');
         $q = 2;
 
@@ -386,7 +387,7 @@ class BudgetMutationTest extends TestCaseGraphQL
                         id: "' . $item2->id . '",
                         itemableId: "' . $part->id . '",
                         itemableType: "App\\\\Models\\\\Part",
-                        quantity: ' . $q .',
+                        quantity: ' . $q . ',
                         unitPrice: ' . $randomPrice . ',
                         includeInSum: true
                     }
@@ -431,7 +432,8 @@ class BudgetMutationTest extends TestCaseGraphQL
     }
 
     #[Test]
-    public function add_item_to_existing_budget(){
+    public function add_item_to_existing_budget()
+    {
         $Sj1 = ServiceJob::factory()->create([
             'price' => number_format(rand(900, 1000) / 100, 2, '.', ''),
             'team_id' => $this->team->id
@@ -481,7 +483,7 @@ class BudgetMutationTest extends TestCaseGraphQL
                         id: "",
                         itemableId: "' . $part->id . '",
                         itemableType: "App\\\\Models\\\\Part",
-                        quantity: ' . $q .',
+                        quantity: ' . $q . ',
                         unitPrice: ' . $randomPrice . ',
                         includeInSum: true
                     }
@@ -526,7 +528,8 @@ class BudgetMutationTest extends TestCaseGraphQL
     }
 
     #[Test]
-    public function replace_item_in_existing_budget(){
+    public function replace_item_in_existing_budget()
+    {
         $randomPrice = number_format(rand(10, 1000) / 100, 2, '.', '');
         $q = 2;
 
@@ -588,7 +591,7 @@ class BudgetMutationTest extends TestCaseGraphQL
                         id: "",
                         itemableId: "' . $part->id . '",
                         itemableType: "App\\\\Models\\\\Part",
-                        quantity: ' . $q .',
+                        quantity: ' . $q . ',
                         unitPrice: ' . $randomPrice . ',
                         includeInSum: true
                     }
