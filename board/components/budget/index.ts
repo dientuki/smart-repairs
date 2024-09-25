@@ -5,3 +5,8 @@ export { RemoveRow } from "./RemoveRow";
 export { AddRow } from "./AddRow";
 export { BooleanCell } from "./BooleanCell";
 export { BudgetModal } from "./BudgetModal";
+export { BudgetTable } from "./BudgetTable";
+export { DescriptionCell } from "./DescriptionCell";
+export { BudgetResume } from "./BudgetResume";
+export { DisplayAmount } from "./DisplayAmount";
+export { DisplayTotal } from "./DisplayTotal";

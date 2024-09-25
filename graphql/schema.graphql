@@ -8,12 +8,22 @@ type Query {
     currentUser: User!
         @field(resolver: "UserQueries@getCurrentUser")
         @namespace(field: "App\\GraphQL\\Queries")
+    morph: Morph
+        @field(resolver: "MorphQueries@getMorph")
+        @namespace(field: "App\\GraphQL\\Queries")
+}
+
+type Morph {
+    part: String
+    discount: String
+    serviceJob: String
 }
 
 type ErrorPayload {
     status: Boolean
     message: String
     code: String
+    i18nKey: String
 }
 
 #import budget.graphql

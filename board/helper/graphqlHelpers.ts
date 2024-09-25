@@ -1,9 +1,12 @@
+import { GraphQLBusinessError } from "@/helper/GraphQLBusinessError";
+
 type GraphQLErrors = GraphQLError[];
 
 type PayloadErrors = {
   status: boolean;
+  i18nKey: string;
+  code: number;
   message: string;
-  code: string;
 };
 
 export const graphqlRequest = async (query: string) => {
@@ -36,7 +39,7 @@ export const handleGraphQLErrors = (errors: GraphQLErrors | undefined) => {
 
 export const handlePayloadErrors = (errors: PayloadErrors) => {
   if (errors.status === false) {
-    throw new Error(errors.message);
+    throw new GraphQLBusinessError(errors.i18nKey);
   }
 };
 

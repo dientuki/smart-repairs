@@ -6,9 +6,16 @@
         "total_price": "precio total",
         "total": "total",
         "sum": "suma",
-        "new_item": "añadir item",
+        "item": "item",
         "error": {
-            "can_add": "agrega un item antes"
+            "can_add": "agrega un item antes",
+            "quantity": "la cantidad del servicio/descuento debe ser 1"
+        },
+        "add_foreign_part": "Agregar parte de otro equipo",
+        "type": {
+            "discount": "Descuento",
+            "servicejob": "Servicio",
+            "part": "Parte"
         }
     },
 
@@ -22,7 +29,8 @@
         "validate": "Validar",
         "quote": "Presupuestar",
         "edit": "Editar",
-        "delete": "Eliminar"
+        "delete": "Eliminar",
+        "add": "Añadir"
     },
 
     "device": "equipo",

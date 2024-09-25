@@ -3,21 +3,23 @@
 namespace App\Filament\Team\Resources;
 
 use App\Enum\DiscountEnum;
+use App\Enum\SimpleDiscountEnum;
 use App\Filament\Team\Resources\ServiceJobResource\Pages;
 use App\Models\ServiceJob;
 use App\Traits\RegistersNavigationTrait;
+use Filament\Facades\Filament;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Toggle;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\ToggleColumn;
 use Filament\Tables\Table;
 
 class ServiceJobResource extends Resource
 {
-    use RegistersNavigationTrait;
-
     protected static ?string $model = ServiceJob::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-wrench-screwdriver';
@@ -35,7 +37,7 @@ class ServiceJobResource extends Resource
             ->schema([
                 TextInput::make('name'),
                 TextInput::make('price')->prefix('$'),
-                Select::make('discount_type')->options(DiscountEnum::class)
+                Toggle::make('is_active')
             ]);
     }
 
@@ -45,7 +47,7 @@ class ServiceJobResource extends Resource
             ->columns([
                 TextColumn::make('name'),
                 TextColumn::make('price')->money('ARS'),
-                TextColumn::make('discount_type'),
+                ToggleColumn::make('is_active')
             ])
             ->filters([
                 //

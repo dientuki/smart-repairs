@@ -14,6 +14,7 @@ interface User {
   name: string;
   imageUrl: string;
   package: string;
+  currency: string;
 }
 
 interface Board {
@@ -23,4 +24,8 @@ interface Board {
 interface Column {
   id: TypedColumn;
   orders: Order[];
+}
+
+interface GraphQLBusinessError extends Error {
+  i18nKey: string;
 }

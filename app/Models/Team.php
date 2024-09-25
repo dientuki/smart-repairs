@@ -54,9 +54,9 @@ class Team extends ModelAuditable
         return $this->hasMany(ServiceJob::class);
     }
 
-    public function simpleServiceJobs(): HasMany
+    public function discounts(): HasMany
     {
-        return $this->hasMany(SimpleServiceJob::class);
+        return $this->hasMany(Discount::class);
     }
 
     public function deviceTypeChecks(): HasMany

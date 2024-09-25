@@ -1,12 +1,11 @@
 enum DiscountEnum {
-  None
-  Percentage
-  Amount
+  percentage
+  amount
 }
 
 extend type Query {
-    discounts: [ServiceJob]!
-        @field(resolver: "ServiceJobQueries@getDiscounts")
+    discounts: [Discount]!
+        @field(resolver: "DiscountQueries@getDiscounts")
         @namespace(field: "App\\GraphQL\\Queries")
     services: [ServiceJob]!
         @field(resolver: "ServiceJobQueries@getServices")
@@ -17,5 +16,11 @@ type ServiceJob {
     id: ID!
     label: String!
     price: Float!
-    discount_type: DiscountEnum!
+}
+
+type Discount {
+    id: ID!
+    label: String!
+    price: Float!
+    type: DiscountEnum!
 }

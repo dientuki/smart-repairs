@@ -1,7 +1,19 @@
 import { useEffect, useState } from "react";
+import { ToggleField } from "@/components/form";
+import { Switch } from "@headlessui/react";
+import { Controller } from "react-hook-form";
 
-export const BooleanCell = ({ getValue, row, table }: BooleanCellProps) => {
+export const BooleanCell = ({
+  getValue,
+  row,
+  column,
+  table,
+}: BooleanCellProps) => {
+  const checked = true;
+  const name = `${column.columnDef.meta?.name}.${row.id}.${column.id}`;
+  /*
   const initialValue = getValue();
+
   const [value, setValue] = useState(initialValue);
 
   useEffect(() => {
@@ -15,17 +27,22 @@ export const BooleanCell = ({ getValue, row, table }: BooleanCellProps) => {
     // Actualiza los datos en el `onChange`
     table.options.meta?.updateSum(row.index, newValue);
   };
-
+  */
   return (
-    <label className='flex w-full cursor-pointer justify-center items-center'>
-      <input
-        type='checkbox'
-        className='sr-only peer'
-        checked={value} // Asignar correctamente el valor booleano
-        onChange={handleChange}
-        disabled={row.index == 0 ? true : false}
-      />
-      <div className="relative w-9 h-5 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-blue-600"></div>
-    </label>
+    <Controller
+      name={name}
+      control={column.columnDef.meta.control}
+      rules={column.columnDef.meta.rules}
+      defaultValue={checked}
+      render={({ field }) => (
+        <Switch
+          {...field}
+          name={name}
+          className='group inline-flex h-6 w-11 items-center rounded-full bg-gray-200 transition data-[checked]:bg-blue-600'
+        >
+          <span className='size-4 translate-x-1 rounded-full bg-white transition group-data-[checked]:translate-x-6' />
+        </Switch>
+      )}
+    />
   );
 };

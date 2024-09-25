@@ -2,7 +2,7 @@
 
 namespace App\GraphQL\Queries;
 
-use App\Enum\DiscountEnum;
+use App\Models\Discount;
 use App\Models\ServiceJob;
 use App\Traits\UserDataTrait;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
@@ -10,16 +10,6 @@ use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 class ServiceJobQueries
 {
     use UserDataTrait;
-
-    public function getDiscounts(null $root, array $args, GraphQLContext $context): mixed
-    {
-        $team_id = $this->getTeamId();
-
-        return ServiceJob::where([
-        ['discount_type', '!=', DiscountEnum::None->value],
-        ['team_id', '=', $team_id]
-        ])->get();
-    }
 
     /**
      * @param  null  $_
@@ -30,9 +20,9 @@ class ServiceJobQueries
     {
         $team_id = $this->getTeamId();
 
-        return ServiceJob::where(
-            ['discount_type' => DiscountEnum::None->value],
-            ['team_id' => $team_id]
-        )->get();
+        return ServiceJob::where([
+            ['is_active', '=', true],
+            ['team_id', '=', $team_id]
+        ])->get();
     }
 }

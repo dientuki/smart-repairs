@@ -1,19 +1,38 @@
-import { XCircleIcon } from "@heroicons/react/16/solid";
+import { ActionButton, CancelButton } from "../form";
+import { HiddenInput } from "../form/HiddenInput";
+import { StyleColor } from "@/types/enums";
+import { t } from "i18next";
 
-export const RemoveRow = ({ row, table }) => {
+export const RemoveRow = ({ getValue, row, column, table }: InputCellProps) => {
+  const initialValue = getValue();
   const meta = table.options.meta;
+  const name = `${column.columnDef.meta?.name}.${row.id}.${column.id}`;
 
   const removeRow = () => {
     meta?.removeRow(row.index);
   };
 
   return (
-    <div className='flex justify-center items-center'>
-      {row.index > 1 && (
-        <button className='text-red-500 hover:text-red-600' onClick={removeRow}>
-          <XCircleIcon className='h-5 w-5' />
-        </button>
+    <>
+      {table.getRowCount() === 1 ? (
+        <CancelButton customClass='w-full'>
+          {t("button.delete")} {t("budget.item")}
+        </CancelButton>
+      ) : (
+        <ActionButton
+          onClick={removeRow}
+          style={StyleColor.Danger}
+          customClass='w-full'
+        >
+          {t("button.delete")} {t("budget.item")}
+        </ActionButton>
       )}
-    </div>
+      <HiddenInput
+        name={name}
+        control={column.columnDef.meta.control}
+        rules={column.columnDef.meta.rules}
+        defaultValue={initialValue}
+      />
+    </>
   );
 };

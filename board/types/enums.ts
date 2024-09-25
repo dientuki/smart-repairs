@@ -5,9 +5,8 @@ export enum OperationStatus {
 }
 
 export enum DiscountType {
-  None = "None",
-  Percentage = "Percentage",
-  Amount = "Amount",
+  Percentage = "percentage",
+  Amount = "amount",
 }
 
 export enum TypedColumn {
@@ -34,6 +33,13 @@ export enum ButtonType {
   Reset = "reset",
 }
 
+export enum InputType {
+  Text = "text",
+  Number = "number",
+  Email = "email",
+  Tel = "tel",
+}
+
 export enum PackageType {
   Basic = "Basico",
   Medium = "Medio",
@@ -43,4 +49,18 @@ export enum PackageType {
 export enum CountOperation {
   Increment = "increment",
   Decrement = "decrement",
+}
+
+export enum BudgetColumns {
+  Itemable = "itemable",
+  Quantity = "quantity",
+  UnitPrice = "unitPrice",
+  TotalPrice = "totalPrice",
+  IncludeInSum = "includeInSum",
+}
+
+export enum Itemable {
+  Part = "Part",
+  ServiceJob = "ServiceJob",
+  Discount = "Discount",
 }

@@ -24,6 +24,7 @@ export const CancelButton = ({
       as='button'
       className={combineClasses(defaultClasses, customClass)}
       onClick={onClick}
+      disabled={!onClick}
       type={type}
     >
       {children}

@@ -7,4 +7,4 @@ interface InputCellProps {
 
 interface BooleanCellProps extends InputCellProps {}
 
-interface StaticAutocomplete extends InputCellProps {}
+interface DescriptionCellProps extends InputCellProps {}

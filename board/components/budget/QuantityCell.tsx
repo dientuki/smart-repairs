@@ -1,6 +1,8 @@
+import { InputType } from "@/types/enums";
+import { InputField } from "@/components/form";
+import { t } from "i18next";
+import { Itemable } from "@/types/enums";
 import { useEffect, useState } from "react";
-import { Controller } from "react-hook-form";
-import { Input } from "@headlessui/react";
 
 export const QuantityCell = ({
   getValue,
@@ -9,49 +11,41 @@ export const QuantityCell = ({
   table,
 }: InputCellProps) => {
   const initialValue = getValue();
-  const [val, setVal] = useState(initialValue);
+  const [value, setValue] = useState(initialValue);
   const name = `${column.columnDef.meta?.name}.${row.id}.${column.id}`;
-  const errorMessage =
-    column.columnDef.meta.errors.items?.[row.index]?.[column.id] ?? null;
-  const isHidden = row.index === 0 || row.index === 1;
+  const control = column.columnDef.meta.control;
+  let disabled = false;
 
-  useEffect(() => {
-    setVal(initialValue);
-  }, [initialValue]);
-
-  const handleChange = (newValue: any) => {
-    setVal(newValue);
-    table.options.meta?.updatePrice(row.index, column.id, newValue);
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    //const q = parseFloat(e.target.value);
+    //table.options.meta?.updatePrice(row.index, column.id, q);
   };
 
-  if (isHidden) {
-    return null; // No renderiza nada si se cumple la condición
+  useEffect(() => {
+    console.log(name, "cambio");
+    setValue(initialValue);
+  }, [initialValue]);
+
+  if (table.options.data[row.index].itemable) {
+    disabled =
+      table.options.data[row.index].itemable.info.item_type.indexOf(
+        Itemable.Part,
+      ) === -1;
   }
 
   return (
-    <Controller
+    <InputField
       name={name}
-      control={column.columnDef.meta.control}
+      label={t("budget.quantity")}
+      labelless
+      control={control}
       rules={column.columnDef.meta.rules}
-      defaultValue={initialValue}
-      render={({ field }) => (
-        <Input
-          {...field}
-          value={val}
-          type='number'
-          onChange={(e) => {
-            const value = parseFloat(e.target.value);
-            field.onChange(value);
-            handleChange(value);
-          }}
-          className={`text-center rounded-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block w-full text-base border-gray-300 p-2.5 ${
-            errorMessage
-              ? "bg-red-50 border-red-500 text-red-900 placeholder-red-700 focus:ring-red-500 focus:border-red-500"
-              : ""
-          }
-            `}
-        />
-      )}
+      defaultValue='1'
+      forceValue={value || "1"}
+      errors={column.columnDef.meta.errors}
+      type={InputType.Number}
+      onChange={handleChange}
+      disabled={disabled}
     />
   );
 };

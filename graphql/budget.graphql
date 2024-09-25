@@ -7,7 +7,7 @@ extend type Query {
 }
 
 extend type Mutation {
-    updateBudget(orderId: ID, budgetItems: [BudgetItemInput!]!): UpdateBudgetResult
+    updateBudget(orderId: String!, budgetItems: [BudgetItemInput!]!): UpdateBudgetResult
         @field(resolver: "BudgetMutations@updateBudget")
         @namespace(field: "App\\GraphQL\\Mutations")
 }
@@ -16,26 +16,36 @@ type UpdateBudgetPayload {
     success: Boolean!
 }
 
+input BudgetResumeInput {
+    id: String
+    orderId: String!
+    total: Float!
+    subtotal: Float!
+    discount: Float!
+}
+
 input BudgetItemInput {
-  itemId: String!
-  serviceId: String!
+  id: String
+  itemableId: String!
+  itemableType: String!
   quantity: Int!
   unitPrice: Float!
   includeInSum: Boolean!
-  type: String!
 }
 
 type Budget {
     id: ID!
-    total: Float!
+    subtotal: Float!
+    discount: Float!
     items: [BudgetItem]
 }
 
 type BudgetItem {
-    id: ID!
-    part_id: ID
-    service_job_id: ID
+    id: String!
+    itemable_id: String!
+    itemable_type: String!
     quantity: Int!
     unit_price: Float!
+    item_total: Float!
     include_in_sum: Boolean!
 }

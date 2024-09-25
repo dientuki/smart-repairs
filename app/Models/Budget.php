@@ -10,7 +10,16 @@ class Budget extends ModelAuditable
 {
     use HasTeamTrait;
 
-    protected $fillable = ['order_id', 'user_id', 'total'];
+    protected $fillable = [
+        'order_id',
+        'user_id',
+        'total',
+        'subtotal',
+        'discount',
+        'status',
+        'valid_until',
+        'team_id'
+    ];
 
     public function order(): BelongsTo
     {
