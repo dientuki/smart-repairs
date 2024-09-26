@@ -57,7 +57,6 @@ export const BudgetModal = ({ order }: BudgetModalProps) => {
   }, []);
 
   const handleRegistration = async (data: FieldValues) => {
-    console.log("data", data);
     try {
       await updateBudget(order, data);
       toast.success(t(`toast.success.form`));
