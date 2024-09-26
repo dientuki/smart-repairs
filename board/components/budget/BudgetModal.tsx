@@ -30,18 +30,17 @@ export const BudgetModal = ({ order }: BudgetModalProps) => {
   } = useForm();
 
   useEffect(() => {
-
     initialValues(order) // Asegúrate de pasar el valor correcto
-    .then((result) => {
-      setBudget(result.budget); // Descomentar para usarlo
-      setDescription(result.description); // Descomentar para usarlo
-    })
-    .catch((error) => {
-      toast.error(t(`toast.error.${error.message}`));
-    })
-    .finally(() => {
-      setIsLoading(false);
-    });
+      .then((result) => {
+        setBudget(result.budget); // Descomentar para usarlo
+        setDescription(result.description); // Descomentar para usarlo
+      })
+      .catch((error) => {
+        toast.error(t(`toast.error.${error.message}`));
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
 
     return () => {
       AbortControllerManager.abort();

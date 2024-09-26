@@ -11,18 +11,14 @@ export class AbortControllerManager {
   }
 
   static abort() {
-    console.log(this.isFetching, 'call abort')
     if (this.controller && this.isFetching) {
-      console.log('do abort')
       this.controller.abort();
       this.controller = null;
       this.isFetching = false;
     }
   }
 
-
   static completeFetch() {
-    console.log('complete fetch')
     this.isFetching = false; // Resetea el flag cuando la solicitud se completa
   }
 }

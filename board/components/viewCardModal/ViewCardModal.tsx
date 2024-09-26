@@ -82,7 +82,6 @@ export const ViewCardModal = () => {
             </div>
 
             <div className='basis-1/4 flex flex-col gap-4 overflow-y-scroll min-h-full max-h-full pr-2 pl-1'>
-
               <OrderStatus status={t(`status.${order.status}`)} />
               <Details />
               <ChecklistDisplay

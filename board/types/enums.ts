@@ -66,7 +66,7 @@ export enum Itemable {
 }
 
 export enum TabStatusEnum {
-  Active = 'active',
-  Inactive = 'inactive',
-  Completed = 'completed'
+  Active = "active",
+  Inactive = "inactive",
+  Completed = "completed",
 }
