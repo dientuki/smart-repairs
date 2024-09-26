@@ -5,7 +5,7 @@ import { ButtonType, StyleColor } from "@/types/enums";
 import { Loading } from "@/components/Loading";
 
 interface ActionButtonProps {
-  customClass?: string; // Can contain multiple classes separated by spaces
+  className?: string; // Can contain multiple classes separated by spaces
   children: React.ReactNode; // The content of the button
   onClick?: () => void; // Function to execute on click
   type?: ButtonType; // Button type
@@ -15,7 +15,7 @@ interface ActionButtonProps {
 }
 
 export const ActionButton = ({
-  customClass = "w-1/4",
+  className = "w-1/4",
   children,
   onClick,
   type = ButtonType.Button,
@@ -30,7 +30,7 @@ export const ActionButton = ({
     <Button
       style={dynamicStyles(style)}
       as='button'
-      className={combineClasses(defaultClasses, customClass)}
+      className={combineClasses(defaultClasses, className)}
       onClick={onClick}
       disabled={disabled || loading}
       type={type}

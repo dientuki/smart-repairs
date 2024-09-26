@@ -87,7 +87,7 @@ export const Description = () => {
           <div className='flex gap-2'>
             <ActionButton
               onClick={isEditing ? submitForm : handleEditClick}
-              customClass='w-auto'
+              className='w-auto'
               loading={isSubmitting}
             >
               {isEditing ? t("button.send") : t("button.edit")}

@@ -373,14 +373,14 @@ export const BudgetTable = ({
 
               <td className='px-3 py-4'>
                 {data.length === 1 ? (
-                  <CancelButton customClass='w-full'>
+                  <CancelButton className='w-full'>
                     {t("button.delete")} {t("budget.item")}
                   </CancelButton>
                 ) : (
                   <ActionButton
                     onClick={() => removeRow(index)}
                     style={StyleColor.Danger}
-                    customClass='w-full'
+                    className='w-full'
                   >
                     {t("button.delete")} {t("budget.item")}
                   </ActionButton>
@@ -392,7 +392,7 @@ export const BudgetTable = ({
             <td colSpan={header.length - 1} align='right' className='p-2'>
               {user?.package !== PackageType.Basic && (
                 <ActionButton
-                  customClass='w-auto'
+                  className='w-auto'
                   style={StyleColor.Warning}
                   onClick={() => {
                     console.log("38");
@@ -414,7 +414,7 @@ export const BudgetTable = ({
                   append(defaultData);
                 }}
                 style={StyleColor.Primary}
-                customClass='w-full'
+                className='w-full'
                 disabled={
                   data.filter((item) => item.itemable === "").length > 0
                     ? true

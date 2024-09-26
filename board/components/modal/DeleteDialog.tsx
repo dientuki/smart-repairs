@@ -41,14 +41,14 @@ export const DeleteDialog = () => {
           {t("dialog.question")}
         </div>
         <div className='flex flex-row gap-2 mt-6'>
-          <CancelButton onClick={modal.close} customClass='w-full'>
+          <CancelButton onClick={modal.close} className='w-full'>
             {t("button.cancel")}
           </CancelButton>
           <ActionButton
             onClick={handleConfirm}
             style={StyleColor.Danger}
             loading={loading}
-            customClass='w-full'
+            className='w-full'
           >
             {t("button.confirm")}
           </ActionButton>
