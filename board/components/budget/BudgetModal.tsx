@@ -11,6 +11,7 @@ import { useBudgetStore } from "@/store";
 import { toast } from "react-toastify";
 import { t } from "i18next";
 import { GraphQLBusinessError } from "@/helper/GraphQLBusinessError";
+import { AbortControllerManager } from "@/helper/AbortControllerManager";
 
 type BudgetModalProps = {
   order: string;
@@ -29,30 +30,21 @@ export const BudgetModal = ({ order }: BudgetModalProps) => {
   } = useForm();
 
   useEffect(() => {
-    let isMounted = true;
 
-    const fetchInitialValues = async () => {
-      try {
-        const result = await initialValues(order);
-        if (isMounted) {
-          setBudget(result.budget);
-          setDescription(result.description);
-        }
-      } catch (e) {
-        if (isMounted) {
-          toast.error(t(`toast.error.${e.message}`));
-        }
-      } finally {
-        if (isMounted) {
-          setIsLoading(false); // Indicar que terminó la carga
-        }
-      }
-    };
-
-    fetchInitialValues();
+    initialValues(order) // Asegúrate de pasar el valor correcto
+    .then((result) => {
+      setBudget(result.budget); // Descomentar para usarlo
+      setDescription(result.description); // Descomentar para usarlo
+    })
+    .catch((error) => {
+      toast.error(t(`toast.error.${error.message}`));
+    })
+    .finally(() => {
+      setIsLoading(false);
+    });
 
     return () => {
-      isMounted = false; // Limpieza del efecto
+      AbortControllerManager.abort();
     };
   }, []);
 
