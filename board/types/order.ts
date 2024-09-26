@@ -1,5 +1,4 @@
 declare global {
-
   interface OrderBase {
     $id: string;
     brand: string;
@@ -99,4 +98,4 @@ declare global {
   }
 }
 
-export {}
+export {};

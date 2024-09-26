@@ -1,5 +1,4 @@
 declare global {
-
   interface GraphQLErrorExtension {
     validation?: any;
   }
@@ -10,4 +9,4 @@ declare global {
   }
 }
 
-export {}
+export {};

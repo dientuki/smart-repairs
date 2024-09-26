@@ -2,7 +2,11 @@ import { create } from "zustand";
 import { useServiceJobStore, useUserStore } from "@/store";
 import { getInitialValues, updateBudget } from "@/services/budget";
 import { clearState } from "@/helper/storeHelpers";
-import { getCurrency, getType, isQuantityDisabled } from "@/helper/budgetHelpers";
+import {
+  getCurrency,
+  getType,
+  isQuantityDisabled,
+} from "@/helper/budgetHelpers";
 
 interface BudgetStore {
   parts: OptionType[];
@@ -30,16 +34,20 @@ export const useBudgetStore = create<BudgetStore>((set) => ({
   ): Promise<{ description: OptionType[]; budget: ViewBudget | undefined }> => {
     const { user } = useUserStore.getState();
 
-    const { discounts, services, parts, budget: dbBudget } = await getInitialValues(
-      user.package,
-      orderId,
-    );
-    const description:OptionType[] = [...services, ...discounts, ...parts];
+    const {
+      discounts,
+      services,
+      parts,
+      budget: dbBudget,
+    } = await getInitialValues(user.package, orderId);
+    const description: OptionType[] = [...services, ...discounts, ...parts];
 
     let viewBudget: ViewBudget | undefined = undefined;
     if (dbBudget) {
       const items = dbBudget.items.reduce((acc: ViewItem[], item: DBItem) => {
-        const itemable = description.find(desc => desc.id === item.itemable_id);
+        const itemable = description.find(
+          (desc) => desc.id === item.itemable_id,
+        );
 
         if (itemable) {
           acc.push({

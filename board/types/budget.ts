@@ -1,7 +1,6 @@
 import { BudgetColumns } from "@/types/enums";
 
 declare global {
-
   interface ItemBase {
     id: string;
     quantity: number;

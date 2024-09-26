@@ -11,7 +11,6 @@ import {
   CancelButton,
   FakeInput,
   InputField,
-  HiddenInput,
 } from "@/components/form";
 import { Icon } from "@/components/Icon";
 import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
@@ -27,7 +26,12 @@ import { useUserStore } from "@/store";
 import { capitalizeFirstLetter } from "@/helper/stringHelpers";
 import { DescriptionCell } from "./DescriptionCell";
 import { BudgetResume } from "./BudgetResume";
-import { getCurrency, getQuantity, getType, isQuantityDisabled } from "@/helper/budgetHelpers";
+import {
+  getCurrency,
+  getQuantity,
+  getType,
+  isQuantityDisabled,
+} from "@/helper/budgetHelpers";
 
 type TableProps = {
   control: Control<FieldValues>;
@@ -89,7 +93,6 @@ export const BudgetTable = ({
   ];
 
   useEffect(() => {
-
     append(budget?.items || defaultData);
     setData(budget?.items || [...defaultData]);
   }, []);
@@ -168,7 +171,7 @@ export const BudgetTable = ({
     },
     {
       header: capitalizeFirstLetter(t("budget.quantity")),
-      className: "w-20 text-center",
+      className: "w-28 text-center",
     },
     {
       header: capitalizeFirstLetter(t("budget.unit_price")),
@@ -274,7 +277,6 @@ export const BudgetTable = ({
     );
   };
 
-
   return (
     <div className='divide-y divide-gray-200 overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-gray-950/5 dark:divide-white/10 dark:bg-gray-900 dark:ring-white/10'>
       <table className='w-full table-auto divide-y divide-gray-200 text-start dark:divide-white/5'>
@@ -290,7 +292,7 @@ export const BudgetTable = ({
         <tbody className='divide-y divide-gray-200 whitespace-nowrap dark:divide-white/5'>
           {fields.map((field, index) => (
             <tr key={field.id}>
-              <td>
+              <td className='px-3 py-4'>
                 <DescriptionCell
                   control={control}
                   errors={errors}
@@ -302,7 +304,7 @@ export const BudgetTable = ({
                   resetRow={resetRow}
                 />
               </td>
-              <td>
+              <td className='px-3 py-4'>
                 <InputField
                   name={`items.${index}.quantity`}
                   label={t("budget.quantity")}
@@ -323,7 +325,7 @@ export const BudgetTable = ({
                   }}
                 />
               </td>
-              <td>
+              <td className='px-3 py-4'>
                 <InputField
                   name={`items.${index}.unitPrice`}
                   label={t("budget.unitPrice")}
@@ -344,15 +346,15 @@ export const BudgetTable = ({
                   }}
                 />
               </td>
-              <td>
+              <td className='px-3 py-4'>
                 <FakeInput
                   value={data[index].totalPrice}
                   icon={user?.currency}
                   className='text-right'
                 />
               </td>
-              <td>sum</td>
-              <td>
+              <td className='px-3 py-4'>sum</td>
+              <td className='px-3 py-4'>
                 {data.length === 1 ? (
                   <CancelButton customClass='w-full'>
                     {t("button.delete")} {t("budget.item")}

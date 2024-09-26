@@ -1,5 +1,4 @@
 declare global {
-
   interface TemporaryDeviceUnitInput {
     deviceid: string;
 
@@ -33,4 +32,4 @@ declare global {
   }
 }
 
-export {}
+export {};
