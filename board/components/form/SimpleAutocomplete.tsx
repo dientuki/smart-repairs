@@ -20,10 +20,16 @@ interface SimpleAutocompleteProps {
     reason?: string,
   ) => void;
 
-  filterOptions?: (options: OptionType[], state: FilterOptionsState<OptionType>) => OptionType[];
+  filterOptions?: (
+    options: OptionType[],
+    state: FilterOptionsState<OptionType>,
+  ) => OptionType[];
 }
 
-const defaultFilterOptions = (options: OptionType[], params: FilterOptionsState<OptionType>) => {
+const defaultFilterOptions = (
+  options: OptionType[],
+  params: FilterOptionsState<OptionType>,
+) => {
   const filtered = filter(options, params);
 
   const { inputValue } = params;
@@ -49,7 +55,7 @@ export const SimpleAutocomplete = ({
   label,
   isLoading,
   filterOptions = defaultFilterOptions,
-}:SimpleAutocompleteProps) => {
+}: SimpleAutocompleteProps) => {
   return (
     <Field>
       <Label className='first-letter:uppercase block mb-2 text-base font-medium text-gray-900'>
@@ -58,7 +64,7 @@ export const SimpleAutocomplete = ({
       {isLoading ? (
         <Skeleton variant='rectangular' width={210} height={32} />
       ) : (
-        <div className="w-full rounded-lg shadow-sm ring-1 transition duration-75 bg-white dark:bg-white/5 [&:not(:has(.fi-ac-action:focus))]:focus-within:ring-2 [&:not(:has(.fi-ac-action:focus))]:focus-within overflow-hidden ring-gray-950/10 dark:ring-white/20 [&:not(:has(.fi-ac-action:focus))]:focus-within:ring-primary-600 dark:[&:not(:has(.fi-ac-action:focus))]:focus-within:ring-primary-500">
+        <div className='w-full rounded-lg shadow-sm ring-1 transition duration-75 bg-white dark:bg-white/5 [&:not(:has(.fi-ac-action:focus))]:focus-within:ring-2 [&:not(:has(.fi-ac-action:focus))]:focus-within overflow-hidden ring-gray-950/10 dark:ring-white/20 [&:not(:has(.fi-ac-action:focus))]:focus-within:ring-primary-600 dark:[&:not(:has(.fi-ac-action:focus))]:focus-within:ring-primary-500'>
           <Autocomplete
             autoHighlight
             autoSelect
@@ -81,5 +87,5 @@ export const SimpleAutocomplete = ({
         </div>
       )}
     </Field>
-  )
+  );
 };
