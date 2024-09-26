@@ -48,7 +48,7 @@ export const Comment = ({ comment }: Props) => {
   };
 
   const handleRegistration = async (data: FieldValues) => {
-    if (isSubmitting || isEqualOrderComment(data, comment)) return;
+    //if (isSubmitting || isEqualOrderComment(data, comment)) return;
     setIsSubmitting(true);
     try {
       const status = await updateComment(
