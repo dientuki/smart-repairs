@@ -4,7 +4,12 @@ import { useForm, FieldValues, FieldErrors } from "react-hook-form";
 import { EnvelopeIcon, PhoneIcon } from "@heroicons/react/16/solid";
 import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
-import { ActionButton, HiddenInput, InputField, SimpleAutocomplete } from "@/components/form";
+import {
+  ActionButton,
+  HiddenInput,
+  InputField,
+  SimpleAutocomplete,
+} from "@/components/form";
 import { useCustomerStore, useOrderStore } from "@/store";
 import { ButtonType, OperationStatus } from "@/types/enums";
 import { Icon } from "../Icon";
@@ -164,11 +169,7 @@ export const Step1 = ({ nextStep }: Step1Props) => {
       />
 
       <form onSubmit={handleSubmit(handleRegistration, handleError)}>
-        <HiddenInput
-          name='id'
-          control={control}
-          rules={registerOptions.id}
-        />
+        <HiddenInput name='id' control={control} rules={registerOptions.id} />
 
         <div className='grid gap-6 grid-cols-2 mt-4'>
           <InputField
@@ -209,9 +210,11 @@ export const Step1 = ({ nextStep }: Step1Props) => {
         </div>
 
         <div className='flex justify-end mt-6'>
-          <ActionButton type={ButtonType.Submit} onClick={nextStep}>Siguiente</ActionButton>
+          <ActionButton type={ButtonType.Submit} onClick={nextStep}>
+            Siguiente
+          </ActionButton>
         </div>
       </form>
     </TabPanel>
   );
-}
+};
