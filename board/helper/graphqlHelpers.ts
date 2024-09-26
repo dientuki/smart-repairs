@@ -1,4 +1,5 @@
 import { GraphQLBusinessError } from "@/helper/GraphQLBusinessError";
+import { AbortControllerManager } from "@/helper/AbortControllerManager";
 
 type GraphQLErrors = GraphQLError[];
 
@@ -10,6 +11,8 @@ type PayloadErrors = {
 };
 
 export const graphqlRequest = async (query: string) => {
+  const controller = AbortControllerManager.getController();
+
   try {
     const response = await fetch("/graphql", {
       method: "POST",
@@ -19,11 +22,15 @@ export const graphqlRequest = async (query: string) => {
       body: JSON.stringify({
         query,
       }),
+      signal: controller.signal,
     });
-
     return await response.json();
-  } catch {
-    throw new Error("network");
+  } catch (error) {
+    if (error.name !== "AbortError") {
+      throw new Error("network");
+    }
+  } finally {
+    AbortControllerManager.completeFetch();
   }
 };
 
