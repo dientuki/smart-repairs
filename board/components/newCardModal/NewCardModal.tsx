@@ -4,9 +4,6 @@ import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";
 import { useBoardStore, useOrderStore, useUserStore } from "@/store";
 import { TabGroup, TabList, TabPanel, TabPanels } from "@headlessui/react";
-import Step1 from "@/components/newCardModal/Step1";
-import Step2 from "@/components/newCardModal/Step2";
-import Step3 from "@/components/newCardModal/Step3";
 import { useModalWindow } from "react-modal-global";
 import { AbortControllerManager } from "@/helper/AbortControllerManager";
 import { InboxIcon } from "@heroicons/react/24/outline";
@@ -14,7 +11,7 @@ import { Icon } from "../Icon";
 import { OrderStatus } from "@/components/viewCardModal";
 import { TypedColumn } from "@/types/enums";
 import Avatar from "react-avatar";
-import { TabListTab } from "./TabListTab";
+import { Step1, TabListTab } from "@/components/newCardModal";
 
 export const NewCardModal = () => {
   const modal = useModalWindow();
@@ -68,12 +65,12 @@ export const NewCardModal = () => {
     >
       {!isLoading && (
         <div className='flex flex-row flex-grow border-t border-gray-200 dark:border-white/10 px-5 py-3 text-base min-h-0'>
-          <div className='basis-3/4 p-2 pr-4 mr-3 flex flex-col gap-6 overflow-y-scroll min-h-full max-h-full'>
+          <div className='basis-3/4 p-2 pr-4 mr-3 flex flex-col overflow-y-scroll min-h-full max-h-full'>
             <TabGroup
               defaultIndex={0}
               selectedIndex={selectedIndex}
               onChange={setSelectedIndex}
-              className='flex flex-col gap-6 min-h-full max-h-full rounded-xl bg-white shadow-sm ring-1 ring-gray-950/5 dark:bg-gray-900 dark:ring-white/10'
+              className='flex flex-col min-h-full max-h-full rounded-xl bg-white shadow-sm ring-1 ring-gray-950/5 dark:bg-gray-900 dark:ring-white/10'
             >
               <TabList className='grid divide-y divide-gray-200 dark:divide-white/5 md:grid-flow-col md:divide-y-0 md:overflow-x-auto border-b border-gray-200 dark:border-white/10'>
                 <TabListTab
@@ -97,10 +94,8 @@ export const NewCardModal = () => {
                 />
               </TabList>
 
-              <TabPanels className='mt-4 fi-fo-wizard-step outline-none fi-active p-6'>
-                <TabPanel unmount={false}>panel 1</TabPanel>
-                <TabPanel unmount={false}>panel 1</TabPanel>
-                <TabPanel unmount={false}>panel 1</TabPanel>
+              <TabPanels className='outline-none p-6'>
+                <Step1 nextStep={nextStep} />
               </TabPanels>
             </TabGroup>
           </div>
