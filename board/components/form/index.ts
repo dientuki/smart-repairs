@@ -1,6 +1,6 @@
 // /stores/index.js
 export { InputField } from "@/components/form/InputField";
-export { default as SimpleAutocomplete } from "@/components/form/SimpleAutocomplete";
+export { SimpleAutocomplete } from "@/components/form/SimpleAutocomplete";
 export { default as ValidatedAutocomplete } from "@/components/form/ValidatedAutocomplete";
 export { ActionButton } from "@/components/form/ActionButton";
 export { CancelButton } from "@/components/form/CancelButton";

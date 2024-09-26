@@ -51,8 +51,6 @@ export const ViewCardModal = () => {
     Modal.open(BudgetModal, { layer: 5, order: order.$id });
   };
 
-  console.log(order);
-
   return (
     <ModalLayout>
       {modal.params.order == order.$id && (
