@@ -48,7 +48,7 @@ export const Comment = ({ comment }: Props) => {
   };
 
   const handleRegistration = async (data: FieldValues) => {
-    //if (isSubmitting || isEqualOrderComment(data, comment)) return;
+    if (isSubmitting) return;
     setIsSubmitting(true);
     try {
       const status = await updateComment(
@@ -144,6 +144,7 @@ export const Comment = ({ comment }: Props) => {
           toggleVisibility={toggleVisibility}
           status={comment.isPublic}
           disabled={!isMyComment}
+          isSubmitting={isSubmitting}
         />
       </div>
       <form
