@@ -7,12 +7,14 @@ interface LockStatusProps {
   toggleVisibility: () => void;
   status: boolean;
   disabled?: boolean;
+  isSubmitting?: boolean;
 }
 
 export const LockStatus = ({
   toggleVisibility,
   status,
   disabled = false,
+  isSubmitting = false,
 }: LockStatusProps) => {
   const { t } = useTranslation();
 
@@ -26,7 +28,7 @@ export const LockStatus = ({
     <div
       className={`flex flex-row items-center gap-1 ${!disabled ? "cursor-pointer" : ""}`}
       onClick={ () => { 
-        if(!disabled ){
+        if(!disabled && !isSubmitting ){
           toggleVisibility(); 
           handleStateChange(!stState);
         } else {
