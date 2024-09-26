@@ -64,3 +64,9 @@ export enum Itemable {
   ServiceJob = "ServiceJob",
   Discount = "Discount",
 }
+
+export enum TabStatusEnum {
+  Active = 'active',
+  Inactive = 'inactive',
+  Completed = 'completed'
+}

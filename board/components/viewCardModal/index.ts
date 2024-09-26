@@ -7,3 +7,4 @@ export { Description } from "./Description";
 export { ChecklistDisplay } from "./ChecklistDisplay";
 export { Diagnosis } from "./Diagnosis";
 export { Details } from "./Details";
+export { OrderStatus } from "./OrderStatus"

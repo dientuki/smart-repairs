@@ -11,14 +11,13 @@ import {
   DevicePhoneMobileIcon,
   HashtagIcon,
 } from "@heroicons/react/24/outline";
-import { dynamicStyles } from "@/helper/componentsHelpers";
-import { StyleColor } from "@/types/enums";
 import {
   Comments,
   Description,
   Details,
   ChecklistDisplay,
   Diagnosis,
+  OrderStatus,
 } from "@/components/viewCardModal";
 import { AbortControllerManager } from "@/helper/AbortControllerManager";
 
@@ -36,8 +35,7 @@ export const ViewCardModal = () => {
       toast.error(t(`toast.error.${e.message}`));
     });
     return () => {
-      console.log('view card order');
-      AbortControllerManager.abort(); // Abortar cuando el componente se desmonte
+      AbortControllerManager.abort();
     };
   }, [getOrder]);
 
@@ -84,12 +82,8 @@ export const ViewCardModal = () => {
             </div>
 
             <div className='basis-1/4 flex flex-col gap-4 overflow-y-scroll min-h-full max-h-full pr-2 pl-1'>
-              <div
-                style={dynamicStyles(StyleColor.Info)}
-                className='text-center justify-center gap-x-1 rounded-md text-base font-medium ring-1 ring-inset px-2  py-1 bg-custom-50 text-custom-600 ring-custom-600/10 dark:bg-custom-400/10 dark:text-custom-400 dark:ring-custom-400/30'
-              >
-                {t(`status.${order.status}`)}
-              </div>
+
+              <OrderStatus status={t(`status.${order.status}`)} />
               <Details />
               <ChecklistDisplay
                 title={t("order.damages")}
