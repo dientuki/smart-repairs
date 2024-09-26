@@ -96,8 +96,10 @@ export const BudgetModal = ({ order }: BudgetModalProps) => {
             budget={budget}
             description={description}
           />
-          <div className="mt-4 w-full flex justify-end">
-            <ActionButton type={ButtonType.Submit}>{t(`budget.button.${budget ? 'edit' : 'add'}`)}</ActionButton>
+          <div className='mt-4 w-full flex justify-end'>
+            <ActionButton type={ButtonType.Submit}>
+              {t(`budget.button.${budget ? "edit" : "add"}`)}
+            </ActionButton>
           </div>
         </form>
       )}
