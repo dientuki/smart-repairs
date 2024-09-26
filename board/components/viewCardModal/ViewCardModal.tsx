@@ -20,6 +20,7 @@ import {
   ChecklistDisplay,
   Diagnosis,
 } from "@/components/viewCardModal";
+import { AbortControllerManager } from "@/helper/AbortControllerManager";
 
 type ModalParams = {
   order: string;
@@ -34,6 +35,10 @@ export const ViewCardModal = () => {
     getOrder(modal.params.order).catch((e: any) => {
       toast.error(t(`toast.error.${e.message}`));
     });
+    return () => {
+      console.log('view card order');
+      AbortControllerManager.abort(); // Abortar cuando el componente se desmonte
+    };
   }, [getOrder]);
 
   const handleUpdateDeviceUnit = () => {
