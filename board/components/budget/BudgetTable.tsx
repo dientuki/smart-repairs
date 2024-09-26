@@ -175,11 +175,11 @@ export const BudgetTable = ({
     },
     {
       header: capitalizeFirstLetter(t("budget.unit_price")),
-      className: "w-40 text-center",
+      className: "w-44 text-center",
     },
     {
       header: capitalizeFirstLetter(t("budget.total_price")),
-      className: "w-40 text-center",
+      className: "w-48 text-center",
     },
   ];
 
@@ -195,7 +195,7 @@ export const BudgetTable = ({
     className: "w-20",
   });
 
-  const updateDescription = (rowIndex: number, itemable: any) => {
+  const updateDescription = (rowIndex: number, itemable: OptionType[]) => {
     setData((old) =>
       old.map((row, index) => {
         if (index === rowIndex) {
@@ -353,7 +353,11 @@ export const BudgetTable = ({
                   className='text-right'
                 />
               </td>
-              <td className='px-3 py-4'>sum</td>
+
+              { user?.package !== PackageType.Basic &&
+                <td className='px-3 py-4'>sum</td>
+              }
+
               <td className='px-3 py-4'>
                 {data.length === 1 ? (
                   <CancelButton customClass='w-full'>

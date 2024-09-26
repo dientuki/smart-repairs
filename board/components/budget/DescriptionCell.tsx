@@ -1,5 +1,4 @@
 import { Autocomplete, TextField } from "@mui/material";
-import { useEffect, useState } from "react";
 import {
   Control,
   Controller,
@@ -9,7 +8,6 @@ import {
 } from "react-hook-form";
 import { FakeInput } from "@/components/form";
 import { t } from "i18next";
-import { BudgetColumns, Itemable } from "@/types/enums";
 
 interface DescriptionCellProps {
   control: Control<FieldValues>;

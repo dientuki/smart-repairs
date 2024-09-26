@@ -55,7 +55,7 @@ declare global {
     discounts: OptionType[];
     services: OptionType[];
     parts: OptionType[];
-    budget: Budget | null;
+    budget: ViewBudget | null;
   }
 }
 
