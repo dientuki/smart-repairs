@@ -25,7 +25,6 @@ interface InputFieldProps {
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
   onBlur?: (event: React.FocusEvent<HTMLInputElement>) => void;
   type?: InputType;
-  forceValue?: string;
 }
 
 const getNestedError = (
@@ -81,7 +80,6 @@ export const InputField = ({
   onClick,
   onChange,
   type = InputType.Text,
-  forceValue,
   onBlur,
 }: InputFieldProps) => {
   // Detectar si el name contiene una estructura anidada (usando un punto)
