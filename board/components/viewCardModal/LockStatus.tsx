@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState } from "react";
 import { LockClosedIcon, LockOpenIcon } from "@heroicons/react/24/outline";
 import { useTranslation } from "react-i18next";
 import { Icon } from "@/components/Icon";
@@ -25,21 +25,25 @@ export const LockStatus = ({
   return (
     <div
       className={`flex flex-row items-center gap-1 ${!disabled ? "cursor-pointer" : ""}`}
-      onClick={ () => { 
-        if(!disabled ){
-          toggleVisibility(); 
+      onClick={() => {
+        if (!disabled) {
+          toggleVisibility();
           handleStateChange(!stState);
         } else {
-          undefined
+          undefined;
         }
-      }
-    }
+      }}
     >
       <>
-        <Icon icon= {stState ? LockOpenIcon : LockClosedIcon} size={4} 
-            data-testid = { stState ? 'lock-open-icon' : 'lock-closed-icon' }
-          />
-        <span className='ml-1 first-letter:uppercase'> { stState? t("public") : t("private")}</span>
+        <Icon
+          icon={stState ? LockOpenIcon : LockClosedIcon}
+          size={4}
+          data-testid={stState ? "lock-open-icon" : "lock-closed-icon"}
+        />
+        <span className='ml-1 first-letter:uppercase'>
+          {" "}
+          {stState ? t("public") : t("private")}
+        </span>
       </>
     </div>
   );
