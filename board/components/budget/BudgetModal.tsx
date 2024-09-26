@@ -20,8 +20,8 @@ export const BudgetModal = ({ order }: BudgetModalProps) => {
   const modal = useModalWindow();
   const { initialValues, updateBudget } = useBudgetStore();
   const [isLoading, setIsLoading] = useState(true);
-  const [budget, setBudget] = useState();
-  const [description, setDescription] = useState();
+  const [budget, setBudget] = useState<ViewBudget>();
+  const [description, setDescription] = useState<OptionType[]>([]);
   const {
     handleSubmit,
     control,
@@ -35,7 +35,6 @@ export const BudgetModal = ({ order }: BudgetModalProps) => {
       try {
         const result = await initialValues(order);
         if (isMounted) {
-          console.log(result);
           setBudget(result.budget);
           setDescription(result.description);
         }
@@ -58,15 +57,12 @@ export const BudgetModal = ({ order }: BudgetModalProps) => {
   }, []);
 
   const handleRegistration = async (data: FieldValues) => {
-    //console.log("data", data);
-    //return;
     try {
       await updateBudget(order, data);
       toast.success(t(`toast.success.form`));
       modal.close();
     } catch (error) {
       if (error instanceof GraphQLBusinessError) {
-        console.log("error graphql");
         toast.error(t(error.i18nKey));
       }
     }

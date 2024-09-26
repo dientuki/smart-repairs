@@ -1,5 +1,4 @@
 import { Autocomplete, TextField } from "@mui/material";
-import { useEffect, useState } from "react";
 import {
   Control,
   Controller,
@@ -9,7 +8,6 @@ import {
 } from "react-hook-form";
 import { FakeInput } from "@/components/form";
 import { t } from "i18next";
-import { BudgetColumns, Itemable } from "@/types/enums";
 
 interface DescriptionCellProps {
   control: Control<FieldValues>;
@@ -46,10 +44,10 @@ export const DescriptionCell = ({
 
   return (
     <div className='flex flex-row items-center gap-3'>
-      <div className='w-1/6'>
+      <div className='w-32'>
         <FakeInput value={type} />
       </div>
-      <div className='w-5/6'>
+      <div className='w-full rounded-lg shadow-sm ring-1 transition duration-75 bg-white dark:bg-white/5 [&:not(:has(.fi-ac-action:focus))]:focus-within:ring-2 ring-gray-950/10 dark:ring-white/20 [&:not(:has(.fi-ac-action:focus))]:focus-within:ring-primary-600 dark:[&:not(:has(.fi-ac-action:focus))]:focus-within:ring-primary-500 '>
         <Controller
           name={`items.${index}.itemable`}
           control={control}
@@ -70,20 +68,17 @@ export const DescriptionCell = ({
               groupBy={(option) => option.info.item_type}
               getOptionLabel={(option) => option.label}
               renderGroup={(params) => (
-                <li key={params.key}>
-                  <div className='sticky -top-2 p-[4px_10px] bg-white'>
+                <li
+                  key={params.key}
+                  className='text-gray-950 dark:text-white dark:bg-gray-900'
+                >
+                  <div className='sticky -top-2 py-1 px-2 text-lg font-semibold border-b border-black shadow-md dark:border-gray-600 dark:shadow-lg dark:bg-gray-900'>
                     {getType(params.group)}
                   </div>
                   <ul>{params.children}</ul>
                 </li>
               )}
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  size='small'
-                  className={`bg-gray-50 border border-gray-300 text-gray-900 text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5`}
-                />
-              )}
+              renderInput={(params) => <TextField {...params} size='small' />}
             />
           )}
         />

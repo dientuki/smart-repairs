@@ -2,6 +2,11 @@ import { create } from "zustand";
 import { useServiceJobStore, useUserStore } from "@/store";
 import { getInitialValues, updateBudget } from "@/services/budget";
 import { clearState } from "@/helper/storeHelpers";
+import {
+  getCurrency,
+  getType,
+  isQuantityDisabled,
+} from "@/helper/budgetHelpers";
 
 interface BudgetStore {
   parts: OptionType[];
@@ -9,7 +14,7 @@ interface BudgetStore {
   clear: (keys: string | string[]) => void;
   initialValues: (
     orderId?: string,
-  ) => Promise<{ description: any[]; budget: any }>;
+  ) => Promise<{ description: OptionType[]; budget: ViewBudget | undefined }>;
   updateBudget: (orderId: string, data: any) => Promise<boolean>;
 }
 
@@ -26,26 +31,56 @@ export const useBudgetStore = create<BudgetStore>((set) => ({
 
   initialValues: async (
     orderId?: string,
-  ): Promise<{ description: any[]; budget: any }> => {
+  ): Promise<{ description: OptionType[]; budget: ViewBudget | undefined }> => {
     const { user } = useUserStore.getState();
 
-    const { discounts, services, parts, budget } = await getInitialValues(
-      user.package,
-      orderId,
-    );
+    const {
+      discounts,
+      services,
+      parts,
+      budget: dbBudget,
+    } = await getInitialValues(user.package, orderId);
+    const description: OptionType[] = [...services, ...discounts, ...parts];
 
-    if (budget.length === 1) {
-      console.log(budget[0]);
+    let viewBudget: ViewBudget | undefined = undefined;
+    if (dbBudget) {
+      const items = dbBudget.items.reduce((acc: ViewItem[], item: DBItem) => {
+        const itemable = description.find(
+          (desc) => desc.id === item.itemable_id,
+        );
+
+        if (itemable) {
+          acc.push({
+            id: item.id,
+            quantity: item.quantity,
+            unitPrice: item.unit_price,
+            totalPrice: item.item_total,
+            includeInSum: item.include_in_sum,
+            qdisabled: isQuantityDisabled(itemable.info.item_type),
+            type: getType(itemable.info.item_type),
+            currency: getCurrency(itemable.info, user.currency),
+            itemable: itemable, // Mapeamos el itemable
+          });
+        }
+
+        return acc;
+      }, []);
+
+      viewBudget = {
+        id: dbBudget.id,
+        subtotal: dbBudget.subtotal,
+        discount: dbBudget.discount,
+        items: items, // Asignamos los items convertidos
+      };
     }
 
     return {
-      description: [...services, ...discounts, ...parts],
-      budget: budget.length ? budget[0] : null,
+      description: description,
+      budget: viewBudget,
     };
   },
 
   updateBudget: async (orderId: string, budgetItems: any): Promise<boolean> => {
-    console.log("budgetItems", budgetItems);
     const normalizedItems = budgetItems.items.reduce((acc, item) => {
       acc.push({
         id: item.id,

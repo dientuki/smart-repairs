@@ -1,7 +1,7 @@
 union UpdateBudgetResult = UpdateBudgetPayload | ErrorPayload
 
 extend type Query {
-    budget(orderId: ID): [Budget]
+    budget(orderId: ID): Budget
         @field(resolver: "BudgetQueries@getBudget")
         @namespace(field: "App\\GraphQL\\Queries")
 }

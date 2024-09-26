@@ -75,6 +75,30 @@ input[type="number"] {
   padding-right: 10px; /* Ajusta el valor según sea necesario */
 }
 
+.MuiFormControl-root input,
+.MuiFormControl-root input:focus {
+  outline: none;
+  box-shadow: none;
+  border-color: transparent;
+}
+
+.dark .MuiFormControl-root input,
+.dark .MuiFormControl-root input:focus,
+.dark .MuiFormControl-root svg {
+  color: #ffffff
+}
+
+.dark .MuiAutocomplete-popper [role="listbox"]{
+  background: #111827;
+}
+
+.dark .MuiAutocomplete-popper [role="listbox"] .Mui-focused {
+  background: #9ec8fb;
+  color: #3b3b3b;
+}
+
+
+
 /*
 textarea {
   field-sizing: content;

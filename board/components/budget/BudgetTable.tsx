@@ -11,7 +11,6 @@ import {
   CancelButton,
   FakeInput,
   InputField,
-  HiddenInput,
 } from "@/components/form";
 import { Icon } from "@/components/Icon";
 import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
@@ -21,40 +20,24 @@ import {
   FieldErrors,
   FieldValues,
   useFieldArray,
-  useForm,
 } from "react-hook-form";
 import { useEffect, useState } from "react";
 import { useUserStore } from "@/store";
 import { capitalizeFirstLetter } from "@/helper/stringHelpers";
 import { DescriptionCell } from "./DescriptionCell";
 import { BudgetResume } from "./BudgetResume";
-
-interface Item {
-  id: string;
-  itemable: { [key: string]: { [key: string]: string } | string } | string;
-  quantity: number;
-  unitPrice: number;
-  totalPrice: number;
-  includeInSum: boolean;
-  qdisabled: boolean;
-  type: string;
-}
-
-const newItem: Item = {
-  id: "",
-  itemable: "",
-  quantity: 1,
-  unitPrice: 0,
-  totalPrice: 0,
-  qdisabled: false,
-  includeInSum: true,
-};
+import {
+  getCurrency,
+  getQuantity,
+  getType,
+  isQuantityDisabled,
+} from "@/helper/budgetHelpers";
 
 type TableProps = {
   control: Control<FieldValues>;
   errors?: FieldErrors<FieldValues>;
-  budget?: any;
-  description: any;
+  budget?: ViewBudget;
+  description: OptionType[];
 };
 
 const registerOptions = {
@@ -83,20 +66,19 @@ export const BudgetTable = ({
   budget,
   description,
 }: TableProps) => {
-  const [data, setData] = useState<Item[]>([]);
+  const [data, setData] = useState<ViewItem[]>([]);
   const { user } = useUserStore();
   const { fields, append, update, remove } = useFieldArray({
     control,
     name: "items",
   });
-  const { getValues, register, setValue } = useForm();
   const [badgetResumeData, setBudgetResumeData] = useState<BudgetResumeData>({
     subtotal: 0,
     discount: 0,
     total: 0,
   });
 
-  const defaultData: Item[] = [
+  const defaultData: ViewItem[] = [
     {
       id: "",
       itemable: "",
@@ -106,16 +88,13 @@ export const BudgetTable = ({
       includeInSum: true,
       qdisabled: false,
       type: "",
-      currency: user?.currency,
+      currency: user.currency,
     },
   ];
 
   useEffect(() => {
-    //setData(budget || [...defaultData]);
-    //console.log("budget", budget.items);
-    //console.log("defaultData", defaultData);
-    append(defaultData);
-    setData([...defaultData]);
+    append(budget?.items || defaultData);
+    setData(budget?.items || [...defaultData]);
   }, []);
 
   useEffect(() => {
@@ -192,15 +171,15 @@ export const BudgetTable = ({
     },
     {
       header: capitalizeFirstLetter(t("budget.quantity")),
-      className: "w-20 text-center",
+      className: "w-28 text-center",
     },
     {
       header: capitalizeFirstLetter(t("budget.unit_price")),
-      className: "w-40 text-center",
+      className: "w-44 text-center",
     },
     {
       header: capitalizeFirstLetter(t("budget.total_price")),
-      className: "w-40 text-center",
+      className: "w-48 text-center",
     },
   ];
 
@@ -216,51 +195,18 @@ export const BudgetTable = ({
     className: "w-20",
   });
 
-  const updateItem = (rowIndex: number, itemable: any) => {
-    setData((old) =>
-      old.map((row, index) => {
-        if (index === rowIndex) {
-          return {
-            ...row,
-            itemable,
-          };
-        }
-        return row;
-      }),
-    );
-    //setTimeout(() => refreshRow(rowIndex), 100); // refreshRow(rowIndex);
-  };
-
-  const getType = (str: string) => {
-    const tmp = str.split("\\");
-    return t(`budget.type.${tmp[tmp.length - 1].toLowerCase()}`);
-  };
-
-  const updateDescription = (rowIndex: number, itemable: any) => {
+  const updateDescription = (rowIndex: number, itemable: OptionType[]) => {
     setData((old) =>
       old.map((row, index) => {
         if (index === rowIndex) {
           const newRow = row;
           newRow.itemable = itemable;
-          newRow.quantity =
-            itemable.info.item_type.indexOf(Itemable.Part) === -1
-              ? 1
-              : row.quantity;
+          newRow.quantity = getQuantity(itemable.info.item_type, row.quantity);
           newRow.unitPrice = parseFloat(itemable.info.price);
-          newRow.qdisabled =
-            itemable.info.item_type.indexOf(Itemable.Part) === -1
-              ? true
-              : false;
-          newRow.currency = user?.currency;
+          newRow.qdisabled = isQuantityDisabled(itemable.info.item_type);
+          newRow.currency = getCurrency(itemable.info, user.currency);
           newRow.totalPrice = newRow.quantity * newRow.unitPrice;
           newRow.type = getType(itemable.info.item_type);
-
-          if (itemable.info.item_type.indexOf(Itemable.Discount) !== -1) {
-            if (itemable.info.type.indexOf(DiscountType.Percentage) !== -1) {
-              newRow.currency = "%";
-              newRow.totalPrice = row.totalPrice;
-            }
-          }
 
           update(index, {
             ...newRow,
@@ -274,16 +220,9 @@ export const BudgetTable = ({
     );
   };
 
-  const refreshRow = (rowIndex: number) => {
-    console.log("blue");
-    update(rowIndex, {
-      ...data[rowIndex],
-    });
-  };
-
   const removeRow = (rowIndex: number) => {
-    const setFilterFunc = (old: Item[]) =>
-      old.filter((_row: Item, index: number) => index !== rowIndex);
+    const setFilterFunc = (old: ViewItem[]) =>
+      old.filter((_row: ViewItem, index: number) => index !== rowIndex);
 
     setData(setFilterFunc);
     remove(rowIndex);
@@ -325,11 +264,13 @@ export const BudgetTable = ({
     setData((old) =>
       old.map((row, index) => {
         if (index === rowIndex) {
-          const newRow = defaultData;
-          newRow.includeInSum = row.includeInSum;
+          const newRow: ViewItem = {
+            ...defaultData[0],
+            includeInSum: row.includeInSum,
+          };
 
           update(index, newRow);
-          return newRow; // Retorna newRow directamente, no { newRow }
+          return newRow;
         }
         return row;
       }),
@@ -351,7 +292,7 @@ export const BudgetTable = ({
         <tbody className='divide-y divide-gray-200 whitespace-nowrap dark:divide-white/5'>
           {fields.map((field, index) => (
             <tr key={field.id}>
-              <td>
+              <td className='px-3 py-4'>
                 <DescriptionCell
                   control={control}
                   errors={errors}
@@ -359,11 +300,11 @@ export const BudgetTable = ({
                   index={index}
                   options={description}
                   updateDescription={updateDescription}
-                  type={data[index].type}
+                  type={t(data[index].type)}
                   resetRow={resetRow}
                 />
               </td>
-              <td>
+              <td className='px-3 py-4'>
                 <InputField
                   name={`items.${index}.quantity`}
                   label={t("budget.quantity")}
@@ -384,7 +325,7 @@ export const BudgetTable = ({
                   }}
                 />
               </td>
-              <td>
+              <td className='px-3 py-4'>
                 <InputField
                   name={`items.${index}.unitPrice`}
                   label={t("budget.unitPrice")}
@@ -405,15 +346,19 @@ export const BudgetTable = ({
                   }}
                 />
               </td>
-              <td>
+              <td className='px-3 py-4'>
                 <FakeInput
                   value={data[index].totalPrice}
                   icon={user?.currency}
                   className='text-right'
                 />
               </td>
-              <td>sum</td>
-              <td>
+
+              { user?.package !== PackageType.Basic &&
+                <td className='px-3 py-4'>sum</td>
+              }
+
+              <td className='px-3 py-4'>
                 {data.length === 1 ? (
                   <CancelButton customClass='w-full'>
                     {t("button.delete")} {t("budget.item")}
@@ -452,7 +397,7 @@ export const BudgetTable = ({
             <td className='p-2'>
               <ActionButton
                 onClick={() => {
-                  setData((old: Item[]) => [...old, ...defaultData]);
+                  setData((old: ViewItem[]) => [...old, ...defaultData]);
                   append(defaultData);
                 }}
                 style={StyleColor.Primary}
