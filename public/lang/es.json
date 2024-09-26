@@ -16,6 +16,10 @@
             "discount": "Descuento",
             "servicejob": "Servicio",
             "part": "Parte"
+        },
+        "button": {
+            "add": "Presupuestar",
+            "edit": "Editar presupuesto"
         }
     },
 
@@ -27,7 +31,6 @@
         "save": "Guardar",
         "update": "Actualizar",
         "validate": "Validar",
-        "quote": "Presupuestar",
         "edit": "Editar",
         "delete": "Eliminar",
         "add": "Añadir"

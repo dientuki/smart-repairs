@@ -142,7 +142,9 @@ export const BudgetTable = ({
           item.itemable.info.type === DiscountType.Percentage,
       )
       .forEach((item) => {
-        const discountPercentageValue = (subTotal * item.unitPrice) / 100;
+        const discountPercentageValue = Math.floor(
+          (subTotal * item.unitPrice) / 100,
+        );
         discountPercentageTotal += discountPercentageValue;
 
         // Actualiza directamente en `data`
@@ -195,7 +197,7 @@ export const BudgetTable = ({
     className: "w-20",
   });
 
-  const updateDescription = (rowIndex: number, itemable: OptionType[]) => {
+  const updateDescription = (rowIndex: number, itemable: OptionType) => {
     setData((old) =>
       old.map((row, index) => {
         if (index === rowIndex) {
@@ -277,6 +279,18 @@ export const BudgetTable = ({
     );
   };
 
+  const onChangeDescription = (
+    newValue: OptionType | null,
+    reason: string,
+    index: number,
+  ) => {
+    if (reason === "clear" || newValue === null) {
+      resetRow(index);
+    } else {
+      updateDescription(index, newValue);
+    }
+  };
+
   return (
     <div className='divide-y divide-gray-200 overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-gray-950/5 dark:divide-white/10 dark:bg-gray-900 dark:ring-white/10'>
       <table className='w-full table-auto divide-y divide-gray-200 text-start dark:divide-white/5'>
@@ -299,9 +313,8 @@ export const BudgetTable = ({
                   rules={registerOptions.itemable}
                   index={index}
                   options={description}
-                  updateDescription={updateDescription}
+                  onChange={onChangeDescription}
                   type={t(data[index].type)}
-                  resetRow={resetRow}
                 />
               </td>
               <td className='px-3 py-4'>
@@ -354,20 +367,20 @@ export const BudgetTable = ({
                 />
               </td>
 
-              { user?.package !== PackageType.Basic &&
+              {user?.package !== PackageType.Basic && (
                 <td className='px-3 py-4'>sum</td>
-              }
+              )}
 
               <td className='px-3 py-4'>
                 {data.length === 1 ? (
-                  <CancelButton customClass='w-full'>
+                  <CancelButton className='w-full'>
                     {t("button.delete")} {t("budget.item")}
                   </CancelButton>
                 ) : (
                   <ActionButton
                     onClick={() => removeRow(index)}
                     style={StyleColor.Danger}
-                    customClass='w-full'
+                    className='w-full'
                   >
                     {t("button.delete")} {t("budget.item")}
                   </ActionButton>
@@ -379,7 +392,7 @@ export const BudgetTable = ({
             <td colSpan={header.length - 1} align='right' className='p-2'>
               {user?.package !== PackageType.Basic && (
                 <ActionButton
-                  customClass='w-auto'
+                  className='w-auto'
                   style={StyleColor.Warning}
                   onClick={() => {
                     console.log("38");
@@ -401,7 +414,7 @@ export const BudgetTable = ({
                   append(defaultData);
                 }}
                 style={StyleColor.Primary}
-                customClass='w-full'
+                className='w-full'
                 disabled={
                   data.filter((item) => item.itemable === "").length > 0
                     ? true

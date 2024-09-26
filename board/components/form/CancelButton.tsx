@@ -4,14 +4,14 @@ import { combineClasses } from "@/helper/componentsHelpers";
 import { ButtonType } from "@/types/enums";
 
 interface CancelButtonProps {
-  customClass?: string; // Can contain multiple classes separated by spaces
+  className?: string; // Can contain multiple classes separated by spaces
   children: React.ReactNode; // The content of the button
   onClick?: () => void; // Function to execute on click
   type?: ButtonType; // Button type
 }
 
 export const CancelButton = ({
-  customClass = "w-1/4",
+  className = "w-1/4",
   children,
   onClick,
   type = ButtonType.Button,
@@ -22,7 +22,7 @@ export const CancelButton = ({
   return (
     <Button
       as='button'
-      className={combineClasses(defaultClasses, customClass)}
+      className={combineClasses(defaultClasses, className)}
       onClick={onClick}
       disabled={!onClick}
       type={type}

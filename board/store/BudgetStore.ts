@@ -1,34 +1,21 @@
 import { create } from "zustand";
-import { useServiceJobStore, useUserStore } from "@/store";
+import { useUserStore } from "@/store";
 import { getInitialValues, updateBudget } from "@/services/budget";
-import { clearState } from "@/helper/storeHelpers";
 import {
   getCurrency,
   getType,
   isQuantityDisabled,
 } from "@/helper/budgetHelpers";
+import { FieldValues } from "react-hook-form";
 
 interface BudgetStore {
-  parts: OptionType[];
-  budget: any;
-  clear: (keys: string | string[]) => void;
   initialValues: (
     orderId?: string,
   ) => Promise<{ description: OptionType[]; budget: ViewBudget | undefined }>;
-  updateBudget: (orderId: string, data: any) => Promise<boolean>;
+  updateBudget: (orderId: string, data: FieldValues) => Promise<boolean>;
 }
 
-const defaultState = {
-  parts: [] as OptionType[],
-  budget: {} as any,
-};
-
-export const useBudgetStore = create<BudgetStore>((set) => ({
-  parts: [],
-  budget: {},
-
-  clear: (keys: string | string[]) => clearState(keys, defaultState, set),
-
+export const useBudgetStore = create<BudgetStore>(() => ({
   initialValues: async (
     orderId?: string,
   ): Promise<{ description: OptionType[]; budget: ViewBudget | undefined }> => {
@@ -44,27 +31,30 @@ export const useBudgetStore = create<BudgetStore>((set) => ({
 
     let viewBudget: ViewBudget | undefined = undefined;
     if (dbBudget) {
-      const items = dbBudget.items.reduce((acc: ViewItem[], item: DBItem) => {
-        const itemable = description.find(
-          (desc) => desc.id === item.itemable_id,
-        );
+      const items: ViewItem[] = dbBudget.items.reduce(
+        (acc: ViewItem[], item: DBItem) => {
+          const itemable: OptionType | undefined = description.find(
+            (desc) => desc.id === item.itemable_id,
+          );
 
-        if (itemable) {
-          acc.push({
-            id: item.id,
-            quantity: item.quantity,
-            unitPrice: item.unit_price,
-            totalPrice: item.item_total,
-            includeInSum: item.include_in_sum,
-            qdisabled: isQuantityDisabled(itemable.info.item_type),
-            type: getType(itemable.info.item_type),
-            currency: getCurrency(itemable.info, user.currency),
-            itemable: itemable, // Mapeamos el itemable
-          });
-        }
+          if (itemable && itemable.info) {
+            acc.push({
+              id: item.id,
+              quantity: item.quantity,
+              unitPrice: item.unit_price,
+              totalPrice: item.item_total,
+              includeInSum: item.include_in_sum,
+              qdisabled: isQuantityDisabled(itemable.info.item_type),
+              type: getType(itemable.info.item_type),
+              currency: getCurrency(itemable.info, user.currency),
+              itemable: itemable as OptionType,
+            });
+          }
 
-        return acc;
-      }, []);
+          return acc;
+        },
+        [],
+      );
 
       viewBudget = {
         id: dbBudget.id,
@@ -80,18 +70,30 @@ export const useBudgetStore = create<BudgetStore>((set) => ({
     };
   },
 
-  updateBudget: async (orderId: string, budgetItems: any): Promise<boolean> => {
-    const normalizedItems = budgetItems.items.reduce((acc, item) => {
-      acc.push({
-        id: item.id,
-        itemableId: item.itemable.id,
-        itemableType: item.itemable.info.item_type,
-        quantity: parseInt(item.quantity, 10),
-        unitPrice: parseFloat(item.unitPrice),
-        includeInSum: item.includeInSum,
-      });
-      return acc;
-    }, []);
+  updateBudget: async (
+    orderId: string,
+    data: FieldValues,
+  ): Promise<boolean> => {
+    const normalizedItems: ItemToDB[] = data.items.reduce(
+      (acc: ItemToDB[], item: ViewItem) => {
+        acc.push({
+          id: item.id,
+          itemableId: item.itemable.id,
+          itemableType: item.itemable.info.item_type,
+          quantity:
+            typeof item.quantity === "number"
+              ? item.quantity
+              : parseInt(item.quantity, 10),
+          unitPrice:
+            typeof item.unitPrice === "number"
+              ? item.unitPrice
+              : parseFloat(item.unitPrice),
+          includeInSum: item.includeInSum,
+        });
+        return acc;
+      },
+      [],
+    );
 
     const $status = await updateBudget(orderId, normalizedItems);
     return $status;

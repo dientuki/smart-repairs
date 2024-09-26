@@ -15,12 +15,19 @@ declare global {
   }
 
   interface ViewItem extends ItemBase {
-    itemable: OptionType[] | string;
+    itemable: OptionType | string;
     unitPrice: number;
     totalPrice: number;
     qdisabled: boolean;
     type: string;
     currency: string;
+    includeInSum: boolean;
+  }
+
+  interface ItemToDB extends ItemBase {
+    itemableId: string;
+    itemableType: string;
+    unitPrice: number;
     includeInSum: boolean;
   }
 

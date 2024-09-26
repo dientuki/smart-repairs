@@ -88,7 +88,7 @@ export const getInitialValues = async (
 
 export const updateBudget = async (
   orderId: string,
-  budgetItems: any,
+  budgetItems: ItemToDB[],
 ): Promise<boolean> => {
   const response = await graphqlRequest(`
     mutation {

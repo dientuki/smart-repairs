@@ -48,6 +48,8 @@ export const ViewCardModal = () => {
     Modal.open(BudgetModal, { layer: 5, order: order.$id });
   };
 
+  console.log(order);
+
   return (
     <ModalLayout>
       {modal.params.order == order.$id && (
@@ -96,19 +98,16 @@ export const ViewCardModal = () => {
                 extraDetails={order.orderCheck.featuresDescription}
                 error={t("order.damages_empty")}
               />
-              <ActionButton
-                onClick={handleUpdateDeviceUnit}
-                customClass='w-full'
-              >
+              <ActionButton onClick={handleUpdateDeviceUnit} className='w-full'>
                 {order.deviceUnitId ? t("button.update") : t("button.validate")}{" "}
                 {t("device")}
               </ActionButton>
               <ActionButton
-                customClass='w-full'
+                className='w-full'
                 disabled={order.deviceUnitId == null && !order.hasBudget}
                 onClick={handleBudgetModal}
               >
-                {t("button.quote")}
+                {t(`budget.button.${order.hasBudget ? "edit" : "add"}`)}
               </ActionButton>
             </div>
           </div>

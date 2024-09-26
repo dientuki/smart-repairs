@@ -73,8 +73,6 @@ export const BudgetModal = ({ order }: BudgetModalProps) => {
     console.log("error", errors);
   };
 
-  modal.on("close", () => {});
-
   return (
     <ModalLayout
       minHeight='460px'
@@ -97,8 +95,11 @@ export const BudgetModal = ({ order }: BudgetModalProps) => {
             budget={budget}
             description={description}
           />
-
-          <ActionButton type={ButtonType.Submit}>Submit</ActionButton>
+          <div className='mt-4 w-full flex justify-end'>
+            <ActionButton type={ButtonType.Submit}>
+              {t(`budget.button.${budget ? "edit" : "add"}`)}
+            </ActionButton>
+          </div>
         </form>
       )}
     </ModalLayout>
