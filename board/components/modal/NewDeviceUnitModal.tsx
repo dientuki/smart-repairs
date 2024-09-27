@@ -2,8 +2,8 @@ import { useModalWindow } from "react-modal-global";
 import { ModalLayout } from "@/components/modal";
 import { useTranslation } from "react-i18next";
 import { useForm, FieldValues } from "react-hook-form";
-import { useEffect, useState } from "react";
-import ValidatedAutocomplete from "../form/ValidatedAutocomplete";
+import { useEffect } from "react";
+import { ValidatedAutocomplete } from "@/components/form";
 import { useDeviceStore } from "@/store/DeviceStore";
 
 type ModalParams = {

@@ -1,4 +1,4 @@
-import { createFilterOptions } from "@mui/material";
+import { createFilterOptions, FilterOptionsState } from "@mui/material";
 import { TabPanel } from "@headlessui/react";
 import { useForm, FieldValues, FieldErrors } from "react-hook-form";
 import { EnvelopeIcon, PhoneIcon } from "@heroicons/react/16/solid";
@@ -50,7 +50,7 @@ export const Step1 = ({ nextStep }: Step1Props) => {
         case OperationStatus.NO_CHANGE:
           break;
       }
-      nextStep();
+      //nextStep();
     } catch (e: any) {
       const toValidate = ["firstname", "lastname", "phone", "email"];
       switch (e.constructor.name) {
@@ -142,7 +142,10 @@ export const Step1 = ({ nextStep }: Step1Props) => {
     }
   };
 
-  const customerFilterOptions = (options: any, params: any) => {
+  const customerFilterOptions = (
+    options: OptionType[],
+    params: FilterOptionsState<OptionType>,
+  ) => {
     const filtered = filter(options, params);
 
     if (params.inputValue !== "") {

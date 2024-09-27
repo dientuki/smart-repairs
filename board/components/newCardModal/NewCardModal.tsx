@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";
 import { useBoardStore, useOrderStore, useUserStore } from "@/store";
-import { TabGroup, TabList, TabPanel, TabPanels } from "@headlessui/react";
+import { TabGroup, TabList, TabPanels } from "@headlessui/react";
 import { useModalWindow } from "react-modal-global";
 import { AbortControllerManager } from "@/helper/AbortControllerManager";
 import { InboxIcon } from "@heroicons/react/24/outline";
@@ -11,7 +11,7 @@ import { Icon } from "../Icon";
 import { OrderStatus } from "@/components/viewCardModal";
 import { TypedColumn } from "@/types/enums";
 import Avatar from "react-avatar";
-import { Step1, TabListTab } from "@/components/newCardModal";
+import { Step1, Step2, Step3, TabListTab } from "@/components/newCardModal";
 
 export const NewCardModal = () => {
   const modal = useModalWindow();
@@ -37,6 +37,10 @@ export const NewCardModal = () => {
       AbortControllerManager.abort();
     };
   }, []);
+
+  useEffect(() => {
+    console.log(selectedIndex);
+  }, [selectedIndex]);
 
   const saveOrder = async () => {
     await createOrder();
@@ -69,7 +73,6 @@ export const NewCardModal = () => {
             <TabGroup
               defaultIndex={0}
               selectedIndex={selectedIndex}
-              onChange={setSelectedIndex}
               className='flex flex-col min-h-full max-h-full rounded-xl bg-white shadow-sm ring-1 ring-gray-950/5 dark:bg-gray-900 dark:ring-white/10'
             >
               <TabList className='grid divide-y divide-gray-200 dark:divide-white/5 md:grid-flow-col md:divide-y-0 md:overflow-x-auto border-b border-gray-200 dark:border-white/10'>
@@ -96,6 +99,8 @@ export const NewCardModal = () => {
 
               <TabPanels className='outline-none p-6'>
                 <Step1 nextStep={nextStep} />
+                <Step2 prevStep={prevStep} nextStep={nextStep} />
+                <Step3 prevStep={prevStep} nextStep={saveOrder} />
               </TabPanels>
             </TabGroup>
           </div>

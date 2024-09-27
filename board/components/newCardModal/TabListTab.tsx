@@ -21,10 +21,7 @@ export const TabListTab = ({
 }: TabListTabProps) => {
   return (
     <div className='relative flex'>
-      <Tab
-        className='flex h-full items-center gap-x-4 px-6 py-4 text-start'
-        disabled={status !== TabStatusEnum.Completed}
-      >
+      <Tab className='flex h-full items-center gap-x-4 px-6 py-4 text-start'>
         <div
           className={clsx(
             "flex h-10 w-10 shrink-0 items-center justify-center rounded-full",
@@ -35,7 +32,7 @@ export const TabListTab = ({
               "border-2 border-gray-300 dark:border-gray-600 text-gray-500 dark:text-gray-400",
           )}
         >
-          {status === TabStatusEnum.Completed ? (
+          {selectedIndex > index ? (
             <Icon
               size={6}
               icon={CheckIcon}
