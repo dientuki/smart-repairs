@@ -3,12 +3,12 @@ import { Field, Input, Label, TabPanel } from "@headlessui/react";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
-type Props = {
+type Step3Props = {
   nextStep: () => void;
   prevStep: () => void;
 };
 
-function Step3({ prevStep, nextStep }: Props) {
+export const Step3 = ({ prevStep, nextStep }: Step3Props) => {
   const { t } = useTranslation();
   const { createOrderSelectedData, devicesChecks, setTmpOrder } =
     useOrderStore();
@@ -154,6 +154,4 @@ function Step3({ prevStep, nextStep }: Props) {
       </form>
     </TabPanel>
   );
-}
-
-export default Step3;
+};
