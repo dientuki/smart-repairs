@@ -5,6 +5,7 @@ import { UserCircleIcon } from "@heroicons/react/24/outline";
 import Avatar from "react-avatar";
 import { useTranslation } from "react-i18next";
 import { Icon } from "@/components/Icon";
+import { Pattern } from "./Pattern";
 
 export const OrderUsers = () => {
   const { order } = useOrderStore();
@@ -49,6 +50,7 @@ export const OrderUsers = () => {
           {t("order.assign_to_me")}
         </span>
       </div>
+      <Pattern />
     </>
   );
 };
