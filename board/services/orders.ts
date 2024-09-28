@@ -1,8 +1,6 @@
 import { arrayToString } from "@/helper/stringHelpers";
-import { device, extra } from "@/helper/reduceHelpers";
 import { graphqlRequest, handleGraphQLErrors } from "@/helper/graphqlHelpers";
 import { TypedColumn } from "@/types/enums";
-
 export const createOrder = async (newOrder: NewOrder) => {
   const response = await graphqlRequest(`
                         mutation {
@@ -217,6 +215,8 @@ export const getOrders = async () => {
     new Map<TypedColumn, Column>(),
   );
 
+  console.log('por aca222fdasdfs');
+
   // if column doesn have inprogress or done or order, create that column
   const columnTypes: TypedColumn[] = [
     TypedColumn.ForBudgeting,
@@ -226,6 +226,9 @@ export const getOrders = async () => {
     TypedColumn.Repairing,
     TypedColumn.Repaired,
   ];
+
+  console.log('por aca222fd');
+
   for (const columnType of columnTypes) {
     if (!columns.get(columnType)) {
       columns.set(columnType, {
@@ -248,7 +251,7 @@ export const getOrders = async () => {
   return board;
 };
 
-export const getOrderCreationData = async () => {
+export const getOrderCreationData = async (): Promise<QueryResponse> => {
   const response = await graphqlRequest(`
             query {
               customers {
@@ -295,26 +298,7 @@ export const getOrderCreationData = async () => {
 
   handleGraphQLErrors(response.errors);
 
-  const devicesChecks: DeviceCheck[] = response.data.deviceTypeChecks.reduce(
-    (acc: DeviceCheck[], device: any) => {
-      acc.push({
-        deviceTypeId: device.device_type_id,
-        damages: device.damages,
-        features: device.features,
-      });
-
-      return acc;
-    },
-    [],
-  );
-
-  return {
-    customers: extra(response.data.customers),
-    brands: response.data.brands,
-    deviceTypes: response.data.deviceTypes,
-    devices: device(response.data.devices),
-    devicesChecks: devicesChecks,
-  };
+  return response.data;
 };
 
 export const updateDiagnosis = async (
