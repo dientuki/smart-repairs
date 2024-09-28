@@ -6,6 +6,7 @@ import { DragDropContext, DropResult, Droppable } from "react-beautiful-dnd";
 import { Column } from "@/components/board";
 import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
+import { TypedColumn } from "@/types/enums";
 
 export const Board = () => {
   const { board, getBoard, setBoardState, updateStatus } = useBoardStore();
