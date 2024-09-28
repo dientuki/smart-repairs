@@ -5,7 +5,6 @@ import { Icon } from "@/components/Icon";
 import { useEffect, useState } from "react";
 import { FieldValues, useForm } from "react-hook-form";
 import { ActionButton } from "@/components/form";
-import { ButtonType } from "@/types/enums";
 import { BudgetTable } from "@/components/budget";
 import { useBudgetStore } from "@/store";
 import { toast } from "react-toastify";

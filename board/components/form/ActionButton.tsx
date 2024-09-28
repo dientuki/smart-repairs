@@ -1,7 +1,6 @@
 import React from "react";
 import { Button } from "@headlessui/react";
 import { combineClasses, dynamicStyles } from "@/helper/componentsHelpers";
-import { ButtonType, StyleColor } from "@/types/enums";
 import { Loading } from "@/components/Loading";
 
 interface ActionButtonProps {

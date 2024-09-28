@@ -1,6 +1,5 @@
 import { Draggable, Droppable } from "react-beautiful-dnd";
 import { OrderCard } from "@/components/board";
-import { StyleColor, TypedColumn } from "@/types/enums";
 import { useTranslation } from "react-i18next";
 import { dynamicStyles } from "@/helper/componentsHelpers";
 

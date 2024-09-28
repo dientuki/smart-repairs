@@ -5,7 +5,6 @@ import { useTranslation } from "react-i18next";
 import { ActionButton, TextareaField } from "@/components/form";
 import { FieldErrors, FieldValues, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
-import { ButtonType } from "@/types/enums";
 
 type Step3Props = {
   nextStep: () => void;

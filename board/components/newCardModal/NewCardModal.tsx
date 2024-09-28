@@ -9,15 +9,15 @@ import { AbortControllerManager } from "@/helper/AbortControllerManager";
 import { InboxIcon } from "@heroicons/react/24/outline";
 import { Icon } from "../Icon";
 import { OrderStatus } from "@/components/viewCardModal";
-import { TypedColumn } from "@/types/enums";
 import Avatar from "react-avatar";
 import { Step1, Step2, Step3, TabListTab } from "@/components/newCardModal";
 
 export const NewCardModal = () => {
   const modal = useModalWindow();
   const { user } = useUserStore();
-  const [isLoading, setIsLoading] = useState(true);
-  const [selectedIndex, setSelectedIndex] = useState(0);
+  const [ isLoading, setIsLoading ] = useState(true);
+  const [ selectedIndex, setSelectedIndex ] = useState(0);
+  const [ initialData, setInitialData ] = useState<OrderCreationData>();
   const { t } = useTranslation();
   const { getBoard } = useBoardStore();
   const { initializeOrderCreationData, createOrderSelectedData, createOrder } =
@@ -25,6 +25,18 @@ export const NewCardModal = () => {
   const date = new Date();
 
   useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await initializeOrderCreationData();
+        setInitialData(data);
+      } catch (e) {
+        console.log(e);
+      } finally {
+        setIsLoading(false)
+      }
+    };
+    fetchData();
+    /*
     initializeOrderCreationData()
       .catch((e: any) => {
         toast.error(t(`toast.error.${e.message}`));
@@ -32,7 +44,7 @@ export const NewCardModal = () => {
       .finally(() => {
         setIsLoading(false);
       });
-
+    */
     return () => {
       AbortControllerManager.abort();
     };
