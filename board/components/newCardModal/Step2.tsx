@@ -25,6 +25,7 @@ import {
   useDeviceTypeStore,
 } from "@/store";
 import { Icon } from "../Icon";
+import { ButtonType } from "@/types/enums";
 
 enum UnlockType {
   NONE = "none",

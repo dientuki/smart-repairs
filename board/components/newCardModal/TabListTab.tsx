@@ -1,3 +1,4 @@
+import { TabStatusEnum } from "@/types/enums";
 import { Tab } from "@headlessui/react"; // Asegúrate de importar Tab correctamente
 import { CheckIcon } from "@heroicons/react/24/outline";
 import clsx from "clsx";

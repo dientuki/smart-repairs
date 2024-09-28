@@ -8,6 +8,7 @@ import {
   FieldError,
 } from "react-hook-form";
 import { ErrorMessage } from "@/components/form";
+import { InputType } from "@/types/enums";
 
 interface InputFieldProps {
   name: string;

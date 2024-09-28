@@ -11,6 +11,7 @@ import {
   SimpleAutocomplete,
 } from "@/components/form";
 import { useCustomerStore, useOrderStore } from "@/store";
+import { ButtonType, OperationStatus } from "@/types/enums";
 import { Icon } from "../Icon";
 
 const filter = createFilterOptions<OptionType>();

@@ -1,4 +1,5 @@
 import { dynamicStyles } from "@/helper/componentsHelpers";
+import { StyleColor } from "@/types/enums";
 import React from "react";
 
 interface IconProps {

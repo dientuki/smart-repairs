@@ -1,5 +1,6 @@
 import { useModalWindow } from "react-modal-global";
 import { ActionButton, CancelButton } from "@/components/form";
+import { StyleColor } from "@/types/enums";
 import { useState } from "react";
 import { dynamicStyles } from "@/helper/componentsHelpers";
 import { Icon } from "@/components/Icon";

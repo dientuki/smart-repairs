@@ -14,6 +14,7 @@ import {
 import { Modal } from "@/components/modal";
 import { Icon } from "@/components/Icon";
 import { ViewCardModal } from "@/components/viewCardModal";
+import { TypedColumn } from "@/types/enums";
 
 type Props = {
   order: Order;

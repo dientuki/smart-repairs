@@ -1,6 +1,7 @@
 import React from "react";
 import { Button } from "@headlessui/react";
 import { combineClasses } from "@/helper/componentsHelpers";
+import { ButtonType } from "@/types/enums";
 
 interface CancelButtonProps {
   className?: string; // Can contain multiple classes separated by spaces
