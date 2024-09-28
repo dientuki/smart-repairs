@@ -50,7 +50,7 @@ export const Step1 = ({ nextStep }: Step1Props) => {
         case OperationStatus.NO_CHANGE:
           break;
       }
-      //nextStep();
+      nextStep();
     } catch (e: any) {
       const toValidate = ["firstname", "lastname", "phone", "email"];
       switch (e.constructor.name) {
@@ -213,7 +213,7 @@ export const Step1 = ({ nextStep }: Step1Props) => {
         </div>
 
         <div className='flex justify-end mt-6'>
-          <ActionButton type={ButtonType.Submit} onClick={nextStep}>
+          <ActionButton type={ButtonType.Submit}>
             Siguiente
           </ActionButton>
         </div>

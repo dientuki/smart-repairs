@@ -61,14 +61,6 @@ interface Images {
   fileId: string;
 }
 
-interface Step3data {
-  damages: [damage];
-  damageDescription: string;
-  features: [feature];
-  featureDescription: string;
-  observation: string;
-}
-
 interface checks {
   damages: [damage];
   features: [feature];
