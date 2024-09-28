@@ -17,10 +17,11 @@ import { Icon } from "../Icon";
 const filter = createFilterOptions<OptionType>();
 type Step1Props = {
   nextStep: () => void;
+  customers: OptionType[];
 };
 
-export const Step1 = ({ nextStep }: Step1Props) => {
-  const { customers, updateOrCreateCustomer } = useCustomerStore();
+export const Step1 = ({ nextStep, customers }: Step1Props) => {
+  const { updateOrCreateCustomer } = useCustomerStore();
   const { setCreateOrderSelectedData, clearCreateOrderSelectedData } =
     useOrderStore();
   const { t } = useTranslation();

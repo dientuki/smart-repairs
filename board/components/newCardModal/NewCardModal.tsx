@@ -16,8 +16,9 @@ import { Step1, Step2, Step3, TabListTab } from "@/components/newCardModal";
 export const NewCardModal = () => {
   const modal = useModalWindow();
   const { user } = useUserStore();
-  const [isLoading, setIsLoading] = useState(true);
-  const [selectedIndex, setSelectedIndex] = useState(0);
+  const [ isLoading, setIsLoading ] = useState(true);
+  const [ selectedIndex, setSelectedIndex ] = useState(0);
+  const [ initialData, setInitialData ] = useState<OrderCreationData>();
   const { t } = useTranslation();
   const { getBoard } = useBoardStore();
   const { initializeOrderCreationData, createOrderSelectedData, createOrder } =
@@ -25,13 +26,17 @@ export const NewCardModal = () => {
   const date = new Date();
 
   useEffect(() => {
-    initializeOrderCreationData()
-      .catch((e: any) => {
-        toast.error(t(`toast.error.${e.message}`));
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
+    const fetchData = async () => {
+      try {
+        const data = await initializeOrderCreationData();
+        setInitialData(data);
+      } catch (e) {
+        console.log(e);
+      } finally {
+        setIsLoading(false)
+      }
+    };
+    fetchData();
 
     return () => {
       AbortControllerManager.abort();
@@ -67,7 +72,7 @@ export const NewCardModal = () => {
         </h2>
       }
     >
-      {!isLoading && (
+      {!isLoading && initialData && (
         <div className='flex flex-row flex-grow border-t border-gray-200 dark:border-white/10 px-5 py-3 text-base min-h-0'>
           <div className='basis-3/4 p-2 pr-4 mr-3 flex flex-col overflow-y-scroll min-h-full max-h-full'>
             <TabGroup
@@ -98,7 +103,7 @@ export const NewCardModal = () => {
               </TabList>
 
               <TabPanels className='outline-none p-6'>
-                <Step1 nextStep={nextStep} />
+                <Step1 nextStep={nextStep} customers={initialData.customers} />
                 <Step2 prevStep={prevStep} nextStep={nextStep} />
                 <Step3 prevStep={prevStep} nextStep={saveOrder} />
               </TabPanels>

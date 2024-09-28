@@ -215,8 +215,6 @@ export const getOrders = async () => {
     new Map<TypedColumn, Column>(),
   );
 
-  console.log('por aca222fdasdfs');
-
   // if column doesn have inprogress or done or order, create that column
   const columnTypes: TypedColumn[] = [
     TypedColumn.ForBudgeting,
@@ -226,8 +224,6 @@ export const getOrders = async () => {
     TypedColumn.Repairing,
     TypedColumn.Repaired,
   ];
-
-  console.log('por aca222fd');
 
   for (const columnType of columnTypes) {
     if (!columns.get(columnType)) {
