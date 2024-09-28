@@ -25,6 +25,7 @@ import {
   useDeviceTypeStore,
 } from "@/store";
 import { Icon } from "../Icon";
+import { ButtonType } from "@/types/enums";
 
 enum UnlockType {
   NONE = "none",
@@ -368,7 +369,7 @@ export const Step2 = ({ nextStep, prevStep }: Step2Props) => {
 
         <div className='flex justify-between mt-6'>
           <ActionButton onClick={prevStep}>Anterior</ActionButton>
-          <ActionButton onClick={nextStep}>Enciende</ActionButton>
+          <ActionButton type={ButtonType.Submit}>Enciende</ActionButton>
         </div>
       </form>
     </TabPanel>
