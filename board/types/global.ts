@@ -18,16 +18,12 @@ declare global {
   }
 
   interface Board {
-    columns: Map<TypedColumn, Colum>;
+    columns: Map<TypedColumn, Column>;
   }
 
   interface Column {
     id: TypedColumn;
     orders: Order[];
-  }
-
-  interface GraphQLBusinessError extends Error {
-    i18nKey: string;
   }
 }
 

@@ -1,6 +1,5 @@
 import { dynamicStyles } from "@/helper/componentsHelpers";
 import { useOrderStore, useUserStore } from "@/store";
-import { PackageType, StyleColor } from "@/types/enums";
 import { UserCircleIcon } from "@heroicons/react/24/outline";
 import Avatar from "react-avatar";
 import { useTranslation } from "react-i18next";

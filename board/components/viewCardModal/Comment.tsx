@@ -5,7 +5,6 @@ import { toast } from "react-toastify";
 import { capitalizeFirstLetter } from "@/helper/stringHelpers";
 import { useRef, useState } from "react";
 import { LockStatus } from "@/components/viewCardModal";
-import { StyleColor } from "@/types/enums";
 import { useOrderStore, useUserStore } from "@/store";
 import { simpleError } from "@/helper/toastHelper";
 import {

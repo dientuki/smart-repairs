@@ -1,5 +1,4 @@
 import { dynamicStyles } from "@/helper/componentsHelpers";
-import { StyleColor } from "@/types/enums";
 
 interface OrderStatusProps {
   status: string;
