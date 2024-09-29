@@ -30,10 +30,6 @@ export const graphqlRequest = async (query: string) => {
     if (error instanceof Error && error.name !== "AbortError") {
       throw new ApiLayerError("toast.error.network", ApiLayerErrorEnum.Network);
     }
-  } finally {
-    AbortControllerManager.completeFetch();
-  }
-};
 
 export const handleGraphQLErrors = (errors: GraphQLErrors | undefined) => {
   if (errors && errors.length > 0) {
