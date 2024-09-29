@@ -56,10 +56,14 @@ export const Step1 = ({ nextStep, customers }: Step1Props) => {
       );
       switch (customerStatus) {
         case OperationStatus.CREATED:
-          toast.success(t('toast.success.add', { record: t('field.customer') }));
+          toast.success(
+            t("toast.success.add", { record: t("field.customer") }),
+          );
           break;
         case OperationStatus.UPDATED:
-          toast.success(t('toast.success.update', { record: t('field.customer') }));
+          toast.success(
+            t("toast.success.update", { record: t("field.customer") }),
+          );
           break;
         case OperationStatus.NO_CHANGE:
           break;
@@ -71,7 +75,7 @@ export const Step1 = ({ nextStep, customers }: Step1Props) => {
   };
 
   const handleErrorForm = () => {
-    toast.error(t('toast.error.form'));
+    toast.error(t("toast.error.form"));
   };
 
   const validateAtLeastOneField = (value: string) => {

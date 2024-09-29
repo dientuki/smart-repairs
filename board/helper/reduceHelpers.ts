@@ -38,7 +38,9 @@ export const extra = (
   if (collection.length === 0) return [];
 
   return collection.reduce((acc: OptionType[], item: GraphQLObject) => {
-    const keys = Object.keys(item).filter(key => key !== "id" && key !== "label");
+    const keys = Object.keys(item).filter(
+      (key) => key !== "id" && key !== "label",
+    );
 
     let info: Record<string, string | null> | null = null;
 

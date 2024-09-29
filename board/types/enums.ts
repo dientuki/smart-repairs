@@ -72,9 +72,9 @@ export enum TabStatusEnum {
 }
 
 export enum ApiLayerErrorEnum {
-  Network = 'Network',
-  Validation = 'Validation',
-  GraphQL = 'GraphQL',
-  Business = 'Business',
-  Wtf = 'Wtf',
+  Network = "Network",
+  Validation = "Validation",
+  GraphQL = "GraphQL",
+  Business = "Business",
+  Wtf = "Wtf",
 }

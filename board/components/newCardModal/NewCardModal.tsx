@@ -16,9 +16,9 @@ import useErrorHandler from "../hooks/useErrorHandler";
 export const NewCardModal = () => {
   const modal = useModalWindow();
   const { user } = useUserStore();
-  const [ isLoading, setIsLoading ] = useState(true);
-  const [ selectedIndex, setSelectedIndex ] = useState(0);
-  const [ initialData, setInitialData ] = useState<OrderCreationData>();
+  const [isLoading, setIsLoading] = useState(true);
+  const [selectedIndex, setSelectedIndex] = useState(0);
+  const [initialData, setInitialData] = useState<OrderCreationData>();
   const { t } = useTranslation();
   const { getBoard } = useBoardStore();
   const { initializeOrderCreationData, createOrderSelectedData, createOrder } =
@@ -34,7 +34,7 @@ export const NewCardModal = () => {
       } catch (error) {
         handleError(error);
       } finally {
-        setIsLoading(false)
+        setIsLoading(false);
       }
     };
     fetchData();

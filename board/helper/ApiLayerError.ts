@@ -1,7 +1,7 @@
 import { ApiLayerErrorEnum } from "@/types/enums";
 
 export class ApiLayerError extends Error {
-  i18nKey: string;  // Clave para internacionalización
+  i18nKey: string; // Clave para internacionalización
   errorType: ApiLayerErrorEnum; // Propiedad para el tipo de error
 
   constructor(i18nKey: string, errorType: ApiLayerErrorEnum, message?: string) {

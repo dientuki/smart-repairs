@@ -135,7 +135,7 @@ export const useOrderStore = create<OrderStore>((set) => ({
     return false;
   },
 
-  initializeOrderCreationData: async ():Promise<OrderCreationData> => {
+  initializeOrderCreationData: async (): Promise<OrderCreationData> => {
     const data = await getOrderCreationData();
 
     const devicesChecks: DeviceCheck[] = data.deviceTypeChecks.reduce(

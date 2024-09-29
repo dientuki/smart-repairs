@@ -38,7 +38,11 @@ export const graphqlRequest = async (query: string) => {
 export const handleGraphQLErrors = (errors: GraphQLErrors | undefined) => {
   if (errors && errors.length > 0) {
     if (errors[0].extensions && errors[0].extensions.validation) {
-      throw new ApiLayerError("toast.error.validation", ApiLayerErrorEnum.Validation, errors[0].extensions.validation);
+      throw new ApiLayerError(
+        "toast.error.validation",
+        ApiLayerErrorEnum.Validation,
+        errors[0].extensions.validation,
+      );
     } else {
       throw new ApiLayerError("toast.error.graphql", ApiLayerErrorEnum.GraphQL);
     }
