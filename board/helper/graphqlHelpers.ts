@@ -1,5 +1,6 @@
-import { GraphQLBusinessError } from "@/helper/GraphQLBusinessError";
 import { AbortControllerManager } from "@/helper/AbortControllerManager";
+import { ApiLayerErrorEnum } from "@/types/enums";
+import { ApiLayerError } from "@/helper/ApiLayerError";
 
 type GraphQLErrors = GraphQLError[];
 
@@ -26,8 +27,8 @@ export const graphqlRequest = async (query: string) => {
     });
     return await response.json();
   } catch (error) {
-    if (error.name !== "AbortError") {
-      throw new Error("network");
+    if (error instanceof Error && error.name !== "AbortError") {
+      throw new ApiLayerError("toast.error.network", ApiLayerErrorEnum.Network);
     }
   } finally {
     AbortControllerManager.completeFetch();
@@ -37,16 +38,16 @@ export const graphqlRequest = async (query: string) => {
 export const handleGraphQLErrors = (errors: GraphQLErrors | undefined) => {
   if (errors && errors.length > 0) {
     if (errors[0].extensions && errors[0].extensions.validation) {
-      throw errors[0].extensions.validation;
+      throw new ApiLayerError("toast.error.validation", ApiLayerErrorEnum.Validation, errors[0].extensions.validation);
     } else {
-      throw new Error("data");
+      throw new ApiLayerError("toast.error.graphql", ApiLayerErrorEnum.GraphQL);
     }
   }
 };
 
 export const handlePayloadErrors = (errors: PayloadErrors) => {
   if (errors.status === false) {
-    throw new GraphQLBusinessError(errors.i18nKey);
+    throw new ApiLayerError(errors.i18nKey, ApiLayerErrorEnum.Business);
   }
 };
 

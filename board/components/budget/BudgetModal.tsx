@@ -10,7 +10,7 @@ import { BudgetTable } from "@/components/budget";
 import { useBudgetStore } from "@/store";
 import { toast } from "react-toastify";
 import { t } from "i18next";
-import { GraphQLBusinessError } from "@/helper/GraphQLBusinessError";
+import { ApiLayerError } from "@/helper/ApiLayerError";
 import { AbortControllerManager } from "@/helper/AbortControllerManager";
 
 type BudgetModalProps = {
@@ -53,7 +53,7 @@ export const BudgetModal = ({ order }: BudgetModalProps) => {
       toast.success(t(`toast.success.form`));
       modal.close();
     } catch (error) {
-      if (error instanceof GraphQLBusinessError) {
+      if (error instanceof ApiLayerError) {
         toast.error(t(error.i18nKey));
       }
     }
