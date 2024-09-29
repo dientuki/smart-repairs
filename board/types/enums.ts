@@ -70,3 +70,11 @@ export enum TabStatusEnum {
   Inactive = "inactive",
   Completed = "completed",
 }
+
+export enum ApiLayerErrorEnum {
+  Network = 'Network',
+  Validation = 'Validation',
+  GraphQL = 'GraphQL',
+  Business = 'Business',
+  Wtf = 'Wtf',
+}

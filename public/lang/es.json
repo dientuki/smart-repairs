@@ -33,7 +33,13 @@
         "validate": "Validar",
         "edit": "Editar",
         "delete": "Eliminar",
-        "add": "Añadir"
+        "add": "Añadir",
+        "next": "Siguiente",
+        "previous": "Anterior"
+    },
+
+    "combos": {
+        "add": "Agregar nuevo {{record}}"
     },
 
     "device": "equipo",
@@ -49,6 +55,7 @@
         "any_damage": "¿presenta daños?",
         "brand": "marca",
         "characteristics": "características",
+        "customer": "cliente",
         "device": "equipo",
         "device_version": "version del equipo",
         "diagnosis": "diagnostico",
@@ -106,7 +113,9 @@
             "form": "Error en el formulario",
             "update": "Error al actualizar {{record}}",
             "add": "Error al agregar {{record}}",
-            "delete": "Error al eliminar {{record}}"
+            "delete": "Error al eliminar {{record}}",
+            "graphql": "Error de GraphQL",
+            "validation": "Error en el formulario"
         },
         "success": {
             "add" : "{{record}} agregado con exito",

@@ -1,6 +1,6 @@
 import { createFilterOptions, FilterOptionsState } from "@mui/material";
 import { TabPanel } from "@headlessui/react";
-import { useForm, FieldValues, FieldErrors } from "react-hook-form";
+import { useForm, FieldValues } from "react-hook-form";
 import { EnvelopeIcon, PhoneIcon } from "@heroicons/react/16/solid";
 import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
@@ -13,6 +13,7 @@ import {
 import { useCustomerStore, useOrderStore } from "@/store";
 import { ButtonType, OperationStatus } from "@/types/enums";
 import { Icon } from "../Icon";
+import useErrorHandler from "../hooks/useErrorHandler";
 
 const filter = createFilterOptions<OptionType>();
 type Step1Props = {
@@ -35,6 +36,18 @@ export const Step1 = ({ nextStep, customers }: Step1Props) => {
     trigger,
     setError,
   } = useForm();
+  const { handleError } = useErrorHandler();
+
+  const setErrorFields = (message: Record<string, string[]>) => {
+    const toValidate = ["firstname", "lastname", "phone", "email"];
+    for (let i = 0, c = toValidate.length; i < c; i++) {
+      if (message[`customer.${toValidate[i]}`]) {
+        setError(toValidate[i], {
+          message: message[`customer.${toValidate[i]}`][0],
+        });
+      }
+    }
+  };
 
   const handleRegistration = async (data: FieldValues) => {
     try {
@@ -43,40 +56,22 @@ export const Step1 = ({ nextStep, customers }: Step1Props) => {
       );
       switch (customerStatus) {
         case OperationStatus.CREATED:
-          toast.success("Cliente agregado");
+          toast.success(t('toast.success.add', { record: t('field.customer') }));
           break;
         case OperationStatus.UPDATED:
-          toast.success("Actualizo");
+          toast.success(t('toast.success.update', { record: t('field.customer') }));
           break;
         case OperationStatus.NO_CHANGE:
           break;
       }
       nextStep();
-    } catch (e: any) {
-      const toValidate = ["firstname", "lastname", "phone", "email"];
-      switch (e.constructor.name) {
-        case "Object":
-          for (let i = 0, c = toValidate.length; i < c; i++) {
-            if (e.hasOwnProperty(`customer.${toValidate[i]}`)) {
-              setError(toValidate[i], {
-                message: e[`customer.${toValidate[i]}`][0],
-              });
-            }
-          }
-          toast.error("Error en el formulario");
-          break;
-        case "Error":
-          toast.error(e.message);
-          break;
-        default:
-          toast.error("Error!! a los botes");
-          break;
-      }
+    } catch (error) {
+      handleError(error, setErrorFields);
     }
   };
 
-  const handleError = (_: FieldErrors<FieldValues>) => {
-    toast.error("Error en el formulario");
+  const handleErrorForm = () => {
+    toast.error(t('toast.error.form'));
   };
 
   const validateAtLeastOneField = (value: string) => {
@@ -152,7 +147,7 @@ export const Step1 = ({ nextStep, customers }: Step1Props) => {
     if (params.inputValue !== "") {
       filtered.push({
         id: "new",
-        label: "Agregar nuevo cliente",
+        label: t("combos.add", { record: t("field.customer") }),
       });
     }
 
@@ -163,7 +158,7 @@ export const Step1 = ({ nextStep, customers }: Step1Props) => {
     <TabPanel unmount={false}>
       <SimpleAutocomplete
         name='customer'
-        label='Cliente'
+        label={t("field.customer")}
         options={customers}
         isLoading={!customers}
         onChange={(_, newValue, reason) =>
@@ -172,7 +167,7 @@ export const Step1 = ({ nextStep, customers }: Step1Props) => {
         filterOptions={customerFilterOptions}
       />
 
-      <form onSubmit={handleSubmit(handleRegistration, handleError)}>
+      <form onSubmit={handleSubmit(handleRegistration, handleErrorForm)}>
         <HiddenInput name='id' control={control} rules={registerOptions.id} />
 
         <div className='grid gap-6 grid-cols-2 mt-4'>
@@ -215,7 +210,7 @@ export const Step1 = ({ nextStep, customers }: Step1Props) => {
 
         <div className='flex justify-end mt-6'>
           <ActionButton type={ButtonType.Submit}>
-            Siguiente
+            {t("button.next")}
           </ActionButton>
         </div>
       </form>

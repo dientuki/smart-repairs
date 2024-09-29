@@ -1,7 +1,6 @@
 import { ModalLayout } from "@/components/modal";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { toast } from "react-toastify";
 import { useBoardStore, useOrderStore, useUserStore } from "@/store";
 import { TabGroup, TabList, TabPanels } from "@headlessui/react";
 import { useModalWindow } from "react-modal-global";
@@ -12,6 +11,7 @@ import { OrderStatus } from "@/components/viewCardModal";
 import { TypedColumn } from "@/types/enums";
 import Avatar from "react-avatar";
 import { Step1, Step2, Step3, TabListTab } from "@/components/newCardModal";
+import useErrorHandler from "../hooks/useErrorHandler";
 
 export const NewCardModal = () => {
   const modal = useModalWindow();
@@ -24,14 +24,15 @@ export const NewCardModal = () => {
   const { initializeOrderCreationData, createOrderSelectedData, createOrder } =
     useOrderStore();
   const date = new Date();
+  const { handleError } = useErrorHandler();
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const data = await initializeOrderCreationData();
         setInitialData(data);
-      } catch (e) {
-        console.log(e);
+      } catch (error) {
+        handleError(error);
       } finally {
         setIsLoading(false)
       }
@@ -42,10 +43,6 @@ export const NewCardModal = () => {
       AbortControllerManager.abort();
     };
   }, []);
-
-  useEffect(() => {
-    console.log(selectedIndex);
-  }, [selectedIndex]);
 
   const saveOrder = async () => {
     await createOrder();
