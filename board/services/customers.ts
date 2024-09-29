@@ -1,7 +1,11 @@
-import { graphqlRequest, handleGraphQLErrors } from "@/helper/graphqlHelpers";
+import {
+  graphqlRequest,
+  handleGraphQLErrors,
+  handlePayloadErrors,
+} from "@/helper/graphqlHelpers";
 import { extra } from "@/helper/reduceHelpers";
 
-export const getCustomers = async () => {
+export const getCustomers = async (): Promise<OptionType[]> => {
   const response = await graphqlRequest(`
             query {
               customers {
@@ -18,38 +22,40 @@ export const getCustomers = async () => {
 
   return extra(response.data.customers);
 };
-export const createCustomer = async (customer: CustomerInput) => {
+export const upsertCustomer = async (
+  customer: CustomerInput,
+): Promise<QueryResponse> => {
   const response = await graphqlRequest(`
                         mutation {
-                            addCustomer(customer: {
-                                firstname: "${customer.firstname}"
-                                lastname: "${customer.lastname}"
-                                phone: "${customer.phone}"
-                                email: "${customer.email}"
+                            upsertCustomer(customer: {
+                              id: "${customer.id}"
+                              firstname: "${customer.firstname}"
+                              lastname: "${customer.lastname}"
+                              phone: "${customer.phone}"
+                              email: "${customer.email}"
                             }) {
-                                id
+                                __typename
+                                ... on UpsertCustomerPayload {
+                                    customer {
+                                        id
+                                        label
+                                        first_name
+                                        last_name
+                                        phone
+                                        email
+                                    }
+                                    operation
+                                }
+                                ... on ErrorPayload {
+                                    status
+                                    i18nKey
+                                }
                             }
                         }
                     `);
 
   handleGraphQLErrors(response.errors);
+  handlePayloadErrors(response.data.upsertCustomer);
 
-  return response.data.addCustomer.id;
-};
-
-export const updateCustomer = async (customer: CustomerInput) => {
-  const response = await graphqlRequest(`
-        mutation {
-            updateCustomer(customerId: "${customer.id}", customer: {
-                firstname: "${customer.firstname}"
-                lastname: "${customer.lastname}"
-                phone: "${customer.phone}"
-                email: "${customer.email}"
-            })
-        }
-    `);
-
-  handleGraphQLErrors(response.errors);
-
-  return response.data.updateCustomer;
+  return response.data.upsertCustomer;
 };

@@ -1,3 +1,5 @@
+union UpsertCustomerResult = UpsertCustomerPayload | ErrorPayload
+
 extend type Query {
     customers: [Customer!]! @orderBy(column: "first_name", direction: ASC)
         @field(resolver: "CustomerQueries@getCustomers")
@@ -5,15 +7,18 @@ extend type Query {
 }
 
 extend type Mutation {
-    addCustomer(customer: CustomerInput): Customer!
-        @field(resolver: "CustomerMutations@create")
-        @namespace(field: "App\\GraphQL\\Mutations")
-    updateCustomer(customerId: String, customer: CustomerInput): Boolean!
-        @field(resolver: "CustomerMutations@update")
+    upsertCustomer(customer: CustomerInput): UpsertCustomerResult!
+        @field(resolver: "CustomerMutations@upsertCustomer")
         @namespace(field: "App\\GraphQL\\Mutations")
 }
 
+type UpsertCustomerPayload {
+    customer: Customer!
+    operation: String!
+}
+
 input CustomerInput {
+    id: ID @rules(apply: ["nullable", "ulid"])
     firstname: String! @rules(apply: ["required"])
     lastname: String! @rules(apply: ["required"])
     phone: String! @rules(apply: ["required_without:email", "regex:\/^\\+?\\d+(-\\d+)*$\/"])

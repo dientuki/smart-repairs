@@ -14,6 +14,7 @@ import {
   useDeviceTypeStore,
   useBoardStore,
 } from "@/store";
+import { device, extra } from "@/helper/reduceHelpers";
 import { CountOperation } from "@/types/enums";
 
 interface CreateOrderSelectedData {
@@ -24,6 +25,7 @@ interface CreateOrderSelectedData {
   deviceTypeLabel?: string | null;
   temporaryDeviceUnitId?: string | null;
 }
+
 interface OrderStore {
   order: Order;
   tmpOrder: NewOrder;
@@ -36,7 +38,7 @@ interface OrderStore {
   deleteComment: (id: string) => Promise<boolean>;
   addComment: (newComment: CreateOrUpdateComment) => Promise<boolean>;
 
-  initializeOrderCreationData: () => Promise<void>;
+  initializeOrderCreationData: () => Promise<OrderCreationData>;
   createOrderSelectedData: {
     customer: OptionType | null;
     deviceId: string | null;
@@ -133,16 +135,29 @@ export const useOrderStore = create<OrderStore>((set) => ({
     return false;
   },
 
-  initializeOrderCreationData: async () => {
-    const { customers, brands, deviceTypes, devices, devicesChecks } =
-      await getOrderCreationData();
+  initializeOrderCreationData: async (): Promise<OrderCreationData> => {
+    const data = await getOrderCreationData();
 
-    useCustomerStore.getState().setCustomers(customers);
-    useDeviceStore.getState().setDevices(devices);
-    useBrandStore.getState().setBrands(brands);
-    useDeviceTypeStore.getState().setDeviceTypes(deviceTypes);
+    const devicesChecks: DeviceCheck[] = data.deviceTypeChecks.reduce(
+      (acc: DeviceCheck[], device: any) => {
+        acc.push({
+          deviceTypeId: device.device_type_id,
+          damages: device.damages,
+          features: device.features,
+        });
 
-    set({ devicesChecks });
+        return acc;
+      },
+      [],
+    );
+
+    return {
+      customers: extra(data.customers),
+      brands: extra(data.brands),
+      deviceTypes: extra(data.deviceTypes),
+      devices: device(data.devices),
+      devicesChecks: devicesChecks,
+    };
   },
 
   createOrderSelectedData: {

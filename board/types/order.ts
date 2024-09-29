@@ -96,6 +96,14 @@ declare global {
     value: string;
     checked: boolean;
   }
+
+  interface OrderCreationData {
+    customers: OptionType[];
+    brands: OptionType[];
+    devices: OptionType[];
+    deviceTypes: OptionType[];
+    devicesChecks: DeviceCheck[];
+  }
 }
 
 export {};

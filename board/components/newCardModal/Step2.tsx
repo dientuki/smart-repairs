@@ -1,11 +1,13 @@
 import { useTranslation } from "react-i18next";
-import { Input, TabPanel } from "@headlessui/react";
-import { Controller, FieldErrors, FieldValues, useForm } from "react-hook-form";
+import { TabPanel } from "@headlessui/react";
+import { FieldErrors, FieldValues, useForm } from "react-hook-form";
 import { createFilterOptions } from "@mui/material";
 import { toast } from "react-toastify";
 import { useEffect, useState } from "react";
 import { GlobeAltIcon } from "@heroicons/react/16/solid";
 import {
+  ActionButton,
+  HiddenInput,
   InputField,
   SimpleAutocomplete,
   ValidatedAutocomplete,
@@ -22,6 +24,8 @@ import {
   useBrandStore,
   useDeviceTypeStore,
 } from "@/store";
+import { Icon } from "../Icon";
+import { ButtonType } from "@/types/enums";
 
 enum UnlockType {
   NONE = "none",
@@ -43,7 +47,7 @@ type SelectionState = {
 
 const unlockTypeEntries = Object.entries(UnlockType);
 
-function Step2({ nextStep, prevStep }: Step2Props) {
+export const Step2 = ({ nextStep, prevStep }: Step2Props) => {
   const {
     devices,
     addTemporaryDeviceUnit,
@@ -283,12 +287,10 @@ function Step2({ nextStep, prevStep }: Step2Props) {
       />
 
       <form onSubmit={handleSubmit(handleRegistration, handleError)}>
-        <Controller
+        <HiddenInput
           name='deviceid'
-          defaultValue=''
           control={control}
-          rules={registerOptions.deviceid}
-          render={({ field }) => <Input {...field} type='hidden' />}
+          rules={registerOptions.id}
         />
 
         <div className='grid gap-6 grid-cols-2 mt-4'>
@@ -334,19 +336,15 @@ function Step2({ nextStep, prevStep }: Step2Props) {
             control={control}
             rules={registerOptions.url}
             errors={errors}
-            icon={GlobeAltIcon}
+            icon={<Icon icon={GlobeAltIcon} />}
           />
         </div>
 
         <div className='grid gap-6 grid-cols-3 mt-4'>
           <div className='relative'>
-            <button
-              type='button'
-              className='absolute bottom-0 right-0 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-base px-5 py-2.5 text-center cursor-pointer w-full'
-              onClick={handleDeviceWorksVersion}
-            >
+            <ActionButton onClick={handleDeviceWorksVersion}>
               Enciende
-            </button>
+            </ActionButton>
           </div>
           <ValidatedAutocomplete
             name='unlocktype'
@@ -370,23 +368,10 @@ function Step2({ nextStep, prevStep }: Step2Props) {
         </div>
 
         <div className='flex justify-between mt-6'>
-          <div
-            onClick={prevStep}
-            className='text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-base px-5 py-2.5 text-center w-1/4 cursor-pointer'
-          >
-            Anterior
-          </div>
-
-          <button
-            type='submit'
-            className='text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-base px-5 py-2.5 text-center w-1/4'
-          >
-            Siguiente
-          </button>
+          <ActionButton onClick={prevStep}>Anterior</ActionButton>
+          <ActionButton type={ButtonType.Submit}>Enciende</ActionButton>
         </div>
       </form>
     </TabPanel>
   );
-}
-
-export default Step2;
+};
