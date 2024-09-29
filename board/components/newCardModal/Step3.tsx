@@ -81,12 +81,6 @@ export const Step3 = ({ prevStep, nextStep }: Step3Props) => {
     featuredescription: { required: false },
   };
 
-  const registerOptions = {
-    comment: { required: false },
-    damagedescription: { required: false },
-    featuredescription: { required: false },
-  }
-
   return (
     <TabPanel unmount={false}>
       <form onSubmit={handleSubmit(handleRegistration, handleError)}>
