@@ -22,9 +22,9 @@ const useErrorHandler = () => {
           }
           break;
       }
-      toast.error(t(error.i18nKey || "error.unexpected")); // Manejo del i18nKey si existe
+      toast.error(t(error.i18nKey || "error.bit.unexpected")); // Manejo del i18nKey si existe
     } else {
-      toast.error(t("error.unexpected")); // Mensaje genérico para otros errores
+      toast.error(t("error.very.unexpected")); // Mensaje genérico para otros errores
     }
   };
 

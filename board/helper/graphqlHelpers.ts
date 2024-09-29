@@ -51,6 +51,7 @@ export const handleGraphQLErrors = (errors: GraphQLErrors | undefined) => {
 
 export const handlePayloadErrors = (errors: PayloadErrors) => {
   if (errors.status === false) {
+    console.log("aca?");
     throw new ApiLayerError(errors.i18nKey, ApiLayerErrorEnum.Business);
   }
 };

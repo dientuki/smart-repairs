@@ -14,18 +14,21 @@ import { useCustomerStore, useOrderStore } from "@/store";
 import { ButtonType, OperationStatus } from "@/types/enums";
 import { Icon } from "../Icon";
 import useErrorHandler from "../hooks/useErrorHandler";
+import { useState } from "react";
 
 const filter = createFilterOptions<OptionType>();
 type Step1Props = {
   nextStep: () => void;
   customers: OptionType[];
+  onNext: (selectedCustomer: string) => void;
 };
 
-export const Step1 = ({ nextStep, customers }: Step1Props) => {
-  const { updateOrCreateCustomer } = useCustomerStore();
+export const Step1 = ({ nextStep, customers, onNext }: Step1Props) => {
+  const { upsertCustomer } = useCustomerStore();
   const { setCreateOrderSelectedData, clearCreateOrderSelectedData } =
     useOrderStore();
   const { t } = useTranslation();
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const {
     handleSubmit,
     control,
@@ -37,6 +40,7 @@ export const Step1 = ({ nextStep, customers }: Step1Props) => {
     setError,
   } = useForm();
   const { handleError } = useErrorHandler();
+  const [localCustomers, setLocalCustomers] = useState<OptionType[]>(customers);
 
   const setErrorFields = (message: Record<string, string[]>) => {
     const toValidate = ["firstname", "lastname", "phone", "email"];
@@ -49,28 +53,73 @@ export const Step1 = ({ nextStep, customers }: Step1Props) => {
     }
   };
 
+  const isUpdatedNeeded = (data: CustomerInput): boolean => {
+    const customer = localCustomers.find((c) => c.id === data.id);
+    if (!customer || !customer.info || typeof customer.info === "string") {
+      return true;
+    }
+
+    const customerInfo = [
+      customer.info.first_name,
+      customer.info.last_name,
+      customer.info.phone,
+      customer.info.email,
+    ];
+
+    const dataInfo = [data.firstname, data.lastname, data.phone, data.email];
+
+    if (customerInfo.some((value, index) => value !== dataInfo[index])) {
+      return true;
+    }
+
+    return false;
+  };
+
+  console.log(localCustomers);
+
   const handleRegistration = async (data: FieldValues) => {
+    if (isSubmitting) return;
+    setIsSubmitting(true);
     try {
-      const customerStatus = await updateOrCreateCustomer(
-        data as CustomerInput,
-      );
-      switch (customerStatus) {
-        case OperationStatus.CREATED:
-          toast.success(
-            t("toast.success.add", { record: t("field.customer") }),
-          );
-          break;
-        case OperationStatus.UPDATED:
-          toast.success(
-            t("toast.success.update", { record: t("field.customer") }),
-          );
-          break;
-        case OperationStatus.NO_CHANGE:
-          break;
+      if (isUpdatedNeeded(data as CustomerInput)) {
+        const upsertData = await upsertCustomer(data as CustomerInput);
+
+        switch (upsertData.operation) {
+          case OperationStatus.Created:
+            toast.success(
+              t("toast.success.add", { record: t("field.customer") }),
+            );
+            setLocalCustomers((prev) => [
+              ...prev,
+              {
+                id: upsertData.customer.id,
+                label: upsertData.customer.label,
+                info: upsertData.customer.info,
+              },
+            ]);
+            break;
+          case OperationStatus.Updated:
+            toast.success(
+              t("toast.success.update", { record: t("field.customer") }),
+            );
+            setLocalCustomers((prev) =>
+              prev.map((customer) =>
+                customer.id === upsertData.customer.id
+                  ? { ...customer, ...upsertData.customer }
+                  : customer,
+              ),
+            );
+            break;
+          case OperationStatus.NoChange:
+            break;
+        }
       }
+      onNext(`${data.firstname} ${data.lastname}`);
       nextStep();
     } catch (error) {
       handleError(error, setErrorFields);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -128,8 +177,8 @@ export const Step1 = ({ nextStep, customers }: Step1Props) => {
         setValue("id", newValue.id);
         setValue("firstname", newValue.info.first_name);
         setValue("lastname", newValue.info.last_name);
-        setValue("phone", newValue.info.phone);
-        setValue("email", newValue.info.email);
+        setValue("phone", newValue.info.phone || "");
+        setValue("email", newValue.info.email || "");
         ["firstname", "lastname", "phone", "email"].forEach((field) =>
           trigger(field),
         );
@@ -163,8 +212,8 @@ export const Step1 = ({ nextStep, customers }: Step1Props) => {
       <SimpleAutocomplete
         name='customer'
         label={t("field.customer")}
-        options={customers}
-        isLoading={!customers}
+        options={localCustomers}
+        isLoading={!localCustomers}
         onChange={(_, newValue, reason) =>
           handleCustomerChange(newValue, reason)
         }
@@ -213,7 +262,7 @@ export const Step1 = ({ nextStep, customers }: Step1Props) => {
         </div>
 
         <div className='flex justify-end mt-6'>
-          <ActionButton type={ButtonType.Submit}>
+          <ActionButton type={ButtonType.Submit} loading={isSubmitting}>
             {t("button.next")}
           </ActionButton>
         </div>

@@ -13,6 +13,12 @@ import Avatar from "react-avatar";
 import { Step1, Step2, Step3, TabListTab } from "@/components/newCardModal";
 import useErrorHandler from "../hooks/useErrorHandler";
 
+interface OrderData {
+  customer: string | null;
+  deviceType: string | null;
+  device: string | null;
+}
+
 export const NewCardModal = () => {
   const modal = useModalWindow();
   const { user } = useUserStore();
@@ -23,6 +29,11 @@ export const NewCardModal = () => {
   const { getBoard } = useBoardStore();
   const { initializeOrderCreationData, createOrderSelectedData, createOrder } =
     useOrderStore();
+  const [orderData, setOrderData] = useState<OrderData>({
+    customer: null,
+    deviceType: null,
+    device: null,
+  });
   const date = new Date();
   const { handleError } = useErrorHandler();
 
@@ -43,6 +54,24 @@ export const NewCardModal = () => {
       AbortControllerManager.abort();
     };
   }, []);
+
+  const handleCustomerSelected = (selectedCustomer: string) => {
+    setOrderData((prevState) => ({
+      ...prevState,
+      customer: selectedCustomer,
+    }));
+  };
+
+  const handleDeviceSelected = (
+    selectedDevice: string,
+    selectedDeviceType: string,
+  ) => {
+    setOrderData((prevState) => ({
+      ...prevState,
+      device: selectedDevice,
+      deviceType: selectedDeviceType,
+    }));
+  };
 
   const saveOrder = async () => {
     await createOrder();
@@ -100,7 +129,11 @@ export const NewCardModal = () => {
               </TabList>
 
               <TabPanels className='outline-none p-6'>
-                <Step1 nextStep={nextStep} customers={initialData.customers} />
+                <Step1
+                  nextStep={nextStep}
+                  customers={initialData.customers}
+                  onNext={handleCustomerSelected}
+                />
                 <Step2 prevStep={prevStep} nextStep={nextStep} />
                 <Step3 prevStep={prevStep} nextStep={saveOrder} />
               </TabPanels>
@@ -126,7 +159,7 @@ export const NewCardModal = () => {
                 <p className='w-1/3 first-letter:uppercase'>
                   {t("order.customer")}
                 </p>
-                <p className='w-2/3 truncate'>Cliente</p>
+                <p className='w-2/3 truncate'>{orderData.customer || ""}</p>
               </div>
               <div className='flex items-center justify-between w-full'>
                 <p className='w-1/3 first-letter:uppercase'>Vendedor</p>

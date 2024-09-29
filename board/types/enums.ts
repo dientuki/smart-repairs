@@ -1,7 +1,7 @@
 export enum OperationStatus {
-  CREATED = "CREATED",
-  UPDATED = "UPDATED",
-  NO_CHANGE = "NO_CHANGE",
+  Created = "Created",
+  Updated = "Updated",
+  NoChange = "NoChange",
 }
 
 export enum DiscountType {
