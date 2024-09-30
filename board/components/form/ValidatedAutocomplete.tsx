@@ -30,11 +30,7 @@ interface ValidatedAutocompleteProps {
   disableClearable?: boolean;
   disabled?: boolean;
 
-  onChange?: (
-    event: React.SyntheticEvent,
-    newValue: OptionType | null,
-    reason?: string,
-  ) => void;
+  onChange?: (newValue: OptionType | null, reason: string) => void;
 
   filterOptions?: (
     options: OptionType[],
@@ -99,9 +95,8 @@ export const ValidatedAutocomplete = ({
           <Controller
             name={name}
             control={control}
-            defaultValue=''
             rules={rules}
-            render={() => (
+            render={({ field }) => (
               <Autocomplete
                 autoHighlight
                 autoSelect
@@ -109,13 +104,14 @@ export const ValidatedAutocomplete = ({
                 handleHomeEndKeys
                 clearOnEscape
                 id={name}
-                onChange={onChange}
-                filterOptions={filterOptions}
-                value={value}
+                onChange={(_, newValue, reason) => {
+                  field.onChange(newValue);
+                  if (onChange) {
+                    onChange(newValue, reason);
+                  }
+                }}
+                value={field.value || null}
                 options={Array.isArray(options) ? options : []}
-                disableClearable={disableClearable}
-                isOptionEqualToValue={() => true}
-                disabled={disabled}
                 renderInput={(params) => (
                   <TextField
                     {...params}

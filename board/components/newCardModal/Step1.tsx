@@ -13,7 +13,7 @@ import {
 import { useCustomerStore, useOrderStore } from "@/store";
 import { ButtonType, OperationStatus } from "@/types/enums";
 import { Icon } from "../Icon";
-import useErrorHandler from "../hooks/useErrorHandler";
+import useErrorHandler from "@/components/hooks/useErrorHandler";
 import { useState } from "react";
 
 const filter = createFilterOptions<OptionType>();
@@ -74,8 +74,6 @@ export const Step1 = ({ nextStep, customers, onNext }: Step1Props) => {
 
     return false;
   };
-
-  console.log(localCustomers);
 
   const handleRegistration = async (data: FieldValues) => {
     if (isSubmitting) return;
