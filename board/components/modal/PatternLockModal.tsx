@@ -37,8 +37,11 @@ function PatternLockModal() {
 
   return (
     <ModalLayout width='328px' height='384px'>
-      <div className="p-4 flex flex-col justify-between h-full">
-        <div onPointerDown={reset} className="fi-ta-ctn divide-y divide-gray-200 overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-gray-950/5 dark:divide-white/10 dark:bg-gray-900 dark:ring-white/10">
+      <div className='p-4 flex flex-col justify-between h-full'>
+        <div
+          onPointerDown={reset}
+          className='fi-ta-ctn divide-y divide-gray-200 overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-gray-950/5 dark:divide-white/10 dark:bg-gray-900 dark:ring-white/10'
+        >
           <PatternLock
             className='bg-black'
             success={isSuccess}
@@ -56,7 +59,9 @@ function PatternLockModal() {
             onFinish={onFinish}
           />
         </div>
-        <ActionButton onClick={closeModal} className="w-full">Listo!</ActionButton>
+        <ActionButton onClick={closeModal} className='w-full'>
+          Listo!
+        </ActionButton>
       </div>
     </ModalLayout>
   );
