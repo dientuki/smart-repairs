@@ -134,7 +134,13 @@ export const NewCardModal = () => {
                   customers={initialData.customers}
                   onNext={handleCustomerSelected}
                 />
-                <Step2 prevStep={prevStep} nextStep={nextStep} />
+                <Step2
+                  prevStep={prevStep}
+                  nextStep={nextStep}
+                  brands={initialData.brands}
+                  devices={initialData.devices}
+                  deviceTypes={initialData.deviceTypes}
+                />
                 <Step3 prevStep={prevStep} nextStep={saveOrder} />
               </TabPanels>
             </TabGroup>
@@ -155,12 +161,6 @@ export const NewCardModal = () => {
                   })}
                 </p>
               </div>
-              <div className='flex justify-between w-full'>
-                <p className='w-1/3 first-letter:uppercase'>
-                  {t("order.customer")}
-                </p>
-                <p className='w-2/3 truncate'>{orderData.customer || ""}</p>
-              </div>
               <div className='flex items-center justify-between w-full'>
                 <p className='w-1/3 first-letter:uppercase'>Vendedor</p>
                 <div className='w-2/3 flex flex-row gap-1 items-center'>
@@ -173,6 +173,18 @@ export const NewCardModal = () => {
                   />
                   <div className='truncate'>{user.name}</div>
                 </div>
+              </div>
+              <div className='flex justify-between w-full'>
+                <p className='w-1/3 first-letter:uppercase'>
+                  {t("order.customer")}
+                </p>
+                <p className='w-2/3 truncate'>{orderData.customer || ""}</p>
+              </div>
+              <div className='flex justify-between w-full'>
+                <p className='w-1/3 first-letter:uppercase'>
+                  {t("order.customer")}
+                </p>
+                <p className='w-2/3 truncate'>{orderData.customer || ""}</p>
               </div>
             </div>
           </div>

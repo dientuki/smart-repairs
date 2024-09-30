@@ -10,6 +10,7 @@ import { getDeviceVersions } from "@/services/deviceVersions";
 import { useBrandStore, useDeviceTypeStore, useOrderStore } from "@/store";
 import { device } from "@/helper/reduceHelpers";
 import { getDevicesByTypeAndBrand } from "@/services/devices";
+import { FieldValues } from "react-hook-form";
 
 /*
   get To retrieve data from the server
@@ -40,7 +41,7 @@ interface DeviceStore {
   };
   setDeviceUnitSelected: (data: DeviceUnitSelectedUpdate) => void;
 
-  addTemporaryDeviceUnit: (data: TemporaryDeviceUnitInput) => Promise<any>;
+  addTemporaryDeviceUnit: (data: FieldValues) => Promise<any>;
   updateDeviceInStore: (device: OptionType) => void;
 
   deviceUnit: any;
@@ -96,19 +97,22 @@ export const useDeviceStore = create<DeviceStore>((set) => ({
   },
 
   addTemporaryDeviceUnit: async (
-    data: TemporaryDeviceUnitInput,
+    data: FieldValues,
   ): Promise<any> => {
-    const response = await addTemporaryDeviceUnit(data);
 
-    useBrandStore.getState().updateBrandInStore(response.brand);
-    useDeviceTypeStore.getState().updateDeviceTypeInStore(response.deviceType);
-    useDeviceStore.getState().updateDeviceInStore(device([response.device])[0]);
-    useOrderStore.getState().setCreateOrderSelectedData({
-      temporaryDeviceUnitId: response.temporarydeviceunit,
-    });
-    useOrderStore
-      .getState()
-      .setCreateOrderSelectedData({ deviceId: response.device.id });
+    const normalized:TemporaryDeviceUnitInput = {
+      deviceid: data.deviceid,
+      brandid: data.brand.id,
+      brandlabel: data.brand.label,
+      typeid: data.type.id,
+      typelabel: data.type.label,
+      commercialname: data.commercialname,
+      url: data.url,
+      unlockcode: data.unlockcode,
+      unlocktype: data.unlocktype
+    }
+
+    const response = await addTemporaryDeviceUnit(normalized);
 
     //return await addTemporaryDeviceUnit(data);
   },
