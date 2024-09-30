@@ -75,8 +75,6 @@ export const Step1 = ({ nextStep, customers, onNext }: Step1Props) => {
     return false;
   };
 
-  console.log(localCustomers);
-
   const handleRegistration = async (data: FieldValues) => {
     if (isSubmitting) return;
     setIsSubmitting(true);

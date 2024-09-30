@@ -65,11 +65,21 @@ export const Step2 = ({
   }));
 
   const setErrorFields = (message: Record<string, string[]>) => {
-    const toValidate = ["firstname", "lastname", "phone", "email"];
+    const toValidate = [
+      "deviceid",
+      "brandid",
+      "typeid",
+      "url",
+      "serialid",
+      "versionid",
+      "commercialname",
+      "unlocktype",
+      "unlockcode",
+    ];
     for (let i = 0, c = toValidate.length; i < c; i++) {
-      if (message[`customer.${toValidate[i]}`]) {
+      if (message[`input.${toValidate[i]}`]) {
         setError(toValidate[i], {
-          message: message[`customer.${toValidate[i]}`][0],
+          message: message[`input.${toValidate[i]}`][0],
         });
       }
     }

@@ -3,6 +3,7 @@ import { ModalLayout } from "@/components/modal";
 import PatternLock from "react-pattern-lock/lib/components/PatternLock";
 import { useState } from "react";
 import { useModalWindow } from "react-modal-global";
+import { ActionButton } from "../form";
 
 type ModalParams = {
   setPattern: (pattern: number[]) => void;
@@ -36,30 +37,27 @@ function PatternLockModal() {
 
   return (
     <ModalLayout width='328px' height='384px'>
-      <div onPointerDown={reset}>
-        <PatternLock
-          className='bg-black'
-          success={isSuccess}
-          error={isError}
-          width={280}
-          pointSize={15}
-          pointActiveSize={40}
-          size={3}
-          path={pattern}
-          allowOverlapping={true}
-          connectorThickness={5}
-          onChange={(path) => {
-            setPath([...path] as number[]);
-          }}
-          onFinish={onFinish}
-        />
+      <div className="p-4 flex flex-col justify-between h-full">
+        <div onPointerDown={reset} className="fi-ta-ctn divide-y divide-gray-200 overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-gray-950/5 dark:divide-white/10 dark:bg-gray-900 dark:ring-white/10">
+          <PatternLock
+            className='bg-black'
+            success={isSuccess}
+            error={isError}
+            width={296}
+            pointSize={15}
+            pointActiveSize={40}
+            size={3}
+            path={pattern}
+            allowOverlapping={true}
+            connectorThickness={5}
+            onChange={(path) => {
+              setPath([...path] as number[]);
+            }}
+            onFinish={onFinish}
+          />
+        </div>
+        <ActionButton onClick={closeModal} className="w-full">Listo!</ActionButton>
       </div>
-      <button
-        onClick={closeModal}
-        className='mt-4 w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-base px-5 py-2.5 text-center'
-      >
-        Listo!
-      </button>
     </ModalLayout>
   );
 }
