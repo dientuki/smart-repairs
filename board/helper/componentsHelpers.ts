@@ -18,9 +18,15 @@ export const combineClasses = (
   const cleanedCustomClasses = new Set(customClassList.map(cleanClass));
 
   // Filter default classes that are not in custom classes
-  const filteredDefaultClasses = defaultClassList.filter(
+  let filteredDefaultClasses = defaultClassList.filter(
     (cls) => !cleanedCustomClasses.has(cleanClass(cls)),
   );
+
+  if (cleanedCustomClasses.has("absolute")) {
+    filteredDefaultClasses = filteredDefaultClasses.filter(
+      (cls) => cls !== "relative",
+    );
+  }
 
   // Combine custom classes with filtered default classes
   return [...customClassList, ...filteredDefaultClasses].join(" ");

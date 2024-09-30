@@ -8,7 +8,12 @@ import {
 } from "@/services/deviceUnits";
 import { getDeviceVersions } from "@/services/deviceVersions";
 import { useBrandStore, useDeviceTypeStore, useOrderStore } from "@/store";
-import { device } from "@/helper/reduceHelpers";
+import {
+  device,
+  deviceSingle,
+  extra,
+  extraSingle,
+} from "@/helper/reduceHelpers";
 import { getDevicesByTypeAndBrand } from "@/services/devices";
 import { FieldValues } from "react-hook-form";
 
@@ -19,6 +24,13 @@ import { FieldValues } from "react-hook-form";
   clear To clear data from the store
   set To set data in the store
 */
+
+interface TemporaryDeviceUnit {
+  brand: OptionType;
+  type: OptionType;
+  device: OptionType;
+  temporarydeviceunit: string;
+}
 
 interface DeviceUnitSelectedUpdate {
   version?: OptionType | null;
@@ -41,7 +53,7 @@ interface DeviceStore {
   };
   setDeviceUnitSelected: (data: DeviceUnitSelectedUpdate) => void;
 
-  addTemporaryDeviceUnit: (data: FieldValues) => Promise<any>;
+  addTemporaryDeviceUnit: (data: FieldValues) => Promise<TemporaryDeviceUnit>;
   updateDeviceInStore: (device: OptionType) => void;
 
   deviceUnit: any;
@@ -96,7 +108,9 @@ export const useDeviceStore = create<DeviceStore>((set) => ({
     }));
   },
 
-  addTemporaryDeviceUnit: async (data: FieldValues): Promise<any> => {
+  addTemporaryDeviceUnit: async (
+    data: FieldValues,
+  ): Promise<TemporaryDeviceUnit> => {
     const normalized: TemporaryDeviceUnitInput = {
       deviceid: data.deviceid,
       brandid: data.brand.id,
@@ -106,10 +120,17 @@ export const useDeviceStore = create<DeviceStore>((set) => ({
       commercialname: data.commercialname,
       url: data.url,
       unlockcode: data.unlockcode,
-      unlocktype: data.unlocktype,
+      unlocktype: data.unlocktype.id,
     };
 
     const response = await addTemporaryDeviceUnit(normalized);
+
+    return {
+      brand: extraSingle(response.brand),
+      type: extraSingle(response.deviceType),
+      device: deviceSingle(response.device),
+      temporarydeviceunit: response.temporarydeviceunit,
+    };
 
     //return await addTemporaryDeviceUnit(data);
   },

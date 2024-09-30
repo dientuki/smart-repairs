@@ -7,7 +7,7 @@ import {
   SimpleAutocomplete,
   ValidatedAutocomplete,
 } from "@/components/form";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FieldErrors, FieldValues, useForm } from "react-hook-form";
 import { GlobeAltIcon } from "@heroicons/react/24/outline";
 import { Icon } from "../Icon";
@@ -16,6 +16,7 @@ import { capitalizeFirstLetter } from "@/helper/stringHelpers";
 import { Modal, PatternLockModal } from "@/components/modal";
 import useErrorHandler from "@/components/hooks/useErrorHandler";
 import { useDeviceStore } from "@/store";
+import { use } from "i18next";
 
 type Step2Props = {
   nextStep: () => void;
@@ -64,6 +65,10 @@ export const Step2 = ({
     label: capitalizeFirstLetter(t(`unlock_type.${key.toLowerCase()}`)) ?? "",
   }));
 
+  useEffect(() => {
+    setValue("unlocktype", unlockOptions[0]);
+  }, []);
+
   const setErrorFields = (message: Record<string, string[]>) => {
     const toValidate = [
       "deviceid",
@@ -85,6 +90,44 @@ export const Step2 = ({
     }
   };
 
+  const upsertOptionType = (
+    original: OptionType[],
+    upsertItem: OptionType,
+  ): OptionType[] => {
+    const index = original.findIndex((item) => item.id === upsertItem.id);
+
+    if (index === -1) {
+      // Si no existe, agregamos el nuevo elemento
+      return [...original, upsertItem];
+    } else {
+      // Si ya existe, actualizamos el elemento
+      const updatedOriginal = [...original];
+      updatedOriginal[index] = upsertItem;
+      return updatedOriginal;
+    }
+  };
+
+  const upsertBrands = (brand: OptionType) => {
+    const updatedVariable = upsertOptionType(localBrands, brand);
+    if (updatedVariable !== localBrands) {
+      setLocalBrands(updatedVariable);
+    }
+  };
+
+  const upsertDeviceTypes = (type: OptionType) => {
+    const updatedVariable = upsertOptionType(localDevicesTypes, type);
+    if (updatedVariable !== localDevicesTypes) {
+      setLocalDevicesTypes(updatedVariable);
+    }
+  };
+
+  const upsertDevices = (device: OptionType) => {
+    const updatedVariable = upsertOptionType(localDevices, device);
+    if (updatedVariable !== localDevices) {
+      setLocalDevices(updatedVariable);
+    }
+  };
+
   const handleRegistration = async (data: FieldValues) => {
     console.log(data);
     if (isSubmitting) return;
@@ -92,6 +135,9 @@ export const Step2 = ({
 
     try {
       const upsertData = await addTemporaryDeviceUnit(data);
+      upsertBrands(upsertData.brand);
+      upsertDeviceTypes(upsertData.type);
+      upsertDevices(upsertData.device);
     } catch (error) {
       handleError(error, setErrorFields);
     } finally {
@@ -121,6 +167,7 @@ export const Step2 = ({
 
     if (reason === "clear" || newValue?.id == "new") {
       reset();
+      setValue("unlocktype", unlockOptions[0]);
     }
   };
 
@@ -138,7 +185,6 @@ export const Step2 = ({
   };
 
   const handleUnlock = (unlock: string) => {
-    console.log(unlock);
     switch (unlock) {
       case UnlockType.NONE:
         setIsDisableCode(true);
@@ -246,8 +292,11 @@ export const Step2 = ({
         </div>
 
         <div className='grid gap-6 grid-cols-3 mt-4'>
-          <div className='relative'>
-            <ActionButton onClick={handleDeviceWorksVersion}>
+          <div className='relative h-full'>
+            <ActionButton
+              onClick={handleDeviceWorksVersion}
+              className='absolute bottom-0 left-0 w-full'
+            >
               Enciende
             </ActionButton>
           </div>
