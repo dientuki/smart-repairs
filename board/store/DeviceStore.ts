@@ -96,11 +96,8 @@ export const useDeviceStore = create<DeviceStore>((set) => ({
     }));
   },
 
-  addTemporaryDeviceUnit: async (
-    data: FieldValues,
-  ): Promise<any> => {
-
-    const normalized:TemporaryDeviceUnitInput = {
+  addTemporaryDeviceUnit: async (data: FieldValues): Promise<any> => {
+    const normalized: TemporaryDeviceUnitInput = {
       deviceid: data.deviceid,
       brandid: data.brand.id,
       brandlabel: data.brand.label,
@@ -109,8 +106,8 @@ export const useDeviceStore = create<DeviceStore>((set) => ({
       commercialname: data.commercialname,
       url: data.url,
       unlockcode: data.unlockcode,
-      unlocktype: data.unlocktype
-    }
+      unlocktype: data.unlocktype,
+    };
 
     const response = await addTemporaryDeviceUnit(normalized);
 

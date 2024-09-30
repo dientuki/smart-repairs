@@ -1,6 +1,12 @@
 import { useTranslation } from "react-i18next";
 import { TabPanel } from "@headlessui/react";
-import { ActionButton, HiddenInput, InputField, SimpleAutocomplete, ValidatedAutocomplete } from "@/components/form";
+import {
+  ActionButton,
+  HiddenInput,
+  InputField,
+  SimpleAutocomplete,
+  ValidatedAutocomplete,
+} from "@/components/form";
 import { useState } from "react";
 import { FieldErrors, FieldValues, useForm } from "react-hook-form";
 import { GlobeAltIcon } from "@heroicons/react/24/outline";
@@ -27,12 +33,19 @@ enum UnlockType {
 
 const unlockTypeEntries = Object.entries(UnlockType);
 
-export const Step2 = ({ nextStep, prevStep, brands, deviceTypes, devices }: Step2Props) => {
+export const Step2 = ({
+  nextStep,
+  prevStep,
+  brands,
+  deviceTypes,
+  devices,
+}: Step2Props) => {
   const { t } = useTranslation();
-  const [ localDevices, setLocalDevices ] = useState<OptionType[]>(devices);
-  const [ localDevicesTypes, setLocalDevicesTypes ] = useState<OptionType[]>(deviceTypes);
-  const [ localBrands, setLocalBrands ] = useState<OptionType[]>(brands);
-  const [ isDisableCode, setIsDisableCode] = useState(true);
+  const [localDevices, setLocalDevices] = useState<OptionType[]>(devices);
+  const [localDevicesTypes, setLocalDevicesTypes] =
+    useState<OptionType[]>(deviceTypes);
+  const [localBrands, setLocalBrands] = useState<OptionType[]>(brands);
+  const [isDisableCode, setIsDisableCode] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { addTemporaryDeviceUnit } = useDeviceStore();
   const { handleError } = useErrorHandler();
@@ -43,12 +56,12 @@ export const Step2 = ({ nextStep, prevStep, brands, deviceTypes, devices }: Step
     control,
     setValue,
     reset,
-    setError
+    setError,
   } = useForm();
 
   const unlockOptions: OptionType[] = unlockTypeEntries.map(([key, value]) => ({
     id: value,
-    label: capitalizeFirstLetter(t(`unlock_type.${key.toLowerCase()}`)) ?? '',
+    label: capitalizeFirstLetter(t(`unlock_type.${key.toLowerCase()}`)) ?? "",
   }));
 
   const setErrorFields = (message: Record<string, string[]>) => {
@@ -63,22 +76,20 @@ export const Step2 = ({ nextStep, prevStep, brands, deviceTypes, devices }: Step
   };
 
   const handleRegistration = async (data: FieldValues) => {
-    console.log(data)
+    console.log(data);
     if (isSubmitting) return;
     setIsSubmitting(true);
 
     try {
       const upsertData = await addTemporaryDeviceUnit(data);
-
     } catch (error) {
       handleError(error, setErrorFields);
     } finally {
       setIsSubmitting(false);
     }
+  };
 
-  }
-
-  const handleErrorForm = (errors: FieldErrors<FieldValues>) => {}
+  const handleErrorForm = (errors: FieldErrors<FieldValues>) => {};
 
   const handleDeviceChange = async (
     newValue: OptionType | null,
@@ -87,10 +98,12 @@ export const Step2 = ({ nextStep, prevStep, brands, deviceTypes, devices }: Step
     if (newValue && newValue.id != "new" && reason === "selectOption") {
       if (typeof newValue.info === "object" && newValue.info !== null) {
         const brand = localBrands.find((b) => b.id === newValue.info.brandid);
-        const type = localDevicesTypes.find((t) => t.id === newValue.info.typeid);
-        setValue('deviceid', newValue.id);
-        setValue('type', type);
-        setValue('brand', brand);
+        const type = localDevicesTypes.find(
+          (t) => t.id === newValue.info.typeid,
+        );
+        setValue("deviceid", newValue.id);
+        setValue("type", type);
+        setValue("brand", brand);
         setValue("url", newValue.info.url ?? "");
         setValue("commercialname", newValue.info.commercialname ?? "");
       }
@@ -99,7 +112,7 @@ export const Step2 = ({ nextStep, prevStep, brands, deviceTypes, devices }: Step
     if (reason === "clear" || newValue?.id == "new") {
       reset();
     }
-  }
+  };
 
   const handleDeviceWorksVersion = () => {
     /*
@@ -115,7 +128,7 @@ export const Step2 = ({ nextStep, prevStep, brands, deviceTypes, devices }: Step
   };
 
   const handleUnlock = (unlock: string) => {
-    console.log(unlock)
+    console.log(unlock);
     switch (unlock) {
       case UnlockType.NONE:
         setIsDisableCode(true);
@@ -174,7 +187,11 @@ export const Step2 = ({ nextStep, prevStep, brands, deviceTypes, devices }: Step
       />
 
       <form onSubmit={handleSubmit(handleRegistration, handleErrorForm)}>
-        <HiddenInput name='deviceid' control={control} rules={registerOptions.deviceid} />
+        <HiddenInput
+          name='deviceid'
+          control={control}
+          rules={registerOptions.deviceid}
+        />
 
         <div className='grid gap-6 grid-cols-2 mt-4'>
           <ValidatedAutocomplete
@@ -220,7 +237,9 @@ export const Step2 = ({ nextStep, prevStep, brands, deviceTypes, devices }: Step
 
         <div className='grid gap-6 grid-cols-3 mt-4'>
           <div className='relative'>
-            <ActionButton onClick={handleDeviceWorksVersion}>Enciende</ActionButton>
+            <ActionButton onClick={handleDeviceWorksVersion}>
+              Enciende
+            </ActionButton>
           </div>
           <ValidatedAutocomplete
             name='unlocktype'
@@ -243,12 +262,12 @@ export const Step2 = ({ nextStep, prevStep, brands, deviceTypes, devices }: Step
         </div>
 
         <div className='flex justify-between mt-6'>
-          <ActionButton onClick={prevStep}>{t('button.previous')}</ActionButton>
-          <ActionButton type={ButtonType.Submit}>{t('button.next')}</ActionButton>
+          <ActionButton onClick={prevStep}>{t("button.previous")}</ActionButton>
+          <ActionButton type={ButtonType.Submit}>
+            {t("button.next")}
+          </ActionButton>
         </div>
       </form>
-
-
     </TabPanel>
   );
 };

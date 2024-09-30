@@ -26,9 +26,7 @@ export const HiddenInput = ({
       control={control}
       defaultValue={defaultValue}
       rules={rules}
-      render={({ field }) => (
-        <Input {...field} type={InputType.Hidden} />
-      )}
+      render={({ field }) => <Input {...field} type={InputType.Hidden} />}
     />
   );
 };

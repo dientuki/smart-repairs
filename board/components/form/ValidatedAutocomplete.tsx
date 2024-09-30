@@ -30,10 +30,7 @@ interface ValidatedAutocompleteProps {
   disableClearable?: boolean;
   disabled?: boolean;
 
-  onChange?: (
-    newValue: OptionType | null,
-    reason: string,
-  ) => void;
+  onChange?: (newValue: OptionType | null, reason: string) => void;
 
   filterOptions?: (
     options: OptionType[],
