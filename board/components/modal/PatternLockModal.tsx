@@ -38,12 +38,9 @@ function PatternLockModal() {
   return (
     <ModalLayout width='328px' height='384px'>
       <div className='p-4 flex flex-col justify-between h-full'>
-        <div
-          onPointerDown={reset}
-          className='fi-ta-ctn divide-y divide-gray-200 overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-gray-950/5 dark:divide-white/10 dark:bg-gray-900 dark:ring-white/10'
-        >
+        <div onPointerDown={reset}>
           <PatternLock
-            className='bg-black'
+            className='overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-gray-950/5 dark:bg-gray-900 dark:ring-white/10'
             success={isSuccess}
             error={isError}
             width={296}
