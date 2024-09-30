@@ -1,3 +1,5 @@
+import { TypedColumn } from "@/types/enums";
+
 declare global {
   interface OptionType {
     id: string;
@@ -18,7 +20,7 @@ declare global {
   }
 
   interface Board {
-    columns: Map<TypedColumn, Colum>;
+    columns: Map<TypedColumn, Column>;
   }
 
   interface Column {

@@ -97,8 +97,101 @@ input[type="number"] {
   color: #3b3b3b;
 }
 
+/* initial */
+.react-pattern-lock__pattern-wrapper
+.react-pattern-lock__connector-wrapper
+.react-pattern-lock__connector {
+  --tw-bg-opacity: 1;
+  background-color: rgba(var(--gray-500),var(--tw-bg-opacity))
+}
+
+.react-pattern-lock__pattern-wrapper
+.react-pattern-lock__point-wrapper
+.react-pattern-lock__point
+.react-pattern-lock__point-inner {
+  --tw-bg-opacity: 1;
+  background-color: rgba(var(--gray-500),var(--tw-bg-opacity))
+}
 
 
+/* success */
+.react-pattern-lock__pattern-wrapper.success
+.react-pattern-lock__connector-wrapper
+.react-pattern-lock__connector {
+  --tw-bg-opacity: 1;
+  background-color: rgba(var(--success-600),var(--tw-bg-opacity))
+}
+
+.react-pattern-lock__pattern-wrapper.success
+.react-pattern-lock__point-wrapper.selected
+.react-pattern-lock__point
+.react-pattern-lock__point-inner {
+  --tw-bg-opacity: 1;
+  background-color: rgba(var(--success-600),var(--tw-bg-opacity))
+}
+
+.react-pattern-lock__pattern-wrapper.success
+.react-pattern-lock__point-wrapper
+.react-pattern-lock__point
+.react-pattern-lock__point-inner {
+  --tw-bg-opacity: 1;
+  background-color: rgba(var(--gray-500),var(--tw-bg-opacity))
+}
+
+
+
+/* error */
+.react-pattern-lock__pattern-wrapper.error
+.react-pattern-lock__connector-wrapper
+.react-pattern-lock__connector {
+  --tw-bg-opacity: 1;
+  background-color: rgba(var(--danger-600),var(--tw-bg-opacity))
+}
+
+.react-pattern-lock__pattern-wrapper.error
+.react-pattern-lock__point-wrapper.selected
+.react-pattern-lock__point
+.react-pattern-lock__point-inner {
+  --tw-bg-opacity: 1;
+  background-color: rgba(var(--danger-600),var(--tw-bg-opacity))
+}
+
+.react-pattern-lock__pattern-wrapper.error
+.react-pattern-lock__point-wrapper
+.react-pattern-lock__point
+.react-pattern-lock__point-inner {
+  --tw-bg-opacity: 1;
+  background-color: rgba(var(--gray-500),var(--tw-bg-opacity))
+}
+
+/*
+
+.react-pattern-lock__pattern-wrapper.error
+.react-pattern-lock__point-wrapper.selected
+.react-pattern-lock__point
+.react-pattern-lock__point-inner {
+background: red !important;
+}
+.react-pattern-lock__pattern-wrapper
+.react-pattern-lock__point-wrapper
+.react-pattern-lock__point
+.react-pattern-lock__point-inner {
+background: blue !important;
+}
+
+.react-pattern-lock__pattern-wrapper.error
+.react-pattern-lock__connector-wrapper
+.react-pattern-lock__connector {
+background: green !important;
+}
+
+
+.react-pattern-lock__pattern-wrapper
+.react-pattern-lock__connector-wrapper
+.react-pattern-lock__connector {
+background: black !important;
+}
+*/
 /*
 textarea {
   field-sizing: content;

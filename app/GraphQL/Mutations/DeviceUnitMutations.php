@@ -65,25 +65,36 @@ final readonly class DeviceUnitMutations
         try {
             DB::beginTransaction();
 
-            $brand = Brand::updateOrCreate(
-                ['id' => $args['input']['brandid']],
-                ['name' => $args['input']['brandlabel']]
-            );
+            $brand = Brand::find($args['input']['brandid']);
+            if ($brand) {
+                $brand->update(['name' => $args['input']['brandlabel']]);
+            } else {
+                $brand = Brand::create(['name' => $args['input']['brandlabel']]);
+            }
 
-            $type = DeviceType::updateOrCreate(
-                ['id' => $args['input']['typeid']],
-                ['name' => $args['input']['typelabel']]
-            );
+            $type = DeviceType::find($args['input']['typeid']);
+            if ($type) {
+                $type->update(['name' => $args['input']['typelabel']]);
+            } else {
+                $type = DeviceType::create(['name' => $args['input']['typelabel']]);
+            }
 
-            $device = Device::updateOrCreate(
-                ['id' => $args['input']['deviceid']],
-                [
+            $device = Device::find($args['input']['deviceid']);
+            if ($device) {
+                $device->update([
                     'commercial_name' => $args['input']['commercialname'],
                     'brand_id' => $brand->id,
                     'device_type_id' => $type->id,
                     'url' => $args['input']['url'],
-                ]
-            );
+                ]);
+            } else {
+                $device = Device::create([
+                    'commercial_name' => $args['input']['commercialname'],
+                    'brand_id' => $brand->id,
+                    'device_type_id' => $type->id,
+                    'url' => $args['input']['url'],
+                ]);
+            }
 
             if (!empty($args['input']['versionlabel'])) {
                 $deviceVersion = DeviceVersion::updateOrCreate(

@@ -1,7 +1,7 @@
 export enum OperationStatus {
-  CREATED = "CREATED",
-  UPDATED = "UPDATED",
-  NO_CHANGE = "NO_CHANGE",
+  Created = "Created",
+  Updated = "Updated",
+  NoChange = "NoChange",
 }
 
 export enum DiscountType {
@@ -38,6 +38,7 @@ export enum InputType {
   Number = "number",
   Email = "email",
   Tel = "tel",
+  Hidden = "hidden",
 }
 
 export enum PackageType {
@@ -63,4 +64,18 @@ export enum Itemable {
   Part = "Part",
   ServiceJob = "ServiceJob",
   Discount = "Discount",
+}
+
+export enum TabStatusEnum {
+  Active = "active",
+  Inactive = "inactive",
+  Completed = "completed",
+}
+
+export enum ApiLayerErrorEnum {
+  Network = "Network",
+  Validation = "Validation",
+  GraphQL = "GraphQL",
+  Business = "Business",
+  Wtf = "Wtf",
 }

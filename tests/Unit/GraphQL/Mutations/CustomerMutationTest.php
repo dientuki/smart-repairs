@@ -8,6 +8,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\Unit\GraphQL\TestCaseGraphQL;
 use Nuwave\Lighthouse\Testing\MakesGraphQLRequests;
 use PHPUnit\Framework\Attributes\Test;
+use Faker\Factory;
 
 class CustomerMutationTest extends TestCaseGraphQL
 {
@@ -22,40 +23,67 @@ class CustomerMutationTest extends TestCaseGraphQL
     #[Test]
     public function add_customer_successfully()
     {
+        $faker = Factory::create();
+
+        $customer = [
+            'firstname' => $faker->firstName,
+            'lastname' => $faker->lastName,
+            'phone' => '+123456789',
+            'email' => $faker->email,
+        ];
+
         $response = $this->graphQL('
             mutation {
-                addCustomer(customer: {
-                    firstname: "John",
-                    lastname: "Doe",
-                    phone: "+123456789",
-                    email: "john.doe@example.com"
-                }) {
-                    id
-                    label
-                    first_name
-                    last_name
-                    phone
-                    email
+                upsertCustomer(
+                    customer: {
+                        id: "",
+                        firstname: "' . $customer['firstname'] . '",
+                        lastname: "' . $customer['lastname'] . '",
+                        phone: "' . $customer['phone'] . '",
+                        email: "' . $customer['email'] . '"
+                    }
+                ) {
+                    __typename
+                    ... on UpsertCustomerPayload {
+                        customer {
+                            id
+                            label
+                            first_name
+                            last_name
+                            phone
+                            email
+                        }
+                        operation
+                    }
+                    ... on ErrorPayload {
+                        status
+                        i18nKey
+                    }
                 }
             }
         ');
 
         $response->assertJson([
             'data' => [
-                'addCustomer' => [
-                    'first_name' => 'John',
-                    'last_name' => 'Doe',
-                    'phone' => '+123456789',
-                    'email' => 'john.doe@example.com',
+                'upsertCustomer' => [
+                    '__typename' => 'UpsertCustomerPayload',
+                    'customer' => [
+                        'label' => $customer['firstname'] . ' ' . $customer['lastname'],
+                        'first_name' => $customer['firstname'],
+                        'last_name' => $customer['lastname'],
+                        'phone' => $customer['phone'],
+                        'email' => $customer['email'],
+                    ],
+                    'operation' => 'Created',
                 ],
             ],
         ]);
 
         $this->assertDatabaseHas('customers', [
-            'first_name' => 'John',
-            'last_name' => 'Doe',
-            'phone' => '+123456789',
-            'email' => 'john.doe@example.com',
+            'first_name' => $customer['firstname'],
+            'last_name' => $customer['lastname'],
+            'phone' => $customer['phone'],
+            'email' => $customer['email'],
             'team_id' => $this->team->id
         ]);
     }
@@ -70,13 +98,31 @@ class CustomerMutationTest extends TestCaseGraphQL
     {
         $response = $this->graphQL('
             mutation {
-                addCustomer(customer: {
-                    firstname: "John",
-                    lastname: "Doe",
-                    phone: "",
-                    email: ""
-                }) {
-                    id
+                upsertCustomer(
+                    customer: {
+                        id: "",
+                        firstname: "Jhon",
+                        lastname: "Doe",
+                        phone: "",
+                        email: ""
+                    }
+                ) {
+                    __typename
+                    ... on UpsertCustomerPayload {
+                        customer {
+                            id
+                            label
+                            first_name
+                            last_name
+                            phone
+                            email
+                        }
+                        operation
+                    }
+                    ... on ErrorPayload {
+                        status
+                        i18nKey
+                    }
                 }
             }
         ');
@@ -100,34 +146,73 @@ class CustomerMutationTest extends TestCaseGraphQL
     public function update_customer_successfully()
     {
         // Crear un equipo y cliente
-        $customer = Customer::factory()->create(['team_id' => $this->team->id]);
+        $customerDB = Customer::factory()->create(['team_id' => $this->team->id]);
+
+        $faker = Factory::create();
+        $customer = [
+            'firstname' => $faker->firstName,
+            'lastname' => $faker->lastName,
+            'phone' => '+123456789',
+            'email' => $faker->email,
+        ];
 
         // Realizar la mutación de actualización
         $response = $this->graphQL('
             mutation {
-                updateCustomer(customerId: "' . $customer->id . '", customer: {
-                    firstname: "UpdatedFirstName",
-                    lastname: "UpdatedLastName",
-                    phone: "+123456789",
-                    email: "updated@example.com"
-                })
+                upsertCustomer(
+                    customer: {
+                        id: "' . $customerDB->id . '",
+                        firstname: "' . $customer['firstname'] . '",
+                        lastname: "' . $customer['lastname'] . '",
+                        phone: "' . $customer['phone'] . '",
+                        email: "' . $customer['email'] . '"
+                    }
+                ) {
+                    __typename
+                    ... on UpsertCustomerPayload {
+                        customer {
+                            id
+                            label
+                            first_name
+                            last_name
+                            phone
+                            email
+                        }
+                        operation
+                    }
+                    ... on ErrorPayload {
+                        status
+                        i18nKey
+                    }
+                }
             }
         ');
 
         // Verificar que la mutación retornó true
         $response->assertJson([
             'data' => [
-                'updateCustomer' => true,
+                'upsertCustomer' => [
+                    '__typename' => 'UpsertCustomerPayload',
+                    'customer' => [
+                        'id' => $customerDB->id,
+                        'label' => $customer['firstname'] . ' ' . $customer['lastname'],
+                        'first_name' => $customer['firstname'],
+                        'last_name' => $customer['lastname'],
+                        'phone' => $customer['phone'],
+                        'email' => $customer['email'],
+                    ],
+                    'operation' => 'Updated',
+                ],
             ],
         ]);
 
         // Verificar que los datos del cliente se han actualizado en la base de datos
         $this->assertDatabaseHas('customers', [
-            'id' => $customer->id,
-            'first_name' => 'UpdatedFirstName',
-            'last_name' => 'UpdatedLastName',
-            'phone' => '+123456789',
-            'email' => 'updated@example.com',
+            'id' => $customerDB->id,
+            'first_name' => $customer['firstname'],
+            'last_name' => $customer['lastname'],
+            'phone' => $customer['phone'],
+            'email' => $customer['email'],
         ]);
     }
 
@@ -136,30 +221,60 @@ class CustomerMutationTest extends TestCaseGraphQL
     {
         // Crear un equipo y cliente
         $team = Team::factory()->create();
-        $customer = Customer::factory()->create(['team_id' => $team->id]);
+        $customerDB = Customer::factory()->create(['team_id' => $team->id]);
 
         // Intentar actualizar con datos inválidos
+        $faker = Factory::create();
+        $customer = [
+            'firstname' => $faker->firstName,
+            'lastname' => $faker->lastName,
+            'phone' => '+123456789',
+            'email' => $faker->email,
+        ];
+
+        // Realizar la mutación de actualización
         $response = $this->graphQL('
             mutation {
-                updateCustomer(customerId: "' . $customer->id . '", customer: {
-                    firstname: "UpdatedFirstName",
-                    lastname: "UpdatedLastName",
-                    phone: "+123456789",
-                    email: "updated@example.com"
-                })
+                upsertCustomer(
+                    customer: {
+                        id: "' . $customerDB->id . '",
+                        firstname: "' . $customer['firstname'] . '",
+                        lastname: "' . $customer['lastname'] . '",
+                        phone: "' . $customer['phone'] . '",
+                        email: "' . $customer['email'] . '"
+                    }
+                ) {
+                    __typename
+                    ... on UpsertCustomerPayload {
+                        customer {
+                            id
+                            label
+                            first_name
+                            last_name
+                            phone
+                            email
+                        }
+                        operation
+                    }
+                    ... on ErrorPayload {
+                        status
+                        i18nKey
+                    }
+                }
             }
         ');
-
-        //dd($response);
 
         // Verificar que la mutación retornó false (no se actualizó)
         $response->assertJson([
             'data' => [
-                'updateCustomer' => false,
+                'upsertCustomer' => [
+                    '__typename' => 'ErrorPayload',
+                    'status' => false,
+                    'i18nKey' => 'customer.error.wrong_team'
+                ],
             ],
         ]);
     }
-
 
     /**
      * Test to ensure that an unauthenticated user cannot access the mutation.
@@ -171,13 +286,31 @@ class CustomerMutationTest extends TestCaseGraphQL
     {
         $query = '
             mutation {
-                addCustomer(customer: {
-                    firstname: "John",
-                    lastname: "Doe",
-                    phone: "+123456789",
-                    email: "john.doe@example.com"
-                }) {
-                    id
+                upsertCustomer(
+                    customer: {
+                        id: "",
+                        firstname: "name",
+                        lastname: "last",
+                        phone: "+123456789",
+                        email: "email@gmail.com"
+                    }
+                ) {
+                    __typename
+                    ... on UpsertCustomerPayload {
+                        customer {
+                            id
+                            label
+                            first_name
+                            last_name
+                            phone
+                            email
+                        }
+                        operation
+                    }
+                    ... on ErrorPayload {
+                        status
+                        i18nKey
+                    }
                 }
             }
         ';

@@ -1,23 +1,34 @@
-import { createFilterOptions } from "@mui/material";
-import { Input, TabPanel } from "@headlessui/react";
-import { Controller, useForm, FieldValues, FieldErrors } from "react-hook-form";
+import { createFilterOptions, FilterOptionsState } from "@mui/material";
+import { TabPanel } from "@headlessui/react";
+import { useForm, FieldValues } from "react-hook-form";
 import { EnvelopeIcon, PhoneIcon } from "@heroicons/react/16/solid";
 import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
-import { InputField, SimpleAutocomplete } from "@/components/form";
+import {
+  ActionButton,
+  HiddenInput,
+  InputField,
+  SimpleAutocomplete,
+} from "@/components/form";
 import { useCustomerStore, useOrderStore } from "@/store";
-import { OperationStatus } from "@/types/enums";
+import { ButtonType, OperationStatus } from "@/types/enums";
+import { Icon } from "../Icon";
+import useErrorHandler from "@/components/hooks/useErrorHandler";
+import { useState } from "react";
 
 const filter = createFilterOptions<OptionType>();
 type Step1Props = {
   nextStep: () => void;
+  customers: OptionType[];
+  onNext: (selectedCustomer: string) => void;
 };
 
-function Step1({ nextStep }: Step1Props) {
-  const { customers, updateOrCreateCustomer } = useCustomerStore();
+export const Step1 = ({ nextStep, customers, onNext }: Step1Props) => {
+  const { upsertCustomer } = useCustomerStore();
   const { setCreateOrderSelectedData, clearCreateOrderSelectedData } =
     useOrderStore();
   const { t } = useTranslation();
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const {
     handleSubmit,
     control,
@@ -28,48 +39,90 @@ function Step1({ nextStep }: Step1Props) {
     trigger,
     setError,
   } = useForm();
+  const { handleError } = useErrorHandler();
+  const [localCustomers, setLocalCustomers] = useState<OptionType[]>(customers);
 
-  const handleRegistration = async (data: FieldValues) => {
-    try {
-      const customerStatus = await updateOrCreateCustomer(
-        data as CustomerInput,
-      );
-      switch (customerStatus) {
-        case OperationStatus.CREATED:
-          toast.success("Cliente agregado");
-          break;
-        case OperationStatus.UPDATED:
-          toast.success("Actualizo");
-          break;
-        case OperationStatus.NO_CHANGE:
-          break;
-      }
-      nextStep();
-    } catch (e: any) {
-      const toValidate = ["firstname", "lastname", "phone", "email"];
-      switch (e.constructor.name) {
-        case "Object":
-          for (let i = 0, c = toValidate.length; i < c; i++) {
-            if (e.hasOwnProperty(`customer.${toValidate[i]}`)) {
-              setError(toValidate[i], {
-                message: e[`customer.${toValidate[i]}`][0],
-              });
-            }
-          }
-          toast.error("Error en el formulario");
-          break;
-        case "Error":
-          toast.error(e.message);
-          break;
-        default:
-          toast.error("Error!! a los botes");
-          break;
+  const setErrorFields = (message: Record<string, string[]>) => {
+    const toValidate = ["firstname", "lastname", "phone", "email"];
+    for (let i = 0, c = toValidate.length; i < c; i++) {
+      if (message[`customer.${toValidate[i]}`]) {
+        setError(toValidate[i], {
+          message: message[`customer.${toValidate[i]}`][0],
+        });
       }
     }
   };
 
-  const handleError = (_: FieldErrors<FieldValues>) => {
-    toast.error("Error en el formulario");
+  const isUpdatedNeeded = (data: CustomerInput): boolean => {
+    const customer = localCustomers.find((c) => c.id === data.id);
+    if (!customer || !customer.info || typeof customer.info === "string") {
+      return true;
+    }
+
+    const customerInfo = [
+      customer.info.first_name,
+      customer.info.last_name,
+      customer.info.phone,
+      customer.info.email,
+    ];
+
+    const dataInfo = [data.firstname, data.lastname, data.phone, data.email];
+
+    if (customerInfo.some((value, index) => value !== dataInfo[index])) {
+      return true;
+    }
+
+    return false;
+  };
+
+  const handleRegistration = async (data: FieldValues) => {
+    if (isSubmitting) return;
+    setIsSubmitting(true);
+    try {
+      if (isUpdatedNeeded(data as CustomerInput)) {
+        const upsertData = await upsertCustomer(data as CustomerInput);
+
+        switch (upsertData.operation) {
+          case OperationStatus.Created:
+            toast.success(
+              t("toast.success.add", { record: t("field.customer") }),
+            );
+            setLocalCustomers((prev) => [
+              ...prev,
+              {
+                id: upsertData.customer.id,
+                label: upsertData.customer.label,
+                info: upsertData.customer.info,
+              },
+            ]);
+            break;
+          case OperationStatus.Updated:
+            toast.success(
+              t("toast.success.update", { record: t("field.customer") }),
+            );
+            setLocalCustomers((prev) =>
+              prev.map((customer) =>
+                customer.id === upsertData.customer.id
+                  ? { ...customer, ...upsertData.customer }
+                  : customer,
+              ),
+            );
+            break;
+          case OperationStatus.NoChange:
+            break;
+        }
+      }
+      onNext(`${data.firstname} ${data.lastname}`);
+      nextStep();
+    } catch (error) {
+      handleError(error, setErrorFields);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleErrorForm = () => {
+    toast.error(t("toast.error.form"));
   };
 
   const validateAtLeastOneField = (value: string) => {
@@ -122,8 +175,8 @@ function Step1({ nextStep }: Step1Props) {
         setValue("id", newValue.id);
         setValue("firstname", newValue.info.first_name);
         setValue("lastname", newValue.info.last_name);
-        setValue("phone", newValue.info.phone);
-        setValue("email", newValue.info.email);
+        setValue("phone", newValue.info.phone || "");
+        setValue("email", newValue.info.email || "");
         ["firstname", "lastname", "phone", "email"].forEach((field) =>
           trigger(field),
         );
@@ -136,13 +189,16 @@ function Step1({ nextStep }: Step1Props) {
     }
   };
 
-  const customerFilterOptions = (options: any, params: any) => {
+  const customerFilterOptions = (
+    options: OptionType[],
+    params: FilterOptionsState<OptionType>,
+  ) => {
     const filtered = filter(options, params);
 
     if (params.inputValue !== "") {
       filtered.push({
         id: "new",
-        label: "Agregar nuevo cliente",
+        label: t("combos.add", { record: t("field.customer") }),
       });
     }
 
@@ -153,23 +209,17 @@ function Step1({ nextStep }: Step1Props) {
     <TabPanel unmount={false}>
       <SimpleAutocomplete
         name='customer'
-        label='Cliente'
-        options={customers}
-        isLoading={!customers}
+        label={t("field.customer")}
+        options={localCustomers}
+        isLoading={!localCustomers}
         onChange={(_, newValue, reason) =>
           handleCustomerChange(newValue, reason)
         }
         filterOptions={customerFilterOptions}
       />
 
-      <form onSubmit={handleSubmit(handleRegistration, handleError)}>
-        <Controller
-          name='id'
-          defaultValue=''
-          control={control}
-          rules={registerOptions.id}
-          render={({ field }) => <Input {...field} type='hidden' />}
-        />
+      <form onSubmit={handleSubmit(handleRegistration, handleErrorForm)}>
+        <HiddenInput name='id' control={control} rules={registerOptions.id} />
 
         <div className='grid gap-6 grid-cols-2 mt-4'>
           <InputField
@@ -196,7 +246,7 @@ function Step1({ nextStep }: Step1Props) {
             control={control}
             rules={registerOptions.email}
             errors={errors}
-            icon={EnvelopeIcon}
+            icon={<Icon icon={EnvelopeIcon} />}
           />
 
           <InputField
@@ -205,21 +255,16 @@ function Step1({ nextStep }: Step1Props) {
             control={control}
             rules={registerOptions.phone}
             errors={errors}
-            icon={PhoneIcon}
+            icon={<Icon icon={PhoneIcon} />}
           />
         </div>
 
         <div className='flex justify-end mt-6'>
-          <button
-            type='submit'
-            className='text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-base px-5 py-2.5 text-center w-1/4'
-          >
-            Siguiente
-          </button>
+          <ActionButton type={ButtonType.Submit} loading={isSubmitting}>
+            {t("button.next")}
+          </ActionButton>
         </div>
       </form>
     </TabPanel>
   );
-}
-
-export default Step1;
+};

@@ -18,7 +18,7 @@ export const ModalLayout = ({
 }: ModalLayoutProps) => {
   return (
     <div
-      className='flex flex-col transform overflow-hidden m-auto cursor-auto relative bg-white shadow-xl ring-1 ring-gray-950/5 dark:bg-gray-900 dark:ring-white/10 rounded-xl'
+      className='flex flex-col transform overflow-hidden m-auto cursor-auto relative bg-gray-50 shadow-xl ring-1 ring-gray-950/5 dark:bg-gray-950 dark:ring-white/10 rounded-xl'
       style={{
         width,
         height: minHeight ? undefined : height,
