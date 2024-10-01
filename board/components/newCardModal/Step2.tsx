@@ -16,7 +16,6 @@ import { capitalizeFirstLetter } from "@/helper/stringHelpers";
 import { Modal, PatternLockModal } from "@/components/modal";
 import useErrorHandler from "@/components/hooks/useErrorHandler";
 import { useDeviceStore } from "@/store";
-import { use } from "i18next";
 
 type Step2Props = {
   nextStep: () => void;
@@ -24,6 +23,11 @@ type Step2Props = {
   brands: OptionType[];
   deviceTypes: OptionType[];
   devices: OptionType[];
+  onNext: (
+    selectedDeviceType: string,
+    selectedDevice: string,
+    tmpDeviceUnit: string,
+  ) => void;
 };
 
 enum UnlockType {
@@ -40,6 +44,7 @@ export const Step2 = ({
   brands,
   deviceTypes,
   devices,
+  onNext,
 }: Step2Props) => {
   const { t } = useTranslation();
   const [localDevices, setLocalDevices] = useState<OptionType[]>(devices);
@@ -129,7 +134,6 @@ export const Step2 = ({
   };
 
   const handleRegistration = async (data: FieldValues) => {
-    console.log(data);
     if (isSubmitting) return;
     setIsSubmitting(true);
 
@@ -138,6 +142,12 @@ export const Step2 = ({
       upsertBrands(upsertData.brand);
       upsertDeviceTypes(upsertData.type);
       upsertDevices(upsertData.device);
+      onNext(
+        upsertData.type.label,
+        upsertData.device.label,
+        upsertData.temporarydeviceunit,
+      );
+      nextStep();
     } catch (error) {
       handleError(error, setErrorFields);
     } finally {
