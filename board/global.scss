@@ -182,3 +182,18 @@ input[type="number"] {
     }
   }
 }
+
+.peer {
+  &:checked {
+    + .peer {
+      background: rgba(var(--primary-600),1);
+    }
+  }
+
+  + .peer{
+    &:after {
+      background: #fff;
+      border-color: rgba(var(--gray-300),1);
+    }
+  }
+}
