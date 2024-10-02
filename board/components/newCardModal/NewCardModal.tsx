@@ -10,7 +10,7 @@ import { Icon } from "../Icon";
 import { OrderStatus } from "@/components/viewCardModal";
 import { TypedColumn } from "@/types/enums";
 import Avatar from "react-avatar";
-import { Step1, Step2, Step3, TabListTab } from "@/components/newCardModal";
+import { Step1, Step2, Step3, Step4, TabListTab } from "@/components/newCardModal";
 import { useErrorHandler } from "@/components/hooks/useErrorHandler";
 
 interface OrderData {
@@ -127,6 +127,12 @@ export const NewCardModal = () => {
                   title='Problema'
                   subtitle='Informacion del problema'
                   selectedIndex={selectedIndex}
+                />
+                <TabListTab
+                  index={3}
+                  title='Presupuesto'
+                  subtitle='y biyuya'
+                  selectedIndex={selectedIndex}
                   hideArrow
                 />
               </TabList>
@@ -147,11 +153,17 @@ export const NewCardModal = () => {
                 />
                 <Step3
                   prevStep={prevStep}
-                  nextStep={saveOrder}
+                  nextStep={nextStep}
                   checks={initialData.devicesChecks}
                   deviceType={orderData.deviceType?.id}
+
+                />
+                <Step4
+                  prevStep={prevStep}
+                  nextStep={saveOrder}
                   budgetTableData={initialData.budgetTableData}
                 />
+
               </TabPanels>
             </TabGroup>
           </div>

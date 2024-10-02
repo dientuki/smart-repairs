@@ -4,20 +4,18 @@ import { ActionButton, SimpleToggle, TextareaField } from "@/components/form";
 import { ButtonType } from "@/types/enums";
 import { useErrorHandler } from "@/components/hooks/useErrorHandler";
 import { FieldValues, useForm } from "react-hook-form";
-import { BudgetTable } from "@/components/budget";
 import { useEffect, useState } from "react";
 
 type Step3Props = {
   nextStep: () => void;
   prevStep: () => void;
-  deviceType: string | null;
-  budgetTableData: OptionType[];
+  deviceType: string | undefined;
   checks: DeviceCheck[];
 };
 
-export const Step3 = ({ prevStep, nextStep, deviceType, budgetTableData, checks  }: Step3Props) => {
+export const Step3 = ({ prevStep, nextStep, deviceType, checks  }: Step3Props) => {
   const { t } = useTranslation();
-  const [check, setCheck] = useState<DeviceCheck | null>(null);
+  const [check, setCheck] = useState<DeviceCheck | undefined>(undefined);
   const { handleError, handleErrorForm } = useErrorHandler();
   const {
     handleSubmit,
@@ -27,7 +25,7 @@ export const Step3 = ({ prevStep, nextStep, deviceType, budgetTableData, checks 
 
   useEffect(() => {
     const foundCheck = checks.find((check) => check.deviceTypeId === deviceType);
-    setCheck(foundCheck || null);
+    setCheck(foundCheck || undefined);
   }, [deviceType]);
 
   console.log(checks, deviceType, check)
@@ -35,8 +33,8 @@ export const Step3 = ({ prevStep, nextStep, deviceType, budgetTableData, checks 
   const handleRegistration = async (data: FieldValues) => {
 
     try {
-      console.log(data)
-      return;
+      console.log(data);
+      nextStep();
     } catch (error) {
       handleError(error);
     }
@@ -106,8 +104,10 @@ export const Step3 = ({ prevStep, nextStep, deviceType, budgetTableData, checks 
 
 
         <div className='flex justify-between mt-6'>
-          <ActionButton onClick={prevStep}>Anterior</ActionButton>
-          <ActionButton type={ButtonType.Submit}>Finalizar</ActionButton>
+          <ActionButton onClick={prevStep}>{t("button.previous")}</ActionButton>
+          <ActionButton type={ButtonType.Submit}>
+            {t("button.next")}
+          </ActionButton>
         </div>
       </form>
     </TabPanel>
