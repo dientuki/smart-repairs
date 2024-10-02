@@ -29,7 +29,7 @@ type Step2Props = {
   deviceTypes: OptionType[];
   devices: OptionType[];
   onNext: (
-    selectedDeviceType: string,
+    selectedDeviceType: OptionType,
     selectedDevice: string,
     tmpDeviceUnit: string,
   ) => void;
@@ -136,7 +136,7 @@ export const Step2 = ({
       upsertDeviceTypes(upsertData.type);
       upsertDevices(upsertData.device);
       onNext(
-        upsertData.type.label,
+        upsertData.type,
         upsertData.device.label,
         upsertData.temporarydeviceunit,
       );
