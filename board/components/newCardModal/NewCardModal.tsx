@@ -15,7 +15,7 @@ import { useErrorHandler } from "@/components/hooks/useErrorHandler";
 
 interface OrderData {
   customer: string | null;
-  deviceType: string | null;
+  deviceType: OptionType | null;
   device: string | null;
 }
 
@@ -64,7 +64,7 @@ export const NewCardModal = () => {
   };
 
   const handleDeviceSelected = (
-    selectedDeviceType: string,
+    selectedDeviceType: OptionType,
     selectedDevice: string,
     tmp: string,
   ) => {
@@ -147,7 +147,13 @@ export const NewCardModal = () => {
                   deviceTypes={initialData.deviceTypes}
                   onNext={handleDeviceSelected}
                 />
-                <Step3 prevStep={prevStep} nextStep={saveOrder} tmpDeviceUnit={tmpDeviceUnit} budgetTableData={initialData.budgetTableData} />
+                <Step3
+                  prevStep={prevStep}
+                  nextStep={saveOrder}
+                  checks={initialData.devicesChecks}
+                  deviceType={orderData.deviceType?.id}
+                  budgetTableData={initialData.budgetTableData}
+                />
               </TabPanels>
             </TabGroup>
           </div>
@@ -189,7 +195,7 @@ export const NewCardModal = () => {
               <div className='flex justify-between w-full'>
                 <p className='w-1/3 first-letter:uppercase'>
                   {orderData.deviceType
-                    ? orderData.deviceType
+                    ? orderData.deviceType.label
                     : t("order.device")}
                 </p>
                 <p className='w-2/3 truncate'>{orderData.device || ""}</p>

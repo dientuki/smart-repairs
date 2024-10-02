@@ -80,6 +80,12 @@ declare global {
     checked: boolean;
   }
 
+  interface DeviceCheck {
+    deviceTypeId: string;
+    damages: [damage];
+    features: [feature];
+  }
+
   interface CreateOrUpdateComment {
     comment: string;
     ispublic: boolean;
