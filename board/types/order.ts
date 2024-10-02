@@ -103,6 +103,7 @@ declare global {
     devices: OptionType[];
     deviceTypes: OptionType[];
     devicesChecks: DeviceCheck[];
+    budgetTableData: OptionType[];
   }
 }
 
