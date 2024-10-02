@@ -13,9 +13,14 @@ import { GlobeAltIcon } from "@heroicons/react/24/outline";
 import { Icon } from "../Icon";
 import { ButtonType } from "@/types/enums";
 import { capitalizeFirstLetter } from "@/helper/stringHelpers";
-import { Modal, PatternLockModal } from "@/components/modal";
+import {
+  Modal,
+  NewDeviceUnitModal,
+  PatternLockModal,
+} from "@/components/modal";
 import useErrorHandler from "@/components/hooks/useErrorHandler";
 import { useDeviceStore } from "@/store";
+import { upsertOptionType } from "@/helper/componentsHelpers";
 
 type Step2Props = {
   nextStep: () => void;
@@ -55,6 +60,10 @@ export const Step2 = ({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { addTemporaryDeviceUnit } = useDeviceStore();
   const { handleError } = useErrorHandler();
+  const { getDeviceVersions } = useDeviceStore();
+  const [newDeviceUnitModalData, setNewDeviceUnitModalData] = useState<
+    OptionType[]
+  >([]);
 
   const {
     formState: { errors },
@@ -63,6 +72,7 @@ export const Step2 = ({
     setValue,
     reset,
     setError,
+    resetField,
   } = useForm();
 
   const unlockOptions: OptionType[] = unlockTypeEntries.map(([key, value]) => ({
@@ -92,23 +102,6 @@ export const Step2 = ({
           message: message[`input.${toValidate[i]}`][0],
         });
       }
-    }
-  };
-
-  const upsertOptionType = (
-    original: OptionType[],
-    upsertItem: OptionType,
-  ): OptionType[] => {
-    const index = original.findIndex((item) => item.id === upsertItem.id);
-
-    if (index === -1) {
-      // Si no existe, agregamos el nuevo elemento
-      return [...original, upsertItem];
-    } else {
-      // Si ya existe, actualizamos el elemento
-      const updatedOriginal = [...original];
-      updatedOriginal[index] = upsertItem;
-      return updatedOriginal;
     }
   };
 
@@ -172,6 +165,13 @@ export const Step2 = ({
         setValue("brand", brand);
         setValue("url", newValue.info.url ?? "");
         setValue("commercialname", newValue.info.commercialname ?? "");
+
+        try {
+          const data = await getDeviceVersions(newValue.id);
+          setNewDeviceUnitModalData(data);
+        } catch (error) {
+          handleError(error);
+        }
       }
     }
 
@@ -182,12 +182,20 @@ export const Step2 = ({
   };
 
   const handleDeviceWorksVersion = () => {
-    /*
     Modal.open(NewDeviceUnitModal, {
       layer: 5,
+      versions: newDeviceUnitModalData,
       setDeviceUnit: setDeviceUnit,
     });
-    */
+  };
+
+  const setDeviceUnit = (data: FieldValues) => {
+    for (const element in data) {
+      resetField(element);
+      if (data[element] != undefined) {
+        setValue(element, data[element]);
+      }
+    }
   };
 
   const setPattern = (pattern: number[]) => {
@@ -306,6 +314,7 @@ export const Step2 = ({
             <ActionButton
               onClick={handleDeviceWorksVersion}
               className='absolute bottom-0 left-0 w-full'
+              disabled={newDeviceUnitModalData.length === 0}
             >
               Enciende
             </ActionButton>

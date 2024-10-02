@@ -13,6 +13,7 @@ import {
   deviceSingle,
   extra,
   extraSingle,
+  deviceVersion,
 } from "@/helper/reduceHelpers";
 import { getDevicesByTypeAndBrand } from "@/services/devices";
 import { FieldValues } from "react-hook-form";
@@ -41,7 +42,7 @@ interface DeviceStore {
   setDevices: (devices: OptionType[]) => void;
 
   deviceVersions: OptionType[];
-  getDeviceVersions: (device: string) => Promise<void>;
+  getDeviceVersions: (device: string) => Promise<OptionType[]>;
 
   deviceUnitsByVersion: OptionType[];
   getDevicesUnitsByVersion: (versionId: string) => Promise<void>;
@@ -71,9 +72,9 @@ export const useDeviceStore = create<DeviceStore>((set) => ({
   },
 
   deviceVersions: [],
-  getDeviceVersions: async (deviceId: string): Promise<void> => {
-    const deviceVersions: OptionType[] = await getDeviceVersions(deviceId);
-    set({ deviceVersions });
+  getDeviceVersions: async (deviceId: string): Promise<OptionType[]> => {
+    const response = await getDeviceVersions(deviceId);
+    return response;
   },
 
   deviceUnitsByVersion: [],

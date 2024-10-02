@@ -45,3 +45,20 @@ export const dynamicStyles = (
     {} as Record<string, string>,
   );
 };
+
+export const upsertOptionType = (
+  original: OptionType[],
+  upsertItem: OptionType,
+): OptionType[] => {
+  const index = original.findIndex((item) => item.id === upsertItem.id);
+
+  if (index === -1) {
+    // Si no existe, agregamos el nuevo elemento
+    return [...original, upsertItem];
+  } else {
+    // Si ya existe, actualizamos el elemento
+    const updatedOriginal = [...original];
+    updatedOriginal[index] = upsertItem;
+    return updatedOriginal;
+  }
+};

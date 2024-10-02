@@ -1,4 +1,4 @@
-export const deviceVersion = (collection: any[]): OptionType[] => {
+export const deviceVersion = (collection: GraphQLObject[]): OptionType[] => {
   return collection.reduce((acc: OptionType[], deviceVersion: any) => {
     const desc = deviceVersion.description
       ? ` (${deviceVersion.description})`
