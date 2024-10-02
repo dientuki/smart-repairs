@@ -13,7 +13,12 @@ type Step3Props = {
   checks: DeviceCheck[];
 };
 
-export const Step3 = ({ prevStep, nextStep, deviceType, checks  }: Step3Props) => {
+export const Step3 = ({
+  prevStep,
+  nextStep,
+  deviceType,
+  checks,
+}: Step3Props) => {
   const { t } = useTranslation();
   const [check, setCheck] = useState<DeviceCheck | undefined>(undefined);
   const { handleError, handleErrorForm } = useErrorHandler();
@@ -24,22 +29,22 @@ export const Step3 = ({ prevStep, nextStep, deviceType, checks  }: Step3Props) =
   } = useForm();
 
   useEffect(() => {
-    const foundCheck = checks.find((check) => check.deviceTypeId === deviceType);
+    const foundCheck = checks.find(
+      (check) => check.deviceTypeId === deviceType,
+    );
     setCheck(foundCheck || undefined);
   }, [deviceType]);
 
-  console.log(checks, deviceType, check)
+  console.log(checks, deviceType, check);
 
   const handleRegistration = async (data: FieldValues) => {
-
     try {
       console.log(data);
       nextStep();
     } catch (error) {
       handleError(error);
     }
-
-  }
+  };
 
   const registerOptions = {
     comment: { required: false },
@@ -67,9 +72,13 @@ export const Step3 = ({ prevStep, nextStep, deviceType, checks  }: Step3Props) =
             <div className='grid grid-cols-2 mt-4'>
               {check &&
                 check.damages.map((damage: damage, index) => (
-                  <SimpleToggle key={index} name="damages" value="1" text={damage.toString()} />
-                )
-              )}
+                  <SimpleToggle
+                    key={index}
+                    name='damages'
+                    value='1'
+                    text={damage.toString()}
+                  />
+                ))}
             </div>
             <TextareaField
               name='damagedescription'
@@ -88,7 +97,12 @@ export const Step3 = ({ prevStep, nextStep, deviceType, checks  }: Step3Props) =
             <div className='grid grid-cols-2 mt-4'>
               {check &&
                 check.features.map((feature: feature, index) => (
-                  <SimpleToggle key={index} name="features" value="1" text={feature.toString()} />
+                  <SimpleToggle
+                    key={index}
+                    name='features'
+                    value='1'
+                    text={feature.toString()}
+                  />
                 ))}
             </div>
             <TextareaField
@@ -101,7 +115,6 @@ export const Step3 = ({ prevStep, nextStep, deviceType, checks  }: Step3Props) =
             />
           </Field>
         </div>
-
 
         <div className='flex justify-between mt-6'>
           <ActionButton onClick={prevStep}>{t("button.previous")}</ActionButton>

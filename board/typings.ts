@@ -76,8 +76,6 @@ interface DeviceType {
   label: string;
 }
 
-
-
 interface CustomerDeviceUnit {
   deviceid: string;
   commercialname: string;
