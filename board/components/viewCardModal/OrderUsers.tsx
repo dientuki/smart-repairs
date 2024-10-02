@@ -50,7 +50,6 @@ export const OrderUsers = () => {
           {t("order.assign_to_me")}
         </span>
       </div>
-      <Pattern deviceUnlockCode={order.deviceUnlockCode} />
     </>
   );
 };

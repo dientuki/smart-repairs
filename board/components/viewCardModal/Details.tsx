@@ -4,11 +4,27 @@ import { useTranslation } from "react-i18next";
 import { OrderUsers } from "./OrderUsers";
 import { dynamicStyles } from "@/helper/componentsHelpers";
 import { StyleColor } from "@/types/enums";
+import { Pattern } from "./Pattern";
+import { Code } from "./Code";
 
 export const Details = () => {
   const { order } = useOrderStore();
   const { t } = useTranslation();
 
+  let code = null, colorBackground = null;
+  switch ( order.deviceUnlockType ) {
+    case "pattern":
+      code = <Pattern deviceUnlockCode={order.deviceUnlockCode}/>
+      break;
+    case "code":
+      code = <Code deviceUnlockCode={order.deviceUnlockCode} />
+      colorBackground = StyleColor.Info;
+    break;
+    case "none":
+      code = <h1> Sin Código </h1>
+      colorBackground = StyleColor.Warning;
+    break;
+  }  
   return (
     <div className='p-3 rounded-xl shadow-sm ring-1 ring-gray-950/5 dark:ring-white/10 flex flex-col gap-2 bg-white dark:bg-white/5'>
       <div className='flex justify-between w-full'>
@@ -46,8 +62,10 @@ export const Details = () => {
       </div>
       <OrderUsers />
       <div className='flex justify-between w-full items-center'>
-        <p className='w-1/3 first-letter:uppercase'>Desbloqueo:</p>
-        <p className='w-2/3 justify-center gap-x-1 rounded-md text-base ring-1 ring-inset px-2  py-1 bg-custom-50 text-custom-600 ring-custom-600/10 dark:bg-custom-400/10 dark:text-custom-400 dark:ring-custom-400/30' style={dynamicStyles(StyleColor.Warning)}>Sin Codigo</p>
+        <p className='w-1/3 first-letter:uppercase'>Desbloqueo</p>
+        <p className='w-2/3 justify-center gap-x-1 rounded-md text-base ring-1 ring-inset px-2  py-1 bg-custom-50 text-custom-600 ring-custom-600/10 dark:bg-custom-400/10 dark:text-custom-400 dark:ring-custom-400/30' style={ colorBackground ? dynamicStyles(colorBackground): {} }>
+          {code}
+        </p>
       </div>
     </div>
   );

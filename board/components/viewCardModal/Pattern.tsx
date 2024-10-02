@@ -1,5 +1,7 @@
 import PatternLock from "react-pattern-lock";
 import { useEffect, useState } from "react";
+import { ActionButton } from "../form";
+import { StyleColor } from "@/types/enums";
 
 
 type Props = {
@@ -29,14 +31,26 @@ export const Pattern = ({deviceUnlockCode}: Props) => {
   return (
     <>
       {!isActive? ( 
-          <button onClick={() => setIsActive(true)}>Ver Patrón</button> 
+          <ActionButton
+            onClick={() => setIsActive(true)}
+            style={StyleColor.info}
+            className='w-full'
+          >
+            Ver patrón
+          </ActionButton>
         ) : (
-          <button onClick={() => {setIsActive(false); setSubPath([])}}>Ocultar</button> 
+          <ActionButton
+            onClick={() => {setIsActive(false); setSubPath([])}}
+            style={StyleColor.info}
+            className='w-full'
+          >
+            Ocultar
+          </ActionButton>
         ) 
       }
       {isActive && 
         <PatternLock
-          style={{background: "cyan", color: "red"}}
+          className='overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-gray-950/5 dark:bg-gray-900 dark:ring-white/10 mt-4'  
           size={size}
           onChange={ () => {}}
           onFinish={() => {}}
