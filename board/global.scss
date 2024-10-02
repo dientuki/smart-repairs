@@ -1,0 +1,184 @@
+/*
+@tailwind base;
+*/
+@tailwind components;
+@tailwind utilities;
+
+::-webkit-scrollbar {
+  width: 5px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background-color: rgba(155, 155, 155, 0.5);
+  border-radius: 20px;
+  border: transparent;
+}
+
+.modal {
+  position: fixed;
+  inset: 0;
+  z-index: 40; /* Cambia el z-index a 40 */
+  background-color: rgba(17, 24, 39, 0.5); /* bg-gray-950/50 en Tailwind */
+  /* Para el modo oscuro, puedes usar una clase adicional o manejarlo con JavaScript */
+  transition: 250ms ease-in-out opacity;
+  opacity: 1;
+
+  .dark & {
+    background-color: rgba(
+      17,
+      24,
+      39,
+      0.75
+    ); /* dark:bg-gray-950/75 en Tailwind */
+  }
+
+  &:not(.modal--active) {
+    opacity: 0;
+    pointer-events: none;
+
+    .modal__container {
+      overflow: hidden;
+    }
+  }
+
+  .modal__container {
+    position: absolute;
+    inset: 0;
+
+    display: grid;
+    cursor: pointer;
+
+    overflow: auto;
+    overscroll-behavior: contain;
+
+    &:nth-child(n+2) {
+      background-color: rgba(17, 24, 39, .5);
+
+      .dark & {
+        background-color: rgba(17, 24, 39, .75);
+      }
+    }
+  }
+
+  .modal__inner {
+    display: grid;
+  }
+}
+
+.Toastify__toast-body > div:first-letter{
+    text-transform: uppercase;
+}
+
+input[type="number"] {
+  text-align: right;
+  padding-right: 10px; /* Ajusta el valor según sea necesario */
+}
+
+
+.MuiFormControl-root {
+  input {
+    outline: none;
+    box-shadow: none;
+    border-color: transparent;
+
+    .dark & {
+      color: #ffffff
+    }
+
+    &:focus {
+      outline: none;
+      box-shadow: none;
+      border-color: transparent;
+
+      .dark & {
+        color: #ffffff
+      }
+    }
+  }
+
+  svg {
+    .dark & {
+      color: #ffffff
+    }
+  }
+}
+
+.dark .MuiAutocomplete-popper [role="listbox"]{
+  background: #111827;
+
+  .Mui-focused {
+    background: #9ec8fb;
+    color: #3b3b3b;
+  }
+}
+
+/* initial */
+.react-pattern-lock__pattern-wrapper {
+  .react-pattern-lock__connector-wrapper {
+    .react-pattern-lock__connector {
+      --tw-bg-opacity: 1;
+      background-color: rgba(var(--gray-500),var(--tw-bg-opacity))
+    }
+  }
+
+  .react-pattern-lock__point-wrapper {
+    .react-pattern-lock__point {
+      .react-pattern-lock__point-inner {
+        --tw-bg-opacity: 1;
+        background-color: rgba(var(--gray-500),var(--tw-bg-opacity))
+      }
+    }
+  }
+
+  &.success {
+    .react-pattern-lock__connector-wrapper {
+      .react-pattern-lock__connector {
+        --tw-bg-opacity: 1;
+        background-color: rgba(var(--success-600),var(--tw-bg-opacity))
+      }
+    }
+
+    .react-pattern-lock__point-wrapper {
+      .react-pattern-lock__point
+      .react-pattern-lock__point-inner {
+        --tw-bg-opacity: 1;
+        background-color: rgba(var(--gray-500),var(--tw-bg-opacity))
+      }
+
+      &.selected {
+        .react-pattern-lock__point
+        .react-pattern-lock__point-inner {
+          --tw-bg-opacity: 1;
+          background-color: rgba(var(--success-600),var(--tw-bg-opacity))
+        }
+      }
+    }
+  }
+
+  &.error {
+    .react-pattern-lock__connector-wrapper {
+      .react-pattern-lock__connector {
+        --tw-bg-opacity: 1;
+        background-color: rgba(var(--danger-600),var(--tw-bg-opacity))
+      }
+    }
+
+    .react-pattern-lock__point-wrapper {
+      .react-pattern-lock__point
+      .react-pattern-lock__point-inner {
+        --tw-bg-opacity: 1;
+        background-color: rgba(var(--gray-500),var(--tw-bg-opacity))
+      }
+
+      &.selected {
+        .react-pattern-lock__point
+        .react-pattern-lock__point-inner {
+          --tw-bg-opacity: 1;
+          background-color: rgba(var(--danger-600),var(--tw-bg-opacity))
+        }
+      }
+    }
+  }
+}
