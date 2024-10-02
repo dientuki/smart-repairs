@@ -38,26 +38,7 @@ type TableProps = {
   errors?: FieldErrors<FieldValues>;
   budget?: ViewBudget;
   description: OptionType[];
-};
-
-const registerOptions = {
-  id: {
-    required: false,
-  },
-  itemable: {
-    required: true,
-  },
-  quantity: {
-    required: true,
-    min: 1,
-  },
-  unitPrice: {
-    required: true,
-    min: 0,
-  },
-  includeInSum: {
-    required: true,
-  },
+  required?: boolean;
 };
 
 export const BudgetTable = ({
@@ -65,6 +46,7 @@ export const BudgetTable = ({
   errors,
   budget,
   description,
+  required = true,
 }: TableProps) => {
   const [data, setData] = useState<ViewItem[]>([]);
   const { user } = useUserStore();
@@ -91,6 +73,26 @@ export const BudgetTable = ({
       currency: user.currency,
     },
   ];
+
+  const registerOptions = {
+    id: {
+      required: false,
+    },
+    itemable: {
+      required: required,
+    },
+    quantity: {
+      required: required,
+      min: 1,
+    },
+    unitPrice: {
+      required: required,
+      min: 0,
+    },
+    includeInSum: {
+      required: required,
+    },
+  };
 
   useEffect(() => {
     append(budget?.items || defaultData);

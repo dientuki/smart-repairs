@@ -289,6 +289,22 @@ export const getOrderCreationData = async (): Promise<QueryResponse> => {
                 features
               }
 
+              discounts {
+                id
+                label
+                price
+                type
+              }
+              services {
+                id
+                label
+                price
+              }
+              morph {
+                part
+                discount
+                serviceJob
+              }
             }
         `);
 

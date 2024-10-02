@@ -145,7 +145,7 @@ export const NewCardModal = () => {
                   deviceTypes={initialData.deviceTypes}
                   onNext={handleDeviceSelected}
                 />
-                <Step3 prevStep={prevStep} nextStep={saveOrder} />
+                <Step3 prevStep={prevStep} nextStep={saveOrder} tmpDeviceUnit={tmpDeviceUnit} budgetTableData={initialData.budgetTableData} />
               </TabPanels>
             </TabGroup>
           </div>
