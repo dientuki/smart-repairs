@@ -151,8 +151,8 @@ export const useOrderStore = create<OrderStore>((set) => ({
       [],
     );
 
-    const discounts = extra(data.discounts, {item_type: data.morph.discount});
-    const services = extra(data.services, {item_type: data.morph.serviceJob});
+    const discounts = extra(data.discounts, { item_type: data.morph.discount });
+    const services = extra(data.services, { item_type: data.morph.serviceJob });
 
     return {
       customers: extra(data.customers),
@@ -160,7 +160,7 @@ export const useOrderStore = create<OrderStore>((set) => ({
       deviceTypes: extra(data.deviceTypes),
       devices: device(data.devices),
       devicesChecks: devicesChecks,
-      budgetTableData: [...services, ...discounts]
+      budgetTableData: [...services, ...discounts],
     };
   },
 

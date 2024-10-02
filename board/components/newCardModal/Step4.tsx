@@ -1,6 +1,6 @@
 import { TabPanel } from "@headlessui/react";
 import { useTranslation } from "react-i18next";
-import { ActionButton, InputField, } from "@/components/form";
+import { ActionButton, InputField } from "@/components/form";
 import { ButtonType } from "@/types/enums";
 import { useErrorHandler } from "@/components/hooks/useErrorHandler";
 import { FieldValues, useForm } from "react-hook-form";
@@ -12,7 +12,7 @@ type Step3Props = {
   budgetTableData: OptionType[];
 };
 
-export const Step4 = ({ prevStep, nextStep, budgetTableData  }: Step3Props) => {
+export const Step4 = ({ prevStep, nextStep, budgetTableData }: Step3Props) => {
   const { t } = useTranslation();
   const { handleError, handleErrorForm } = useErrorHandler();
   const {
@@ -21,17 +21,13 @@ export const Step4 = ({ prevStep, nextStep, budgetTableData  }: Step3Props) => {
     formState: { errors },
   } = useForm();
 
-
   const handleRegistration = async (data: FieldValues) => {
-
     try {
       console.log(data);
-
     } catch (error) {
       handleError(error);
     }
-
-  }
+  };
 
   const registerOptions = {
     money: { required: false },
@@ -40,13 +36,24 @@ export const Step4 = ({ prevStep, nextStep, budgetTableData  }: Step3Props) => {
   return (
     <TabPanel unmount={false}>
       <form onSubmit={handleSubmit(handleRegistration, handleErrorForm)}>
-        <BudgetTable control={control} errors={errors} description={budgetTableData} required={false} />
+        <BudgetTable
+          control={control}
+          errors={errors}
+          description={budgetTableData}
+          required={false}
+        />
 
-        <div className="mt-4">
-        <InputField name='money' label='Entrega' control={control} rules={registerOptions.money} errors={errors} />
+        <div className='mt-4'>
+          <InputField
+            name='money'
+            label='Entrega'
+            control={control}
+            rules={registerOptions.money}
+            errors={errors}
+          />
         </div>
         <div className='flex justify-between mt-6'>
-        <ActionButton onClick={prevStep}>{t("button.previous")}</ActionButton>
+          <ActionButton onClick={prevStep}>{t("button.previous")}</ActionButton>
           <ActionButton type={ButtonType.Submit}>
             {t("button.finish")}
           </ActionButton>
