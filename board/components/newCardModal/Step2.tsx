@@ -8,7 +8,7 @@ import {
   ValidatedAutocomplete,
 } from "@/components/form";
 import { useEffect, useState } from "react";
-import { FieldErrors, FieldValues, useForm } from "react-hook-form";
+import { FieldValues, useForm } from "react-hook-form";
 import { GlobeAltIcon } from "@heroicons/react/24/outline";
 import { Icon } from "../Icon";
 import { ButtonType } from "@/types/enums";
@@ -18,7 +18,7 @@ import {
   NewDeviceUnitModal,
   PatternLockModal,
 } from "@/components/modal";
-import useErrorHandler from "@/components/hooks/useErrorHandler";
+import { useErrorHandler } from "@/components/hooks/useErrorHandler";
 import { useDeviceStore } from "@/store";
 import { upsertOptionType } from "@/helper/componentsHelpers";
 
@@ -59,7 +59,7 @@ export const Step2 = ({
   const [isDisableCode, setIsDisableCode] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { addTemporaryDeviceUnit } = useDeviceStore();
-  const { handleError } = useErrorHandler();
+  const { handleError, handleErrorForm } = useErrorHandler();
   const { getDeviceVersions } = useDeviceStore();
   const [newDeviceUnitModalData, setNewDeviceUnitModalData] = useState<
     OptionType[]
@@ -147,8 +147,6 @@ export const Step2 = ({
       setIsSubmitting(false);
     }
   };
-
-  const handleErrorForm = (errors: FieldErrors<FieldValues>) => {};
 
   const handleDeviceChange = async (
     newValue: OptionType | null,

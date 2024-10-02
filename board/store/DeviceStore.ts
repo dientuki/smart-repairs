@@ -45,7 +45,7 @@ interface DeviceStore {
   getDeviceVersions: (device: string) => Promise<OptionType[]>;
 
   deviceUnitsByVersion: OptionType[];
-  getDevicesUnitsByVersion: (versionId: string) => Promise<void>;
+  getDevicesUnitsByVersion: (versionId: string) => Promise<OptionType[]>;
   clearDeviceVersions: () => void;
 
   deviceUnitSelected: {
@@ -78,10 +78,11 @@ export const useDeviceStore = create<DeviceStore>((set) => ({
   },
 
   deviceUnitsByVersion: [],
-  getDevicesUnitsByVersion: async (versionId: string): Promise<void> => {
-    const deviceUnitsByVersion: OptionType[] =
-      await getDevicesUnitsByVersionId(versionId);
-    set({ deviceUnitsByVersion });
+  getDevicesUnitsByVersion: async (
+    versionId: string,
+  ): Promise<OptionType[]> => {
+    const response = await getDevicesUnitsByVersionId(versionId);
+    return response;
   },
 
   clearDeviceVersions: () => {

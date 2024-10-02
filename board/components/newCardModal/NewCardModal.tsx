@@ -11,7 +11,7 @@ import { OrderStatus } from "@/components/viewCardModal";
 import { TypedColumn } from "@/types/enums";
 import Avatar from "react-avatar";
 import { Step1, Step2, Step3, TabListTab } from "@/components/newCardModal";
-import useErrorHandler from "../hooks/useErrorHandler";
+import { useErrorHandler } from "@/components/hooks/useErrorHandler";
 
 interface OrderData {
   customer: string | null;
