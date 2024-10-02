@@ -11,7 +11,7 @@ import { OrderStatus } from "@/components/viewCardModal";
 import { TypedColumn } from "@/types/enums";
 import Avatar from "react-avatar";
 import { Step1, Step2, Step3, TabListTab } from "@/components/newCardModal";
-import useErrorHandler from "../hooks/useErrorHandler";
+import { useErrorHandler } from "@/components/hooks/useErrorHandler";
 
 interface OrderData {
   customer: string | null;
@@ -34,6 +34,7 @@ export const NewCardModal = () => {
     deviceType: null,
     device: null,
   });
+  const [tmpDeviceUnit, setTmpDeviceUnit] = useState<string>("");
   const date = new Date();
   const { handleError } = useErrorHandler();
 
@@ -63,14 +64,16 @@ export const NewCardModal = () => {
   };
 
   const handleDeviceSelected = (
-    selectedDevice: string,
     selectedDeviceType: string,
+    selectedDevice: string,
+    tmp: string,
   ) => {
     setOrderData((prevState) => ({
       ...prevState,
       device: selectedDevice,
       deviceType: selectedDeviceType,
     }));
+    setTmpDeviceUnit(tmp);
   };
 
   const saveOrder = async () => {
@@ -140,6 +143,7 @@ export const NewCardModal = () => {
                   brands={initialData.brands}
                   devices={initialData.devices}
                   deviceTypes={initialData.deviceTypes}
+                  onNext={handleDeviceSelected}
                 />
                 <Step3 prevStep={prevStep} nextStep={saveOrder} />
               </TabPanels>
@@ -182,9 +186,11 @@ export const NewCardModal = () => {
               </div>
               <div className='flex justify-between w-full'>
                 <p className='w-1/3 first-letter:uppercase'>
-                  {t("order.customer")}
+                  {orderData.deviceType
+                    ? orderData.deviceType
+                    : t("order.device")}
                 </p>
-                <p className='w-2/3 truncate'>{orderData.customer || ""}</p>
+                <p className='w-2/3 truncate'>{orderData.device || ""}</p>
               </div>
             </div>
           </div>

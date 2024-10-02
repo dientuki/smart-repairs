@@ -1,5 +1,4 @@
 import { graphqlRequest, handleGraphQLErrors } from "@/helper/graphqlHelpers";
-import { deviceVersion } from "@/helper/reduceHelpers";
 
 export const getDeviceVersions = async (
   deviceId: string,
@@ -8,13 +7,12 @@ export const getDeviceVersions = async (
                 query {
                     deviceVersions(device_id:"${deviceId}") {
                         id
-                        version
-                        description
+                        label
                     }
                 }
             `);
 
   handleGraphQLErrors(response.errors);
 
-  return deviceVersion(response.data.deviceVersions);
+  return response.data.deviceVersions;
 };

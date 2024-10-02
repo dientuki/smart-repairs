@@ -2,8 +2,9 @@ import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
 import { ApiLayerError } from "@/helper/ApiLayerError";
 import { ApiLayerErrorEnum } from "@/types/enums";
+import { FieldErrors, FieldValues } from "react-hook-form";
 
-const useErrorHandler = () => {
+export const useErrorHandler = () => {
   const { t } = useTranslation();
 
   const handleError = (
@@ -28,7 +29,9 @@ const useErrorHandler = () => {
     }
   };
 
-  return { handleError };
-};
+  const handleErrorForm = (errors?: FieldErrors<FieldValues>) => {
+    toast.error(t("toast.error.form"));
+  };
 
-export default useErrorHandler;
+  return { handleError, handleErrorForm };
+};

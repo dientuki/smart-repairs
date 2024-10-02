@@ -8,7 +8,13 @@ import {
 } from "@/services/deviceUnits";
 import { getDeviceVersions } from "@/services/deviceVersions";
 import { useBrandStore, useDeviceTypeStore, useOrderStore } from "@/store";
-import { device } from "@/helper/reduceHelpers";
+import {
+  device,
+  deviceSingle,
+  extra,
+  extraSingle,
+  deviceVersion,
+} from "@/helper/reduceHelpers";
 import { getDevicesByTypeAndBrand } from "@/services/devices";
 import { FieldValues } from "react-hook-form";
 
@@ -20,6 +26,13 @@ import { FieldValues } from "react-hook-form";
   set To set data in the store
 */
 
+interface TemporaryDeviceUnit {
+  brand: OptionType;
+  type: OptionType;
+  device: OptionType;
+  temporarydeviceunit: string;
+}
+
 interface DeviceUnitSelectedUpdate {
   version?: OptionType | null;
   serial?: OptionType | null;
@@ -29,10 +42,10 @@ interface DeviceStore {
   setDevices: (devices: OptionType[]) => void;
 
   deviceVersions: OptionType[];
-  getDeviceVersions: (device: string) => Promise<void>;
+  getDeviceVersions: (device: string) => Promise<OptionType[]>;
 
   deviceUnitsByVersion: OptionType[];
-  getDevicesUnitsByVersion: (versionId: string) => Promise<void>;
+  getDevicesUnitsByVersion: (versionId: string) => Promise<OptionType[]>;
   clearDeviceVersions: () => void;
 
   deviceUnitSelected: {
@@ -41,7 +54,7 @@ interface DeviceStore {
   };
   setDeviceUnitSelected: (data: DeviceUnitSelectedUpdate) => void;
 
-  addTemporaryDeviceUnit: (data: FieldValues) => Promise<any>;
+  addTemporaryDeviceUnit: (data: FieldValues) => Promise<TemporaryDeviceUnit>;
   updateDeviceInStore: (device: OptionType) => void;
 
   deviceUnit: any;
@@ -59,16 +72,17 @@ export const useDeviceStore = create<DeviceStore>((set) => ({
   },
 
   deviceVersions: [],
-  getDeviceVersions: async (deviceId: string): Promise<void> => {
-    const deviceVersions: OptionType[] = await getDeviceVersions(deviceId);
-    set({ deviceVersions });
+  getDeviceVersions: async (deviceId: string): Promise<OptionType[]> => {
+    const response = await getDeviceVersions(deviceId);
+    return response;
   },
 
   deviceUnitsByVersion: [],
-  getDevicesUnitsByVersion: async (versionId: string): Promise<void> => {
-    const deviceUnitsByVersion: OptionType[] =
-      await getDevicesUnitsByVersionId(versionId);
-    set({ deviceUnitsByVersion });
+  getDevicesUnitsByVersion: async (
+    versionId: string,
+  ): Promise<OptionType[]> => {
+    const response = await getDevicesUnitsByVersionId(versionId);
+    return response;
   },
 
   clearDeviceVersions: () => {
@@ -96,7 +110,9 @@ export const useDeviceStore = create<DeviceStore>((set) => ({
     }));
   },
 
-  addTemporaryDeviceUnit: async (data: FieldValues): Promise<any> => {
+  addTemporaryDeviceUnit: async (
+    data: FieldValues,
+  ): Promise<TemporaryDeviceUnit> => {
     const normalized: TemporaryDeviceUnitInput = {
       deviceid: data.deviceid,
       brandid: data.brand.id,
@@ -106,10 +122,17 @@ export const useDeviceStore = create<DeviceStore>((set) => ({
       commercialname: data.commercialname,
       url: data.url,
       unlockcode: data.unlockcode,
-      unlocktype: data.unlocktype,
+      unlocktype: data.unlocktype.id,
     };
 
     const response = await addTemporaryDeviceUnit(normalized);
+
+    return {
+      brand: extraSingle(response.brand),
+      type: extraSingle(response.deviceType),
+      device: deviceSingle(response.device),
+      temporarydeviceunit: response.temporarydeviceunit,
+    };
 
     //return await addTemporaryDeviceUnit(data);
   },

@@ -26,7 +26,6 @@ interface ValidatedAutocompleteProps {
 
   rules?: RegisterOptions;
   errors?: FieldErrors<FieldValues>;
-  value?: OptionType | null;
   disableClearable?: boolean;
   disabled?: boolean;
 
@@ -70,7 +69,6 @@ export const ValidatedAutocomplete = ({
   isLoading,
   disableClearable = false,
   filterOptions = defaultFilterOptions,
-  value,
   disabled = false,
   errors,
 }: ValidatedAutocompleteProps) => {
@@ -103,6 +101,8 @@ export const ValidatedAutocomplete = ({
                 selectOnFocus
                 handleHomeEndKeys
                 clearOnEscape
+                disableClearable={disableClearable}
+                filterOptions={filterOptions}
                 id={name}
                 onChange={(_, newValue, reason) => {
                   field.onChange(newValue);

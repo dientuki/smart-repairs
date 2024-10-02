@@ -7,15 +7,20 @@ import {
   SimpleAutocomplete,
   ValidatedAutocomplete,
 } from "@/components/form";
-import { useState } from "react";
-import { FieldErrors, FieldValues, useForm } from "react-hook-form";
+import { useEffect, useState } from "react";
+import { FieldValues, useForm } from "react-hook-form";
 import { GlobeAltIcon } from "@heroicons/react/24/outline";
 import { Icon } from "../Icon";
 import { ButtonType } from "@/types/enums";
 import { capitalizeFirstLetter } from "@/helper/stringHelpers";
-import { Modal, PatternLockModal } from "@/components/modal";
-import useErrorHandler from "@/components/hooks/useErrorHandler";
+import {
+  Modal,
+  NewDeviceUnitModal,
+  PatternLockModal,
+} from "@/components/modal";
+import { useErrorHandler } from "@/components/hooks/useErrorHandler";
 import { useDeviceStore } from "@/store";
+import { upsertOptionType } from "@/helper/componentsHelpers";
 
 type Step2Props = {
   nextStep: () => void;
@@ -23,6 +28,11 @@ type Step2Props = {
   brands: OptionType[];
   deviceTypes: OptionType[];
   devices: OptionType[];
+  onNext: (
+    selectedDeviceType: string,
+    selectedDevice: string,
+    tmpDeviceUnit: string,
+  ) => void;
 };
 
 enum UnlockType {
@@ -39,6 +49,7 @@ export const Step2 = ({
   brands,
   deviceTypes,
   devices,
+  onNext,
 }: Step2Props) => {
   const { t } = useTranslation();
   const [localDevices, setLocalDevices] = useState<OptionType[]>(devices);
@@ -48,7 +59,11 @@ export const Step2 = ({
   const [isDisableCode, setIsDisableCode] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { addTemporaryDeviceUnit } = useDeviceStore();
-  const { handleError } = useErrorHandler();
+  const { handleError, handleErrorForm } = useErrorHandler();
+  const { getDeviceVersions } = useDeviceStore();
+  const [newDeviceUnitModalData, setNewDeviceUnitModalData] = useState<
+    OptionType[]
+  >([]);
 
   const {
     formState: { errors },
@@ -57,12 +72,17 @@ export const Step2 = ({
     setValue,
     reset,
     setError,
+    resetField,
   } = useForm();
 
   const unlockOptions: OptionType[] = unlockTypeEntries.map(([key, value]) => ({
     id: value,
     label: capitalizeFirstLetter(t(`unlock_type.${key.toLowerCase()}`)) ?? "",
   }));
+
+  useEffect(() => {
+    setValue("unlocktype", unlockOptions[0]);
+  }, []);
 
   const setErrorFields = (message: Record<string, string[]>) => {
     const toValidate = [
@@ -85,21 +105,48 @@ export const Step2 = ({
     }
   };
 
+  const upsertBrands = (brand: OptionType) => {
+    const updatedVariable = upsertOptionType(localBrands, brand);
+    if (updatedVariable !== localBrands) {
+      setLocalBrands(updatedVariable);
+    }
+  };
+
+  const upsertDeviceTypes = (type: OptionType) => {
+    const updatedVariable = upsertOptionType(localDevicesTypes, type);
+    if (updatedVariable !== localDevicesTypes) {
+      setLocalDevicesTypes(updatedVariable);
+    }
+  };
+
+  const upsertDevices = (device: OptionType) => {
+    const updatedVariable = upsertOptionType(localDevices, device);
+    if (updatedVariable !== localDevices) {
+      setLocalDevices(updatedVariable);
+    }
+  };
+
   const handleRegistration = async (data: FieldValues) => {
-    console.log(data);
     if (isSubmitting) return;
     setIsSubmitting(true);
 
     try {
       const upsertData = await addTemporaryDeviceUnit(data);
+      upsertBrands(upsertData.brand);
+      upsertDeviceTypes(upsertData.type);
+      upsertDevices(upsertData.device);
+      onNext(
+        upsertData.type.label,
+        upsertData.device.label,
+        upsertData.temporarydeviceunit,
+      );
+      nextStep();
     } catch (error) {
       handleError(error, setErrorFields);
     } finally {
       setIsSubmitting(false);
     }
   };
-
-  const handleErrorForm = (errors: FieldErrors<FieldValues>) => {};
 
   const handleDeviceChange = async (
     newValue: OptionType | null,
@@ -116,21 +163,37 @@ export const Step2 = ({
         setValue("brand", brand);
         setValue("url", newValue.info.url ?? "");
         setValue("commercialname", newValue.info.commercialname ?? "");
+
+        try {
+          const data = await getDeviceVersions(newValue.id);
+          setNewDeviceUnitModalData(data);
+        } catch (error) {
+          handleError(error);
+        }
       }
     }
 
     if (reason === "clear" || newValue?.id == "new") {
       reset();
+      setValue("unlocktype", unlockOptions[0]);
     }
   };
 
   const handleDeviceWorksVersion = () => {
-    /*
     Modal.open(NewDeviceUnitModal, {
       layer: 5,
+      versions: newDeviceUnitModalData,
       setDeviceUnit: setDeviceUnit,
     });
-    */
+  };
+
+  const setDeviceUnit = (data: FieldValues) => {
+    for (const element in data) {
+      resetField(element);
+      if (data[element] != undefined) {
+        setValue(element, data[element]);
+      }
+    }
   };
 
   const setPattern = (pattern: number[]) => {
@@ -138,7 +201,6 @@ export const Step2 = ({
   };
 
   const handleUnlock = (unlock: string) => {
-    console.log(unlock);
     switch (unlock) {
       case UnlockType.NONE:
         setIsDisableCode(true);
@@ -246,8 +308,12 @@ export const Step2 = ({
         </div>
 
         <div className='grid gap-6 grid-cols-3 mt-4'>
-          <div className='relative'>
-            <ActionButton onClick={handleDeviceWorksVersion}>
+          <div className='relative h-full'>
+            <ActionButton
+              onClick={handleDeviceWorksVersion}
+              className='absolute bottom-0 left-0 w-full'
+              disabled={newDeviceUnitModalData.length === 0}
+            >
               Enciende
             </ActionButton>
           </div>
