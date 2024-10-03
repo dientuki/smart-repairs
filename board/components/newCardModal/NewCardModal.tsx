@@ -19,11 +19,53 @@ import {
 } from "@/components/newCardModal";
 import { useErrorHandler } from "@/components/hooks/useErrorHandler";
 
-interface OrderData {
-  customer: string | null;
-  deviceType: OptionType | null;
-  device: string | null;
+interface OrderTable {
+  customer: OptionType;
+  obervation: string;
 }
+
+interface OrderChecksTable {
+  damages: [damage];
+  features: [feature];
+  damagesDescription: string;
+  featuresDescription: string;
+}
+
+interface tmpDeviceUnitTable {
+  serial: string | null;
+  unlockType: string;
+  unlockCode: string | null;
+  device: OptionType;
+  deviceVersion: OptionType;
+  deviceUnit: string;
+}
+
+interface OrderData {
+  order: OrderTable;
+  orderChecks: OrderChecksTable;
+  tmpDeviceUnit: tmpDeviceUnitTable;
+}
+
+const orderDataInit: OrderData = {
+  order: {
+    customer: { id: '', label: '', info: null },
+    obervation: '',
+  },
+  orderChecks: {
+    damages: [],
+    features: [],
+    damagesDescription: '',
+    featuresDescription: '',
+  },
+  tmpDeviceUnit: {
+    serial: '',
+    unlockType: '',
+    unlockCode: '',
+    device: { id: '', label: '', info: null },
+    deviceVersion: { id: '', label: '', info: null },
+    deviceUnit: '',
+  }
+};
 
 export const NewCardModal = () => {
   const modal = useModalWindow();
@@ -35,12 +77,7 @@ export const NewCardModal = () => {
   const { getBoard } = useBoardStore();
   const { initializeOrderCreationData, createOrderSelectedData, createOrder } =
     useOrderStore();
-  const [orderData, setOrderData] = useState<OrderData>({
-    customer: null,
-    deviceType: null,
-    device: null,
-  });
-  const [tmpDeviceUnit, setTmpDeviceUnit] = useState<string>("");
+  const [orderData, setOrderData] = useState<OrderData>(orderDataInit);
   const date = new Date();
   const { handleError } = useErrorHandler();
 
@@ -62,24 +99,26 @@ export const NewCardModal = () => {
     };
   }, []);
 
-  const handleCustomerSelected = (selectedCustomer: string) => {
-    setOrderData((prevState) => ({
-      ...prevState,
-      customer: selectedCustomer,
+  const handleCustomerSelected = (selectedCustomer: OptionType) => {
+    setOrderData((prevOrderData) => ({
+      ...prevOrderData,
+      order: {
+        ...prevOrderData.order,
+        customer: selectedCustomer,
+      },
     }));
   };
 
   const handleDeviceSelected = (
-    selectedDeviceType: OptionType,
-    selectedDevice: string,
-    tmp: string,
+    selectedDevice: OptionType,
   ) => {
-    setOrderData((prevState) => ({
-      ...prevState,
-      device: selectedDevice,
-      deviceType: selectedDeviceType,
+    setOrderData((prevOrderData) => ({
+      ...prevOrderData,
+      tmpDeviceUnit: {
+        ...prevOrderData.tmpDeviceUnit,
+        device: selectedDevice,
+      },
     }));
-    setTmpDeviceUnit(tmp);
   };
 
   const saveOrder = async () => {
@@ -164,6 +203,7 @@ export const NewCardModal = () => {
                   nextStep={nextStep}
                   checks={initialData.devicesChecks}
                   deviceType={orderData.deviceType?.id}
+                  onNext={handleCheckSelected}
                 />
                 <Step4
                   prevStep={prevStep}
@@ -206,7 +246,7 @@ export const NewCardModal = () => {
                 <p className='w-1/3 first-letter:uppercase'>
                   {t("order.customer")}
                 </p>
-                <p className='w-2/3 truncate'>{orderData.customer || ""}</p>
+                <p className='w-2/3 truncate'>{orderData.order.customer.label || ""}</p>
               </div>
               <div className='flex justify-between w-full'>
                 <p className='w-1/3 first-letter:uppercase'>
