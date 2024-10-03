@@ -41,6 +41,15 @@ enum UnlockType {
   PATTERN = "pattern",
 }
 
+interface tmpDeviceUnitTable {
+  serial: string;
+  unlockType: string;
+  unlockCode: string;
+  device: OptionType;
+  deviceVersion: OptionType;
+  deviceUnit: string;
+}
+
 const unlockTypeEntries = Object.entries(UnlockType);
 
 export const Step2 = ({
@@ -135,11 +144,10 @@ export const Step2 = ({
       upsertBrands(upsertData.brand);
       upsertDeviceTypes(upsertData.type);
       upsertDevices(upsertData.device);
-      onNext(
-        upsertData.type,
-        upsertData.device.label,
-        upsertData.temporarydeviceunit,
-      );
+      const tmp:tmpDeviceUnitTable = {
+
+      }
+      onNext(tmp);
       nextStep();
     } catch (error) {
       handleError(error, setErrorFields);

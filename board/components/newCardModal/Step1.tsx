@@ -20,7 +20,7 @@ const filter = createFilterOptions<OptionType>();
 type Step1Props = {
   nextStep: () => void;
   customers: OptionType[];
-  onNext: (selectedCustomer: string) => void;
+  onNext: (selectedCustomer: OptionType) => void;
 };
 
 export const Step1 = ({ nextStep, customers, onNext }: Step1Props) => {
@@ -112,8 +112,11 @@ export const Step1 = ({ nextStep, customers, onNext }: Step1Props) => {
             break;
         }
       }
-      onNext(`${data.firstname} ${data.lastname}`);
-      nextStep();
+      const customer = localCustomers.find((c) => c.id === data.id);
+      if (customer) {
+        onNext(customer);
+        nextStep();
+      }
     } catch (error) {
       handleError(error, setErrorFields);
     } finally {
