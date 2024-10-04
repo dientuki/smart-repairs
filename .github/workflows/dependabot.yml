@@ -1,7 +1,7 @@
 name: Dependabot Checks
 
 on:
-  pull_request:
+  push:
     branches:
       - 'dependabot/*'  # Se activa para ramas que comienzan con 'dependabot/'
 
