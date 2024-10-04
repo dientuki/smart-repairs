@@ -15,12 +15,21 @@ declare global {
     extensions?: GraphQLErrorExtension;
   }
 
+  type GraphQLErrors = GraphQLError[];
+
   interface GraphQLObject {
     [key: string]: GraphQLValue;
   }
 
   interface QueryResponse<T extends GraphQLObject = GraphQLObject> {
     [key: string]: T[];
+  }
+
+  interface PayloadErrors {
+    status: boolean;
+    i18nKey: string;
+    code: number;
+    message: string;
   }
 }
 
