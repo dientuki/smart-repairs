@@ -2,15 +2,6 @@ import { AbortControllerManager } from "@/helper/AbortControllerManager";
 import { ApiLayerErrorEnum } from "@/types/enums";
 import { ApiLayerError } from "@/helper/ApiLayerError";
 
-type GraphQLErrors = GraphQLError[];
-
-type PayloadErrors = {
-  status: boolean;
-  i18nKey: string;
-  code: number;
-  message: string;
-};
-
 export const graphqlRequest = async (query: string) => {
   const controller = AbortControllerManager.getController();
 
@@ -49,7 +40,6 @@ export const handleGraphQLErrors = (errors: GraphQLErrors | undefined) => {
 
 export const handlePayloadErrors = (errors: PayloadErrors) => {
   if (errors.status === false) {
-    console.log("aca?");
     throw new ApiLayerError(errors.i18nKey, ApiLayerErrorEnum.Business);
   }
 };
