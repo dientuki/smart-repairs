@@ -1,0 +1,18 @@
+name: Dependabot Checks
+
+on:
+  pull_request:
+    branches:
+      - 'dependabot/*'  # Se activa para ramas que comienzan con 'dependabot/'
+
+jobs:
+  find_merge_conflicts:
+    runs-on: ubuntu-latest
+    name: Find Merge Conflicts
+    steps:
+      # Checkout del código fuente
+      - uses: actions/checkout@v4
+
+      # Ejecutar el buscador de conflictos de merge
+      - name: Merge Conflict Finder
+        uses: olivernybroe/action-conflict-finder@v4.0
