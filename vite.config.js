@@ -41,8 +41,8 @@ export default defineConfig({
         coverage: {
             provider: 'v8',
             reportsDirectory: './coverage/board',
-            include: ['board/**/*.test.{ts,tsx}'],
-            exclude: ['dist/**', 'node_modules/**']
+            include: ['board/**/*.{ts,tsx}'],
+            exclude: ['dist/**', 'node_modules/**', 'board/**/*.test.{ts,tsx}']
         },
         reporter: ['verbose']
       }
