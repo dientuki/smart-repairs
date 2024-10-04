@@ -7,7 +7,10 @@ on:
 
 jobs:
   find_merge_conflicts:
-    uses: ./.github/workflows/find-merge-conflicts.yml
+    runs-on: ubuntu-latest
+    name: Find merge conflicts
+    steps:
+      uses: ./.github/actions/find-merge-conflicts
   php_syntax_check:
     runs-on: ubuntu-latest
     name: PHP Syntax

@@ -1,0 +1,12 @@
+name: 'Find Merge Conflicts'
+description: 'Check for merge conflicts'
+inputs:
+  branch:
+    description: 'Branch to check for conflicts'
+    required: true
+runs:
+  using: 'composite'
+  steps:
+    - uses: actions/checkout@v4
+    - name: Merge Conflict Finder
+      uses: olivernybroe/action-conflict-finder@v4.0
