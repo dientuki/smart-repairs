@@ -43,6 +43,7 @@ export default defineConfig({
             reportsDirectory: './coverage/board',
             include: ['board/**/*.test.{ts,tsx}'],
             exclude: ['dist/**', 'node_modules/**']
-        }
+        },
+        reporter: ['verbose']
       }
 });
