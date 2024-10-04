@@ -1,0 +1,66 @@
+name: Unit Tests
+
+on:
+  pull_request:
+    branches:
+      - 'SM-*'
+
+jobs:
+  react_test:
+    runs-on: ubuntu-latest
+    name: Run React Tests
+    steps:
+      # Checkout del código fuente
+      - uses: actions/checkout@v4
+
+      # Configurar Node.js
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'  # Cambia esto a la versión que necesites
+
+      - name: Cache npm dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.npm  # Ruta donde npm guarda la caché
+          key: npm-${{ runner.os }}-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            npm-${{ runner.os }}-
+
+      # Instalar dependencias
+      - name: Install Dependencies
+        run: npm install
+
+      # Ejecutar los tests de React
+      - name: Run React Tests
+        run: npm run test  # Ajusta este comando según tu configuración
+
+  laravel_test:
+    runs-on: ubuntu-latest
+    name: Run Laravel Tests
+    steps:
+      # Checkout del código fuente
+      - uses: actions/checkout@v4
+
+      - name: Validate composer.json and composer.lock
+        run: composer validate --strict
+
+      - name: Cache Composer dependencies
+        uses: actions/cache@v4
+        with:
+          path: ./vendor
+          key: composer-${{ runner.os }}-${{ hashFiles('**/composer.lock') }}-${{ hashFiles('**/composer.json') }}
+          restore-keys: |
+            composer-${{ runner.os }}-
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+
+      - name: Install dependencies
+        run: composer install --prefer-dist --no-progress
+
+      # Ejecutar los tests de Laravel
+      - name: Run Laravel Tests
+        run: php composer test  # Ajusta este comando según tu configuración
