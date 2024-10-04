@@ -18,9 +18,15 @@ export const combineClasses = (
   const cleanedCustomClasses = new Set(customClassList.map(cleanClass));
 
   // Filter default classes that are not in custom classes
-  const filteredDefaultClasses = defaultClassList.filter(
+  let filteredDefaultClasses = defaultClassList.filter(
     (cls) => !cleanedCustomClasses.has(cleanClass(cls)),
   );
+
+  if (cleanedCustomClasses.has("absolute")) {
+    filteredDefaultClasses = filteredDefaultClasses.filter(
+      (cls) => cls !== "relative",
+    );
+  }
 
   // Combine custom classes with filtered default classes
   return [...customClassList, ...filteredDefaultClasses].join(" ");
@@ -38,4 +44,21 @@ export const dynamicStyles = (
     },
     {} as Record<string, string>,
   );
+};
+
+export const upsertOptionType = (
+  original: OptionType[],
+  upsertItem: OptionType,
+): OptionType[] => {
+  const index = original.findIndex((item) => item.id === upsertItem.id);
+
+  if (index === -1) {
+    // Si no existe, agregamos el nuevo elemento
+    return [...original, upsertItem];
+  } else {
+    // Si ya existe, actualizamos el elemento
+    const updatedOriginal = [...original];
+    updatedOriginal[index] = upsertItem;
+    return updatedOriginal;
+  }
 };
