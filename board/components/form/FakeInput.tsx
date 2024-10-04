@@ -11,6 +11,7 @@ export const FakeInput = ({ value, icon, className }: FakeInputProps) => {
         [&:not(:has(.fi-ac-action:focus))]:focus-within:ring-2
         ring-gray-950/10 dark:ring-white/20 [&:not(:has(.fi-ac-action:focus))]:focus-within:ring-primary-600 dark:[&:not(:has(.fi-ac-action:focus))]:focus-within:ring-primary-500
         overflow-hidden ${className}`}
+      data-testid='main'
     >
       {icon && (
         <div className='items-center gap-x-3 ps-3 flex border-e border-gray-200 pe-3 dark:border-white/10'>
