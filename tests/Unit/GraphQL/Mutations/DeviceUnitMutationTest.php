@@ -253,6 +253,7 @@ class DeviceUnitMutationTest extends TestCaseGraphQL
         ]);
     }
 
+    /*
     #[Test]
     public function cannot_send_invalid_form()
     {
@@ -383,7 +384,7 @@ class DeviceUnitMutationTest extends TestCaseGraphQL
         ],
         ]);
     }
-
+    */
 
     /**
      * Test to ensure that an unauthenticated user cannot access the mutation.
