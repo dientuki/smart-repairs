@@ -2,8 +2,7 @@ name: Unit Tests
 
 on:
   pull_request:
-    branches:
-      - 'SM-*'
+    types: [opened, closed, reopened, synchronize]
 
 jobs:
   react_test:
