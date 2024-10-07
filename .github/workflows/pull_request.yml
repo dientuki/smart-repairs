@@ -5,9 +5,19 @@ on:
     types: [opened, closed, reopened, synchronize]
 
 jobs:
+  find_merge_conflicts:
+    runs-on: ubuntu-latest
+    name: Find merge conflicts
+    steps:
+      # Checkout the source code so there are some files to look at.
+      - uses: actions/checkout@v4
+      # Run the actual merge conflict finder
+      - name: Merge Conflict finder
+        uses: olivernybroe/action-conflict-finder@v4.0
   react_test:
     runs-on: ubuntu-latest
     name: Run React Tests
+    needs: [find_merge_conflicts]
     steps:
       # Checkout del código fuente
       - uses: actions/checkout@v4
@@ -37,6 +47,7 @@ jobs:
   laravel_test:
     runs-on: ubuntu-latest
     name: Run Laravel Tests
+    needs: [find_merge_conflicts]
     steps:
       # Checkout del código fuente
       - uses: actions/checkout@v4
