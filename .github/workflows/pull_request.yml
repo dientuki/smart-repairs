@@ -55,9 +55,6 @@ jobs:
       - name: Validate composer.json and composer.lock
         run: composer validate --strict
 
-      - name: Copy .env
-        run: php -r "file_exists('.env') || copy('.env.testing', '.env');"
-
       - name: Cache Composer dependencies
         uses: actions/cache@v4
         with:
@@ -73,6 +70,9 @@ jobs:
 
       - name: Install dependencies
         run: composer install --prefer-dist --no-progress
+
+      - name: Copy .env
+        run: php -r "file_exists('.env') || copy('.env.testing', '.env');"
 
       - name: Generate key
         run: php artisan key:generate
