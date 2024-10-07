@@ -73,4 +73,4 @@ jobs:
 
       # Ejecutar los tests de Laravel
       - name: Run Laravel Tests
-        run: php composer test  # Ajusta este comando según tu configuración
+        run: composer test  # Ajusta este comando según tu configuración
