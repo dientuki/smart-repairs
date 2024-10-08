@@ -125,6 +125,8 @@ export const getOrder = async (id: string) => {
     brand: response.data.order.device.brand.name,
     brandImage: response.data.order.device.brand.imageUrl,
     deviceUnitId: response.data.order.deviceUnit?.id,
+    deviceUnlockCode: response.data.order.deviceUnit?.unlock_code,
+    deviceUnlockType: response.data.order.deviceUnit?.unlock_type,
     deviceType: response.data.order.device.deviceType.name,
     deviceTypeImage: response.data.order.device.deviceType.imageUrl,
     deviceCommercialName: response.data.order.device.commercial_name,

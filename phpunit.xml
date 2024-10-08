@@ -20,7 +20,7 @@
 
     <coverage>
         <report>
-                <html outputDirectory="coverage-php"/>
+                <html outputDirectory="coverage/laravel"/>
         </report>
     </coverage>
 

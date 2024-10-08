@@ -2,7 +2,7 @@ import { ModalLayout } from "@/components/modal";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useBoardStore, useOrderStore, useUserStore } from "@/store";
-import { TabGroup, TabList, TabPanels } from "@headlessui/react";
+import { TabGroup, TabList, TabPanels, TabPanel } from "@headlessui/react";
 import { useModalWindow } from "react-modal-global";
 import { AbortControllerManager } from "@/helper/AbortControllerManager";
 import { InboxIcon } from "@heroicons/react/24/outline";
@@ -183,11 +183,13 @@ export const NewCardModal = () => {
               </TabList>
 
               <TabPanels className='outline-none p-6'>
-                <Step1
-                  nextStep={nextStep}
-                  customers={initialData.customers}
-                  onNext={handleCustomerSelected}
-                />
+                <TabPanel unmount={false}>
+                  <Step1
+                    nextStep={nextStep}
+                    customers={initialData.customers}
+                    onNext={handleCustomerSelected}
+                  />
+                </TabPanel>
                 <Step2
                   prevStep={prevStep}
                   nextStep={nextStep}

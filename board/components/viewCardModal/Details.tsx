@@ -2,6 +2,7 @@ import { useOrderStore } from "@/store/OrderStore";
 import Avatar from "react-avatar";
 import { useTranslation } from "react-i18next";
 import { OrderUsers } from "./OrderUsers";
+import { UnlockPattern } from "./UnlockPattern";
 
 export const Details = () => {
   const { order } = useOrderStore();
@@ -43,6 +44,7 @@ export const Details = () => {
         </a>
       </div>
       <OrderUsers />
+      <UnlockPattern />
     </div>
   );
 };
