@@ -1,5 +1,4 @@
 import { createFilterOptions, FilterOptionsState } from "@mui/material";
-import { TabPanel } from "@headlessui/react";
 import { useForm, FieldValues } from "react-hook-form";
 import { EnvelopeIcon, PhoneIcon } from "@heroicons/react/16/solid";
 import { toast } from "react-toastify";
@@ -206,7 +205,7 @@ export const Step1 = ({ nextStep, customers, onNext }: Step1Props) => {
   };
 
   return (
-    <TabPanel unmount={false}>
+    <>
       <SimpleAutocomplete
         name='customer'
         label={t("field.customer")}
@@ -265,6 +264,6 @@ export const Step1 = ({ nextStep, customers, onNext }: Step1Props) => {
           </ActionButton>
         </div>
       </form>
-    </TabPanel>
+    </>
   );
 };
