@@ -107,6 +107,9 @@ input[type="number"] {
 
 .dark .MuiAutocomplete-popper [role="listbox"]{
   background: #111827;
+  color: #ffffff;
+  border: solid 1px #fff;
+  border-top:none;
 
   .Mui-focused {
     background: #9ec8fb;
