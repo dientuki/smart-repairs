@@ -39,14 +39,20 @@ export const Step3 = ({
   }, [deviceType]);
 
   const handleRegistration = async (data: FieldValues) => {
+    console.log(data);
+
     const damages: damage[] = check?.damages.map((value) => ({
       value: value,
-      checked: data.damages.includes(value.toString()),
+      checked:
+        data.damages == false ? false : data.damages.includes(value.toString()),
     }));
 
     const features: feature[] = check?.features.map((value) => ({
       value: value,
-      checked: data.features.includes(value.toString()),
+      checked:
+        data.features == false
+          ? false
+          : data.features.includes(value.toString()),
     }));
 
     const table: OrderChecksTable = {

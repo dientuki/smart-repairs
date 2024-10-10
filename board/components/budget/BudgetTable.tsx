@@ -39,6 +39,7 @@ type TableProps = {
   budget?: ViewBudget;
   description: OptionType[];
   required?: boolean;
+  isSimple: boolean;
 };
 
 export const BudgetTable = ({
@@ -47,6 +48,7 @@ export const BudgetTable = ({
   budget,
   description,
   required = true,
+  isSimple = false,
 }: TableProps) => {
   const [data, setData] = useState<ViewItem[]>([]);
   const { user } = useUserStore();
@@ -59,6 +61,12 @@ export const BudgetTable = ({
     discount: 0,
     total: 0,
   });
+
+  const showSum: boolean =
+    user?.package === PackageType.Basic || isSimple ? false : true;
+
+  const showAddPart: boolean =
+    user?.package === PackageType.Basic || isSimple ? false : true;
 
   const defaultData: ViewItem[] = [
     {
@@ -187,7 +195,7 @@ export const BudgetTable = ({
     },
   ];
 
-  if (user?.package !== PackageType.Basic) {
+  if (showSum) {
     header.push({
       header: capitalizeFirstLetter(t("budget.sum")),
       className: "w-20 text-center",
@@ -368,9 +376,7 @@ export const BudgetTable = ({
                 />
               </td>
 
-              {user?.package !== PackageType.Basic && (
-                <td className='px-3 py-4'>sum</td>
-              )}
+              {showSum && <td className='px-3 py-4'>sum</td>}
 
               <td className='px-3 py-4'>
                 {data.length === 1 ? (
@@ -391,7 +397,7 @@ export const BudgetTable = ({
           ))}
           <tr className='bg-gray-50 dark:bg-white/5'>
             <td colSpan={header.length - 1} align='right' className='p-2'>
-              {user?.package !== PackageType.Basic && (
+              {showAddPart && (
                 <ActionButton
                   className='w-auto'
                   style={StyleColor.Warning}

@@ -113,6 +113,8 @@ export const NewCardModal = () => {
   };
 
   const saveOrder = async () => {
+    console.log("warning, try to add order");
+    return;
     await createOrder();
     await getBoard();
     modal.close();
@@ -198,6 +200,13 @@ export const NewCardModal = () => {
                     checks={initialData.devicesChecks}
                     deviceType={orderData.tmpDeviceUnit.device.info?.typeid}
                     onNext={handleStep3}
+                  />
+                </TabPanel>
+                <TabPanel unmount={false}>
+                  <Step4
+                    prevStep={prevStep}
+                    nextStep={saveOrder}
+                    budgetTableData={initialData.budgetTableData}
                   />
                 </TabPanel>
               </TabPanels>
