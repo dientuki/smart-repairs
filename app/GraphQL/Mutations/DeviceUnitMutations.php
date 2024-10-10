@@ -22,6 +22,18 @@ final readonly class DeviceUnitMutations
 {
     use UserDataTrait;
 
+    private function separarString($input) {
+        $var1 = $input;
+        $var2 = '';
+
+        if (preg_match('/^(.*)\s?\((.*)\)$/', $input, $matches)) {
+            $var1 = trim($matches[1]);
+            $var2 = trim($matches[2]);
+        }
+
+        return [$var1, $var2];
+    }
+
     /**
      * Return a value for the field.
      *
@@ -95,31 +107,25 @@ final readonly class DeviceUnitMutations
                     'url' => $args['input']['url'],
                 ]);
             }
-
+            /*
             if (!empty($args['input']['versionlabel'])) {
+                list($var1, $var2) = $this->separarString($args['input']['versionlabel']);
+
                 $deviceVersion = DeviceVersion::updateOrCreate(
                     ['id' => $args['input']['versionid']],
                     [
-                        'version' => $args['input']['versionlabel'],
+                        'version' => $var1,
+                        'description' => $var2,
                         'device_id' => $device->id,
                     ]
                 );
             }
-
-            $temporaryDeviceUnit = TemporaryDeviceUnit::create([
-                'device_id' => $device->id,
-                'device_version_id' => isset($deviceVersion) ? $deviceVersion->id : null,
-                'device_unit_id' => $args['input']['serialid'],
-                'serial' => $args['input']['seriallabel'],
-                'unlock_type' => $args['input']['unlocktype'],
-                'unlock_code' => $args['input']['unlockcode'],
-            ]);
+            */
             DB::commit();
 
             return [
                 '__typename' => 'TemporaryDeviceUnitPayload',
                 'status' => true,
-                'temporarydeviceunit' => $temporaryDeviceUnit->id,
                 'brand' => [
                     'id' => $brand->id,
                     'label' => $brand->name,
@@ -134,13 +140,14 @@ final readonly class DeviceUnitMutations
                     'url' => $device->url,
                     'brand' => [
                         'id' => $device->brand->id,
-                        'name' => $device->brand->name,
+                        'label' => $device->brand->name,
                     ],
                     'deviceType' => [
                         'id' => $device->deviceType->id,
-                        'name' => $device->deviceType->name,
+                        'label' => $device->deviceType->name,
                     ],
-                ]
+                ],
+                'deviceVersionId' => (isset($deviceVersion)) ? $deviceVersion->id : null,
             ];
         } catch (GraphQLBusinessException $e) {
             DB::rollBack();

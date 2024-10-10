@@ -35,7 +35,7 @@ export const Step3 = ({
     setCheck(foundCheck || undefined);
   }, [deviceType]);
 
-  console.log(checks, deviceType, check);
+  //console.log(checks, deviceType, check);
 
   const handleRegistration = async (data: FieldValues) => {
     try {

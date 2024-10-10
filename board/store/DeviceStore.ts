@@ -30,7 +30,7 @@ interface TemporaryDeviceUnit {
   brand: OptionType;
   type: OptionType;
   device: OptionType;
-  temporarydeviceunit: string;
+  temporarydeviceunit: tmpDeviceUnitTable;
 }
 
 interface DeviceUnitSelectedUpdate {
@@ -113,16 +113,19 @@ export const useDeviceStore = create<DeviceStore>((set) => ({
   addTemporaryDeviceUnit: async (
     data: FieldValues,
   ): Promise<TemporaryDeviceUnit> => {
-    const normalized: TemporaryDeviceUnitInput = {
-      deviceid: data.deviceid,
+    const normalized = {
       brandid: data.brand.id,
       brandlabel: data.brand.label,
+
       typeid: data.type.id,
       typelabel: data.type.label,
+
+      deviceid: data.deviceid,
       commercialname: data.commercialname,
       url: data.url,
-      unlockcode: data.unlockcode,
-      unlocktype: data.unlocktype.id,
+
+      versionid: data.version?.id,
+      versionlabel: data.version?.label,
     };
 
     const response = await addTemporaryDeviceUnit(normalized);
@@ -131,7 +134,7 @@ export const useDeviceStore = create<DeviceStore>((set) => ({
       brand: extraSingle(response.brand),
       type: extraSingle(response.deviceType),
       device: deviceSingle(response.device),
-      temporarydeviceunit: response.temporarydeviceunit,
+      deviceVersionId: response.deviceVersionId,
     };
 
     //return await addTemporaryDeviceUnit(data);

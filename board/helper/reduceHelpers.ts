@@ -34,7 +34,7 @@ export const device = (collection: any[]): OptionType[] => {
 export const deviceSingle = (device: any): OptionType => {
   return {
     id: device.id,
-    label: `${device.brand.name} ${device.commercial_name}`,
+    label: `${device.brand.label} ${device.commercial_name}`,
     info: {
       commercialname: device.commercial_name,
       brandid: device.brand.id,

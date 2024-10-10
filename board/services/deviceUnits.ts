@@ -51,26 +51,23 @@ export async function addTemporaryDeviceUnit(
   const response = await graphqlRequest(`
         mutation {
             addTemporaryDeviceUnit(input: {
-                deviceid: "${handleNew(data.deviceid)}"
-
                 brandid: "${handleNew(data.brandid)}"
                 brandlabel: "${data.brandlabel}"
+
                 typeid: "${handleNew(data.typeid)}"
                 typelabel: "${data.typelabel}"
+
+                deviceid: "${handleNew(data.deviceid)}"
                 commercialname: "${data.commercialname}"
                 url: "${handleUndefined(data.url)}"
 
-                unlocktype: "${data.unlocktype}"
-                unlockcode: "${handleUndefined(data.unlockcode)}"
-                serialid: "${handleNew(data.serialid)}"
-                seriallabel: "${handleUndefined(data.seriallabel)}"
                 versionid: "${handleNew(data.versionid)}"
-                versionlabel: "${handleUndefined(data.versionlabel)}"
+                versionlabel: "${data.versionlabel}"
             }) {
                 __typename
                 ... on TemporaryDeviceUnitPayload {
-                    temporarydeviceunit
                     status
+                    deviceVersionId
                     brand {
                         id
                         label
@@ -85,13 +82,14 @@ export async function addTemporaryDeviceUnit(
                         url
                         brand {
                             id
-                            name
+                            label
                         }
                         deviceType {
                             id
-                            name
+                            label
                         }
                     }
+
                 }
                 ... on ErrorPayload {
                     i18nKey

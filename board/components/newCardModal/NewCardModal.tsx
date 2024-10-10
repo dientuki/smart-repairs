@@ -31,15 +31,6 @@ interface OrderChecksTable {
   featuresDescription: string;
 }
 
-interface tmpDeviceUnitTable {
-  serial: string | null;
-  unlockType: string;
-  unlockCode: string | null;
-  device: OptionType;
-  deviceVersion: OptionType;
-  deviceUnit: string;
-}
-
 interface OrderData {
   order: OrderTable;
   orderChecks: OrderChecksTable;
@@ -75,11 +66,12 @@ export const NewCardModal = () => {
   const [initialData, setInitialData] = useState<OrderCreationData>();
   const { t } = useTranslation();
   const { getBoard } = useBoardStore();
-  const { initializeOrderCreationData, createOrderSelectedData, createOrder } =
-    useOrderStore();
+  const { initializeOrderCreationData, createOrder } = useOrderStore();
   const [orderData, setOrderData] = useState<OrderData>(orderDataInit);
   const date = new Date();
   const { handleError } = useErrorHandler();
+
+  console.log(orderData)
 
   useEffect(() => {
     const fetchData = async () => {
@@ -99,7 +91,7 @@ export const NewCardModal = () => {
     };
   }, []);
 
-  const handleCustomerSelected = (selectedCustomer: OptionType) => {
+  const handleStep1 = (selectedCustomer: OptionType) => {
     setOrderData((prevOrderData) => ({
       ...prevOrderData,
       order: {
@@ -109,17 +101,16 @@ export const NewCardModal = () => {
     }));
   };
 
-  const handleDeviceSelected = (
-    selectedDevice: OptionType,
+  const handleStep2 = (
+    tmpDeviceUnit: tmpDeviceUnitTable,
   ) => {
     setOrderData((prevOrderData) => ({
       ...prevOrderData,
-      tmpDeviceUnit: {
-        ...prevOrderData.tmpDeviceUnit,
-        device: selectedDevice,
-      },
+      tmpDeviceUnit: tmpDeviceUnit,
     }));
   };
+
+  const handleStep3 = () => {};
 
   const saveOrder = async () => {
     await createOrder();
@@ -187,29 +178,27 @@ export const NewCardModal = () => {
                   <Step1
                     nextStep={nextStep}
                     customers={initialData.customers}
-                    onNext={handleCustomerSelected}
+                    onNext={handleStep1}
                   />
                 </TabPanel>
-                <Step2
-                  prevStep={prevStep}
-                  nextStep={nextStep}
-                  brands={initialData.brands}
-                  devices={initialData.devices}
-                  deviceTypes={initialData.deviceTypes}
-                  onNext={handleDeviceSelected}
-                />
+                <TabPanel unmount={false}>
+                  <Step2
+                    prevStep={prevStep}
+                    nextStep={nextStep}
+                    brands={initialData.brands}
+                    devices={initialData.devices}
+                    deviceTypes={initialData.deviceTypes}
+                    onNext={handleStep2}
+                  />
+                </TabPanel>
                 <Step3
                   prevStep={prevStep}
                   nextStep={nextStep}
                   checks={initialData.devicesChecks}
                   deviceType={orderData.deviceType?.id}
-                  onNext={handleCheckSelected}
+                  onNext={handleStep3}
                 />
-                <Step4
-                  prevStep={prevStep}
-                  nextStep={saveOrder}
-                  budgetTableData={initialData.budgetTableData}
-                />
+
               </TabPanels>
             </TabGroup>
           </div>
@@ -249,12 +238,24 @@ export const NewCardModal = () => {
                 <p className='w-2/3 truncate'>{orderData.order.customer.label || ""}</p>
               </div>
               <div className='flex justify-between w-full'>
-                <p className='w-1/3 first-letter:uppercase'>
-                  {orderData.deviceType
-                    ? orderData.deviceType.label
-                    : t("order.device")}
-                </p>
-                <p className='w-2/3 truncate'>{orderData.device || ""}</p>
+                {
+                  orderData.tmpDeviceUnit.device.info == null ?
+                    <>
+                      <p className='w-1/3 first-letter:uppercase'>
+                        No
+                      </p>
+                      <p className='w-2/3 truncate'>No</p>
+                    </>
+                  :
+                    <>
+                      <p className='w-1/3 first-letter:uppercase'>
+                        {orderData.tmpDeviceUnit.device.info.type}
+                      </p>
+                      <p className='w-2/3 truncate'>
+                        {orderData.tmpDeviceUnit.device.info.brand} {orderData.tmpDeviceUnit.device.info.commercialname}
+                      </p>
+                    </>
+                }
               </div>
             </div>
           </div>
