@@ -32,23 +32,23 @@ interface OrderData {
 
 const orderDataInit: OrderData = {
   order: {
-    customer: { id: '', label: '', info: null },
-    obervation: '',
+    customer: { id: "", label: "", info: null },
+    obervation: "",
   },
   orderChecks: {
     damages: [],
     features: [],
-    damagesDescription: '',
-    featuresDescription: '',
+    damagesDescription: "",
+    featuresDescription: "",
   },
   tmpDeviceUnit: {
-    serial: '',
-    unlockType: '',
-    unlockCode: '',
-    device: { id: '', label: '', info: null },
-    deviceVersion: { id: '', label: '', info: null },
-    deviceUnit: '',
-  }
+    serial: "",
+    unlockType: "",
+    unlockCode: "",
+    device: { id: "", label: "", info: null },
+    deviceVersion: { id: "", label: "", info: null },
+    deviceUnit: "",
+  },
 };
 
 export const NewCardModal = () => {
@@ -64,7 +64,7 @@ export const NewCardModal = () => {
   const date = new Date();
   const { handleError } = useErrorHandler();
 
-  console.log(orderData)
+  console.log(orderData);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -94,9 +94,7 @@ export const NewCardModal = () => {
     }));
   };
 
-  const handleStep2 = (
-    tmpDeviceUnit: tmpDeviceUnitTable,
-  ) => {
+  const handleStep2 = (tmpDeviceUnit: tmpDeviceUnitTable) => {
     setOrderData((prevOrderData) => ({
       ...prevOrderData,
       tmpDeviceUnit: tmpDeviceUnit,
@@ -111,7 +109,7 @@ export const NewCardModal = () => {
         ...prevOrderData.order,
         obervation: observation,
       },
-    }))
+    }));
   };
 
   const saveOrder = async () => {
@@ -202,7 +200,6 @@ export const NewCardModal = () => {
                     onNext={handleStep3}
                   />
                 </TabPanel>
-
               </TabPanels>
             </TabGroup>
           </div>
@@ -239,27 +236,27 @@ export const NewCardModal = () => {
                 <p className='w-1/3 first-letter:uppercase'>
                   {t("order.customer")}
                 </p>
-                <p className='w-2/3 truncate'>{orderData.order.customer.label || ""}</p>
+                <p className='w-2/3 truncate'>
+                  {orderData.order.customer.label || ""}
+                </p>
               </div>
               <div className='flex justify-between w-full'>
-                {
-                  orderData.tmpDeviceUnit.device.info == null ?
-                    <>
-                      <p className='w-1/3 first-letter:uppercase'>
-                        No
-                      </p>
-                      <p className='w-2/3 truncate'>No</p>
-                    </>
-                  :
-                    <>
-                      <p className='w-1/3 first-letter:uppercase'>
-                        {orderData.tmpDeviceUnit.device.info.type}
-                      </p>
-                      <p className='w-2/3 truncate'>
-                        {orderData.tmpDeviceUnit.device.info.brand} {orderData.tmpDeviceUnit.device.info.commercialname}
-                      </p>
-                    </>
-                }
+                {orderData.tmpDeviceUnit.device.info == null ? (
+                  <>
+                    <p className='w-1/3 first-letter:uppercase'>No</p>
+                    <p className='w-2/3 truncate'>No</p>
+                  </>
+                ) : (
+                  <>
+                    <p className='w-1/3 first-letter:uppercase'>
+                      {orderData.tmpDeviceUnit.device.info.type}
+                    </p>
+                    <p className='w-2/3 truncate'>
+                      {orderData.tmpDeviceUnit.device.info.brand}{" "}
+                      {orderData.tmpDeviceUnit.device.info.commercialname}
+                    </p>
+                  </>
+                )}
               </div>
             </div>
           </div>

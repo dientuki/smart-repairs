@@ -27,9 +27,7 @@ type Step2Props = {
   brands: OptionType[];
   deviceTypes: OptionType[];
   devices: OptionType[];
-  onNext: (
-    tmpDeviceUnit: tmpDeviceUnitTable,
-  ) => void;
+  onNext: (tmpDeviceUnit: tmpDeviceUnitTable) => void;
 };
 
 enum UnlockType {
@@ -128,7 +126,6 @@ export const Step2 = ({
     setIsSubmitting(true);
 
     try {
-
       const upsertData = await addTemporaryDeviceUnit(data);
       console.log(data);
       upsertBrands(upsertData.brand);
@@ -142,7 +139,7 @@ export const Step2 = ({
         device: upsertData.device,
         deviceVersion: upsertData.temporarydeviceunit,
         deviceUnit: upsertData,
-      }
+      };
 
       onNext(tmp);
       nextStep();

@@ -19,7 +19,7 @@ export const Step3 = ({
   nextStep,
   deviceType,
   checks,
-  onNext
+  onNext,
 }: Step3Props) => {
   const { t } = useTranslation();
   const [check, setCheck] = useState<DeviceCheck | undefined>(undefined);
@@ -39,24 +39,22 @@ export const Step3 = ({
   }, [deviceType]);
 
   const handleRegistration = async (data: FieldValues) => {
-
-    const damages:damage[] = check?.damages.map(value => ({
-      value:value,
-      checked: data.damages.includes(value.toString())
+    const damages: damage[] = check?.damages.map((value) => ({
+      value: value,
+      checked: data.damages.includes(value.toString()),
     }));
 
-    const features:feature[] = check?.features.map(value => ({
-      value:value,
-      checked: data.features.includes(value.toString())
+    const features: feature[] = check?.features.map((value) => ({
+      value: value,
+      checked: data.features.includes(value.toString()),
     }));
 
-
-    const table:OrderChecksTable = {
+    const table: OrderChecksTable = {
       damages: damages,
       features: features,
       damagesDescription: data.damagedescription,
-      featuresDescription: data.featuredescription
-    }
+      featuresDescription: data.featuredescription,
+    };
 
     onNext(data.observation, table);
     nextStep();
@@ -135,9 +133,7 @@ export const Step3 = ({
 
       <div className='flex justify-between mt-6'>
         <ActionButton onClick={prevStep}>{t("button.previous")}</ActionButton>
-        <ActionButton type={ButtonType.Submit}>
-          {t("button.next")}
-        </ActionButton>
+        <ActionButton type={ButtonType.Submit}>{t("button.next")}</ActionButton>
       </div>
     </form>
   );

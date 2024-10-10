@@ -8,7 +8,12 @@ interface SimpleToggleProps {
   register: UseFormRegister<FieldValues>;
 }
 
-export const SimpleToggle = ({ name, value, text, register }: SimpleToggleProps) => {
+export const SimpleToggle = ({
+  name,
+  value,
+  text,
+  register,
+}: SimpleToggleProps) => {
   return (
     <label className='flex items-center mb-5 cursor-pointer'>
       <input

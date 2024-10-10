@@ -47,7 +47,9 @@ test("renders assigned user correctly", () => {
 
 test("renders unassigned state when no assignee", () => {
   // Actualizar el mock para simular que no hay asignado
-  (useOrderStore as unknown as Mock).mockReturnValue({ order: { ...mockOrder, assignee: null } });
+  (useOrderStore as unknown as Mock).mockReturnValue({
+    order: { ...mockOrder, assignee: null },
+  });
 
   render(<OrderUsers />);
 
@@ -57,7 +59,9 @@ test("renders unassigned state when no assignee", () => {
 
 test("does not render when user package is basic", () => {
   // Simular que el user tiene un paquete Basic
-  (useUserStore as unknown as Mock).mockReturnValue({ user: { package: PackageType.Basic } });
+  (useUserStore as unknown as Mock).mockReturnValue({
+    user: { package: PackageType.Basic },
+  });
 
   render(<OrderUsers />);
 

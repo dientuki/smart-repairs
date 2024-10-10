@@ -130,8 +130,6 @@ declare global {
     damagesDescription: string;
     featuresDescription: string;
   }
-
-
 }
 
 export {};
