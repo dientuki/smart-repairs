@@ -236,7 +236,6 @@ export const BudgetTable = ({
     setData((prevData) =>
       prevData.map((row, index) => {
         if (index === rowIndex) {
-          console.log(data, updates);
           let newQuantity = row.quantity; // Valor predeterminado: el valor actual
           let newUnitPrice = row.unitPrice; // Valor predeterminado: el valor actual
 

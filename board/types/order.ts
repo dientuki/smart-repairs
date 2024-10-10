@@ -124,6 +124,13 @@ declare global {
     deviceUnit: string;
   }
 
+  interface OrderChecksTable {
+    damages: damage[];
+    features: feature[];
+    damagesDescription: string;
+    featuresDescription: string;
+  }
+
 
 }
 

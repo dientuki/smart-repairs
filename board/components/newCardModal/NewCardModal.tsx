@@ -24,13 +24,6 @@ interface OrderTable {
   obervation: string;
 }
 
-interface OrderChecksTable {
-  damages: [damage];
-  features: [feature];
-  damagesDescription: string;
-  featuresDescription: string;
-}
-
 interface OrderData {
   order: OrderTable;
   orderChecks: OrderChecksTable;
@@ -110,7 +103,16 @@ export const NewCardModal = () => {
     }));
   };
 
-  const handleStep3 = () => {};
+  const handleStep3 = (observation: string, orderChecks: OrderChecksTable) => {
+    setOrderData((prevOrderData) => ({
+      ...prevOrderData,
+      orderChecks: orderChecks,
+      order: {
+        ...prevOrderData.order,
+        obervation: observation,
+      },
+    }))
+  };
 
   const saveOrder = async () => {
     await createOrder();
@@ -191,13 +193,15 @@ export const NewCardModal = () => {
                     onNext={handleStep2}
                   />
                 </TabPanel>
-                <Step3
-                  prevStep={prevStep}
-                  nextStep={nextStep}
-                  checks={initialData.devicesChecks}
-                  deviceType={orderData.deviceType?.id}
-                  onNext={handleStep3}
-                />
+                <TabPanel unmount={false}>
+                  <Step3
+                    prevStep={prevStep}
+                    nextStep={nextStep}
+                    checks={initialData.devicesChecks}
+                    deviceType={orderData.tmpDeviceUnit.device.info?.typeid}
+                    onNext={handleStep3}
+                  />
+                </TabPanel>
 
               </TabPanels>
             </TabGroup>

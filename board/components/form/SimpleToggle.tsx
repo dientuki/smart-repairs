@@ -1,17 +1,19 @@
 import { InputType } from "@/types/enums";
+import { FieldValues, UseFormRegister } from "react-hook-form";
 
 interface SimpleToggleProps {
   name: string;
   value: string;
   text: string;
+  register: UseFormRegister<FieldValues>;
 }
 
-export const SimpleToggle = ({ name, value, text }: SimpleToggleProps) => {
+export const SimpleToggle = ({ name, value, text, register }: SimpleToggleProps) => {
   return (
     <label className='flex items-center mb-5 cursor-pointer'>
       <input
         type={InputType.Checkbox}
-        name={name}
+        {...register(name)}
         value={value}
         className='sr-only peer'
       />
