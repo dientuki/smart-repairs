@@ -80,3 +80,8 @@ export enum ApiLayerErrorEnum {
   Business = "Business",
   Wtf = "Wtf",
 }
+
+export enum Layout {
+  Column = 'col',
+  Row = 'row',
+}

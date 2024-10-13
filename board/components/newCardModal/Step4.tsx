@@ -1,9 +1,10 @@
 import { useTranslation } from "react-i18next";
 import { ActionButton, InputField } from "@/components/form";
-import { ButtonType } from "@/types/enums";
+import { ButtonType, InputType, Layout } from "@/types/enums";
 import { useErrorHandler } from "@/components/hooks/useErrorHandler";
 import { FieldValues, useForm } from "react-hook-form";
 import { BudgetTable } from "@/components/budget";
+import { useUserStore } from "@/store";
 
 type Step3Props = {
   nextStep: () => void;
@@ -13,6 +14,7 @@ type Step3Props = {
 
 export const Step4 = ({ prevStep, nextStep, budgetTableData }: Step3Props) => {
   const { t } = useTranslation();
+  const { user } = useUserStore();
   const { handleError, handleErrorForm } = useErrorHandler();
   const {
     handleSubmit,
@@ -29,7 +31,10 @@ export const Step4 = ({ prevStep, nextStep, budgetTableData }: Step3Props) => {
   };
 
   const registerOptions = {
-    money: { required: false },
+    money: {
+      required: false,
+      min: 0
+    },
   };
 
   return (
@@ -49,6 +54,9 @@ export const Step4 = ({ prevStep, nextStep, budgetTableData }: Step3Props) => {
           control={control}
           rules={registerOptions.money}
           errors={errors}
+          layout={Layout.Row}
+          icon={user.currency}
+          type={InputType.Number}
         />
       </div>
       <div className='flex justify-between mt-6'>

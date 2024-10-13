@@ -252,8 +252,8 @@ export const NewCardModal = () => {
               <div className='flex justify-between w-full'>
                 {orderData.tmpDeviceUnit.device.info == null ? (
                   <>
-                    <p className='w-1/3 first-letter:uppercase'>No</p>
-                    <p className='w-2/3 truncate'>No</p>
+                    <p className='w-1/3 first-letter:uppercase'>Equipo</p>
+                    <p className='w-2/3 truncate'></p>
                   </>
                 ) : (
                   <>

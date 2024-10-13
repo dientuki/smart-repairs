@@ -8,7 +8,7 @@ import {
   FieldError,
 } from "react-hook-form";
 import { ErrorMessage } from "@/components/form";
-import { InputType } from "@/types/enums";
+import { InputType, Layout } from "@/types/enums";
 
 interface InputFieldProps {
   name: string;
@@ -25,6 +25,7 @@ interface InputFieldProps {
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
   onBlur?: (event: React.FocusEvent<HTMLInputElement>) => void;
   type?: InputType;
+  layout?: Layout;
 }
 
 const getNestedError = (
@@ -81,6 +82,7 @@ export const InputField = ({
   onChange,
   type = InputType.Text,
   onBlur,
+  layout = Layout.Column,
 }: InputFieldProps) => {
   // Detectar si el name contiene una estructura anidada (usando un punto)
   const isNested = name.includes(".");
@@ -94,18 +96,16 @@ export const InputField = ({
       };
 
   return (
-    <Field>
+    <Field className={`flex ${layout === Layout.Column ? 'flex-col' : 'flex-row gap-4'}`}>
       <Label
         htmlFor={name}
-        className={
-          labelless
-            ? "sr-only"
-            : "first-letter:uppercase block mb-2 text-base font-medium text-gray-900"
-        }
+        className={`${labelless ? "sr-only" : "first-letter:uppercase text-base font-medium text-gray-900"} ${
+          layout === Layout.Row ? "flex items-center" : "block mb-2"
+        }`}
       >
         {label}
       </Label>
-      <div className='flex flex-col gap-2'>
+      <div className={`flex flex-col gap-2 ${layout === Layout.Row ? 'w-full' : ''}`}>
         <div
           className={`flex rounded-lg shadow-sm ring-1 transition duration-75 bg-white dark:bg-white/5
               [&:not(:has(.fi-ac-action:focus))]:focus-within:ring-2
