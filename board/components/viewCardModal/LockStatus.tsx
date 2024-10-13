@@ -36,14 +36,14 @@ export const LockStatus = ({
         }
       }}
     >
-        <Icon
-          icon={stState ? LockOpenIcon : LockClosedIcon}
-          size={4}
-          data-testid={stState ? "lock-open-icon" : "lock-closed-icon"}
-        />
-        <span className='ml-1 first-letter:uppercase'>
-          {stState ? t("public") : t("private")}
-        </span>
+      <Icon
+        icon={stState ? LockOpenIcon : LockClosedIcon}
+        size={4}
+        data-testid={stState ? "lock-open-icon" : "lock-closed-icon"}
+      />
+      <span className='ml-1 first-letter:uppercase'>
+        {stState ? t("public") : t("private")}
+      </span>
     </div>
   );
 };

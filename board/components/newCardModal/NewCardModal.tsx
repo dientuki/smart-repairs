@@ -10,14 +10,46 @@ import { Icon } from "../Icon";
 import { OrderStatus } from "@/components/viewCardModal";
 import { TypedColumn } from "@/types/enums";
 import Avatar from "react-avatar";
-import { Step1, Step2, Step3, TabListTab } from "@/components/newCardModal";
+import {
+  Step1,
+  Step2,
+  Step3,
+  Step4,
+  TabListTab,
+} from "@/components/newCardModal";
 import { useErrorHandler } from "@/components/hooks/useErrorHandler";
 
-interface OrderData {
-  customer: string | null;
-  deviceType: string | null;
-  device: string | null;
+interface OrderTable {
+  customer: OptionType;
+  obervation: string;
 }
+
+interface OrderData {
+  order: OrderTable;
+  orderChecks: OrderChecksTable;
+  tmpDeviceUnit: tmpDeviceUnitTable;
+}
+
+const orderDataInit: OrderData = {
+  order: {
+    customer: { id: "", label: "", info: null },
+    obervation: "",
+  },
+  orderChecks: {
+    damages: [],
+    features: [],
+    damagesDescription: "",
+    featuresDescription: "",
+  },
+  tmpDeviceUnit: {
+    serial: "",
+    unlockType: "",
+    unlockCode: "",
+    device: { id: "", label: "", info: null },
+    deviceVersion: { id: "", label: "", info: null },
+    deviceUnit: "",
+  },
+};
 
 export const NewCardModal = () => {
   const modal = useModalWindow();
@@ -27,16 +59,12 @@ export const NewCardModal = () => {
   const [initialData, setInitialData] = useState<OrderCreationData>();
   const { t } = useTranslation();
   const { getBoard } = useBoardStore();
-  const { initializeOrderCreationData, createOrderSelectedData, createOrder } =
-    useOrderStore();
-  const [orderData, setOrderData] = useState<OrderData>({
-    customer: null,
-    deviceType: null,
-    device: null,
-  });
-  const [tmpDeviceUnit, setTmpDeviceUnit] = useState<string>("");
+  const { initializeOrderCreationData, createOrder } = useOrderStore();
+  const [orderData, setOrderData] = useState<OrderData>(orderDataInit);
   const date = new Date();
   const { handleError } = useErrorHandler();
+
+  console.log(orderData);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -56,27 +84,37 @@ export const NewCardModal = () => {
     };
   }, []);
 
-  const handleCustomerSelected = (selectedCustomer: string) => {
-    setOrderData((prevState) => ({
-      ...prevState,
-      customer: selectedCustomer,
+  const handleStep1 = (selectedCustomer: OptionType) => {
+    setOrderData((prevOrderData) => ({
+      ...prevOrderData,
+      order: {
+        ...prevOrderData.order,
+        customer: selectedCustomer,
+      },
     }));
   };
 
-  const handleDeviceSelected = (
-    selectedDeviceType: string,
-    selectedDevice: string,
-    tmp: string,
-  ) => {
-    setOrderData((prevState) => ({
-      ...prevState,
-      device: selectedDevice,
-      deviceType: selectedDeviceType,
+  const handleStep2 = (tmpDeviceUnit: tmpDeviceUnitTable) => {
+    setOrderData((prevOrderData) => ({
+      ...prevOrderData,
+      tmpDeviceUnit: tmpDeviceUnit,
     }));
-    setTmpDeviceUnit(tmp);
+  };
+
+  const handleStep3 = (observation: string, orderChecks: OrderChecksTable) => {
+    setOrderData((prevOrderData) => ({
+      ...prevOrderData,
+      orderChecks: orderChecks,
+      order: {
+        ...prevOrderData.order,
+        obervation: observation,
+      },
+    }));
   };
 
   const saveOrder = async () => {
+    console.log("warning, try to add order");
+    return;
     await createOrder();
     await getBoard();
     modal.close();
@@ -127,6 +165,12 @@ export const NewCardModal = () => {
                   title='Problema'
                   subtitle='Informacion del problema'
                   selectedIndex={selectedIndex}
+                />
+                <TabListTab
+                  index={3}
+                  title='Presupuesto'
+                  subtitle='y biyuya'
+                  selectedIndex={selectedIndex}
                   hideArrow
                 />
               </TabList>
@@ -136,18 +180,35 @@ export const NewCardModal = () => {
                   <Step1
                     nextStep={nextStep}
                     customers={initialData.customers}
-                    onNext={handleCustomerSelected}
+                    onNext={handleStep1}
                   />
                 </TabPanel>
-                <Step2
-                  prevStep={prevStep}
-                  nextStep={nextStep}
-                  brands={initialData.brands}
-                  devices={initialData.devices}
-                  deviceTypes={initialData.deviceTypes}
-                  onNext={handleDeviceSelected}
-                />
-                <Step3 prevStep={prevStep} nextStep={saveOrder} />
+                <TabPanel unmount={false}>
+                  <Step2
+                    prevStep={prevStep}
+                    nextStep={nextStep}
+                    brands={initialData.brands}
+                    devices={initialData.devices}
+                    deviceTypes={initialData.deviceTypes}
+                    onNext={handleStep2}
+                  />
+                </TabPanel>
+                <TabPanel unmount={false}>
+                  <Step3
+                    prevStep={prevStep}
+                    nextStep={nextStep}
+                    checks={initialData.devicesChecks}
+                    deviceType={orderData.tmpDeviceUnit.device.info?.typeid}
+                    onNext={handleStep3}
+                  />
+                </TabPanel>
+                <TabPanel unmount={false}>
+                  <Step4
+                    prevStep={prevStep}
+                    nextStep={saveOrder}
+                    budgetTableData={initialData.budgetTableData}
+                  />
+                </TabPanel>
               </TabPanels>
             </TabGroup>
           </div>
@@ -184,15 +245,27 @@ export const NewCardModal = () => {
                 <p className='w-1/3 first-letter:uppercase'>
                   {t("order.customer")}
                 </p>
-                <p className='w-2/3 truncate'>{orderData.customer || ""}</p>
+                <p className='w-2/3 truncate'>
+                  {orderData.order.customer.label || ""}
+                </p>
               </div>
               <div className='flex justify-between w-full'>
-                <p className='w-1/3 first-letter:uppercase'>
-                  {orderData.deviceType
-                    ? orderData.deviceType
-                    : t("order.device")}
-                </p>
-                <p className='w-2/3 truncate'>{orderData.device || ""}</p>
+                {orderData.tmpDeviceUnit.device.info == null ? (
+                  <>
+                    <p className='w-1/3 first-letter:uppercase'>No</p>
+                    <p className='w-2/3 truncate'>No</p>
+                  </>
+                ) : (
+                  <>
+                    <p className='w-1/3 first-letter:uppercase'>
+                      {orderData.tmpDeviceUnit.device.info.type}
+                    </p>
+                    <p className='w-2/3 truncate'>
+                      {orderData.tmpDeviceUnit.device.info.brand}{" "}
+                      {orderData.tmpDeviceUnit.device.info.commercialname}
+                    </p>
+                  </>
+                )}
               </div>
             </div>
           </div>

@@ -76,12 +76,6 @@ interface DeviceType {
   label: string;
 }
 
-interface DeviceCheck {
-  deviceTypeId: string;
-  damages: [damage];
-  features: [feature];
-}
-
 interface CustomerDeviceUnit {
   deviceid: string;
   commercialname: string;

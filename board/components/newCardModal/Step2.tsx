@@ -1,5 +1,4 @@
 import { useTranslation } from "react-i18next";
-import { TabPanel } from "@headlessui/react";
 import {
   ActionButton,
   HiddenInput,
@@ -28,11 +27,7 @@ type Step2Props = {
   brands: OptionType[];
   deviceTypes: OptionType[];
   devices: OptionType[];
-  onNext: (
-    selectedDeviceType: string,
-    selectedDevice: string,
-    tmpDeviceUnit: string,
-  ) => void;
+  onNext: (tmpDeviceUnit: tmpDeviceUnitTable) => void;
 };
 
 enum UnlockType {
@@ -132,14 +127,21 @@ export const Step2 = ({
 
     try {
       const upsertData = await addTemporaryDeviceUnit(data);
+      console.log(data);
       upsertBrands(upsertData.brand);
       upsertDeviceTypes(upsertData.type);
       upsertDevices(upsertData.device);
-      onNext(
-        upsertData.type.label,
-        upsertData.device.label,
-        upsertData.temporarydeviceunit,
-      );
+
+      const tmp = {
+        serial: data.serial,
+        unlockType: data.unlocktype.id,
+        unlockCode: data.unlockcode,
+        device: upsertData.device,
+        deviceVersion: upsertData.temporarydeviceunit,
+        deviceUnit: upsertData,
+      };
+
+      onNext(tmp);
       nextStep();
     } catch (error) {
       handleError(error, setErrorFields);
@@ -249,7 +251,7 @@ export const Step2 = ({
   };
 
   return (
-    <TabPanel unmount={false}>
+    <>
       <SimpleAutocomplete
         name='devices'
         label={t("field.device")}
@@ -344,6 +346,6 @@ export const Step2 = ({
           </ActionButton>
         </div>
       </form>
-    </TabPanel>
+    </>
   );
 };

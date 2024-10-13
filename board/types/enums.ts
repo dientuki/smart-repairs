@@ -39,6 +39,7 @@ export enum InputType {
   Email = "email",
   Tel = "tel",
   Hidden = "hidden",
+  Checkbox = "checkbox",
 }
 
 export enum PackageType {

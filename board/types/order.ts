@@ -1,3 +1,5 @@
+import { TypedColumn } from "./enums";
+
 declare global {
   interface OrderBase {
     $id: string;
@@ -80,6 +82,12 @@ declare global {
     checked: boolean;
   }
 
+  interface DeviceCheck {
+    deviceTypeId: string;
+    damages: [damage];
+    features: [feature];
+  }
+
   interface CreateOrUpdateComment {
     comment: string;
     ispublic: boolean;
@@ -103,6 +111,24 @@ declare global {
     devices: OptionType[];
     deviceTypes: OptionType[];
     devicesChecks: DeviceCheck[];
+    budgetTableData: OptionType[];
+  }
+
+  interface tmpDeviceUnitTable {
+    id?: string;
+    serial: string | null;
+    unlockType: string;
+    unlockCode: string | null;
+    device: OptionType;
+    deviceVersion: OptionType;
+    deviceUnit: string;
+  }
+
+  interface OrderChecksTable {
+    damages: damage[];
+    features: feature[];
+    damagesDescription: string;
+    featuresDescription: string;
   }
 }
 

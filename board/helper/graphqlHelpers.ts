@@ -4,7 +4,6 @@ import { ApiLayerError } from "@/helper/ApiLayerError";
 
 export const graphqlRequest = async (query: string) => {
   const controller = AbortControllerManager.getController();
-
   try {
     const response = await fetch("/graphql", {
       method: "POST",

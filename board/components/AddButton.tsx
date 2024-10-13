@@ -1,4 +1,3 @@
-"use client";
 import { PlusCircleIcon } from "@heroicons/react/24/solid";
 import { Modal } from "@/components/modal";
 import { NewCardModal } from "@/components/newCardModal/NewCardModal";

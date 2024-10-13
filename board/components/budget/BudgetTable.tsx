@@ -38,26 +38,8 @@ type TableProps = {
   errors?: FieldErrors<FieldValues>;
   budget?: ViewBudget;
   description: OptionType[];
-};
-
-const registerOptions = {
-  id: {
-    required: false,
-  },
-  itemable: {
-    required: true,
-  },
-  quantity: {
-    required: true,
-    min: 1,
-  },
-  unitPrice: {
-    required: true,
-    min: 0,
-  },
-  includeInSum: {
-    required: true,
-  },
+  required?: boolean;
+  isSimple: boolean;
 };
 
 export const BudgetTable = ({
@@ -65,6 +47,8 @@ export const BudgetTable = ({
   errors,
   budget,
   description,
+  required = true,
+  isSimple = false,
 }: TableProps) => {
   const [data, setData] = useState<ViewItem[]>([]);
   const { user } = useUserStore();
@@ -77,6 +61,12 @@ export const BudgetTable = ({
     discount: 0,
     total: 0,
   });
+
+  const showSum: boolean =
+    user?.package === PackageType.Basic || isSimple ? false : true;
+
+  const showAddPart: boolean =
+    user?.package === PackageType.Basic || isSimple ? false : true;
 
   const defaultData: ViewItem[] = [
     {
@@ -91,6 +81,26 @@ export const BudgetTable = ({
       currency: user.currency,
     },
   ];
+
+  const registerOptions = {
+    id: {
+      required: false,
+    },
+    itemable: {
+      required: required,
+    },
+    quantity: {
+      required: required,
+      min: 1,
+    },
+    unitPrice: {
+      required: required,
+      min: 0,
+    },
+    includeInSum: {
+      required: required,
+    },
+  };
 
   useEffect(() => {
     append(budget?.items || defaultData);
@@ -185,7 +195,7 @@ export const BudgetTable = ({
     },
   ];
 
-  if (user?.package !== PackageType.Basic) {
+  if (showSum) {
     header.push({
       header: capitalizeFirstLetter(t("budget.sum")),
       className: "w-20 text-center",
@@ -234,7 +244,6 @@ export const BudgetTable = ({
     setData((prevData) =>
       prevData.map((row, index) => {
         if (index === rowIndex) {
-          console.log(data, updates);
           let newQuantity = row.quantity; // Valor predeterminado: el valor actual
           let newUnitPrice = row.unitPrice; // Valor predeterminado: el valor actual
 
@@ -367,9 +376,7 @@ export const BudgetTable = ({
                 />
               </td>
 
-              {user?.package !== PackageType.Basic && (
-                <td className='px-3 py-4'>sum</td>
-              )}
+              {showSum && <td className='px-3 py-4'>sum</td>}
 
               <td className='px-3 py-4'>
                 {data.length === 1 ? (
@@ -390,7 +397,7 @@ export const BudgetTable = ({
           ))}
           <tr className='bg-gray-50 dark:bg-white/5'>
             <td colSpan={header.length - 1} align='right' className='p-2'>
-              {user?.package !== PackageType.Basic && (
+              {showAddPart && (
                 <ActionButton
                   className='w-auto'
                   style={StyleColor.Warning}
