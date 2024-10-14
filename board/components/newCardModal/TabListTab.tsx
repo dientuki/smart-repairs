@@ -49,8 +49,8 @@ export const TabListTab = ({
             selectedIndex < index && "text-gray-500 dark:text-gray-400",
           )}
         >
-          <h3 className='font-bold leading-tight'>{title}</h3>
-          {subtitle && <div>{subtitle}</div>}
+          <h3 className='font-bold leading-tight first-letter:uppercase'>{title}</h3>
+          {subtitle && <div className="first-letter:uppercase">{subtitle}</div>}
         </div>
       </Tab>
       <div className='fi-fo-wizard-header-step-separator absolute end-0 hidden h-full w-5 md:block'>

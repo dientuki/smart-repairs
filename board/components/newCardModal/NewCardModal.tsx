@@ -53,15 +53,15 @@ const orderDataInit: OrderData = {
 
 export const NewCardModal = () => {
   const modal = useModalWindow();
+  const date = new Date();
   const { user } = useUserStore();
-  const [isLoading, setIsLoading] = useState(true);
-  const [selectedIndex, setSelectedIndex] = useState(0);
-  const [initialData, setInitialData] = useState<OrderCreationData>();
+  const [ isLoading, setIsLoading ] = useState(true);
+  const [ selectedIndex, setSelectedIndex ] = useState(0);
+  const [ initialData, setInitialData ] = useState<OrderCreationData>();
   const { t } = useTranslation();
   const { getBoard } = useBoardStore();
   const { initializeOrderCreationData, createOrder } = useOrderStore();
-  const [orderData, setOrderData] = useState<OrderData>(orderDataInit);
-  const date = new Date();
+  const [ orderData, setOrderData ] = useState<OrderData>(orderDataInit);
   const { handleError } = useErrorHandler();
 
   console.log(orderData);
@@ -135,7 +135,7 @@ export const NewCardModal = () => {
       title={
         <h2 className='flex flex-row items-center gap-2 px-5 py-3 text-2xl font-bold tracking-tight sm:text-3xl border-b border-gray-200 dark:border-white/10'>
           <Icon size={7} icon={InboxIcon} />
-          <span>Creacion de orden</span>
+          <span className="first-letter:uppercase">{t("new_order.title")}</span>
         </h2>
       }
     >
@@ -150,26 +150,34 @@ export const NewCardModal = () => {
               <TabList className='grid divide-y divide-gray-200 dark:divide-white/5 md:grid-flow-col md:divide-y-0 md:overflow-x-auto border-b border-gray-200 dark:border-white/10'>
                 <TabListTab
                   index={0}
-                  title='Cliente'
-                  subtitle='Informacion del cliente'
+                  title={t("order.customer")}
+                  subtitle={t("new_order.more_info", {
+                    record: t("order.customer"),
+                  })}
                   selectedIndex={selectedIndex}
                 />
                 <TabListTab
                   index={1}
-                  title='Equipo'
-                  subtitle='Informacion del equipo'
+                  title={t("device")}
+                  subtitle={t("new_order.more_info", {
+                    record: t("device"),
+                  })}
                   selectedIndex={selectedIndex}
                 />
                 <TabListTab
                   index={2}
-                  title='Problema'
-                  subtitle='Informacion del problema'
+                  title={t("new_order.issue")}
+                  subtitle={t("new_order.more_info", {
+                    record: t("new_order.issue"),
+                  })}
                   selectedIndex={selectedIndex}
                 />
                 <TabListTab
                   index={3}
-                  title='Presupuesto'
-                  subtitle='y biyuya'
+                  title={t("new_order.budget")}
+                  subtitle={t("new_order.more_info", {
+                    record: t("new_order.budget"),
+                  })}
                   selectedIndex={selectedIndex}
                   hideArrow
                 />
