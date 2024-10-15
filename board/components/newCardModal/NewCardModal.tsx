@@ -106,7 +106,9 @@ export const NewCardModal = () => {
   const saveOrder = async (data: FieldValues) => {
     //console.log("warning, try to add order", orderData, data);
     try {
-      const order = await createOrder(orderData);
+      const tmp = orderData;
+      tmp.money = data.money;
+      const order = await createOrder(tmp, data.items);
       /*
       await updateBudget(order, data);
       await getBoard();

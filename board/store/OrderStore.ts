@@ -55,7 +55,7 @@ interface OrderStore {
   devicesChecks: DeviceCheck[];
 
   setTmpOrder: (data: any) => void;
-  createOrder: (orderData: OrderData) => Promise<void>;
+  createOrder: (orderData: OrderData, data) => Promise<void>;
   clearAfterCreateOrder: () => void;
 
   updateDiagnosis: (diagnosis: string) => Promise<boolean>;
@@ -213,7 +213,7 @@ export const useOrderStore = create<OrderStore>((set) => ({
     }));
   },
 
-  createOrder: async (orderData: OrderData): Promise<string> => {
+  createOrder: async (orderData: OrderData, items): Promise<string> => {
 
     console.log(orderData);
 
@@ -238,10 +238,7 @@ export const useOrderStore = create<OrderStore>((set) => ({
       serial: orderData.tmpDeviceUnit.serial,
     }
 
-    console.log(orderTable, orderChecksTable, tmpDeviceUnitTable);
-    return;
-
-    const order = createOrder(orderTable, orderChecksTable, tmpDeviceUnitTable );
+    const order = createOrder(orderTable, orderChecksTable, tmpDeviceUnitTable, orderData.money, items );
 
     /*
     const tmpOrder = useOrderStore.getState().tmpOrder;

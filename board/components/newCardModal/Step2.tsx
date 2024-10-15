@@ -126,12 +126,10 @@ export const Step2 = ({
     setIsSubmitting(true);
 
     try {
-      console.log('data to server', data)
       const upsertData = await addTemporaryDeviceUnit(data);
       upsertBrands(upsertData.brand);
       upsertDeviceTypes(upsertData.type);
       upsertDevices(upsertData.device);
-
 
       const tmp = {
         serial: data.serial ? data.serial.label : '',
@@ -141,10 +139,9 @@ export const Step2 = ({
         deviceVersion: upsertData.deviceVersion ? upsertData.deviceVersion : { id: "", label: "", info: null },
         deviceUnit: data.serial ? data.serial.id : '',
       };
-      console.log(upsertData, data, tmp);
 
       onNext(tmp);
-      //nextStep();
+      nextStep();
     } catch (error) {
       handleError(error, setErrorFields);
     } finally {
