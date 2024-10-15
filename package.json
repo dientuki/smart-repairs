@@ -54,7 +54,7 @@
         "eslint-plugin-i18next": "^6.1.0",
         "eslint-plugin-promise": "^7.1.0",
         "eslint-plugin-react": "^7.37.1",
-        "globals": "^15.10.0",
+        "globals": "^15.11.0",
         "jsdom": "^25.0.1",
         "laravel-vite-plugin": "^1.0",
         "postcss": "^8.4.47",
