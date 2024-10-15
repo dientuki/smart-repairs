@@ -30,7 +30,7 @@ interface TemporaryDeviceUnit {
   brand: OptionType;
   type: OptionType;
   device: OptionType;
-  temporarydeviceunit: tmpDeviceUnitTable;
+  deviceVersion: OptionType;
 }
 
 interface DeviceUnitSelectedUpdate {
@@ -134,7 +134,7 @@ export const useDeviceStore = create<DeviceStore>((set) => ({
       brand: extraSingle(response.brand),
       type: extraSingle(response.deviceType),
       device: deviceSingle(response.device),
-      deviceVersionId: response.deviceVersionId,
+      deviceVersion: response.deviceVersion ? extraSingle(response.deviceVersion) : null,
     };
 
     //return await addTemporaryDeviceUnit(data);

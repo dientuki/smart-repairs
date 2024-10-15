@@ -107,7 +107,7 @@ final readonly class DeviceUnitMutations
                     'url' => $args['input']['url'],
                 ]);
             }
-            /*
+
             if (!empty($args['input']['versionlabel'])) {
                 list($var1, $var2) = $this->separarString($args['input']['versionlabel']);
 
@@ -120,7 +120,7 @@ final readonly class DeviceUnitMutations
                     ]
                 );
             }
-            */
+
             DB::commit();
 
             return [
@@ -147,7 +147,11 @@ final readonly class DeviceUnitMutations
                         'label' => $device->deviceType->name,
                     ],
                 ],
-                'deviceVersionId' => (isset($deviceVersion)) ? $deviceVersion->id : null,
+                'deviceVersion' => (isset($deviceVersion)) ? [
+                    'id' => $deviceVersion->id,
+                    'label' => $deviceVersion->label,
+                ] : null,
+                //'deviceVersionId' => (isset($deviceVersion)) ? $deviceVersion->id : null,
             ];
         } catch (GraphQLBusinessException $e) {
             DB::rollBack();

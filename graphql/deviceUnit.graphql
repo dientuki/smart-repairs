@@ -82,7 +82,7 @@ type DeviceVersion {
 }
 
 type TemporaryDeviceUnitPayload {
-    deviceVersionId: ID
+    deviceVersion: DeviceVersion
     status: Boolean
     brand: Brand
     deviceType: DeviceType
