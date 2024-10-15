@@ -6,13 +6,13 @@ import { FieldValues, useForm } from "react-hook-form";
 import { BudgetTable } from "@/components/budget";
 import { useUserStore } from "@/store";
 
-type Step3Props = {
-  nextStep: () => void;
+type Step4Props = {
+  nextStep: (data: FieldValues) => void;
   prevStep: () => void;
   budgetTableData: OptionType[];
 };
 
-export const Step4 = ({ prevStep, nextStep, budgetTableData }: Step3Props) => {
+export const Step4 = ({ prevStep, nextStep, budgetTableData }: Step4Props) => {
   const { t } = useTranslation();
   const { user } = useUserStore();
   const { handleError, handleErrorForm } = useErrorHandler();
@@ -24,7 +24,7 @@ export const Step4 = ({ prevStep, nextStep, budgetTableData }: Step3Props) => {
 
   const handleRegistration = async (data: FieldValues) => {
     try {
-      console.log(data);
+      nextStep(data);
     } catch (error) {
       handleError(error);
     }

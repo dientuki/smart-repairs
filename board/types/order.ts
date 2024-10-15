@@ -130,6 +130,18 @@ declare global {
     damagesDescription: string;
     featuresDescription: string;
   }
+
+  interface OrderTable {
+    customer: OptionType;
+    obervation: string;
+  }
+
+  interface OrderData {
+    order: OrderTable;
+    orderChecks: OrderChecksTable;
+    tmpDeviceUnit: tmpDeviceUnitTable;
+    money: number;
+  }
 }
 
 export {};

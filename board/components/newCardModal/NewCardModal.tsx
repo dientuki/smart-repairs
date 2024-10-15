@@ -18,17 +18,7 @@ import {
   TabListTab,
 } from "@/components/newCardModal";
 import { useErrorHandler } from "@/components/hooks/useErrorHandler";
-
-interface OrderTable {
-  customer: OptionType;
-  obervation: string;
-}
-
-interface OrderData {
-  order: OrderTable;
-  orderChecks: OrderChecksTable;
-  tmpDeviceUnit: tmpDeviceUnitTable;
-}
+import { FieldValues } from "react-hook-form";
 
 const orderDataInit: OrderData = {
   order: {
@@ -49,6 +39,7 @@ const orderDataInit: OrderData = {
     deviceVersion: { id: "", label: "", info: null },
     deviceUnit: "",
   },
+  money: 0
 };
 
 export const NewCardModal = () => {
@@ -112,12 +103,18 @@ export const NewCardModal = () => {
     }));
   };
 
-  const saveOrder = async () => {
-    console.log("warning, try to add order");
-    return;
-    await createOrder();
-    await getBoard();
-    modal.close();
+  const saveOrder = async (data: FieldValues) => {
+    //console.log("warning, try to add order", orderData, data);
+    try {
+      const order = await createOrder(orderData);
+      /*
+      await updateBudget(order, data);
+      await getBoard();
+      */
+      //modal.close();
+    } catch (error) {
+      handleError(error);
+    }
   };
 
   const prevStep = () => {

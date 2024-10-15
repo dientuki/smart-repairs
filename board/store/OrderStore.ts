@@ -16,6 +16,8 @@ import {
 } from "@/store";
 import { device, extra } from "@/helper/reduceHelpers";
 import { CountOperation } from "@/types/enums";
+import { O } from "vitest/dist/chunks/environment.CzISCQ7o.js";
+import { serialize } from "v8";
 
 interface CreateOrderSelectedData {
   customer?: OptionType | null;
@@ -53,7 +55,7 @@ interface OrderStore {
   devicesChecks: DeviceCheck[];
 
   setTmpOrder: (data: any) => void;
-  createOrder: () => Promise<void>;
+  createOrder: (orderData: OrderData) => Promise<void>;
   clearAfterCreateOrder: () => void;
 
   updateDiagnosis: (diagnosis: string) => Promise<boolean>;
@@ -211,7 +213,37 @@ export const useOrderStore = create<OrderStore>((set) => ({
     }));
   },
 
-  createOrder: async (): Promise<void> => {
+  createOrder: async (orderData: OrderData): Promise<string> => {
+
+    console.log(orderData);
+
+    const orderTable = {
+      customer: orderData.order.customer.id,
+      obervation: orderData.order.obervation,
+    }
+
+    const orderChecksTable = {
+      damagesDescription: orderData.orderChecks.damagesDescription,
+      featuresDescription: orderData.orderChecks.featuresDescription,
+      damages: orderData.orderChecks.damages,
+      features: orderData.orderChecks.features,
+    }
+
+    const tmpDeviceUnitTable = {
+      device: orderData.tmpDeviceUnit.device.id,
+      deviceVersion: orderData.tmpDeviceUnit.deviceVersion?.id,
+      deviceUnit: orderData.tmpDeviceUnit.deviceUnit,
+      unlockCode: orderData.tmpDeviceUnit.unlockCode,
+      unlockType: orderData.tmpDeviceUnit.unlockType,
+      serial: orderData.tmpDeviceUnit.serial,
+    }
+
+    console.log(orderTable, orderChecksTable, tmpDeviceUnitTable);
+    return;
+
+    const order = createOrder(orderTable, orderChecksTable, tmpDeviceUnitTable );
+
+    /*
     const tmpOrder = useOrderStore.getState().tmpOrder;
     const createOrderSelectedData =
       useOrderStore.getState().createOrderSelectedData;
@@ -222,6 +254,7 @@ export const useOrderStore = create<OrderStore>((set) => ({
     await createOrder(tmpOrder);
 
     useOrderStore.getState().clearAfterCreateOrder();
+    */
   },
 
   clearAfterCreateOrder: () => {

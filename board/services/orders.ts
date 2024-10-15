@@ -1,23 +1,45 @@
 import { arrayToString } from "@/helper/stringHelpers";
-import { graphqlRequest, handleGraphQLErrors } from "@/helper/graphqlHelpers";
+import { graphqlRequest, handleGraphQLErrors, handlePayloadErrors } from "@/helper/graphqlHelpers";
 import { TypedColumn } from "@/types/enums";
-export const createOrder = async (newOrder: NewOrder) => {
+
+export const createOrder = async (orderTable, orderChecksTable, tmpDeviceUnitTable) => {
   const response = await graphqlRequest(`
                         mutation {
-                            addOrder(order: {
-                                customerid: "${newOrder.customerId}"
-                                observation: "${newOrder.observation}"
-                                damages: ${arrayToString(newOrder.damages)}
-                                damagedescription: "${newOrder.damageDescription}"
-                                features: ${arrayToString(newOrder.features)}
-                                featuredescription: "${newOrder.featureDescription}"
-                                tempdeviceunitid: "${newOrder.tempDeviceUnitId}"
-                                deviceid: "${newOrder.deviceid}"
-                            })
+                            addOrder(
+                              order: {
+                                customer: "${orderTable.customer}"
+                                obervation: "${orderTable.obervation}"
+                              },
+                              orderChecks: {
+                                damages: ${arrayToString(orderChecksTable.damages)}
+                                features: ${arrayToString(orderChecksTable.features)}
+                                damagesDescription: "${orderChecksTable.damagesDescription}"
+                                featuresDescription: "${orderChecksTable.featuresDescription}"
+                              },
+                              tmpDeviceUnit: {
+                                device: "${tmpDeviceUnitTable.device}"
+                                deviceversion: "${tmpDeviceUnitTable.deviceVersion}"
+                                deviceunit: "${tmpDeviceUnitTable.deviceUnit}"
+                                unlockcode: "${tmpDeviceUnitTable.unlockCode}"
+                                unlocktype: "${tmpDeviceUnitTable.unlockType}"
+                                serial: "${tmpDeviceUnitTable.serial}"
+                              }
+                            ) {
+                              __typename
+                              ... on AddOrderPayload {
+                                success
+                                order
+                              }
+                              ... on ErrorPayload {
+                                status
+                                i18nKey
+                              }
+                            }
                     }
                 `);
 
   handleGraphQLErrors(response.errors);
+  handlePayloadErrors(response.data.addOrder);
 
   return response.data.addOrder;
 };
