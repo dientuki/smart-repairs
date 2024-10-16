@@ -1,0 +1,13 @@
+scalar JSON
+
+type OrderCheck {
+  damages: String
+  damages_description: String
+  features: String
+  features_description: String
+}
+
+type DamageFeatureDetail {
+  value: String!
+  checked: Boolean!
+}

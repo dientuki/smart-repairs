@@ -3,12 +3,30 @@
 namespace App\Models;
 
 use App\Models\Admin\Subscription;
+use App\Traits\HasImageTrait;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Team extends ModelAuditable
 {
-    protected $fillable = ['name'];
+    use HasImageTrait;
+
+    protected $fillable = [
+        'name',
+        'email',
+        'phones',
+        'address',
+        'website',
+        'hash_filename',
+    ];
+
+    protected function casts(): array
+    {
+        return [
+            'phones' => 'array',
+        ];
+    }
 
     /**
      * Retrieve the members of the team.
@@ -25,12 +43,37 @@ class Team extends ModelAuditable
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    /*
+
     public function customers(): HasMany
     {
         return $this->hasMany(Customer::class);
     }
-    */
+
+    public function serviceJobs(): HasMany
+    {
+        return $this->hasMany(ServiceJob::class);
+    }
+
+    public function discounts(): HasMany
+    {
+        return $this->hasMany(Discount::class);
+    }
+
+    public function deviceTypeChecks(): HasMany
+    {
+        return $this->hasMany(DeviceTypeCheck::class);
+    }
+
+    public function stocks(): HasMany
+    {
+        return $this->hasMany(Stock::class);
+    }
+
+    public function supplier(): HasMany
+    {
+        return $this->hasMany(Supplier::class);
+    }
+
 
     public function subscription(): HasOne
     {

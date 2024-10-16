@@ -1,8 +1,23 @@
-import { create } from 'zustand'
-import { getOrder, getOrderCreationData } from "@/services/orders";
-import { addComment, updateCommentVisibility, updateComment, deleteComment } from "@/services/comments";
+import { create } from "zustand";
+import {
+  getOrder,
+  getOrderCreationData,
+  updateDiagnosis,
+  updateObservation,
+} from "@/services/orders";
+import { addComment, deleteComment, updateComment } from "@/services/comments";
 import { createOrder } from "@/services/orders";
-import { useCustomerStore, useDeviceStore, useBrandStore, useDeviceTypeStore } from "@/store";
+import {
+  useCustomerStore,
+  useDeviceStore,
+  useBrandStore,
+  useDeviceTypeStore,
+  useBoardStore,
+} from "@/store";
+import { device, extra } from "@/helper/reduceHelpers";
+import { CountOperation } from "@/types/enums";
+import { O } from "vitest/dist/chunks/environment.CzISCQ7o.js";
+import { serialize } from "v8";
 
 interface CreateOrderSelectedData {
   customer?: OptionType | null;
@@ -12,68 +27,143 @@ interface CreateOrderSelectedData {
   deviceTypeLabel?: string | null;
   temporaryDeviceUnitId?: string | null;
 }
+
 interface OrderStore {
-    order: Order,
-    tmpOrder: any,
-    getOrder: (id: string) => Promise<void>,
+  order: Order;
+  tmpOrder: NewOrder;
+  getOrder: (id: string) => Promise<void>;
 
-    updateCommentVisibility: (commentId: string, isPublic: boolean) => void
-    updateComment: (commentId: string, text: string) => void,
-    deleteComment: (commentId: string) => void,
-    addComment: (newComment:NewOrderComment) => Promise<OrderComment>
+  updateComment: (
+    id: string,
+    updateComment: CreateOrUpdateComment,
+  ) => Promise<boolean>;
+  deleteComment: (id: string) => Promise<boolean>;
+  addComment: (newComment: CreateOrUpdateComment) => Promise<boolean>;
 
-    initializeOrderCreationData: () => Promise<void>
-    createOrderSelectedData: {
-      customer: OptionType | null;
-      deviceId: string | null;
-      deviceLabel: string | null;
-      deviceTypeId: string | null;
-      deviceTypeLabel: string | null;
-      temporaryDeviceUnitId: string | null;
-    },
-    setCreateOrderSelectedData: (data: CreateOrderSelectedData) => void;
-    clearCreateOrderSelectedData: (field: keyof CreateOrderSelectedData) => void;
+  initializeOrderCreationData: () => Promise<OrderCreationData>;
+  createOrderSelectedData: {
+    customer: OptionType | null;
+    deviceId: string | null;
+    deviceLabel: string | null;
+    deviceTypeId: string | null;
+    deviceTypeLabel: string | null;
+    temporaryDeviceUnitId: string | null;
+  };
+  setCreateOrderSelectedData: (data: CreateOrderSelectedData) => void;
+  clearCreateOrderSelectedData: (field: keyof CreateOrderSelectedData) => void;
 
-    devicesChecks: DeviceCheck[];
+  devicesChecks: DeviceCheck[];
 
-    setTmpOrder: (data: any) => void,
-    createOrder: () => Promise<void>,
-    clearAfterCreateOrder: () => void,
+  setTmpOrder: (data: any) => void;
+  createOrder: (orderData: OrderData, data) => Promise<void>;
+  clearAfterCreateOrder: () => void;
+
+  updateDiagnosis: (diagnosis: string) => Promise<boolean>;
+  updateObservation: (observation: string) => Promise<boolean>;
 }
 
 export const useOrderStore = create<OrderStore>((set) => ({
   order: {} as Order,
-  tmpOrder: null,
-  getOrder: async(id: string) => {
+  tmpOrder: {} as NewOrder,
+  getOrder: async (id: string) => {
     const order = await getOrder(id);
+    console.log(order);
     set({ order });
   },
 
-  updateCommentVisibility: (commentId: string, isPublic: boolean) => {
-    updateCommentVisibility(commentId, isPublic);
+  updateComment: async (
+    id: string,
+    data: CreateOrUpdateComment,
+  ): Promise<boolean> => {
+    const updatedCommentData = await updateComment(id, data);
+
+    if (updatedCommentData) {
+      set((state) => {
+        const comments = state.order.comments || [];
+        const updatedComments = comments.map((comment) =>
+          comment.id === id ? { ...comment, ...data } : comment,
+        );
+
+        return {
+          order: {
+            ...state.order,
+            comments: updatedComments,
+          },
+        };
+      });
+      return true;
+    }
+    return false;
   },
 
-  updateComment: (commentId: string, text: string) => {
-    updateComment(commentId, text);
+  deleteComment: async (id: string): Promise<boolean> => {
+    const status = await deleteComment(id);
+    if (status) {
+      set((state) => ({
+        order: {
+          ...state.order,
+          comments: state.order.comments?.filter(
+            (comment) => comment.id !== id,
+          ),
+        },
+      }));
+      useBoardStore
+        .getState()
+        .refreshCommentCount(
+          useOrderStore.getState().order.$id,
+          CountOperation.Decrement,
+        );
+      return true;
+    }
+    return false;
   },
 
-  deleteComment: async (commentId: string) => {
-    await deleteComment(commentId);
+  addComment: async (data: CreateOrUpdateComment): Promise<boolean> => {
+    const orderId = useOrderStore.getState().order.$id;
+    const comment = await addComment(orderId, data);
+
+    if (comment) {
+      set((state) => ({
+        order: {
+          ...state.order,
+          comments: [comment, ...(state.order.comments || [])],
+        },
+      }));
+      useBoardStore
+        .getState()
+        .refreshCommentCount(orderId, CountOperation.Increment);
+      return true;
+    }
+    return false;
   },
 
-  addComment: async (newComment:NewOrderComment) => {
-    return await addComment(newComment);
-  },
+  initializeOrderCreationData: async (): Promise<OrderCreationData> => {
+    const data = await getOrderCreationData();
 
-  initializeOrderCreationData: async () => {
-    const { customers, brands, deviceTypes, devices, devicesChecks } = await getOrderCreationData();
+    const devicesChecks: DeviceCheck[] = data.deviceTypeChecks.reduce(
+      (acc: DeviceCheck[], device: any) => {
+        acc.push({
+          deviceTypeId: device.device_type_id,
+          damages: device.damages,
+          features: device.features,
+        });
 
-    useCustomerStore.getState().setCustomers(customers);
-    useDeviceStore.getState().setDevices(devices);
-    useBrandStore.getState().setBrands(brands);
-    useDeviceTypeStore.getState().setDeviceTypes(deviceTypes);
+        return acc;
+      },
+      [],
+    );
 
-    set({ devicesChecks });
+    const discounts = extra(data.discounts, { item_type: data.morph.discount });
+    const services = extra(data.services, { item_type: data.morph.serviceJob });
+
+    return {
+      customers: extra(data.customers),
+      brands: extra(data.brands),
+      deviceTypes: extra(data.deviceTypes),
+      devices: device(data.devices),
+      devicesChecks: devicesChecks,
+      budgetTableData: [...services, ...discounts],
+    };
   },
 
   createOrderSelectedData: {
@@ -92,10 +182,15 @@ export const useOrderStore = create<OrderStore>((set) => ({
       createOrderSelectedData: {
         customer: data.customer ?? state.createOrderSelectedData.customer,
         deviceId: data.deviceId ?? state.createOrderSelectedData.deviceId,
-        deviceLabel: data.deviceLabel ?? state.createOrderSelectedData.deviceLabel,
-        deviceTypeId: data.deviceTypeId ?? state.createOrderSelectedData.deviceTypeId,
-        deviceTypeLabel: data.deviceTypeLabel ?? state.createOrderSelectedData.deviceTypeLabel,
-        temporaryDeviceUnitId: data.temporaryDeviceUnitId ?? state.createOrderSelectedData.temporaryDeviceUnitId,
+        deviceLabel:
+          data.deviceLabel ?? state.createOrderSelectedData.deviceLabel,
+        deviceTypeId:
+          data.deviceTypeId ?? state.createOrderSelectedData.deviceTypeId,
+        deviceTypeLabel:
+          data.deviceTypeLabel ?? state.createOrderSelectedData.deviceTypeLabel,
+        temporaryDeviceUnitId:
+          data.temporaryDeviceUnitId ??
+          state.createOrderSelectedData.temporaryDeviceUnitId,
       },
     }));
   },
@@ -113,14 +208,42 @@ export const useOrderStore = create<OrderStore>((set) => ({
     set((state) => ({
       tmpOrder: {
         ...state.tmpOrder,
-        ...newTmpOrder
-      }
+        ...newTmpOrder,
+      },
     }));
   },
 
-  createOrder: async (): Promise<void> => {
+  createOrder: async (orderData: OrderData, items): Promise<string> => {
+
+    console.log(orderData);
+
+    const orderTable = {
+      customer: orderData.order.customer.id,
+      obervation: orderData.order.obervation,
+    }
+
+    const orderChecksTable = {
+      damagesDescription: orderData.orderChecks.damagesDescription,
+      featuresDescription: orderData.orderChecks.featuresDescription,
+      damages: orderData.orderChecks.damages,
+      features: orderData.orderChecks.features,
+    }
+
+    const tmpDeviceUnitTable = {
+      device: orderData.tmpDeviceUnit.device.id,
+      deviceVersion: orderData.tmpDeviceUnit.deviceVersion?.id,
+      deviceUnit: orderData.tmpDeviceUnit.deviceUnit,
+      unlockCode: orderData.tmpDeviceUnit.unlockCode,
+      unlockType: orderData.tmpDeviceUnit.unlockType,
+      serial: orderData.tmpDeviceUnit.serial,
+    }
+
+    const order = createOrder(orderTable, orderChecksTable, tmpDeviceUnitTable, orderData.money, items );
+
+    /*
     const tmpOrder = useOrderStore.getState().tmpOrder;
-    const createOrderSelectedData = useOrderStore.getState().createOrderSelectedData;
+    const createOrderSelectedData =
+      useOrderStore.getState().createOrderSelectedData;
     tmpOrder.customerId = createOrderSelectedData.customer?.id;
     tmpOrder.tempDeviceUnitId = createOrderSelectedData.temporaryDeviceUnitId;
     tmpOrder.deviceid = createOrderSelectedData.deviceId;
@@ -128,11 +251,12 @@ export const useOrderStore = create<OrderStore>((set) => ({
     await createOrder(tmpOrder);
 
     useOrderStore.getState().clearAfterCreateOrder();
+    */
   },
 
   clearAfterCreateOrder: () => {
     set({
-      tmpOrder: null,
+      tmpOrder: {} as NewOrder,
       createOrderSelectedData: {
         customer: null,
         deviceId: null,
@@ -140,7 +264,29 @@ export const useOrderStore = create<OrderStore>((set) => ({
         deviceTypeId: null,
         deviceTypeLabel: null,
         temporaryDeviceUnitId: null,
-      }
+      },
     });
+  },
+
+  updateDiagnosis: async (diagnosis: string): Promise<boolean> => {
+    const status = await updateDiagnosis(
+      useOrderStore.getState().order.$id,
+      diagnosis,
+    );
+    if (status) {
+      set({ order: { ...useOrderStore.getState().order, diagnosis } });
+    }
+    return status;
+  },
+
+  updateObservation: async (observation: string): Promise<boolean> => {
+    const status = await updateObservation(
+      useOrderStore.getState().order.$id,
+      observation,
+    );
+    if (status) {
+      set({ order: { ...useOrderStore.getState().order, observation } });
+    }
+    return status;
   },
 }));

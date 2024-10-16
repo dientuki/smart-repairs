@@ -14,6 +14,11 @@ return new class extends Migration
         Schema::create('teams', function (Blueprint $table) {
             $table->ulid('id')->primary();
             $table->string('name');
+            $table->string('website')->nullable();
+            $table->string('email')->nullable();
+            $table->json('phones')->nullable();
+            $table->string('address')->nullable();
+            $table->string('hash_filename')->nullable();
             $table->timestamps();
         });
     }

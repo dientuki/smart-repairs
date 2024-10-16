@@ -6,9 +6,20 @@
         "total_price": "precio total",
         "total": "total",
         "sum": "suma",
-        "new_item": "añadir item",
+        "item": "item",
         "error": {
-            "can_add": "agrega un item antes"
+            "can_add": "agrega un item antes",
+            "quantity": "la cantidad del servicio/descuento debe ser 1"
+        },
+        "add_foreign_part": "Agregar parte de otro equipo",
+        "type": {
+            "discount": "Descuento",
+            "servicejob": "Servicio",
+            "part": "Parte"
+        },
+        "button": {
+            "add": "Presupuestar",
+            "edit": "Editar presupuesto"
         }
     },
 
@@ -20,10 +31,23 @@
         "save": "Guardar",
         "update": "Actualizar",
         "validate": "Validar",
-        "quote": "Presupuestar"
+        "edit": "Editar",
+        "delete": "Eliminar",
+        "add": "Añadir",
+        "next": "Siguiente",
+        "previous": "Anterior"
+    },
+
+    "combos": {
+        "add": "Agregar nuevo {{record}}"
     },
 
     "device": "equipo",
+
+    "dialog": {
+        "delete": "Borrar",
+        "question": "¿Está seguro/a de hacer esto?"
+    },
 
     "field": {
         "additional_characteristics": "características adicionales",
@@ -31,13 +55,15 @@
         "any_damage": "¿presenta daños?",
         "brand": "marca",
         "characteristics": "características",
+        "customer": "cliente",
         "device": "equipo",
         "device_version": "version del equipo",
+        "diagnosis": "diagnostico",
         "commercial_name": "nombre comercial",
         "email": "email",
         "firstname": "nombre",
         "lastname": "apellido",
-        "observation": "observación",
+        "observation": "falla presentada",
         "phone": "telefono",
         "serial": "numero de imei\/serie",
         "type": "tipo de equipo",
@@ -47,12 +73,73 @@
         "url": "url"
     },
 
+    "new_order": {
+        "budget": "presupuesto",
+        "title": "creacion de orden",
+        "more_info": "informacion del {{record}}",
+        "issue": "problema"
+    },
+
+    "order" : {
+        "assigned_to": "tecnico",
+        "assign_to_me": "asignar a mi",
+        "comment": "comentario",
+        "comments": "comentarios",
+        "created_at": "creado",
+        "created_by": "vendedor",
+        "customer": "cliente",
+        "features": "características",
+        "features_empty": "no hay características para este tipo de dispositivo",
+        "damages": "daños",
+        "damages_empty": "no hay daños para este tipo de dispositivo",
+        "observation": "descripción inicial del problema",
+        "observation_simple": "descripción del problema",
+        "observation_female": "la descripción del problema",
+        "no_observation": "Describa el problema del equipo",
+        "diagnosis": "diagnostico",
+        "diagnosis_male": "el diagnostico",
+        "serial": "numero de imei\/serie",
+        "no_serial": "no disponible",
+        "unassigned": "sin tecnico",
+        "whatsapp": "whatsapp"
+    },
+
+    "placeholder": {
+        "comment":"ingrese un comentario",
+        "diagnosis": "sin diagnostico"
+    },
+
+    "private": "privado",
+    "public": "publico",
+
     "toast": {
         "error": {
             "data": "Error de datos",
+            "generic": "Error generico",
             "network": "Error de red",
-            "form": "Error de formulario"
+            "form": "Error en el formulario",
+            "update": "Error al actualizar {{record}}",
+            "add": "Error al agregar {{record}}",
+            "delete": "Error al eliminar {{record}}",
+            "graphql": "Error de GraphQL",
+            "validation": "Error en el formulario"
+        },
+        "success": {
+            "add" : "{{record}} agregado con exito",
+            "add_female": "{{record}} actualizada con exito",
+            "delete": "{{record}} eliminado con exito",
+            "update": "{{record}} actualizado con exito",
+            "update_female": "{{record}} actualizada con exito"
         }
+    },
+
+    "status": {
+        "ForBudgeting": "Para presupuesto",
+        "Budgeting": "Presupuestando",
+        "Budgeted": "Presupuestado",
+        "ToDo": "Para reparar",
+        "Repairing": "Reparando",
+        "Repaired": "Reparado"
     },
 
     "unlock_type" : {
@@ -62,6 +149,7 @@
     },
 
     "validation": {
+        "maxLength": "El campo {{field}} debe ser menor o igual a {{length}} caracteres.",
         "regex": "El formato del campo {{field}} es inválido.",
         "required": "El campo {{field}} es requerido",
         "required_without": "El campo {{field}} es obligatorio cuando {{another}} no está presente.",

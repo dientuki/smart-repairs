@@ -2,11 +2,14 @@
 
 namespace App\Models;
 
+use App\Traits\HasTeamTrait;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class Supplier extends ModelWithTeam
+class Supplier extends ModelAuditable
 {
+    use HasTeamTrait;
+
     protected $fillable = ['name', 'address', 'phone', 'email', 'website', 'team_id'];
 
     public function contacts(): HasMany

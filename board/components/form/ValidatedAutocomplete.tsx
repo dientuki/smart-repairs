@@ -1,9 +1,19 @@
 import { Field, Label } from "@headlessui/react";
-import { Autocomplete, TextField, Skeleton, createFilterOptions } from '@mui/material';
-import { Controller, Control, FieldValues, RegisterOptions, FieldErrors } from 'react-hook-form';
-import ErrorMessage from "./ErrorMessage";
-
-// Define el tipo para las opciones del Autocomplete
+import {
+  Autocomplete,
+  TextField,
+  Skeleton,
+  createFilterOptions,
+  FilterOptionsState,
+} from "@mui/material";
+import {
+  Controller,
+  Control,
+  FieldValues,
+  RegisterOptions,
+  FieldErrors,
+} from "react-hook-form";
+import { ErrorMessage } from "@/components/form";
 
 const filter = createFilterOptions<OptionType>();
 
@@ -16,22 +26,31 @@ interface ValidatedAutocompleteProps {
 
   rules?: RegisterOptions;
   errors?: FieldErrors<FieldValues>;
-  value?: OptionType | null,
   disableClearable?: boolean;
   disabled?: boolean;
-  onChange?: (event: React.SyntheticEvent, newValue: OptionType | null, reason?: string) => void;
-  filterOptions?: (options: any, params: any) => OptionType[];
+
+  onChange?: (newValue: OptionType | null, reason: string) => void;
+
+  filterOptions?: (
+    options: OptionType[],
+    state: FilterOptionsState<OptionType>,
+  ) => OptionType[];
 }
 
-const defaultFilterOptions = (options: OptionType[], params: any) => {
+const defaultFilterOptions = (
+  options: OptionType[],
+  params: FilterOptionsState<OptionType>,
+) => {
   const filtered = filter(options, params);
 
   const { inputValue } = params;
   // Suggest the creation of a new value
-  const isExisting = options.some((option: OptionType) => inputValue === option.label);
-  if (inputValue !== '' && !isExisting) {
+  const isExisting = options.some(
+    (option: OptionType) => inputValue === option.label,
+  );
+  if (inputValue !== "" && !isExisting) {
     filtered.push({
-      id: 'new',
+      id: "new",
       label: inputValue,
     });
   }
@@ -40,7 +59,7 @@ const defaultFilterOptions = (options: OptionType[], params: any) => {
 };
 
 // Componente ValidatedAutocomplete
-const ValidatedAutocomplete: React.FC<ValidatedAutocompleteProps> = ({
+export const ValidatedAutocomplete = ({
   name,
   control,
   options,
@@ -50,51 +69,62 @@ const ValidatedAutocomplete: React.FC<ValidatedAutocompleteProps> = ({
   isLoading,
   disableClearable = false,
   filterOptions = defaultFilterOptions,
-  value,
   disabled = false,
-  errors }) => {
+  errors,
+}: ValidatedAutocompleteProps) => {
+  const hasError = Boolean(errors?.[name]);
+
   return (
     <Field>
-      <Label className="first-letter:uppercase block mb-2 text-base font-medium text-gray-900">{label}</Label>
+      <Label className='first-letter:uppercase block mb-2 text-base font-medium text-gray-900'>
+        {label}
+      </Label>
       {isLoading && !disabled ? (
-        <Skeleton variant="rectangular" height={40} />
+        <Skeleton variant='rectangular' height={40} />
       ) : (
-        <Controller
-          name={name}
-          control={control}
-          defaultValue=""
-          rules={rules}
-          render={() => (
-            <Autocomplete
-              autoHighlight
-              autoSelect
-              selectOnFocus
-              handleHomeEndKeys
-              clearOnEscape
-              id={name}
-              onChange={onChange}
-              filterOptions={filterOptions}
-              value={value}
-              options={Array.isArray(options) ? options : []}
-              disableClearable={disableClearable}
-              isOptionEqualToValue={() => true}
-              disabled={disabled}
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  size="small"
-                  className={`bg-gray-50 border border-gray-300 text-gray-900 text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ${
-                errors?.[name] ? 'bg-red-50 border-red-500 text-red-900 placeholder-red-700 focus:ring-red-500 focus:border-red-500' : ''
-              }`}
-                />
-              )}
-            />
-          )}
-        />
+        <div
+          className={`w-full rounded-lg shadow-sm ring-1 transition duration-75 bg-white dark:bg-white/5 [&:not(:has(.fi-ac-action:focus))]:focus-within:ring-2 [&:not(:has(.fi-ac-action:focus))]:focus-within overflow-hidden
+          ${
+            hasError
+              ? "ring-danger-600 dark:ring-danger-500 [&:not(:has(.fi-ac-action:focus))]:focus-within:ring-danger-600 dark:[&:not(:has(.fi-ac-action:focus))]:focus-within:ring-danger-500"
+              : "ring-gray-950/10 dark:ring-white/20 [&:not(:has(.fi-ac-action:focus))]:focus-within:ring-primary-600 dark:[&:not(:has(.fi-ac-action:focus))]:focus-within:ring-primary-500"
+          }`}
+        >
+          <Controller
+            name={name}
+            control={control}
+            rules={rules}
+            render={({ field }) => (
+              <Autocomplete
+                autoHighlight
+                autoSelect
+                selectOnFocus
+                handleHomeEndKeys
+                clearOnEscape
+                disableClearable={disableClearable}
+                filterOptions={filterOptions}
+                id={name}
+                onChange={(_, newValue, reason) => {
+                  field.onChange(newValue);
+                  if (onChange) {
+                    onChange(newValue, reason);
+                  }
+                }}
+                value={field.value || null}
+                options={Array.isArray(options) ? options : []}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    size='small'
+                    className='rounded-lg overflow-hidden'
+                  />
+                )}
+              />
+            )}
+          />
+        </div>
       )}
       <ErrorMessage message={errors?.[name]?.message} />
     </Field>
   );
 };
-
-export default ValidatedAutocomplete;

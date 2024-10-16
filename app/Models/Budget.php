@@ -2,12 +2,24 @@
 
 namespace App\Models;
 
+use App\Traits\HasTeamTrait;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class Budget extends ModelWithTeam
+class Budget extends ModelAuditable
 {
-    protected $fillable = ['order_id', 'user_id', 'total'];
+    use HasTeamTrait;
+
+    protected $fillable = [
+        'order_id',
+        'user_id',
+        'total',
+        'subtotal',
+        'discount',
+        'status',
+        'valid_until',
+        'team_id'
+    ];
 
     public function order(): BelongsTo
     {

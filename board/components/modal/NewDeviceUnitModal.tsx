@@ -1,102 +1,89 @@
-import "react-modal-global/styles/modal.scss" // Imports essential styles for `ModalContainer`.
 import { useModalWindow } from "react-modal-global";
 import { ModalLayout } from "@/components/modal";
 import { useTranslation } from "react-i18next";
-import { useForm, FieldValues } from "react-hook-form";
-import { useEffect, useState } from 'react';
-import ValidatedAutocomplete from "../form/ValidatedAutocomplete";
-import { useDeviceStore } from "@/store/DeviceStore";
+import { ActionButton, ValidatedAutocomplete } from "@/components/form";
+import { FieldValues, useForm } from "react-hook-form";
+import { ButtonType } from "@/types/enums";
+import { useDeviceStore } from "@/store";
+import { useState } from "react";
+import { useErrorHandler } from "@/components/hooks/useErrorHandler";
 
 type ModalParams = {
-    setDeviceUnit: (data: FieldValues) => void;
+  setDeviceUnit: (data: FieldValues) => void;
+  versions: OptionType[];
 };
 
-function NewDeviceUnitModal() {
-  const modal = useModalWindow<ModalParams>();
+export const NewDeviceUnitModal = () => {
   const { t } = useTranslation();
-  const { handleSubmit, control, formState: { errors }, setValue, getValues, resetField} = useForm();
-  const { deviceVersions, deviceUnitsByVersion, deviceUnitSelected, setDeviceUnitSelected, getDevicesUnitsByVersion } = useDeviceStore();
+  const { getDevicesUnitsByVersion } = useDeviceStore();
+  const { handleError, handleErrorForm } = useErrorHandler();
+  const modal = useModalWindow<ModalParams>();
+  const {
+    formState: { errors },
+    handleSubmit,
+    control,
+    resetField,
+  } = useForm();
 
-  useEffect(() => {
-    findAndSet(deviceUnitsByVersion, getValues('serialid'), setSerial, 'serial');
-  }, [deviceUnitsByVersion]);
-
-  const setVersion = (version: OptionType | null) => {
-    setDeviceUnitSelected({version});
-  };
-
-  const setSerial = (serial: OptionType | null) => {
-    setDeviceUnitSelected({serial});
-  };
-
-  const handleRegistration = (data: FieldValues ) => {
+  const handleRegistration = async (data: FieldValues) => {
     modal.params.setDeviceUnit(data);
     modal.close();
-  }
+  };
 
-  const findAndSet = (options: OptionType[], id: string, setOption: (option: OptionType | null) => void,  prefix: string) => {
-    const option = options.find(item => item.id === id) || null;
-    setOption(option);
-    if (option) {
-      setValue(`${prefix}id`, option.id);
-      setValue(`${prefix}label`, option.label);
+  const [deviceUnitsByVersion, setDeviceUnitsByVersion] = useState<
+    OptionType[]
+  >([]);
+
+  const handleVersionChange = async (newValue: OptionType | null) => {
+    if (!newValue) return;
+    resetField("serial");
+
+    try {
+      setDeviceUnitsByVersion([]);
+      const response = await getDevicesUnitsByVersion(newValue.id);
+      setDeviceUnitsByVersion(response);
+    } catch (error) {
+      handleError(error);
     }
   };
 
-  const handleVersionChange = async(newValue: OptionType | null) => {
-    setVersion(newValue);
-    setValue('versionid', newValue?.id);
-    setValue('versionlabel', newValue?.label);
-    resetField('serialid');
-
-    try {
-      await getDevicesUnitsByVersion(getValues('versionid'));
-    } catch (e) {}
-  }
-
-  const handleSerialChange = (newValue: OptionType | null) => {
-    setSerial(newValue);
-    setValue('serialid', newValue?.id);
-    setValue('seriallabel', newValue?.label);
-  }
-
   const registerOptions = {
-    serialid: {required: false},
-    versionid: {required: false},
-  }
+    serial: { required: false },
+    version: { required: true },
+  };
 
   return (
-    <ModalLayout width="328px" height="260px">
-        <form onSubmit={handleSubmit(handleRegistration)}>
+    <ModalLayout width='328px' height='270px'>
+      <form
+        onSubmit={handleSubmit(handleRegistration, handleErrorForm)}
+        className='p-4 flex flex-col h-full justify-between'
+      >
+        <div className='flex flex-col gap-4'>
           <ValidatedAutocomplete
-              name="versionid"
-              label={t('field.device_version')}
-              options={deviceVersions}
-              isLoading={!deviceVersions}
-              control={control}
-              rules={registerOptions.versionid}
-              errors={errors}
-              value={deviceUnitSelected.version}
-              disableClearable
-              onChange={(_, newValue) => handleVersionChange(newValue)}
-            />
+            name='version'
+            label={t("field.device_version")}
+            options={modal.params.versions}
+            control={control}
+            rules={registerOptions.version}
+            errors={errors}
+            disableClearable
+            onChange={(newValue) => handleVersionChange(newValue)}
+          />
 
           <ValidatedAutocomplete
-              name="serialid"
-              label={t('field.serial')}
-              options={deviceUnitsByVersion}
-              isLoading={!deviceUnitsByVersion}
-              control={control}
-              rules={registerOptions.serialid}
-              errors={errors}
-              value={deviceUnitSelected.serial}
-              disableClearable
-              onChange={(_, newValue) => handleSerialChange(newValue)}
-            />
-            <button type="submit" className="mt-4 w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-base px-5 py-2.5 text-center">Listo!</button>
-        </form>
+            name='serial'
+            label={t("field.serial")}
+            options={deviceUnitsByVersion}
+            isLoading={deviceUnitsByVersion.length === 0}
+            control={control}
+            rules={registerOptions.serial}
+            errors={errors}
+          />
+        </div>
+        <ActionButton type={ButtonType.Submit} className='w-full'>
+          Listo!
+        </ActionButton>
+      </form>
     </ModalLayout>
-  )
-}
-
-export default NewDeviceUnitModal;
+  );
+};

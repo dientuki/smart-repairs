@@ -2,10 +2,13 @@
 
 namespace App\Models;
 
+use App\Traits\HasTeamTrait;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class OrderComment extends ModelWithTeam
+class OrderComment extends ModelAuditable
 {
+    use HasTeamTrait;
+
     protected $fillable = ['order_id', 'comment', 'team_id', 'user_id', 'is_public', 'was_edited'];
 
     public function user(): BelongsTo

@@ -9,32 +9,34 @@ interface ModalLayoutProps {
   minHeight?: string;
 }
 
-export const ModalLayout: React.FC<ModalLayoutProps> = ({
+export const ModalLayout = ({
   title,
   children,
-  width = '80vw',
-  height = '80vh',
-  minHeight
-}) => {
+  width = "80vw",
+  height = "80vh",
+  minHeight,
+}: ModalLayoutProps) => {
   return (
     <div
-      className="transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl m-auto cursor-auto relative"
+      className='flex flex-col transform overflow-hidden m-auto cursor-auto relative bg-gray-50 shadow-xl ring-1 ring-gray-950/5 dark:bg-gray-950 dark:ring-white/10 rounded-xl'
       style={{
         width,
-        height: minHeight ? undefined : height, // Usar height solo si minHeight no está definido
-        minHeight: minHeight || undefined // Usar minHeight si está definido
+        height: minHeight ? undefined : height,
+        minHeight: minHeight || undefined,
       }}
     >
       {title && <>{title}</>}
-      {children ?
-        children :
+      {children ? (
+        children
+      ) : (
         <DNA
-        visible={true}
-        height="120"
-        width="120"
-        ariaLabel="dna-loading"
-        wrapperClass="dna-wrapper m-auto absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
-      />}
+          visible={true}
+          height='120'
+          width='120'
+          ariaLabel='dna-loading'
+          wrapperClass='dna-wrapper m-auto absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2'
+        />
+      )}
     </div>
   );
-}
+};

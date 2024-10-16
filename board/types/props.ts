@@ -1,10 +1,3 @@
-interface InputCellProps {
-  getValue: () => any;
-  row: any;
-  column: any;
-  table: any;
-}
+declare global {}
 
-interface BooleanCellProps extends InputCellProps {}
-
-interface StaticAutocomplete extends InputCellProps {}
+export {};

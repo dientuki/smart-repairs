@@ -77,4 +77,9 @@ class Part extends ModelAuditable
     {
         return $this->stock()->where('team_id', $teamId)->first();
     }
+
+    public function budgetItems()
+    {
+        return $this->morphMany(BudgetItem::class, 'itemable');
+    }
 }

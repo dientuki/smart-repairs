@@ -13,4 +13,5 @@ type DeviceVersion {
     version: String!
     description: String
     device: Device!
+    label: String!
 }

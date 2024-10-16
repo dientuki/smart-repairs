@@ -1,9 +1,15 @@
-import { graphqlRequest, handleGraphQLErrors, handlePayloadErrors } from "@/helper/graphqlHelpers";
+import {
+  graphqlRequest,
+  handleGraphQLErrors,
+  handlePayloadErrors,
+} from "@/helper/graphqlHelpers";
 import { deviceVersion, extra } from "@/helper/reduceHelpers";
 import { handleNew, handleUndefined } from "@/helper/stringHelpers";
 
-export async function createDeviceUnit(deviceUnit: NewDeviceUnit): Promise<string> {
-    const response = await graphqlRequest(`
+export async function createDeviceUnit(
+  deviceUnit: NewDeviceUnit,
+): Promise<string> {
+  const response = await graphqlRequest(`
                 mutation {
                     addDeviceUnit(deviceunit: {
                         serial: "${deviceUnit.serial}"
@@ -16,13 +22,15 @@ export async function createDeviceUnit(deviceUnit: NewDeviceUnit): Promise<strin
                 }
             `);
 
-    handleGraphQLErrors(response.errors);
+  handleGraphQLErrors(response.errors);
 
-    return response.data.addDeviceUnit.id;
+  return response.data.addDeviceUnit.id;
 }
 
-export async function updateDeviceUnit(deviceUnit: NewDeviceUnit): Promise<boolean> {
-    const response = await graphqlRequest(`
+export async function updateDeviceUnit(
+  deviceUnit: NewDeviceUnit,
+): Promise<boolean> {
+  const response = await graphqlRequest(`
                 mutation {
                     updateDeviceUnit(deviceUnitId: "${deviceUnit.id}", deviceunit: {
                         serial: "${deviceUnit.serial}"
@@ -32,35 +40,33 @@ export async function updateDeviceUnit(deviceUnit: NewDeviceUnit): Promise<boole
                 }
             `);
 
-    handleGraphQLErrors(response.errors);
+  handleGraphQLErrors(response.errors);
 
-    return response.data.updateDeviceUnit;
+  return response.data.updateDeviceUnit;
 }
 
-export async function addTemporaryDeviceUnit(data: TemporaryDeviceUnitInput): Promise<any> {
-
-    const response = await graphqlRequest(`
+export async function addTemporaryDeviceUnit(
+  data: TemporaryDeviceUnitInput,
+): Promise<any> {
+    console.log(data);
+  const response = await graphqlRequest(`
         mutation {
             addTemporaryDeviceUnit(input: {
-                deviceid: "${handleNew(data.deviceid)}"
-
                 brandid: "${handleNew(data.brandid)}"
                 brandlabel: "${data.brandlabel}"
+
                 typeid: "${handleNew(data.typeid)}"
                 typelabel: "${data.typelabel}"
+
+                deviceid: "${handleNew(data.deviceid)}"
                 commercialname: "${data.commercialname}"
                 url: "${handleUndefined(data.url)}"
 
-                unlocktype: "${data.unlocktype}"
-                unlockcode: "${handleUndefined(data.unlockcode)}"
-                serialid: "${handleNew(data.serialid)}"
-                seriallabel: "${handleUndefined(data.seriallabel)}"
                 versionid: "${handleNew(data.versionid)}"
                 versionlabel: "${handleUndefined(data.versionlabel)}"
             }) {
                 __typename
                 ... on TemporaryDeviceUnitPayload {
-                    temporarydeviceunit
                     status
                     brand {
                         id
@@ -76,31 +82,37 @@ export async function addTemporaryDeviceUnit(data: TemporaryDeviceUnitInput): Pr
                         url
                         brand {
                             id
-                            name
+                            label
                         }
                         deviceType {
                             id
-                            name
+                            label
                         }
                     }
+                    deviceVersion {
+                        id
+                        label
+                    }
+
                 }
                 ... on ErrorPayload {
-                    message
-                    code
+                    i18nKey
                     status
                 }
             }
         }
     `);
 
-    handleGraphQLErrors(response.errors);
-    handlePayloadErrors(response.data.addTemporaryDeviceUnit);
+  handleGraphQLErrors(response.errors);
+  handlePayloadErrors(response.data.addTemporaryDeviceUnit);
 
-    return response.data.addTemporaryDeviceUnit;
+  return response.data.addTemporaryDeviceUnit;
 }
 
-export async function getDevicesUnitsByVersionId(versionId: string): Promise<OptionType[]> {
-    const response = await graphqlRequest(`
+export async function getDevicesUnitsByVersionId(
+  versionId: string,
+): Promise<OptionType[]> {
+  const response = await graphqlRequest(`
         query {
             deviceUnitsByVersionId(versionId: "${versionId}") {
                 id
@@ -109,13 +121,13 @@ export async function getDevicesUnitsByVersionId(versionId: string): Promise<Opt
         }
     `);
 
-    handleGraphQLErrors(response.errors);
+  handleGraphQLErrors(response.errors);
 
-    return response.data.deviceUnitsByVersionId;
+  return response.data.deviceUnitsByVersionId;
 }
 
 export async function getDeviceUnitUpdate(deviceUnit: string): Promise<any> {
-    const response = await graphqlRequest(`
+  const response = await graphqlRequest(`
         query {
             deviceUnit(deviceUnitId: "${deviceUnit}") {
                 id
@@ -159,28 +171,28 @@ export async function getDeviceUnitUpdate(deviceUnit: string): Promise<any> {
         }
     `);
 
-    handleGraphQLErrors(response.errors);
+  handleGraphQLErrors(response.errors);
 
-    return {
-        deviceUnit: {
-            serial: response.data.deviceUnit.serial,
-            device_unit_id: response.data.deviceUnit.id,
-            brand_id: response.data.deviceUnit.deviceVersion.device.brand.id,
-            type_id: response.data.deviceUnit.deviceVersion.device.deviceType.id,
-            device_id: response.data.deviceUnit.deviceVersion.device.id,
-            url: response.data.deviceUnit.deviceVersion.device.url,
-            device_version_id: response.data.deviceUnit.deviceVersion?.id
-        },
-        brands: response.data.brands,
-        types: response.data.deviceTypes,
-        devices: extra(response.data.devicesByDeviceUnit),
-        versions: deviceVersion(response.data.deviceVersionsByDeviceUnit),
-        serials: response.data.deviceUnitsByDeviceUnit
-    }
+  return {
+    deviceUnit: {
+      serial: response.data.deviceUnit.serial,
+      device_unit_id: response.data.deviceUnit.id,
+      brand_id: response.data.deviceUnit.deviceVersion.device.brand.id,
+      type_id: response.data.deviceUnit.deviceVersion.device.deviceType.id,
+      device_id: response.data.deviceUnit.deviceVersion.device.id,
+      url: response.data.deviceUnit.deviceVersion.device.url,
+      device_version_id: response.data.deviceUnit.deviceVersion?.id,
+    },
+    brands: response.data.brands,
+    types: response.data.deviceTypes,
+    devices: extra(response.data.devicesByDeviceUnit),
+    versions: deviceVersion(response.data.deviceVersionsByDeviceUnit),
+    serials: response.data.deviceUnitsByDeviceUnit,
+  };
 }
 
 export async function getTemporaryDeviceUnit(orderId: string): Promise<any> {
-    const response = await graphqlRequest(`
+  const response = await graphqlRequest(`
         query {
             temporaryDeviceUnit(orderId: "${orderId}") {
                 serial
@@ -224,28 +236,28 @@ export async function getTemporaryDeviceUnit(orderId: string): Promise<any> {
         }
     `);
 
-    handleGraphQLErrors(response.errors);
+  handleGraphQLErrors(response.errors);
 
-    return {
-        deviceUnit: {
-            serial: response.data.temporaryDeviceUnit.serial,
-            device_unit_id: response.data.temporaryDeviceUnit.device_unit_id,
-            brand_id: response.data.temporaryDeviceUnit.device.brand.id,
-            type_id: response.data.temporaryDeviceUnit.device.deviceType.id,
-            device_id: response.data.temporaryDeviceUnit.device.id,
-            url: response.data.temporaryDeviceUnit.device.url,
-            device_version_id: response.data.temporaryDeviceUnit.deviceVersion?.id
-        },
-        brands: response.data.brands,
-        types: response.data.deviceTypes,
-        devices: extra(response.data.devicesByBrandWithTmpOrder),
-        versions: deviceVersion(response.data.temporaryDeviceVersions),
-        serials: response.data.temporaryDeviceUnits
-    }
+  return {
+    deviceUnit: {
+      serial: response.data.temporaryDeviceUnit.serial,
+      device_unit_id: response.data.temporaryDeviceUnit.device_unit_id,
+      brand_id: response.data.temporaryDeviceUnit.device.brand.id,
+      type_id: response.data.temporaryDeviceUnit.device.deviceType.id,
+      device_id: response.data.temporaryDeviceUnit.device.id,
+      url: response.data.temporaryDeviceUnit.device.url,
+      device_version_id: response.data.temporaryDeviceUnit.deviceVersion?.id,
+    },
+    brands: response.data.brands,
+    types: response.data.deviceTypes,
+    devices: extra(response.data.devicesByBrandWithTmpOrder),
+    versions: deviceVersion(response.data.temporaryDeviceVersions),
+    serials: response.data.temporaryDeviceUnits,
+  };
 }
 
 export async function confirmDeviceUnit(data: any): Promise<any> {
-    const response = await graphqlRequest(`
+  const response = await graphqlRequest(`
         mutation {
             confirmDeviceUnit(input: {
                 order: "${data.order}",
@@ -264,7 +276,7 @@ export async function confirmDeviceUnit(data: any): Promise<any> {
             })
         }`);
 
-    handleGraphQLErrors(response.errors);
+  handleGraphQLErrors(response.errors);
 
-    return response.data.confirmDeviceUnit
+  return response.data.confirmDeviceUnit;
 }

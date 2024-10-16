@@ -2,8 +2,12 @@
 
 namespace App\Models;
 
-class OrderCheck extends ModelWithTeam
+use App\Traits\HasTeamTrait;
+
+class OrderCheck extends ModelAuditable
 {
+    use HasTeamTrait;
+
     protected $fillable = [
         'order_id',
         'damages',
@@ -11,4 +15,9 @@ class OrderCheck extends ModelWithTeam
         'features',
         'features_description'
     ];
+
+    public function order()
+    {
+        return $this->belongsTo(Order::class);
+    }
 }

@@ -1,3 +1,5 @@
+union UpdateOrderResult = UpdateOrderPayload | ErrorPayload
+
 extend type Query {
     orders: [Orders!]!
         @field(resolver: "OrderQueries@getActiveOrders")
@@ -6,23 +8,47 @@ extend type Query {
 }
 
 extend type Mutation {
-    addOrder(order: OrderInput): Boolean
+    addOrder(
+        order: OrderInput,
+        orderChecks: OrderChecks,
+        tmpDeviceUnit: TmpDeviceUnit,
+        money: String ): Boolean
         @field(resolver: "OrderMutations@create")
         @namespace(field: "App\\GraphQL\\Mutations")
-    updateOrderStatus(id: String, status: String!): Boolean!
+    updateOrderStatus(id: String, status: String!): UpdateOrderResult!
         @field(resolver: "OrderMutations@updateStatus")
+        @namespace(field: "App\\GraphQL\\Mutations")
+    updateDiagnosis(id: String!, diagnosis: String! @rules(apply: ["max:200"])): Boolean!
+        @field(resolver: "OrderMutations@updateDiagnosis")
+        @namespace(field: "App\\GraphQL\\Mutations")
+    updateObservation(id: String!, observation: String! @rules(apply: ["required"])): Boolean!
+        @field(resolver: "OrderMutations@updateObservation")
         @namespace(field: "App\\GraphQL\\Mutations")
 }
 
 input OrderInput {
-    customerid: String!
+    customer: String!
     observation: String!
-    damages: [DamageInput!]
+}
+
+type UpdateOrderPayload {
+    success: Boolean!
+}
+
+input OrderChecks {
+    damages: [DamageInput]
     damagedescription: String
-    features: [FeatureInput!]
+    features: [FeatureInput]
     featuredescription: String
-    tempdeviceunitid: String!
-    deviceid: String!
+}
+
+input TmpDeviceUnit {
+    device: String!
+    deviceVersion: String
+    deviceUnit: String
+    unlockCode: String
+    unlockType: String
+    serial: String
 }
 
 input DamageInput {
@@ -43,9 +69,12 @@ type Order {
     deviceUnit: DeviceUnit
     created_at: DateTime!
     observation: String!
-    comments: [Comment!]
-    author: User!
+    comments: [OrderComment!]
+    creator: User!
+    assignee: User
     hasBudget: Boolean!
+    diagnosis: String
+    orderCheck: OrderCheck
 }
 
 type Orders {
@@ -57,5 +86,5 @@ type Orders {
     deviceUnit: DeviceUnit
     created_at: DateTime!
     observation: String!
-    comments: [Comment!]
+    comments: [OrderComment!]
 }

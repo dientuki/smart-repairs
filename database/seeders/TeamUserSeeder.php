@@ -45,5 +45,10 @@ class TeamUserSeeder extends Seeder
             'team_id' => $teams[0]->id,
             'rol' => RolEnum::Technician,
         ]);
+        DB::table('team_user')->insert([
+            'user_id' => $users[4]->id,
+            'team_id' => $teams[0]->id,
+            'rol' => RolEnum::Salesperson,
+        ]);
     }
 }

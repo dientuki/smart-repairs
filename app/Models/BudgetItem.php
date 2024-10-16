@@ -2,16 +2,20 @@
 
 namespace App\Models;
 
+use App\Traits\HasTeamTrait;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class BudgetItem extends ModelWithTeam
+class BudgetItem extends ModelAuditable
 {
+    use HasTeamTrait;
+
     protected $fillable = [
         'budget_id',
-        'part_id',
-        'service_job_id',
+        'itemable_type',
+        'itemable_id',
         'quantity',
         'unit_price',
+        'item_total',
         'include_in_sum',
     ];
 
@@ -37,5 +41,10 @@ class BudgetItem extends ModelWithTeam
     public function serviceJob(): BelongsTo
     {
         return $this->belongsTo(ServiceJob::class);
+    }
+
+    public function itemable()
+    {
+        return $this->morphTo();
     }
 }

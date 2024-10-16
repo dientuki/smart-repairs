@@ -1,9 +1,22 @@
-import { create } from 'zustand'
-import { addTemporaryDeviceUnit, confirmDeviceUnit, getDevicesUnitsByVersionId, getDeviceUnitUpdate, getTemporaryDeviceUnit } from "@/services/deviceUnits";
+import { create } from "zustand";
+import {
+  addTemporaryDeviceUnit,
+  confirmDeviceUnit,
+  getDevicesUnitsByVersionId,
+  getDeviceUnitUpdate,
+  getTemporaryDeviceUnit,
+} from "@/services/deviceUnits";
 import { getDeviceVersions } from "@/services/deviceVersions";
-import { useBrandStore, useDeviceTypeStore, useOrderStore }  from "@/store";
-import { device } from "@/helper/reduceHelpers";
+import { useBrandStore, useDeviceTypeStore, useOrderStore } from "@/store";
+import {
+  device,
+  deviceSingle,
+  extra,
+  extraSingle,
+  deviceVersion,
+} from "@/helper/reduceHelpers";
 import { getDevicesByTypeAndBrand } from "@/services/devices";
+import { FieldValues } from "react-hook-form";
 
 /*
   get To retrieve data from the server
@@ -13,31 +26,38 @@ import { getDevicesByTypeAndBrand } from "@/services/devices";
   set To set data in the store
 */
 
+interface TemporaryDeviceUnit {
+  brand: OptionType;
+  type: OptionType;
+  device: OptionType;
+  deviceVersion: OptionType;
+}
+
 interface DeviceUnitSelectedUpdate {
   version?: OptionType | null;
   serial?: OptionType | null;
 }
 interface DeviceStore {
-  devices : OptionType[],
+  devices: OptionType[];
   setDevices: (devices: OptionType[]) => void;
 
-  deviceVersions: OptionType[],
-  getDeviceVersions: (device: string) => Promise<void>,
+  deviceVersions: OptionType[];
+  getDeviceVersions: (device: string) => Promise<OptionType[]>;
 
-  deviceUnitsByVersion: OptionType[],
-  getDevicesUnitsByVersion: (versionId: string) => Promise<void>,
-  clearDeviceVersions: () => void,
+  deviceUnitsByVersion: OptionType[];
+  getDevicesUnitsByVersion: (versionId: string) => Promise<OptionType[]>;
+  clearDeviceVersions: () => void;
 
   deviceUnitSelected: {
     version: OptionType | null;
     serial: OptionType | null;
-  },
+  };
   setDeviceUnitSelected: (data: DeviceUnitSelectedUpdate) => void;
 
-  addTemporaryDeviceUnit: (data: TemporaryDeviceUnitInput) => Promise<any>;
+  addTemporaryDeviceUnit: (data: FieldValues) => Promise<TemporaryDeviceUnit>;
   updateDeviceInStore: (device: OptionType) => void;
 
-  deviceUnit: any,
+  deviceUnit: any;
   getDeviceUnitUpdate: (id: string, deviceUnit: string | null) => Promise<void>;
   getDevicesByTypeAndBrand: (typeId: string, brandId: string) => Promise<void>;
   clear: (fields: string | string[]) => void;
@@ -52,15 +72,17 @@ export const useDeviceStore = create<DeviceStore>((set) => ({
   },
 
   deviceVersions: [],
-  getDeviceVersions: async (deviceId: string): Promise<void> => {
-    const deviceVersions: OptionType[] = await getDeviceVersions(deviceId);
-    set({ deviceVersions });
+  getDeviceVersions: async (deviceId: string): Promise<OptionType[]> => {
+    const response = await getDeviceVersions(deviceId);
+    return response;
   },
 
   deviceUnitsByVersion: [],
-  getDevicesUnitsByVersion: async (versionId: string): Promise<void> => {
-    const deviceUnitsByVersion: OptionType[] = await getDevicesUnitsByVersionId(versionId);
-    set({ deviceUnitsByVersion });
+  getDevicesUnitsByVersion: async (
+    versionId: string,
+  ): Promise<OptionType[]> => {
+    const response = await getDevicesUnitsByVersionId(versionId);
+    return response;
   },
 
   clearDeviceVersions: () => {
@@ -76,7 +98,7 @@ export const useDeviceStore = create<DeviceStore>((set) => ({
 
   deviceUnitSelected: {
     version: null,
-    serial: null
+    serial: null,
   },
 
   setDeviceUnitSelected: (data: DeviceUnitSelectedUpdate): void => {
@@ -88,14 +110,32 @@ export const useDeviceStore = create<DeviceStore>((set) => ({
     }));
   },
 
-  addTemporaryDeviceUnit: async (data: TemporaryDeviceUnitInput): Promise<any> => {
-    const response = await addTemporaryDeviceUnit(data);
+  addTemporaryDeviceUnit: async (
+    data: FieldValues,
+  ): Promise<TemporaryDeviceUnit> => {
+    const normalized = {
+      brandid: data.brand.id,
+      brandlabel: data.brand.label,
 
-    useBrandStore.getState().updateBrandInStore(response.brand);
-    useDeviceTypeStore.getState().updateDeviceTypeInStore(response.deviceType);
-    useDeviceStore.getState().updateDeviceInStore(device([response.device])[0]);
-    useOrderStore.getState().setCreateOrderSelectedData({temporaryDeviceUnitId: response.temporarydeviceunit});
-    useOrderStore.getState().setCreateOrderSelectedData({deviceId: response.device.id});
+      typeid: data.type.id,
+      typelabel: data.type.label,
+
+      deviceid: data.deviceid,
+      commercialname: data.commercialname,
+      url: data.url,
+
+      versionid: data.version?.id,
+      versionlabel: data.version?.label,
+    };
+
+    const response = await addTemporaryDeviceUnit(normalized);
+
+    return {
+      brand: extraSingle(response.brand),
+      type: extraSingle(response.deviceType),
+      device: deviceSingle(response.device),
+      deviceVersion: response.deviceVersion ? extraSingle(response.deviceVersion) : null,
+    };
 
     //return await addTemporaryDeviceUnit(data);
   },
@@ -118,7 +158,10 @@ export const useDeviceStore = create<DeviceStore>((set) => ({
 
   deviceUnit: {} as any,
 
-  getDeviceUnitUpdate: async (orderId: string, deviceUnit: string | null): Promise<void> => {
+  getDeviceUnitUpdate: async (
+    orderId: string,
+    deviceUnit: string | null,
+  ): Promise<void> => {
     let result;
     if (deviceUnit) {
       result = await getDeviceUnitUpdate(deviceUnit);
@@ -132,7 +175,7 @@ export const useDeviceStore = create<DeviceStore>((set) => ({
       devices: result.devices,
       deviceVersions: result.versions,
       deviceUnitsByVersion: result.serials,
-      deviceUnit: result.deviceUnit
+      deviceUnit: result.deviceUnit,
     });
   },
 
@@ -143,7 +186,7 @@ export const useDeviceStore = create<DeviceStore>((set) => ({
       const newState: Partial<DeviceStore> = { ...state };
 
       // Limpiar los campos especificados
-      fieldsArray.forEach(field => {
+      fieldsArray.forEach((field) => {
         if (field in newState) {
           (newState as any)[field] = [];
         }
@@ -153,14 +196,19 @@ export const useDeviceStore = create<DeviceStore>((set) => ({
     });
   },
 
-  getDevicesByTypeAndBrand: async (typeId: string, brandId: string): Promise<void> => {
-    const devices: OptionType[] = await getDevicesByTypeAndBrand(typeId, brandId);
+  getDevicesByTypeAndBrand: async (
+    typeId: string,
+    brandId: string,
+  ): Promise<void> => {
+    const devices: OptionType[] = await getDevicesByTypeAndBrand(
+      typeId,
+      brandId,
+    );
     set({ devices });
   },
 
-  confirmDeviceUnit: async(data: any): Promise<void> => {
+  confirmDeviceUnit: async (data: any): Promise<void> => {
     await confirmDeviceUnit(data);
     //set({ deviceUnit: response });
-  }
-
+  },
 }));

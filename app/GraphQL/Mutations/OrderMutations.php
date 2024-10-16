@@ -5,17 +5,18 @@ declare(strict_types=1);
 namespace App\GraphQL\Mutations;
 
 use App\Enum\OrderStatusEnum;
+use App\Exceptions\GraphQLBusinessException;
 use App\Models\Order;
 use App\Models\OrderCheck;
 use App\Models\TemporaryDeviceUnit;
-use App\Traits\TeamContextTrait;
+use App\Traits\UserDataTrait;
 use Illuminate\Support\Facades\DB;
 use Nuwave\Lighthouse\Execution\ResolveInfo;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 
 final readonly class OrderMutations
 {
-    use TeamContextTrait;
+    use UserDataTrait;
 
     /**
      * Return a value for the field.
@@ -33,21 +34,45 @@ final readonly class OrderMutations
         //$phone = $args['phone'];
 
         $order = Order::find($args['id']);
-        $team_id = $this->getTeamIdFromContext($context);
+        $team_id = $this->getTeamId();
 
-        if ($order && $order->team_id === $team_id) {
-            return Order::updateStatus($args['id'], $args['status']);
+        try {
+
+            $status = false;
+
+            if ($order && $order->team_id === $team_id) {
+                $status = Order::updateStatus($args['id'], $args['status']);
+            }
+
+
+
+            return [
+                '__typename' => 'UpdateOrderPayload',
+                'success' => $status,
+            ];
+        } catch (GraphQLBusinessException $e) {
+            return [
+                '__typename' => 'ErrorPayload',
+                'status' => false,
+                'message' => $e->getMessage(),
+                'code' => $e->getCode(),
+                'i18nKey' => $e->getI18nKey(),
+            ];
         }
 
-        return null;
-    }
 
+    }
 
     public function create(null $root, array $args, GraphQLContext $context, ResolveInfo $resolveInfo): bool
     {
-        $team_id = $this->getTeamIdFromContext($context);
-        //dd($args['order']);
+        dd($args);
+    }
 
+
+    /*
+
+    public function create(null $root, array $args, GraphQLContext $context, ResolveInfo $resolveInfo): bool
+    {
         try {
             DB::beginTransaction();
 
@@ -55,8 +80,8 @@ final readonly class OrderMutations
                 'status' => OrderStatusEnum::ForBudgeting,
                 'observation' => $args['order']['observation'],
                 'customer_id' => $args['order']['customerid'],
-                'team_id' => $team_id,
-                'user_id' => auth()->user()->id,
+                'team_id' => $this->getTeamId(),
+                'created_by' => $this->getUserId(),
                 'device_id' => $args['order']['deviceid']
             ]);
 
@@ -80,5 +105,33 @@ final readonly class OrderMutations
 
             return false;
         };
+    }
+
+    */
+
+    public function updateDiagnosis(null $root, array $args, GraphQLContext $context, ResolveInfo $resolveInfo): bool
+    {
+        $order = Order::find($args['id']);
+
+        if ($order->team_id === $this->getTeamId()) {
+            $order->diagnosis = $args['diagnosis'] === '' ? null : $args['diagnosis'];
+            $order->save();
+            return true;
+        }
+
+        return false;
+    }
+
+    public function updateObservation(null $root, array $args, GraphQLContext $context, ResolveInfo $resolveInfo): bool
+    {
+        $order = Order::find($args['id']);
+
+        if ($order->team_id === $this->getTeamId()) {
+            $order->observation = $args['observation'];
+            $order->save();
+            return true;
+        }
+
+        return false;
     }
 }

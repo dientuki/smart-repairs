@@ -1,13 +1,16 @@
-import { create } from 'zustand'
-import { createCustomer, getCustomers, updateCustomer } from "@/services/customers";
-import { extra } from "@/helper/reduceHelpers";
-import { OperationStatus } from '@/types/enums';
-import { useOrderStore } from './OrderStore';
+import { create } from "zustand";
+import { getCustomers, upsertCustomer } from "@/services/customers";
+import { OperationStatus } from "@/types/enums";
+
+interface UpsertCustomerResponse {
+  customer: OptionType;
+  operation: OperationStatus;
+}
 
 interface CustomerStore {
   customers: OptionType[];
   setCustomers: (customers: OptionType[]) => void;
-  updateOrCreateCustomer: (customer: CustomerInput) => Promise<OperationStatus>;
+  upsertCustomer: (customer: CustomerInput) => Promise<UpsertCustomerResponse>;
 }
 
 export const useCustomerStore = create<CustomerStore>((set) => ({
@@ -22,32 +25,23 @@ export const useCustomerStore = create<CustomerStore>((set) => ({
     set({ customers });
   },
 
-  updateOrCreateCustomer: async (customer: CustomerInput): Promise<OperationStatus> => {
-    const setCreateOrderSelectedData = useOrderStore.getState().setCreateOrderSelectedData;
+  upsertCustomer: async (
+    customer: CustomerInput,
+  ): Promise<UpsertCustomerResponse> => {
+    const data = await upsertCustomer(customer);
 
-    if (!customer.id) {
-      const addedCustomer = await createCustomer(customer);
-      customer.id = addedCustomer
-      customer.label = `${customer.firstname} ${customer.lastname}`
-      set((state) => ({
-        customers: [...state.customers, extra([customer])[0]],
-      }));
-
-      setCreateOrderSelectedData({ customer: extra([customer])[0] });
-      return OperationStatus.CREATED;
-    } else {
-      const updatedCustomer = await updateCustomer(customer);
-      customer.label = `${customer.firstname} ${customer.lastname}`
-      if (updatedCustomer) {
-        set((state) => ({
-          customers: state.customers.map((c) =>
-            c.id === updatedCustomer.id ? extra([customer])[0] : c
-          ),
-        }));
-        setCreateOrderSelectedData({ customer: extra([customer])[0] });
-        return OperationStatus.UPDATED;
-      }
-      return OperationStatus.NO_CHANGE;
-    }
+    return {
+      operation: data.operation as OperationStatus,
+      customer: {
+        id: data.customer.id,
+        label: data.customer.label,
+        info: {
+          firstname: data.customer.first_name,
+          lastname: data.customer.last_name,
+          phone: data.customer.phone,
+          email: data.customer.email,
+        },
+      },
+    };
   },
 }));

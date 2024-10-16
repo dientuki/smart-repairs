@@ -1,34 +1,41 @@
-import React from 'react';
-import { Button } from '@headlessui/react';
-import { combineClasses } from "@/helper/componentsHelpers";
+import React from "react";
+import { Button } from "@headlessui/react";
+import { combineClasses, dynamicStyles } from "@/helper/componentsHelpers";
+import { ButtonType, StyleColor } from "@/types/enums";
+import { Loading } from "@/components/Loading";
 
 interface ActionButtonProps {
-  customClass?: string; // Can contain multiple classes separated by spaces
+  className?: string; // Can contain multiple classes separated by spaces
   children: React.ReactNode; // The content of the button
   onClick?: () => void; // Function to execute on click
-  type?: 'button' | 'submit' | 'reset'; // Button type
+  type?: ButtonType; // Button type
   disabled?: boolean;
+  style?: StyleColor;
+  loading?: boolean;
 }
 
-export const ActionButton: React.FC<ActionButtonProps> = ({
-  customClass = 'w-1/4',
+export const ActionButton = ({
+  className = "w-1/4",
   children,
   onClick,
-  type = 'button',
-  disabled = false
-}) => {
-
-  const defaultClasses = "text-center rounded-md bg-sky-600 px-3 py-1.5 text-base font-bold leading-6 text-white shadow-sm hover:bg-sky-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-600 focus:ring-4 focus:outline-none focus:ring-sky-300"
-
+  type = ButtonType.Button,
+  style = StyleColor.Primary,
+  disabled = false,
+  loading = false,
+}: ActionButtonProps) => {
+  const defaultClasses =
+    "relative grid-flow-col items-center justify-center font-semibold outline-none transition duration-75 focus-visible:ring-2 rounded-lg gap-1.5 px-3 py-2 text-sm inline-grid shadow-sm bg-custom-600 text-white hover:bg-custom-500 focus-visible:ring-custom-500/50 dark:bg-custom-500 dark:hover:bg-custom-400 dark:focus-visible:ring-custom-400/50";
 
   return (
     <Button
-      as="button"
-      className={combineClasses(defaultClasses, customClass)}
+      style={dynamicStyles(style)}
+      as='button'
+      className={combineClasses(defaultClasses, className)}
       onClick={onClick}
-      disabled={disabled}
+      disabled={disabled || loading}
       type={type}
     >
+      {loading && <Loading disabled={!loading} />}
       {children}
     </Button>
   );

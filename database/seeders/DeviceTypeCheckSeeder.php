@@ -14,12 +14,21 @@ class DeviceTypeCheckSeeder extends Seeder
     public function run(): void
     {
         $device_type = DB::table('device_types')->get();
-        $team = DB::table('teams')->first()->id;
+        $teams = DB::table('teams')->get();
 
         DB::table('device_type_checks')->insert([
             'id' => (string) Str::ulid(),
             'device_type_id' => $device_type[0]->id,
-            'team_id' => $team,
+            'team_id' => $teams[0]->id,
+            'damages' => json_encode(['Pantalla rota', 'Camara rayada']),
+            'features' => json_encode(['Camara trasera', 'Camara frontal']),
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+        DB::table('device_type_checks')->insert([
+            'id' => (string) Str::ulid(),
+            'device_type_id' => $device_type[0]->id,
+            'team_id' => $teams[2]->id,
             'damages' => json_encode(['Pantalla rota', 'Camara rayada']),
             'features' => json_encode(['Camara trasera', 'Camara frontal']),
             'created_at' => now(),

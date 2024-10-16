@@ -1,74 +1,115 @@
-import { graphqlRequest, handleGraphQLErrors, handlePayloadErrors } from "@/helper/graphqlHelpers";
+import {
+  graphqlRequest,
+  handleGraphQLErrors,
+  handlePayloadErrors,
+} from "@/helper/graphqlHelpers";
 import { extra } from "@/helper/reduceHelpers";
 import { arrayToString } from "@/helper/stringHelpers";
+import { PackageType } from "@/types/enums";
 
-export const getInitialValues = async(orderId: string): Promise<any> => {
-  const response = await graphqlRequest(`
-      query {
-          discounts {
-              id
-              label
-              price
-              discount_type
-          }
-          services {
-              id
-              label
-              price
-          }
-          partsByOrder(orderId: "${orderId}") {
-            id
-            label
-            price
-            stock
-            image
-          }
-          budget(orderId: "${orderId}") {
-            id
-            total
-            items {
-              part_id
-              service_job_id
-              quantity
-              unit_price
-              include_in_sum
-            }
-          }
+export const getInitialValues = async (
+  cpackage: string,
+  orderId?: string,
+): Promise<InitialValues> => {
+  // Construir la consulta dinámicamente según si `orderId` está presente o no
+  const query = `
+    query {
+      morph {
+        part
+        discount
+        serviceJob
       }
-  `);
+      discounts {
+        id
+        label
+        price
+        type
+      }
+      services {
+        id
+        label
+        price
+      }
+      ${
+        orderId && cpackage !== PackageType.Basic
+          ? `
+        partsByOrder(orderId: "${orderId}") {
+          id
+          label
+          price
+          stock
+          image
+        }
+      `
+          : ""
+      }
+      ${
+        orderId
+          ? `
+        budget(orderId: "${orderId}") {
+          id
+          subtotal
+          discount
+          items {
+            id
+            itemable_id
+            itemable_type
+            quantity
+            unit_price
+            item_total
+            include_in_sum
+          }
+        }
+      `
+          : ""
+      }
+    }
+  `;
+
+  const response = await graphqlRequest(query);
 
   handleGraphQLErrors(response.errors);
 
   return {
-    discounts: extra(response.data.discounts),
-    services: extra(response.data.services),
-    parts: extra(response.data.partsByOrder),
-    budget: response.data.budget
-  }
-}
+    discounts: extra(response.data.discounts, {
+      item_type: response.data.morph.discount,
+    }),
+    services: extra(response.data.services, {
+      item_type: response.data.morph.serviceJob,
+    }),
+    parts: response.data.partsByOrder
+      ? extra(response.data.partsByOrder, {
+          item_type: response.data.morph.part,
+        })
+      : [],
+    budget: response.data.budget ? response.data.budget : null,
+  };
+};
 
-export const updateBudget = async(orderId: string, data: any) : Promise<boolean> => {
+export const updateBudget = async (
+  orderId: string,
+  budgetItems: ItemToDB[],
+): Promise<boolean> => {
   const response = await graphqlRequest(`
     mutation {
       updateBudget(
         orderId: "${orderId}",
-        budgetItems: ${arrayToString(data)}
+        budgetItems: ${arrayToString(budgetItems)}
       ) {
         __typename
         ... on UpdateBudgetPayload {
           success
         }
         ... on ErrorPayload {
-          message
-          code
+          status
+          i18nKey
         }
       }
     }
   `);
 
-
   handleGraphQLErrors(response.errors);
   handlePayloadErrors(response.data.updateBudget);
 
-  return response.data.updateBudget.success
-}
+  return response.data.updateBudget.success;
+};

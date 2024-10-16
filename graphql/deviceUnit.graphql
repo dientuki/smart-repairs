@@ -82,8 +82,7 @@ type DeviceVersion {
 }
 
 type TemporaryDeviceUnitPayload {
-    temporarydeviceunit: ID!
-    deviceid: ID!
+    deviceVersion: DeviceVersion
     status: Boolean
     brand: Brand
     deviceType: DeviceType
@@ -91,19 +90,16 @@ type TemporaryDeviceUnitPayload {
 }
 
 input TemporaryDeviceUnitInput {
-  deviceid: ID! @rules(apply: ["nullable", "ulid", "exists:devices,id"])
-
   brandid: ID @rules(apply: ["nullable", "ulid", "exists:brands,id"])
   brandlabel: String @rules(apply: ["nullable"])
+
   typeid: ID @rules(apply: ["nullable", "ulid", "exists:device_types,id"])
   typelabel: String @rules(apply: ["nullable"])
+
+  deviceid: ID @rules(apply: ["nullable", "ulid", "exists:devices,id"])
   commercialname: String! @rules(apply: ["required"])
   url: String @rules(apply: ["nullable", "url"])
 
-  unlocktype: String! @rules(apply: ["required", "in:code,pattern,none"])
-  unlockcode: String @rules(apply: ["required_if:unlocktype,code,unlocktype,pattern"])
-  serialid: ID @rules(apply: ["nullable", "ulid"])
-  seriallabel: String @rules(apply: ["nullable"])
   versionid: ID @rules(apply: ["nullable", "ulid", "exists:device_versions,id"])
   versionlabel: String @rules(apply: ["nullable"])
 }

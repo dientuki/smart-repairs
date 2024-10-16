@@ -4,8 +4,11 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 
+use App\Traits\HasImageTrait;
+use App\Traits\HasTeamTrait;
 use App\Traits\IdAttributeUppercaseTrait;
 use Filament\Models\Contracts\FilamentUser;
+use Filament\Models\Contracts\HasAvatar;
 use Filament\Models\Contracts\HasTenants;
 use Filament\Panel;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
@@ -17,14 +20,17 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Collection;
 use OwenIt\Auditing\Contracts\Auditable;
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Facades\Storage;
 
-class User extends Authenticatable implements FilamentUser, HasTenants, Auditable
+class User extends Authenticatable implements FilamentUser, HasTenants, Auditable, HasAvatar
 {
     use HasFactory;
     use Notifiable;
     use \OwenIt\Auditing\Auditable;
     use HasUlids;
     use IdAttributeUppercaseTrait;
+    use HasImageTrait;
 
     /**
      * The attributes that are mass assignable.
@@ -35,6 +41,7 @@ class User extends Authenticatable implements FilamentUser, HasTenants, Auditabl
         'name',
         'email',
         'password',
+        'hash_filename',
     ];
 
     /**
@@ -60,6 +67,11 @@ class User extends Authenticatable implements FilamentUser, HasTenants, Auditabl
         ];
     }
 
+    public function getFilamentAvatarUrl(): ?string
+    {
+        return $this->hash_filename ? Storage::url($this->hash_filename) : null ;
+    }
+
     /**
      * Get the active tenants for the user. ONLY used in login and registration.
      *
@@ -78,7 +90,7 @@ class User extends Authenticatable implements FilamentUser, HasTenants, Auditabl
      */
     public function teams(): BelongsToMany
     {
-        return $this->belongsToMany(Team::class)->withPivot('rol');
+        return $this->belongsToMany(Team::class, 'team_user', 'user_id', 'team_id');
     }
 
     public function canAccessTenant(Model $tenant): bool

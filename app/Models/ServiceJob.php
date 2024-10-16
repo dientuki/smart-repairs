@@ -2,11 +2,24 @@
 
 namespace App\Models;
 
+use App\Traits\HasTeamTrait;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 
-class ServiceJob extends ModelWithTeam
+class ServiceJob extends ModelAuditable
 {
-    protected $fillable = ['name', 'price', 'discount_type', 'team_id'];
+    use HasTeamTrait;
+
+    protected $fillable = [
+        'name',
+        'price',
+        'is_active',
+        'team_id'
+    ];
+
+    public function budgetItems()
+    {
+        return $this->morphMany(BudgetItem::class, 'itemable');
+    }
 
     public function label(): Attribute
     {

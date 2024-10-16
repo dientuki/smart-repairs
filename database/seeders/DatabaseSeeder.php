@@ -3,6 +3,8 @@
 namespace Database\Seeders;
 
 use App\Models\Device;
+use App\Models\Discount;
+use App\Models\OrderCheck;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -32,10 +34,12 @@ class DatabaseSeeder extends Seeder
             CustomerSeeder::class,
             OrderSeeder::class,
             OrderCommentSeeder::class,
+            OrderCheckSeeder::class,
             SupplierSeeder::class,
             SupplierContactSeeder::class,
             StockSeeder::class,
             ServiceJobSeeder::class,
+            DiscountSeeder::class,
             SubscriptionSeeder::class,
         ]);
     }

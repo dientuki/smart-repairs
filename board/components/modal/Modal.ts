@@ -1,4 +1,4 @@
-import { ModalController } from 'react-modal-global';
+import { ModalController } from "react-modal-global";
 
 const Modal = new ModalController();
 

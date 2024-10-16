@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\GraphQL\Mutations;
 
+use App\Exceptions\GraphQLBusinessException;
 use Exception;
 use App\Models\TemporaryDeviceUnit;
 use App\Models\Device;
@@ -72,7 +73,7 @@ final readonly class CustomerDeviceMutations
                 'temporarydeviceunit' => $temporaryDeviceUnit->id,
                 'deviceid' => $device->id
             ];
-        } catch (Exception $e) {
+        } catch (GraphQLBusinessException $e) {
             DB::rollBack();
 
             return [
@@ -80,6 +81,7 @@ final readonly class CustomerDeviceMutations
                 'status' => false,
                 'message' => $e->getMessage(),
                 'code' => $e->getCode(),
+                'i18nKey' => $e->getI18nKey(),
             ];
         };
     }

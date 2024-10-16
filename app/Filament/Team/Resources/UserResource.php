@@ -23,6 +23,8 @@ class UserResource extends Resource
 
     protected static ?int $navigationSort = 80;
 
+    protected static ?string $tenantOwnershipRelationshipName = 'teams';
+
     public static function getModelLabel(): string
     {
         return __('resource.user');

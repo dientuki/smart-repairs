@@ -17,3 +17,7 @@ yarn-error.log
 /.fleet
 /.idea
 /.vscode
+/.nyc_output
+coverage/
+coverage-php/
+* copy.*

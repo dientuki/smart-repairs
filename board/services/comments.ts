@@ -1,37 +1,54 @@
-import { graphqlRequest } from "@/helper/graphqlHelpers";
+import {
+  graphqlRequest,
+  handleGraphQLErrors,
+  escapeGraphQLString,
+} from "@/helper/graphqlHelpers";
 
-export const updateCommentVisibility = (commentId: string, isPublic: boolean) => {
-  graphqlRequest(`
+export const updateComment = async (
+  id: string,
+  data: CreateOrUpdateComment,
+): Promise<boolean> => {
+  const response = await graphqlRequest(`
     mutation {
-      updateCommentVisibility(commentId: "${commentId}", isPublic: ${isPublic})
+      updateComment(
+        commentId: "${id}",
+        comment: {
+          comment: "${escapeGraphQLString(data.comment)}",
+          ispublic: ${data.ispublic}
+        }
+      )
     }
   `);
+
+  handleGraphQLErrors(response.errors);
+
+  return response.data.updateComment;
 };
 
-export const updateComment = (commentId: string, text: string) => {
-  graphqlRequest(`
+export const deleteComment = async (id: string): Promise<boolean> => {
+  const response = await graphqlRequest(`
     mutation {
-      updateComment(commentId: "${commentId}", text: "${text}")
+      deleteComment(commentId: "${id}")
     }
   `);
-}
 
-export const deleteComment = (commentId: string) => {
-  graphqlRequest(`
-    mutation {
-      deleteComment(commentId: "${commentId}")
-    }
-  `);
-}
+  handleGraphQLErrors(response.errors);
 
-export const addComment = async (newComment:NewOrderComment) => {
+  return response.data.deleteComment;
+};
 
-  const data = await graphqlRequest(`
+export const addComment = async (
+  orderId: string,
+  data: CreateOrUpdateComment,
+): Promise<OrderComment> => {
+  const response = await graphqlRequest(`
             mutation {
               addComment(
-                comment: "${newComment.comment}",
-                orderId: "${newComment.orderId}",
-                isPublic: ${newComment.isPublic}
+                orderId: "${orderId}",
+                comment: {
+                  comment: "${escapeGraphQLString(data.comment)}",
+                  ispublic: ${data.ispublic}
+                }
               ) {
                 id
                 comment
@@ -41,21 +58,23 @@ export const addComment = async (newComment:NewOrderComment) => {
                 was_edited
                 user {
                     name
+                    imageUrl
                 }
               }
           }
         `);
 
-  const json = await data.json();
+  handleGraphQLErrors(response.errors);
 
   return {
-          id: json.data.addComment.id,
-          comment: json.data.addComment.comment,
-          createdAt: json.data.addComment.created_at,
-          createdAtDate: new Date(json.data.addComment.created_at),
-          isPublic: json.data.addComment.is_public,
-          userId: json.data.addComment.user_id,
-          userName: json.data.addComment.user.name,
-          wasEdited: json.data.addComment.was_edited
-      } as OrderComment;
-}
+    id: response.data.addComment.id,
+    comment: response.data.addComment.comment,
+    createdAt: response.data.addComment.created_at,
+    createdAtDate: new Date(response.data.addComment.created_at),
+    isPublic: response.data.addComment.is_public,
+    userId: response.data.addComment.user_id,
+    userName: response.data.addComment.user.name,
+    userImage: response.data.addComment.user.imageUrl,
+    wasEdited: response.data.addComment.was_edited,
+  };
+};

@@ -1,64 +1,119 @@
-export const deviceVersion = (collection: any[]): OptionType[] => {
+export const deviceVersion = (collection: GraphQLObject[]): OptionType[] => {
   return collection.reduce((acc: OptionType[], deviceVersion: any) => {
-      const desc = deviceVersion.description? ` (${deviceVersion.description})` : '';
-      acc.push({
-          id: deviceVersion.id,
-          label: deviceVersion.version + desc
-      });
+    const desc = deviceVersion.description
+      ? ` (${deviceVersion.description})`
+      : "";
+    acc.push({
+      id: deviceVersion.id,
+      label: deviceVersion.version + desc,
+    });
 
-      return acc;
-
-    }, []);
-}
+    return acc;
+  }, []);
+};
 
 export const device = (collection: any[]): OptionType[] => {
   return collection.reduce((acc: OptionType[], device: any): OptionType[] => {
     acc.push({
-        id: device.id,
-        label: `${device.brand.name} ${device.commercial_name}`,
-        info: {
-            commercialname: device.commercial_name,
-            brandid: device.brand.id,
-            brand: device.brand.label,
-            typeid: device.deviceType.id,
-            type: device.deviceType.label,
-            url: device.url
-        }
+      id: device.id,
+      label: `${device.brand.name} ${device.commercial_name}`,
+      info: {
+        commercialname: device.commercial_name,
+        brandid: device.brand.id,
+        brand: device.brand.label,
+        typeid: device.deviceType.id,
+        type: device.deviceType.label,
+        url: device.url,
+      },
     });
 
     return acc;
-
   }, []);
-}
+};
 
-export const extra = (collection: any[]): OptionType[] => {
-  return collection.reduce((acc: OptionType[], item: any) => {
-    const anyValues = Object.keys(item).filter(key => key !== 'id' && key !== 'label');
+export const deviceSingle = (device: any): OptionType => {
+  return {
+    id: device.id,
+    label: `${device.brand.label} ${device.commercial_name}`,
+    info: {
+      commercialname: device.commercial_name,
+      brandid: device.brand.id,
+      brand: device.brand.label,
+      typeid: device.deviceType.id,
+      type: device.deviceType.label,
+      url: device.url,
+    },
+  };
+};
 
-    if (anyValues.length === 1) {
-      // Si hay solo una clave en ANY, usamos su valor como una cadena de texto para info.
-      const key = anyValues[0];
-      const value = item[key];
+export const extra = (
+  collection: GraphQLObject[],
+  additionalInfo?: Record<string, any>,
+): OptionType[] => {
+  if (collection.length === 0) return [];
 
-      // Manejar el caso en que el valor es null.
-      acc.push({
-        id: item.id,
-        label: item.label,
-        info: value === null ? null : String(value) // Si el valor es null, info será null.
-      });
-    } else if (anyValues.length > 1) {
-      // Si hay más de una clave en ANY, usamos las claves y valores como un objeto para info.
-      const infoObject = anyValues.reduce((obj: Record<string, any>, key: string) => {
-        obj[key] = item[key];
+  return collection.reduce((acc: OptionType[], item: GraphQLObject) => {
+    const keys = Object.keys(item).filter(
+      (key) => key !== "id" && key !== "label",
+    );
+
+    let info: Record<string, string | null> | null = null;
+
+    // Si solo tiene id y label
+    if (keys.length === 0) {
+      info = additionalInfo || null;
+    } else {
+      // Si hay otras propiedades además de id y label
+      info = keys.reduce((obj: Record<string, string | null>, key: string) => {
+        obj[key] = item[key] !== null ? String(item[key]) : null;
         return obj;
       }, {});
-      acc.push({
-        id: item.id,
-        label: item.label,
-        info: infoObject
-      });
+
+      // Agregar additionalInfo si existe
+      if (additionalInfo) {
+        info = { ...info, ...additionalInfo };
+      }
     }
+
+    acc.push({
+      id: item.id as string,
+      label: item.label as string,
+      info: info,
+    });
 
     return acc;
   }, []);
-}
+};
+
+export const extraSingle = (
+  item: GraphQLObject,
+  additionalInfo?: Record<string, any>,
+): OptionType => {
+  const keys = Object.keys(item).filter(
+    (key) => key !== "id" && key !== "label",
+  );
+
+  let info: Record<string, string | null> | null = null;
+
+  // Si solo tiene id y label
+  if (keys.length === 0) {
+    info = additionalInfo || null;
+  } else {
+    // Si hay otras propiedades además de id y label
+    info = keys.reduce((obj: Record<string, string | null>, key: string) => {
+      obj[key] = item[key] !== null ? String(item[key]) : null;
+      return obj;
+    }, {});
+
+    // Agregar additionalInfo si existe
+    if (additionalInfo) {
+      info = { ...info, ...additionalInfo };
+    }
+  }
+
+  return {
+    id: item.id as string,
+    label: item.label as string,
+    info: info,
+  };
+};
