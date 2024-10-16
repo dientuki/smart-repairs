@@ -1,3 +1,5 @@
+union UpdateOrderResult = UpdateOrderPayload | ErrorPayload
+
 extend type Query {
     orders: [Orders!]!
         @field(resolver: "OrderQueries@getActiveOrders")
@@ -13,7 +15,7 @@ extend type Mutation {
         money: String ): Boolean
         @field(resolver: "OrderMutations@create")
         @namespace(field: "App\\GraphQL\\Mutations")
-    updateOrderStatus(id: String, status: String!): Boolean!
+    updateOrderStatus(id: String, status: String!): UpdateOrderResult!
         @field(resolver: "OrderMutations@updateStatus")
         @namespace(field: "App\\GraphQL\\Mutations")
     updateDiagnosis(id: String!, diagnosis: String! @rules(apply: ["max:200"])): Boolean!
@@ -27,6 +29,10 @@ extend type Mutation {
 input OrderInput {
     customer: String!
     observation: String!
+}
+
+type UpdateOrderPayload {
+    success: Boolean!
 }
 
 input OrderChecks {
