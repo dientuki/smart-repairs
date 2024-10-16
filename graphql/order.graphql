@@ -6,7 +6,11 @@ extend type Query {
 }
 
 extend type Mutation {
-    addOrder(order: OrderInput): Boolean
+    addOrder(
+        order: OrderInput,
+        orderChecks: OrderChecks,
+        tmpDeviceUnit: TmpDeviceUnit,
+        money: String ): Boolean
         @field(resolver: "OrderMutations@create")
         @namespace(field: "App\\GraphQL\\Mutations")
     updateOrderStatus(id: String, status: String!): Boolean!
@@ -21,14 +25,24 @@ extend type Mutation {
 }
 
 input OrderInput {
-    customerid: String!
+    customer: String!
     observation: String!
-    damages: [DamageInput!]
+}
+
+input OrderChecks {
+    damages: [DamageInput]
     damagedescription: String
-    features: [FeatureInput!]
+    features: [FeatureInput]
     featuredescription: String
-    tempdeviceunitid: String!
-    deviceid: String!
+}
+
+input TmpDeviceUnit {
+    device: String!
+    deviceVersion: String
+    deviceUnit: String
+    unlockCode: String
+    unlockType: String
+    serial: String
 }
 
 input DamageInput {

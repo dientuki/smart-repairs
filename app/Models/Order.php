@@ -68,6 +68,11 @@ class Order extends ModelAuditable
         return $this->hasOne(OrderCheck::class);
     }
 
+    public function payments()
+    {
+        return $this->hasMany(OrderPayment::class);
+    }
+
     /**
      * Updates the status of an order.
      *

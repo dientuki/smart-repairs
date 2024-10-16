@@ -73,6 +73,13 @@
         "url": "url"
     },
 
+    "new_order": {
+        "budget": "presupuesto",
+        "title": "creacion de orden",
+        "more_info": "informacion del {{record}}",
+        "issue": "problema"
+    },
+
     "order" : {
         "assigned_to": "tecnico",
         "assign_to_me": "asignar a mi",

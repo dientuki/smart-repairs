@@ -39,8 +39,6 @@ export const Step3 = ({
   }, [deviceType]);
 
   const handleRegistration = async (data: FieldValues) => {
-    console.log(data);
-
     const damages: damage[] = check?.damages.map((value) => ({
       value: value,
       checked:

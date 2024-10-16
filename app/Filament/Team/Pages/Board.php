@@ -14,7 +14,7 @@ class Board extends Page
     use HasTopbar;
     use HasMaxWidth;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-group';
+    protected static ?string $navigationIcon = 'heroicon-o-view-columns';
 
     protected static string $layout = 'filament.team.layouts.board';
 

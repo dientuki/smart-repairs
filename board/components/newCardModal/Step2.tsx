@@ -127,18 +127,17 @@ export const Step2 = ({
 
     try {
       const upsertData = await addTemporaryDeviceUnit(data);
-      console.log(data);
       upsertBrands(upsertData.brand);
       upsertDeviceTypes(upsertData.type);
       upsertDevices(upsertData.device);
 
       const tmp = {
-        serial: data.serial,
+        serial: data.serial ? data.serial.label : '',
         unlockType: data.unlocktype.id,
         unlockCode: data.unlockcode,
         device: upsertData.device,
-        deviceVersion: upsertData.temporarydeviceunit,
-        deviceUnit: upsertData,
+        deviceVersion: upsertData.deviceVersion ? upsertData.deviceVersion : { id: "", label: "", info: null },
+        deviceUnit: data.serial ? data.serial.id : '',
       };
 
       onNext(tmp);

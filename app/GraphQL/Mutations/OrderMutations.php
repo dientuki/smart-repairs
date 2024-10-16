@@ -42,6 +42,13 @@ final readonly class OrderMutations
         return null;
     }
 
+    public function create(null $root, array $args, GraphQLContext $context, ResolveInfo $resolveInfo): bool
+    {
+        dd($args);
+    }
+
+
+    /*
 
     public function create(null $root, array $args, GraphQLContext $context, ResolveInfo $resolveInfo): bool
     {
@@ -78,6 +85,8 @@ final readonly class OrderMutations
             return false;
         };
     }
+
+    */
 
     public function updateDiagnosis(null $root, array $args, GraphQLContext $context, ResolveInfo $resolveInfo): bool
     {

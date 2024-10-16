@@ -18,17 +18,7 @@ import {
   TabListTab,
 } from "@/components/newCardModal";
 import { useErrorHandler } from "@/components/hooks/useErrorHandler";
-
-interface OrderTable {
-  customer: OptionType;
-  obervation: string;
-}
-
-interface OrderData {
-  order: OrderTable;
-  orderChecks: OrderChecksTable;
-  tmpDeviceUnit: tmpDeviceUnitTable;
-}
+import { FieldValues } from "react-hook-form";
 
 const orderDataInit: OrderData = {
   order: {
@@ -49,19 +39,20 @@ const orderDataInit: OrderData = {
     deviceVersion: { id: "", label: "", info: null },
     deviceUnit: "",
   },
+  money: 0
 };
 
 export const NewCardModal = () => {
   const modal = useModalWindow();
+  const date = new Date();
   const { user } = useUserStore();
-  const [isLoading, setIsLoading] = useState(true);
-  const [selectedIndex, setSelectedIndex] = useState(0);
-  const [initialData, setInitialData] = useState<OrderCreationData>();
+  const [ isLoading, setIsLoading ] = useState(true);
+  const [ selectedIndex, setSelectedIndex ] = useState(0);
+  const [ initialData, setInitialData ] = useState<OrderCreationData>();
   const { t } = useTranslation();
   const { getBoard } = useBoardStore();
   const { initializeOrderCreationData, createOrder } = useOrderStore();
-  const [orderData, setOrderData] = useState<OrderData>(orderDataInit);
-  const date = new Date();
+  const [ orderData, setOrderData ] = useState<OrderData>(orderDataInit);
   const { handleError } = useErrorHandler();
 
   console.log(orderData);
@@ -112,12 +103,20 @@ export const NewCardModal = () => {
     }));
   };
 
-  const saveOrder = async () => {
-    console.log("warning, try to add order");
-    return;
-    await createOrder();
-    await getBoard();
-    modal.close();
+  const saveOrder = async (data: FieldValues) => {
+    //console.log("warning, try to add order", orderData, data);
+    try {
+      const tmp = orderData;
+      tmp.money = data.money;
+      const order = await createOrder(tmp, data.items);
+      /*
+      await updateBudget(order, data);
+      await getBoard();
+      */
+      //modal.close();
+    } catch (error) {
+      handleError(error);
+    }
   };
 
   const prevStep = () => {
@@ -135,7 +134,7 @@ export const NewCardModal = () => {
       title={
         <h2 className='flex flex-row items-center gap-2 px-5 py-3 text-2xl font-bold tracking-tight sm:text-3xl border-b border-gray-200 dark:border-white/10'>
           <Icon size={7} icon={InboxIcon} />
-          <span>Creacion de orden</span>
+          <span className="first-letter:uppercase">{t("new_order.title")}</span>
         </h2>
       }
     >
@@ -150,26 +149,34 @@ export const NewCardModal = () => {
               <TabList className='grid divide-y divide-gray-200 dark:divide-white/5 md:grid-flow-col md:divide-y-0 md:overflow-x-auto border-b border-gray-200 dark:border-white/10'>
                 <TabListTab
                   index={0}
-                  title='Cliente'
-                  subtitle='Informacion del cliente'
+                  title={t("order.customer")}
+                  subtitle={t("new_order.more_info", {
+                    record: t("order.customer"),
+                  })}
                   selectedIndex={selectedIndex}
                 />
                 <TabListTab
                   index={1}
-                  title='Equipo'
-                  subtitle='Informacion del equipo'
+                  title={t("device")}
+                  subtitle={t("new_order.more_info", {
+                    record: t("device"),
+                  })}
                   selectedIndex={selectedIndex}
                 />
                 <TabListTab
                   index={2}
-                  title='Problema'
-                  subtitle='Informacion del problema'
+                  title={t("new_order.issue")}
+                  subtitle={t("new_order.more_info", {
+                    record: t("new_order.issue"),
+                  })}
                   selectedIndex={selectedIndex}
                 />
                 <TabListTab
                   index={3}
-                  title='Presupuesto'
-                  subtitle='y biyuya'
+                  title={t("new_order.budget")}
+                  subtitle={t("new_order.more_info", {
+                    record: t("new_order.budget"),
+                  })}
                   selectedIndex={selectedIndex}
                   hideArrow
                 />
@@ -252,8 +259,8 @@ export const NewCardModal = () => {
               <div className='flex justify-between w-full'>
                 {orderData.tmpDeviceUnit.device.info == null ? (
                   <>
-                    <p className='w-1/3 first-letter:uppercase'>No</p>
-                    <p className='w-2/3 truncate'>No</p>
+                    <p className='w-1/3 first-letter:uppercase'>Equipo</p>
+                    <p className='w-2/3 truncate'></p>
                   </>
                 ) : (
                   <>
