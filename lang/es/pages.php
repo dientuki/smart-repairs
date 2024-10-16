@@ -8,4 +8,5 @@ return [
     'team_hint' => 'Nombre de la empresa',
     'team_helper' => 'Este es el dato mínimo. Luego podrá añadir más información.',
     'create' => 'Crear',
+    'legal_default' => 'Texto legal pendiente de actualizar',
 ];
