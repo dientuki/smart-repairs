@@ -7,11 +7,13 @@ import { Column } from "@/components/board";
 import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
 import { TypedColumn } from "@/types/enums";
+import { useErrorHandler } from "../hooks/useErrorHandler";
 
 export const Board = () => {
   const { board, getBoard, setBoardState, updateStatus } = useBoardStore();
   const { getCurrentUser } = useUserStore();
   const { t } = useTranslation();
+  const { handleError } = useErrorHandler();
 
   useEffect(() => {
     getBoard().catch((e: any) => {
@@ -80,7 +82,12 @@ export const Board = () => {
       });
 
       // update status
-      updateStatus(orderMoved.$id, finishCol.id);
+      try {
+        updateStatus(orderMoved.$id, finishCol.id);
+      } catch (error) {
+        handleError(error);
+      }
+
     }
 
     // update board

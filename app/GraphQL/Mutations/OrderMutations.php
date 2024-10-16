@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\GraphQL\Mutations;
 
 use App\Enum\OrderStatusEnum;
+use App\Exceptions\GraphQLBusinessException;
 use App\Models\Order;
 use App\Models\OrderCheck;
 use App\Models\TemporaryDeviceUnit;
@@ -35,11 +36,31 @@ final readonly class OrderMutations
         $order = Order::find($args['id']);
         $team_id = $this->getTeamId();
 
-        if ($order && $order->team_id === $team_id) {
-            return Order::updateStatus($args['id'], $args['status']);
+        try {
+
+            $status = false;
+
+            if ($order && $order->team_id === $team_id) {
+                $status = Order::updateStatus($args['id'], $args['status']);
+            }
+
+
+
+            return [
+                '__typename' => 'UpdateOrderPayload',
+                'success' => $status,
+            ];
+        } catch (GraphQLBusinessException $e) {
+            return [
+                '__typename' => 'ErrorPayload',
+                'status' => false,
+                'message' => $e->getMessage(),
+                'code' => $e->getCode(),
+                'i18nKey' => $e->getI18nKey(),
+            ];
         }
 
-        return null;
+
     }
 
     public function create(null $root, array $args, GraphQLContext $context, ResolveInfo $resolveInfo): bool
