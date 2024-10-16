@@ -37,7 +37,6 @@ final readonly class OrderMutations
         $team_id = $this->getTeamId();
 
         try {
-
             $status = false;
 
             if ($order && $order->team_id === $team_id) {
@@ -59,8 +58,6 @@ final readonly class OrderMutations
                 'i18nKey' => $e->getI18nKey(),
             ];
         }
-
-
     }
 
     public function create(null $root, array $args, GraphQLContext $context, ResolveInfo $resolveInfo): bool

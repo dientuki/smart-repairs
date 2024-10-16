@@ -22,7 +22,8 @@ final readonly class DeviceUnitMutations
 {
     use UserDataTrait;
 
-    private function separarString($input) {
+    private function separarString($input)
+    {
         $var1 = $input;
         $var2 = '';
 
