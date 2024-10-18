@@ -67,6 +67,8 @@ export const Step1 = ({ nextStep, customers, onNext }: Step1Props) => {
 
     const dataInfo = [data.firstname, data.lastname, data.phone, data.email];
 
+    console.log(dataInfo,customerInfo);
+
     if (customerInfo.some((value, index) => value !== dataInfo[index])) {
       return true;
     }
@@ -110,6 +112,8 @@ export const Step1 = ({ nextStep, customers, onNext }: Step1Props) => {
           case OperationStatus.NoChange:
             break;
         }
+        onNext(upsertData.customer);
+        nextStep();
       }
       const customer = localCustomers.find((c) => c.id === data.id);
       if (customer) {
