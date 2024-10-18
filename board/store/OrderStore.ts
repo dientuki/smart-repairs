@@ -8,25 +8,11 @@ import {
 import { addComment, deleteComment, updateComment } from "@/services/comments";
 import { createOrder } from "@/services/orders";
 import {
-  useCustomerStore,
-  useDeviceStore,
-  useBrandStore,
-  useDeviceTypeStore,
   useBoardStore,
 } from "@/store";
 import { device, extra } from "@/helper/reduceHelpers";
 import { CountOperation } from "@/types/enums";
-import { O } from "vitest/dist/chunks/environment.CzISCQ7o.js";
-import { serialize } from "v8";
 
-interface CreateOrderSelectedData {
-  customer?: OptionType | null;
-  deviceId?: string | null;
-  deviceLabel?: string | null;
-  deviceTypeId?: string | null;
-  deviceTypeLabel?: string | null;
-  temporaryDeviceUnitId?: string | null;
-}
 
 interface OrderStore {
   order: Order;
@@ -209,7 +195,29 @@ export const useOrderStore = create<OrderStore>((set) => ({
       serial: orderData.tmpDeviceUnit.serial,
     }
 
-    const order = createOrder(orderTable, orderChecksTable, tmpDeviceUnitTable, orderData.money, items );
+    const normalizedItems: ItemToDB[] = items.reduce(
+      (acc: ItemToDB[], item: ViewItem) => {
+        acc.push({
+          id: item.id,
+          itemableId: item.itemable.id,
+          itemableType: item.itemable.info.item_type,
+          quantity:
+            typeof item.quantity === "number"
+              ? item.quantity
+              : parseInt(item.quantity, 10),
+          unitPrice:
+            typeof item.unitPrice === "number"
+              ? item.unitPrice
+              : parseFloat(item.unitPrice),
+          includeInSum: item.includeInSum,
+        });
+        return acc;
+      },
+      [],
+    );
+
+
+    const order = createOrder(orderTable, orderChecksTable, tmpDeviceUnitTable, orderData.money, normalizedItems );
 
     /*
     const tmpOrder = useOrderStore.getState().tmpOrder;
