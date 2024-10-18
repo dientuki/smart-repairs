@@ -49,8 +49,6 @@ interface OrderStore {
     deviceTypeLabel: string | null;
     temporaryDeviceUnitId: string | null;
   };
-  setCreateOrderSelectedData: (data: CreateOrderSelectedData) => void;
-  clearCreateOrderSelectedData: (field: keyof CreateOrderSelectedData) => void;
 
   devicesChecks: DeviceCheck[];
 
@@ -176,33 +174,6 @@ export const useOrderStore = create<OrderStore>((set) => ({
   },
 
   devicesChecks: [],
-
-  setCreateOrderSelectedData: (data: CreateOrderSelectedData): void => {
-    set((state) => ({
-      createOrderSelectedData: {
-        customer: data.customer ?? state.createOrderSelectedData.customer,
-        deviceId: data.deviceId ?? state.createOrderSelectedData.deviceId,
-        deviceLabel:
-          data.deviceLabel ?? state.createOrderSelectedData.deviceLabel,
-        deviceTypeId:
-          data.deviceTypeId ?? state.createOrderSelectedData.deviceTypeId,
-        deviceTypeLabel:
-          data.deviceTypeLabel ?? state.createOrderSelectedData.deviceTypeLabel,
-        temporaryDeviceUnitId:
-          data.temporaryDeviceUnitId ??
-          state.createOrderSelectedData.temporaryDeviceUnitId,
-      },
-    }));
-  },
-
-  clearCreateOrderSelectedData: (field: keyof CreateOrderSelectedData) => {
-    set((state) => ({
-      createOrderSelectedData: {
-        ...state.createOrderSelectedData,
-        [field]: null,
-      },
-    }));
-  },
 
   setTmpOrder: (newTmpOrder: any) => {
     set((state) => ({
