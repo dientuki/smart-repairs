@@ -176,7 +176,7 @@ export const useOrderStore = create<OrderStore>((set) => ({
 
     const orderTable = {
       customer: orderData.order.customer.id,
-      obervation: orderData.order.obervation,
+      observation: orderData.order.observation,
     }
 
     const orderChecksTable = {

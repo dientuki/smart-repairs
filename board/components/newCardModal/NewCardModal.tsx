@@ -23,7 +23,7 @@ import { FieldValues } from "react-hook-form";
 const orderDataInit: OrderData = {
   order: {
     customer: { id: "", label: "", info: null },
-    obervation: "",
+    observation: "",
   },
   orderChecks: {
     damages: [],
@@ -98,7 +98,7 @@ export const NewCardModal = () => {
       orderChecks: orderChecks,
       order: {
         ...prevOrderData.order,
-        obervation: observation,
+        observation: observation,
       },
     }));
   };

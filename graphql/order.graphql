@@ -1,3 +1,4 @@
+union AddOrderResult = AddOrderPayload | ErrorPayload
 union UpdateOrderResult = UpdateOrderPayload | ErrorPayload
 
 extend type Query {
@@ -12,7 +13,8 @@ extend type Mutation {
         order: OrderInput,
         orderChecks: OrderChecks,
         tmpDeviceUnit: TmpDeviceUnit,
-        money: String ): Boolean
+        money: Float,
+        budgetItems: [BudgetItemInput!]! ): AddOrderResult!
         @field(resolver: "OrderMutations@create")
         @namespace(field: "App\\GraphQL\\Mutations")
     updateOrderStatus(id: String, status: String!): UpdateOrderResult!
@@ -35,19 +37,24 @@ type UpdateOrderPayload {
     success: Boolean!
 }
 
+type AddOrderPayload {
+    success: Boolean!
+    order: String!
+}
+
 input OrderChecks {
     damages: [DamageInput]
-    damagedescription: String
+    damagesdescription: String
     features: [FeatureInput]
-    featuredescription: String
+    featuresdescription: String
 }
 
 input TmpDeviceUnit {
     device: String!
-    deviceVersion: String
-    deviceUnit: String
-    unlockCode: String
-    unlockType: String
+    deviceversion: String
+    deviceunit: String
+    unlockcode: String
+    unlocktype: String
     serial: String
 }
 
