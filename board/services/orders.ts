@@ -8,13 +8,13 @@ export const createOrder = async (orderTable, orderChecksTable, tmpDeviceUnitTab
                             addOrder(
                               order: {
                                 customer: "${orderTable.customer}"
-                                obervation: "${orderTable.obervation}"
+                                observation: "${orderTable.observation}"
                               },
                               orderChecks: {
                                 damages: ${arrayToString(orderChecksTable.damages)}
                                 features: ${arrayToString(orderChecksTable.features)}
-                                damagesDescription: "${orderChecksTable.damagesDescription}"
-                                featuresDescription: "${orderChecksTable.featuresDescription}"
+                                damagesdescription: "${orderChecksTable.damagesDescription}"
+                                featuresdescription: "${orderChecksTable.featuresDescription}"
                               },
                               tmpDeviceUnit: {
                                 device: "${tmpDeviceUnitTable.device}"
@@ -24,7 +24,7 @@ export const createOrder = async (orderTable, orderChecksTable, tmpDeviceUnitTab
                                 unlocktype: "${tmpDeviceUnitTable.unlockType}"
                                 serial: "${tmpDeviceUnitTable.serial}"
                               },
-                              money: ${orderTable.money},
+                              money: ${money},
                               budgetItems: ${arrayToString(items)}
                             ) {
                               __typename

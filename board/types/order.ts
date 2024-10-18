@@ -133,7 +133,7 @@ declare global {
 
   interface OrderTable {
     customer: OptionType;
-    obervation: string;
+    observation: string;
   }
 
   interface OrderData {
