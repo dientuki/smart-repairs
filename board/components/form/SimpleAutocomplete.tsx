@@ -67,15 +67,15 @@ export const SimpleAutocomplete = ({
         <div className='w-full rounded-lg shadow-sm ring-1 transition duration-75 bg-white dark:bg-white/5 [&:not(:has(.fi-ac-action:focus))]:focus-within:ring-2 [&:not(:has(.fi-ac-action:focus))]:focus-within overflow-hidden ring-gray-950/10 dark:ring-white/20 [&:not(:has(.fi-ac-action:focus))]:focus-within:ring-primary-600 dark:[&:not(:has(.fi-ac-action:focus))]:focus-within:ring-primary-500'>
           <Autocomplete
             autoHighlight
-            autoSelect
             selectOnFocus
             handleHomeEndKeys
             clearOnEscape
+            clearOnBlur
+            disableClearable={false}
             id={name}
             onChange={onChange}
             options={Array.isArray(options) ? options : []}
             filterOptions={filterOptions}
-            isOptionEqualToValue={() => true}
             renderInput={(params) => (
               <TextField
                 {...params}
