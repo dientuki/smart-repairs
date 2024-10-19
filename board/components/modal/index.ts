@@ -4,4 +4,4 @@ export { ModalLayout } from "@/components/modal/ModalLayout";
 export { DeleteDialog } from "@/components/modal/DeleteDialog";
 export { NewDeviceUnitModal } from "@/components/modal/NewDeviceUnitModal";
 export { default as PatternLockModal } from "@/components/modal/PatternLockModal";
-export { default as UpdateDeviceUnitModal } from "@/components/modal/UpdateDeviceUnitModal";
+export { UpdateDeviceUnitModal } from "@/components/modal/UpdateDeviceUnitModal";
