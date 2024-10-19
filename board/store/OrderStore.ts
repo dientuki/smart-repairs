@@ -51,7 +51,6 @@ export const useOrderStore = create<OrderStore>((set) => ({
   tmpOrder: {} as NewOrder,
   getOrder: async (id: string) => {
     const order = await getOrder(id);
-    console.log(order);
     set({ order });
   },
 
@@ -171,8 +170,6 @@ export const useOrderStore = create<OrderStore>((set) => ({
   },
 
   createOrder: async (orderData: OrderData, items): Promise<string> => {
-
-    console.log(orderData);
 
     const orderTable = {
       customer: orderData.order.customer.id,

@@ -63,8 +63,7 @@ export const BudgetModal = ({ order }: BudgetModalProps) => {
   };
 
   const handleErrorForm = () => {
-    //console.log(errors)
-    console.log("error", errors);
+    //console.log("error", errors);
   };
 
   return (
