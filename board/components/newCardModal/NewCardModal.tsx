@@ -23,7 +23,7 @@ import { FieldValues } from "react-hook-form";
 const orderDataInit: OrderData = {
   order: {
     customer: { id: "", label: "", info: null },
-    obervation: "",
+    observation: "",
   },
   orderChecks: {
     damages: [],
@@ -98,7 +98,7 @@ export const NewCardModal = () => {
       orderChecks: orderChecks,
       order: {
         ...prevOrderData.order,
-        obervation: observation,
+        observation: observation,
       },
     }));
   };
@@ -109,11 +109,9 @@ export const NewCardModal = () => {
       const tmp = orderData;
       tmp.money = data.money;
       const order = await createOrder(tmp, data.items);
-      /*
-      await updateBudget(order, data);
+      console.log(order);
       await getBoard();
-      */
-      //modal.close();
+      modal.close();
     } catch (error) {
       handleError(error);
     }

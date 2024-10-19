@@ -57,6 +57,7 @@ export const Step4 = ({ prevStep, nextStep, budgetTableData }: Step4Props) => {
           layout={Layout.Row}
           icon={user.currency}
           type={InputType.Number}
+          defaultValue="0"
         />
       </div>
       <div className='flex justify-between mt-6'>
