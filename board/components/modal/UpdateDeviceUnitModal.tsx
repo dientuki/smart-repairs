@@ -43,16 +43,16 @@ export const UpdateDeviceUnitModal = () => {
         const type = data.types.find((b: any) => b.id === data.deviceUnit.type_id);
         const device = data.devices.find((b: any) => b.id === data.deviceUnit.device_id);
         const version = data.versions.find((b: any) => b.id === data.deviceUnit.device_version_id);
-        //onst serial = data.serials.find((b: any) => b.id === data.deviceUnit.device_version_id);
+        const serial = data.serials.find((b: any) => b.label === data.deviceUnit.serial);
 
         setValue('brand', brand);
         setValue('type', type);
         setValue('device', device);
         setValue('version', version);
-        //setValue('serial', serial);
+        setValue('serial', serial);
         setValue('url', data.deviceUnit.url);
 
-        console.log(data.deviceUnit);
+        console.log(data);
 
       } catch (error) {
         handleError(error);
