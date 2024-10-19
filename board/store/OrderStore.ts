@@ -217,20 +217,9 @@ export const useOrderStore = create<OrderStore>((set) => ({
     );
 
 
-    const order = createOrder(orderTable, orderChecksTable, tmpDeviceUnitTable, orderData.money, normalizedItems );
+    const order = await createOrder(orderTable, orderChecksTable, tmpDeviceUnitTable, orderData.money, normalizedItems );
 
-    /*
-    const tmpOrder = useOrderStore.getState().tmpOrder;
-    const createOrderSelectedData =
-      useOrderStore.getState().createOrderSelectedData;
-    tmpOrder.customerId = createOrderSelectedData.customer?.id;
-    tmpOrder.tempDeviceUnitId = createOrderSelectedData.temporaryDeviceUnitId;
-    tmpOrder.deviceid = createOrderSelectedData.deviceId;
-
-    await createOrder(tmpOrder);
-
-    useOrderStore.getState().clearAfterCreateOrder();
-    */
+    return order.order
   },
 
   clearAfterCreateOrder: () => {
