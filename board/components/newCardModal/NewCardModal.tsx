@@ -109,11 +109,9 @@ export const NewCardModal = () => {
       const tmp = orderData;
       tmp.money = data.money;
       const order = await createOrder(tmp, data.items);
-      /*
-      await updateBudget(order, data);
+      console.log(order);
       await getBoard();
-      */
-      //modal.close();
+      modal.close();
     } catch (error) {
       handleError(error);
     }
