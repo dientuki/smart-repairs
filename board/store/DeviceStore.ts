@@ -169,6 +169,9 @@ export const useDeviceStore = create<DeviceStore>((set) => ({
       result = await getTemporaryDeviceUnit(orderId);
     }
 
+    return result;
+    /*
+
     useBrandStore.getState().setBrands(result.brands);
     useDeviceTypeStore.getState().setDeviceTypes(result.types);
     set({
@@ -177,6 +180,7 @@ export const useDeviceStore = create<DeviceStore>((set) => ({
       deviceUnitsByVersion: result.serials,
       deviceUnit: result.deviceUnit,
     });
+    */
   },
 
   clear: (fields: string | string[]) => {
