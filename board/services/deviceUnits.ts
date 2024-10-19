@@ -48,7 +48,6 @@ export async function updateDeviceUnit(
 export async function addTemporaryDeviceUnit(
   data: TemporaryDeviceUnitInput,
 ): Promise<any> {
-    console.log(data);
   const response = await graphqlRequest(`
         mutation {
             addTemporaryDeviceUnit(input: {

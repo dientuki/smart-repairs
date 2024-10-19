@@ -55,8 +55,6 @@ export const NewCardModal = () => {
   const [ orderData, setOrderData ] = useState<OrderData>(orderDataInit);
   const { handleError } = useErrorHandler();
 
-  console.log(orderData);
-
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -104,12 +102,10 @@ export const NewCardModal = () => {
   };
 
   const saveOrder = async (data: FieldValues) => {
-    //console.log("warning, try to add order", orderData, data);
     try {
       const tmp = orderData;
       tmp.money = data.money;
       const order = await createOrder(tmp, data.items);
-      console.log(order);
       await getBoard();
       modal.close();
     } catch (error) {
