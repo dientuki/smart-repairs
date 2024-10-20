@@ -7,7 +7,6 @@ import {
   getTemporaryDeviceUnit,
 } from "@/services/deviceUnits";
 import { getDeviceVersions } from "@/services/deviceVersions";
-import { useBrandStore, useDeviceTypeStore, useOrderStore } from "@/store";
 import {
   device,
   deviceSingle,
@@ -60,7 +59,6 @@ interface DeviceStore {
   deviceUnit: any;
   getDeviceUnitUpdate: (id: string, deviceUnit: string | null) => Promise<void>;
   getDevicesByTypeAndBrand: (typeId: string, brandId: string) => Promise<OptionType[]>;
-  clear: (fields: string | string[]) => void;
 
   confirmDeviceUnit: (data: FieldValues) => Promise<boolean>;
 }
@@ -172,23 +170,6 @@ export const useDeviceStore = create<DeviceStore>((set) => ({
     return result;
   },
 
-  clear: (fields: string | string[]) => {
-    set((state) => {
-      // Convertir el argumento en un array si es un string
-      const fieldsArray = Array.isArray(fields) ? fields : [fields];
-      const newState: Partial<DeviceStore> = { ...state };
-
-      // Limpiar los campos especificados
-      fieldsArray.forEach((field) => {
-        if (field in newState) {
-          (newState as any)[field] = [];
-        }
-      });
-
-      return newState as DeviceStore;
-    });
-  },
-
   getDevicesByTypeAndBrand: async (
     typeId: string,
     brandId: string,
@@ -220,6 +201,8 @@ export const useDeviceStore = create<DeviceStore>((set) => ({
 
       serialid: data.serial.id,
       seriallabel: data.serial.label,
+
+      deviceunitid: data.deviceunitid,
     }
     const status = await confirmDeviceUnit(dunno);
     return status;
