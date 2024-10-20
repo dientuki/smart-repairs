@@ -5,7 +5,7 @@ import { useModalWindow } from "react-modal-global";
 import { FieldErrors, FieldValues, useForm } from "react-hook-form";
 import { AbortControllerManager } from "@/helper/AbortControllerManager";
 import { useErrorHandler } from "../hooks/useErrorHandler";
-import { useDeviceStore } from "@/store";
+import { useBoardStore, useDeviceStore, useOrderStore } from "@/store";
 import { ActionButton, HiddenInput, InputField, ValidatedAutocomplete } from "../form";
 import { GlobeAltIcon } from "@heroicons/react/16/solid";
 import { Icon } from "../Icon";
@@ -16,20 +16,35 @@ type ModalParams = {
   deviceUnitId: string | null;
 };
 
+interface ComboData {
+  brands: OptionType[];
+  types: OptionType[];
+  devices: OptionType[];
+  versions: OptionType[];
+  serials: OptionType[];
+}
+
 export const UpdateDeviceUnitModal = () => {
   const modal = useModalWindow<ModalParams>();
   const { t } = useTranslation();
   const [isLoading, setIsLoading] = useState(true);
   const { handleError } = useErrorHandler();
-  const [ comboData, setComboData ] = useState();
+  const [ comboData, setComboData ] = useState<ComboData>();
+  const { getOrder } = useOrderStore();
+  const { getBoard } = useBoardStore();
   const {
     getDeviceUnitUpdate,
+    getDevicesByTypeAndBrand,
+    getDeviceVersions,
+    getDevicesUnitsByVersion,
+    confirmDeviceUnit
   } = useDeviceStore();
   const {
     handleSubmit,
     control,
     formState: { errors },
-    setValue
+    setValue,
+    getValues
   } = useForm();
 
   useEffect(() => {
@@ -51,9 +66,6 @@ export const UpdateDeviceUnitModal = () => {
         setValue('version', version);
         setValue('serial', serial);
         setValue('url', data.deviceUnit.url);
-
-        console.log(data);
-
       } catch (error) {
         handleError(error);
       } finally {
@@ -80,7 +92,7 @@ export const UpdateDeviceUnitModal = () => {
       }),
     },
     version: {
-      required: t("validation.required", { field: t("field.brand") }),
+      required: t("validation.required", { field: t("field.version") }),
     },
     url: {
       pattern: {
@@ -88,12 +100,87 @@ export const UpdateDeviceUnitModal = () => {
         message: t("validation.url", { field: t("field.url") }),
       },
     },
+    serial: {
+      required: t("validation.required", { field: t("field.serial") }),
+    },
   }
 
+  const clearByTypeAndBrand = async () => {
+    [
+      "device",
+      "version",
+      "serial",
+      "url",
+    ].forEach((field) => setValue(field, ""));
+
+    try {
+      const devices = await getDevicesByTypeAndBrand(
+        getValues("type").id,
+        getValues("brand").id
+      );
+
+      setComboData((prevComboData) => ({
+        ...prevComboData,
+        devices: devices
+      }));
+
+    } catch (error) {
+      handleError(error);
+    }
+  };
+
+  const handleDeviceChange = async () => {
+
+    const selected = getValues('device')
+    setValue("url", selected.info.url || "");
+
+    try {
+      const versions = await getDeviceVersions(selected.id);
+
+      setComboData((prevComboData) => ({
+        ...prevComboData,
+        versions: versions
+      }));
+
+    } catch (error) {
+      handleError(error);
+    }
+  };
+
+  const handleVersionChange = async () => {
+    try {
+      const serials = await getDevicesUnitsByVersion(getValues("version").id);
+      setComboData((prevComboData) => ({
+        ...prevComboData,
+        serials: serials
+      }));
+    } catch (error) {
+      handleError(error);
+    }
+  };
+
+
   const handleRegistration = async (data: FieldValues) => {
+
+    try {
+      const status = await confirmDeviceUnit(data);
+      if (status) {
+        await getOrder(data.order);
+        getBoard();
+
+        modal.close();
+      } else {
+        alert('error')
+      }
+    } catch (error) {
+      handleError(error);
+    }
+
+
   };
 
   const handleErrorForm = (errors: FieldErrors<FieldValues>) => {
+    console.log(errors)
   };
 
   return (
@@ -117,6 +204,7 @@ export const UpdateDeviceUnitModal = () => {
               rules={registerOptions.type}
               errors={errors}
               disableClearable
+              onChange={clearByTypeAndBrand}
             />
             <ValidatedAutocomplete
               name='brand'
@@ -126,6 +214,7 @@ export const UpdateDeviceUnitModal = () => {
               rules={registerOptions.brand}
               errors={errors}
               disableClearable
+              onChange={clearByTypeAndBrand}
             />
           </div>
 
@@ -138,6 +227,7 @@ export const UpdateDeviceUnitModal = () => {
               rules={registerOptions.device}
               errors={errors}
               disableClearable
+              onChange={handleDeviceChange}
             />
 
             <ValidatedAutocomplete
@@ -148,6 +238,7 @@ export const UpdateDeviceUnitModal = () => {
               rules={registerOptions.version}
               errors={errors}
               disableClearable
+              onChange={handleVersionChange}
             />
           </div>
 

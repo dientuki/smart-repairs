@@ -59,10 +59,10 @@ interface DeviceStore {
 
   deviceUnit: any;
   getDeviceUnitUpdate: (id: string, deviceUnit: string | null) => Promise<void>;
-  getDevicesByTypeAndBrand: (typeId: string, brandId: string) => Promise<void>;
+  getDevicesByTypeAndBrand: (typeId: string, brandId: string) => Promise<OptionType[]>;
   clear: (fields: string | string[]) => void;
 
-  confirmDeviceUnit: (data: any) => Promise<void>;
+  confirmDeviceUnit: (data: FieldValues) => Promise<boolean>;
 }
 
 export const useDeviceStore = create<DeviceStore>((set) => ({
@@ -170,17 +170,6 @@ export const useDeviceStore = create<DeviceStore>((set) => ({
     }
 
     return result;
-    /*
-
-    useBrandStore.getState().setBrands(result.brands);
-    useDeviceTypeStore.getState().setDeviceTypes(result.types);
-    set({
-      devices: result.devices,
-      deviceVersions: result.versions,
-      deviceUnitsByVersion: result.serials,
-      deviceUnit: result.deviceUnit,
-    });
-    */
   },
 
   clear: (fields: string | string[]) => {
@@ -203,16 +192,36 @@ export const useDeviceStore = create<DeviceStore>((set) => ({
   getDevicesByTypeAndBrand: async (
     typeId: string,
     brandId: string,
-  ): Promise<void> => {
+  ): Promise<OptionType[]> => {
     const devices: OptionType[] = await getDevicesByTypeAndBrand(
       typeId,
       brandId,
     );
-    set({ devices });
+    return devices;
   },
 
-  confirmDeviceUnit: async (data: any): Promise<void> => {
-    await confirmDeviceUnit(data);
-    //set({ deviceUnit: response });
+  confirmDeviceUnit: async (data: FieldValues): Promise<boolean> => {
+    const dunno = {
+
+      order: data.order,
+
+      brandid: data.brand.id,
+      brandlabel: data.brand.label,
+
+      typeid: data.type.id,
+      typelabel: data.type.label,
+
+      deviceid: data.device.id,
+      devicelabel: data.device.label,
+      url: data.url,
+
+      versionid: data.version.id,
+      versionlabel: data.version.label,
+
+      serialid: data.serial.id,
+      seriallabel: data.serial.label,
+    }
+    const status = await confirmDeviceUnit(dunno);
+    return status;
   },
 }));

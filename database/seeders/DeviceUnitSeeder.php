@@ -50,7 +50,7 @@ class DeviceUnitSeeder extends Seeder
 
         DB::table('device_units')->insert([
             'id' => (string) Str::ulid(),
-            'device_version_id' => $devices[2]->id,
+            'device_version_id' => $devices[0]->id,
             'team_id' => $teams[2]->id,
             'serial' => '456789123',
             'unlock_type' => UnlockEnum::Pattern,

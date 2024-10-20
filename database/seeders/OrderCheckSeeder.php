@@ -47,6 +47,30 @@ class OrderCheckSeeder extends Seeder
 
         DB::table('order_checks')->insert([
             'id' => (string) Str::ulid(),
+            'order_id' => $order[1]->id,
+            'damages' => json_encode($newDamages),
+            'damages_description' => 'Adicional al daño',
+            'features' => json_encode($newFeaturess),
+            'features_description' => 'Adicional al feature',
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+
+        DB::table('order_checks')->insert([
+            'id' => (string) Str::ulid(),
+            'order_id' => $order[2]->id,
+            'damages' => json_encode($newDamages),
+            'damages_description' => 'Adicional al daño',
+            'features' => json_encode($newFeaturess),
+            'features_description' => 'Adicional al feature',
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+
+        DB::table('order_checks')->insert([
+            'id' => (string) Str::ulid(),
             'order_id' => $order[3]->id,
             'damages' => json_encode($newDamages),
             'damages_description' => 'Adicional al daño',

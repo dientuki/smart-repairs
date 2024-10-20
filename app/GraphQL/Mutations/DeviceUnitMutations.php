@@ -232,7 +232,10 @@ final readonly class DeviceUnitMutations
 
             DB::commit();
 
-            return true;
+            return [
+                '__typename' => 'ConfirmDeviceUnitPayload',
+                'success' => true,
+            ];
         } catch (GraphQLBusinessException $e) {
             DB::rollBack();
 
