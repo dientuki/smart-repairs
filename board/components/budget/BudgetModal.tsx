@@ -34,7 +34,7 @@ export const BudgetModal = ({ order }: BudgetModalProps) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const {budget, description} = await initialValues(order);
+        const { budget, description } = await initialValues(order);
         setBudget(budget); // Descomentar para usarlo
         setDescription(description); // Descomentar para usarlo
       } catch (error) {
