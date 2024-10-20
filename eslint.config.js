@@ -28,6 +28,11 @@ export default [
       'promise/no-nesting': "error",
       'promise/prefer-await-to-callbacks': "error",
       'no-console': "error",
-    }
+    },
+    settings: {
+      react: {
+        version: 'detect',
+      },
+    },
   }
 ];
