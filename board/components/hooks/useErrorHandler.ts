@@ -11,6 +11,8 @@ export const useErrorHandler = () => {
     error: unknown,
     errorCallback?: (error: Record<string, string[]>) => void,
   ) => {
+    console.log('asdf',error);
+
     if (error instanceof ApiLayerError) {
       switch (error.errorType) {
         case ApiLayerErrorEnum.Validation:

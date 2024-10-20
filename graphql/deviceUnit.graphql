@@ -1,4 +1,5 @@
 union TemporaryDeviceUnitResult = TemporaryDeviceUnitPayload | ErrorPayload
+union ConfirmDeviceUnitResult = ConfirmDeviceUnitPayload | ErrorPayload
 
 extend type Query {
     deviceUnit(deviceUnitId: String!): DeviceUnit
@@ -28,7 +29,7 @@ extend type Mutation {
     addTemporaryDeviceUnit(input: TemporaryDeviceUnitInput): TemporaryDeviceUnitResult
         @field(resolver: "DeviceUnitMutations@createTemporaryDeviceUnit")
         @namespace(field: "App\\GraphQL\\Mutations")
-    confirmDeviceUnit(input: ConfirmDeviceUnitInput!): Boolean
+    confirmDeviceUnit(input: ConfirmDeviceUnitInput!): ConfirmDeviceUnitResult
         @field(resolver: "DeviceUnitMutations@confirmDeviceUnit")
         @namespace(field: "App\\GraphQL\\Mutations")
 }
@@ -54,6 +55,10 @@ input ConfirmDeviceUnitInput {
   versionid: ID!
   versionlabel: String!
   deviceunitid: String!
+}
+
+type ConfirmDeviceUnitPayload {
+    success: Boolean!
 }
 
 type DeviceUnit {

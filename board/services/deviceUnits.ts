@@ -255,7 +255,7 @@ export async function getTemporaryDeviceUnit(orderId: string): Promise<any> {
   };
 }
 
-export async function confirmDeviceUnit(data: any): Promise<any> {
+export async function confirmDeviceUnit(data: any): Promise<boolean> {
   const response = await graphqlRequest(`
         mutation {
             confirmDeviceUnit(input: {
@@ -272,10 +272,20 @@ export async function confirmDeviceUnit(data: any): Promise<any> {
                 versionid: "${handleNew(data.versionid)}",
                 versionlabel: "${data.versionlabel}",
                 deviceunitid: "${handleUndefined(data.deviceunitid)}"
-            })
+            }) {
+                __typename
+                ... on ConfirmDeviceUnitPayload {
+                    success
+                }
+                ... on ErrorPayload {
+                    status
+                    i18nKey
+                }
+            }
         }`);
 
   handleGraphQLErrors(response.errors);
+  handlePayloadErrors(response.data.confirmDeviceUnit);
 
   return response.data.confirmDeviceUnit;
 }
