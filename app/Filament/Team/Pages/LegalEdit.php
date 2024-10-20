@@ -12,7 +12,11 @@ use Filament\Facades\Filament;
 use Filament\Forms\Components\RichEditor;
 use Filament\Notifications\Notification;
 use Filament\Support\Exceptions\Halt;
+use Filament\Forms\ComponentContainer;
 
+/**
+ * @property ComponentContainer $form
+ */
 class LegalEdit extends Page implements HasForms
 {
     use InteractsWithForms;
