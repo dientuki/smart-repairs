@@ -49,6 +49,7 @@ export const UpdateDeviceUnitModal = () => {
 
   useEffect(() => {
     setValue("order", modal.params.order);
+    setValue("deviceunitid", modal.params.deviceUnitId);
     const fetchData = async () => {
       try {
         const data = await getDeviceUnitUpdate(modal.params.order, modal.params.deviceUnitId);
@@ -109,7 +110,6 @@ export const UpdateDeviceUnitModal = () => {
     [
       "device",
       "version",
-      "serial",
       "url",
     ].forEach((field) => setValue(field, ""));
 
@@ -166,7 +166,7 @@ export const UpdateDeviceUnitModal = () => {
       const status = await confirmDeviceUnit(data);
       if (status) {
         await getOrder(data.order);
-        getBoard();
+        await getBoard();
 
         modal.close();
       } else {
@@ -194,6 +194,7 @@ export const UpdateDeviceUnitModal = () => {
       {!isLoading && (
         <form onSubmit={handleSubmit(handleRegistration, handleErrorForm)} className="px-5 py-3 text-base min-h-0">
           <HiddenInput name='order' control={control} />
+          <HiddenInput name='deviceunitid' control={control} />
 
           <div className='grid gap-6 grid-cols-2 mt-4'>
             <ValidatedAutocomplete

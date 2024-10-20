@@ -193,7 +193,6 @@ final readonly class OrderMutations
                 'success' => true,
                 'order' => $order->id,
             ];
-
         } catch (GraphQLBusinessException $e) {
             DB::rollBack();
 
