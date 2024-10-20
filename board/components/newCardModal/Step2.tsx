@@ -132,12 +132,14 @@ export const Step2 = ({
       upsertDevices(upsertData.device);
 
       const tmp = {
-        serial: data.serial ? data.serial.label : '',
+        serial: data.serial ? data.serial.label : "",
         unlockType: data.unlocktype.id,
         unlockCode: data.unlockcode,
         device: upsertData.device,
-        deviceVersion: upsertData.deviceVersion ? upsertData.deviceVersion : { id: "", label: "", info: null },
-        deviceUnit: data.serial ? data.serial.id : '',
+        deviceVersion: upsertData.deviceVersion
+          ? upsertData.deviceVersion
+          : { id: "", label: "", info: null },
+        deviceUnit: data.serial ? data.serial.id : "",
       };
 
       onNext(tmp);

@@ -58,7 +58,10 @@ interface DeviceStore {
 
   deviceUnit: any;
   getDeviceUnitUpdate: (id: string, deviceUnit: string | null) => Promise<void>;
-  getDevicesByTypeAndBrand: (typeId: string, brandId: string) => Promise<OptionType[]>;
+  getDevicesByTypeAndBrand: (
+    typeId: string,
+    brandId: string,
+  ) => Promise<OptionType[]>;
 
   confirmDeviceUnit: (data: FieldValues) => Promise<boolean>;
 }
@@ -132,7 +135,9 @@ export const useDeviceStore = create<DeviceStore>((set) => ({
       brand: extraSingle(response.brand),
       type: extraSingle(response.deviceType),
       device: deviceSingle(response.device),
-      deviceVersion: response.deviceVersion ? extraSingle(response.deviceVersion) : null,
+      deviceVersion: response.deviceVersion
+        ? extraSingle(response.deviceVersion)
+        : null,
     };
 
     //return await addTemporaryDeviceUnit(data);
@@ -183,7 +188,6 @@ export const useDeviceStore = create<DeviceStore>((set) => ({
 
   confirmDeviceUnit: async (data: FieldValues): Promise<boolean> => {
     const dunno = {
-
       order: data.order,
 
       brandid: data.brand.id,
@@ -203,7 +207,7 @@ export const useDeviceStore = create<DeviceStore>((set) => ({
       seriallabel: data.serial.label,
 
       deviceunitid: data.deviceunitid,
-    }
+    };
     const status = await confirmDeviceUnit(dunno);
     return status;
   },

@@ -79,7 +79,7 @@ export const Step1 = ({ nextStep, customers, onNext }: Step1Props) => {
     if (isNew) {
       nextStep();
       return;
-    };
+    }
     setIsSubmitting(true);
     try {
       if (isUpdatedNeeded(data as CustomerInput)) {

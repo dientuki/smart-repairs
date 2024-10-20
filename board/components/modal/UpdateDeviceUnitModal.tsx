@@ -6,7 +6,12 @@ import { FieldErrors, FieldValues, useForm } from "react-hook-form";
 import { AbortControllerManager } from "@/helper/AbortControllerManager";
 import { useErrorHandler } from "../hooks/useErrorHandler";
 import { useBoardStore, useDeviceStore, useOrderStore } from "@/store";
-import { ActionButton, HiddenInput, InputField, ValidatedAutocomplete } from "../form";
+import {
+  ActionButton,
+  HiddenInput,
+  InputField,
+  ValidatedAutocomplete,
+} from "../form";
 import { GlobeAltIcon } from "@heroicons/react/16/solid";
 import { Icon } from "../Icon";
 import { ButtonType } from "@/types/enums";
@@ -29,7 +34,7 @@ export const UpdateDeviceUnitModal = () => {
   const { t } = useTranslation();
   const [isLoading, setIsLoading] = useState(true);
   const { handleError } = useErrorHandler();
-  const [ comboData, setComboData ] = useState<ComboData>();
+  const [comboData, setComboData] = useState<ComboData>();
   const { getOrder } = useOrderStore();
   const { getBoard } = useBoardStore();
   const {
@@ -37,14 +42,14 @@ export const UpdateDeviceUnitModal = () => {
     getDevicesByTypeAndBrand,
     getDeviceVersions,
     getDevicesUnitsByVersion,
-    confirmDeviceUnit
+    confirmDeviceUnit,
   } = useDeviceStore();
   const {
     handleSubmit,
     control,
     formState: { errors },
     setValue,
-    getValues
+    getValues,
   } = useForm();
 
   useEffect(() => {
@@ -52,21 +57,34 @@ export const UpdateDeviceUnitModal = () => {
     setValue("deviceunitid", modal.params.deviceUnitId);
     const fetchData = async () => {
       try {
-        const data = await getDeviceUnitUpdate(modal.params.order, modal.params.deviceUnitId);
+        const data = await getDeviceUnitUpdate(
+          modal.params.order,
+          modal.params.deviceUnitId,
+        );
         setComboData(data);
 
-        const brand = data.brands.find((b: any) => b.id === data.deviceUnit.brand_id);
-        const type = data.types.find((b: any) => b.id === data.deviceUnit.type_id);
-        const device = data.devices.find((b: any) => b.id === data.deviceUnit.device_id);
-        const version = data.versions.find((b: any) => b.id === data.deviceUnit.device_version_id);
-        const serial = data.serials.find((b: any) => b.label === data.deviceUnit.serial);
+        const brand = data.brands.find(
+          (b: any) => b.id === data.deviceUnit.brand_id,
+        );
+        const type = data.types.find(
+          (b: any) => b.id === data.deviceUnit.type_id,
+        );
+        const device = data.devices.find(
+          (b: any) => b.id === data.deviceUnit.device_id,
+        );
+        const version = data.versions.find(
+          (b: any) => b.id === data.deviceUnit.device_version_id,
+        );
+        const serial = data.serials.find(
+          (b: any) => b.label === data.deviceUnit.serial,
+        );
 
-        setValue('brand', brand);
-        setValue('type', type);
-        setValue('device', device);
-        setValue('version', version);
-        setValue('serial', serial);
-        setValue('url', data.deviceUnit.url);
+        setValue("brand", brand);
+        setValue("type", type);
+        setValue("device", device);
+        setValue("version", version);
+        setValue("serial", serial);
+        setValue("url", data.deviceUnit.url);
       } catch (error) {
         handleError(error);
       } finally {
@@ -104,34 +122,28 @@ export const UpdateDeviceUnitModal = () => {
     serial: {
       required: t("validation.required", { field: t("field.serial") }),
     },
-  }
+  };
 
   const clearByTypeAndBrand = async () => {
-    [
-      "device",
-      "version",
-      "url",
-    ].forEach((field) => setValue(field, ""));
+    ["device", "version", "url"].forEach((field) => setValue(field, ""));
 
     try {
       const devices = await getDevicesByTypeAndBrand(
         getValues("type").id,
-        getValues("brand").id
+        getValues("brand").id,
       );
 
       setComboData((prevComboData) => ({
         ...prevComboData,
-        devices: devices
+        devices: devices,
       }));
-
     } catch (error) {
       handleError(error);
     }
   };
 
   const handleDeviceChange = async () => {
-
-    const selected = getValues('device')
+    const selected = getValues("device");
     setValue("url", selected.info.url || "");
 
     try {
@@ -139,9 +151,8 @@ export const UpdateDeviceUnitModal = () => {
 
       setComboData((prevComboData) => ({
         ...prevComboData,
-        versions: versions
+        versions: versions,
       }));
-
     } catch (error) {
       handleError(error);
     }
@@ -152,16 +163,14 @@ export const UpdateDeviceUnitModal = () => {
       const serials = await getDevicesUnitsByVersion(getValues("version").id);
       setComboData((prevComboData) => ({
         ...prevComboData,
-        serials: serials
+        serials: serials,
       }));
     } catch (error) {
       handleError(error);
     }
   };
 
-
   const handleRegistration = async (data: FieldValues) => {
-
     try {
       const status = await confirmDeviceUnit(data);
       if (status) {
@@ -170,29 +179,32 @@ export const UpdateDeviceUnitModal = () => {
 
         modal.close();
       } else {
-        alert('error')
+        alert("error");
       }
     } catch (error) {
       handleError(error);
     }
-
-
   };
 
   const handleErrorForm = (errors: FieldErrors<FieldValues>) => {
-    console.log(errors)
+    console.log(errors);
   };
 
   return (
-    <ModalLayout width='728px' minHeight='460px'
+    <ModalLayout
+      width='728px'
+      minHeight='460px'
       title={
         <h2 className='flex flex-row items-center gap-2 px-5 py-3 text-2xl font-bold tracking-tight sm:text-3xl border-b border-gray-200 dark:border-white/10'>
-          <span className="first-letter:uppercase">{t("new_order.title")}</span>
+          <span className='first-letter:uppercase'>{t("new_order.title")}</span>
         </h2>
       }
     >
       {!isLoading && (
-        <form onSubmit={handleSubmit(handleRegistration, handleErrorForm)} className="px-5 py-3 text-base min-h-0">
+        <form
+          onSubmit={handleSubmit(handleRegistration, handleErrorForm)}
+          className='px-5 py-3 text-base min-h-0'
+        >
           <HiddenInput name='order' control={control} />
           <HiddenInput name='deviceunitid' control={control} />
 
@@ -262,16 +274,12 @@ export const UpdateDeviceUnitModal = () => {
               rules={registerOptions.serial}
               errors={errors}
             />
-            </div>
-          <ActionButton
-            type={ButtonType.Submit}
-            className='w-full mt-4'
-          >
+          </div>
+          <ActionButton type={ButtonType.Submit} className='w-full mt-4'>
             {t("action.update")}
           </ActionButton>
         </form>
       )}
     </ModalLayout>
-  )
-
-}
+  );
+};
