@@ -39,23 +39,21 @@ const orderDataInit: OrderData = {
     deviceVersion: { id: "", label: "", info: null },
     deviceUnit: "",
   },
-  money: 0
+  money: 0,
 };
 
 export const NewCardModal = () => {
   const modal = useModalWindow();
   const date = new Date();
   const { user } = useUserStore();
-  const [ isLoading, setIsLoading ] = useState(true);
-  const [ selectedIndex, setSelectedIndex ] = useState(0);
-  const [ initialData, setInitialData ] = useState<OrderCreationData>();
+  const [isLoading, setIsLoading] = useState(true);
+  const [selectedIndex, setSelectedIndex] = useState(0);
+  const [initialData, setInitialData] = useState<OrderCreationData>();
   const { t } = useTranslation();
   const { getBoard } = useBoardStore();
   const { initializeOrderCreationData, createOrder } = useOrderStore();
-  const [ orderData, setOrderData ] = useState<OrderData>(orderDataInit);
+  const [orderData, setOrderData] = useState<OrderData>(orderDataInit);
   const { handleError } = useErrorHandler();
-
-  console.log(orderData);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -104,12 +102,10 @@ export const NewCardModal = () => {
   };
 
   const saveOrder = async (data: FieldValues) => {
-    //console.log("warning, try to add order", orderData, data);
     try {
       const tmp = orderData;
       tmp.money = data.money;
       const order = await createOrder(tmp, data.items);
-      console.log(order);
       await getBoard();
       modal.close();
     } catch (error) {
@@ -132,7 +128,7 @@ export const NewCardModal = () => {
       title={
         <h2 className='flex flex-row items-center gap-2 px-5 py-3 text-2xl font-bold tracking-tight sm:text-3xl border-b border-gray-200 dark:border-white/10'>
           <Icon size={7} icon={InboxIcon} />
-          <span className="first-letter:uppercase">{t("new_order.title")}</span>
+          <span className='first-letter:uppercase'>{t("new_order.title")}</span>
         </h2>
       }
     >

@@ -87,7 +87,6 @@ export const Board = () => {
       } catch (error) {
         handleError(error);
       }
-
     }
 
     // update board

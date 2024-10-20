@@ -7,12 +7,9 @@ import {
 } from "@/services/orders";
 import { addComment, deleteComment, updateComment } from "@/services/comments";
 import { createOrder } from "@/services/orders";
-import {
-  useBoardStore,
-} from "@/store";
+import { useBoardStore } from "@/store";
 import { device, extra } from "@/helper/reduceHelpers";
 import { CountOperation } from "@/types/enums";
-
 
 interface OrderStore {
   order: Order;
@@ -51,7 +48,6 @@ export const useOrderStore = create<OrderStore>((set) => ({
   tmpOrder: {} as NewOrder,
   getOrder: async (id: string) => {
     const order = await getOrder(id);
-    console.log(order);
     set({ order });
   },
 
@@ -171,20 +167,17 @@ export const useOrderStore = create<OrderStore>((set) => ({
   },
 
   createOrder: async (orderData: OrderData, items): Promise<string> => {
-
-    console.log(orderData);
-
     const orderTable = {
       customer: orderData.order.customer.id,
       observation: orderData.order.observation,
-    }
+    };
 
     const orderChecksTable = {
       damagesDescription: orderData.orderChecks.damagesDescription,
       featuresDescription: orderData.orderChecks.featuresDescription,
       damages: orderData.orderChecks.damages,
       features: orderData.orderChecks.features,
-    }
+    };
 
     const tmpDeviceUnitTable = {
       device: orderData.tmpDeviceUnit.device.id,
@@ -193,7 +186,7 @@ export const useOrderStore = create<OrderStore>((set) => ({
       unlockCode: orderData.tmpDeviceUnit.unlockCode,
       unlockType: orderData.tmpDeviceUnit.unlockType,
       serial: orderData.tmpDeviceUnit.serial,
-    }
+    };
 
     const normalizedItems: ItemToDB[] = items.reduce(
       (acc: ItemToDB[], item: ViewItem) => {
@@ -216,10 +209,15 @@ export const useOrderStore = create<OrderStore>((set) => ({
       [],
     );
 
+    const order = await createOrder(
+      orderTable,
+      orderChecksTable,
+      tmpDeviceUnitTable,
+      orderData.money,
+      normalizedItems,
+    );
 
-    const order = await createOrder(orderTable, orderChecksTable, tmpDeviceUnitTable, orderData.money, normalizedItems );
-
-    return order.order
+    return order.order;
   },
 
   clearAfterCreateOrder: () => {

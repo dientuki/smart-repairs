@@ -96,7 +96,9 @@ export const InputField = ({
       };
 
   return (
-    <Field className={`flex ${layout === Layout.Column ? 'flex-col' : 'flex-row gap-4'}`}>
+    <Field
+      className={`flex ${layout === Layout.Column ? "flex-col" : "flex-row gap-4"}`}
+    >
       <Label
         htmlFor={name}
         className={`${labelless ? "sr-only" : "first-letter:uppercase text-base font-medium text-gray-900"} ${
@@ -105,7 +107,9 @@ export const InputField = ({
       >
         {label}
       </Label>
-      <div className={`flex flex-col gap-2 ${layout === Layout.Row ? 'w-full' : ''}`}>
+      <div
+        className={`flex flex-col gap-2 ${layout === Layout.Row ? "w-full" : ""}`}
+      >
         <div
           className={`flex rounded-lg shadow-sm ring-1 transition duration-75 bg-white dark:bg-white/5
               [&:not(:has(.fi-ac-action:focus))]:focus-within:ring-2

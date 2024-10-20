@@ -1,8 +1,18 @@
 import { arrayToString } from "@/helper/stringHelpers";
-import { graphqlRequest, handleGraphQLErrors, handlePayloadErrors } from "@/helper/graphqlHelpers";
+import {
+  graphqlRequest,
+  handleGraphQLErrors,
+  handlePayloadErrors,
+} from "@/helper/graphqlHelpers";
 import { TypedColumn } from "@/types/enums";
 
-export const createOrder = async (orderTable, orderChecksTable, tmpDeviceUnitTable, money, items) => {
+export const createOrder = async (
+  orderTable,
+  orderChecksTable,
+  tmpDeviceUnitTable,
+  money,
+  items,
+) => {
   const response = await graphqlRequest(`
                         mutation {
                             addOrder(
