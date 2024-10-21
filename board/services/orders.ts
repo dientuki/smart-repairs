@@ -116,6 +116,15 @@ export const getOrder = async (id: string) => {
                     }
                 }
 
+                budget {
+                  total
+                }
+
+                payments {
+                  amount
+                  created_at
+                }
+
                 orderCheck {
                   damages
                   damages_description
@@ -177,6 +186,8 @@ export const getOrder = async (id: string) => {
       features: JSON.parse(response.data.order.orderCheck.features),
       featuresDescription: response.data.order.orderCheck.features_description,
     },
+    total: response.data.order.budget.total,
+    payments: response.data.order.payments,
   } as OrderExpanded;
 };
 
@@ -383,4 +394,33 @@ export const updateObservation = async (
   handleGraphQLErrors(response.errors);
 
   return response.data.updateObservation;
+};
+
+export const addPayment = async (
+  order: string,
+  amount: number,
+): Promise<any> => {
+  const response = await graphqlRequest(`
+    mutation {
+      addPayment(
+        order: "${order}",
+        amount: ${amount}
+      ) {
+        __typename
+        ... on AddPaymentPayload {
+          success
+          amount
+          created_at
+        }
+        ... on ErrorPayload {
+          status
+          i18nKey
+        }
+      }
+    }
+  `);
+
+  handleGraphQLErrors(response.errors);
+
+  return response.data.addPayment;
 };

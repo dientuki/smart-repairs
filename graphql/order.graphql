@@ -1,5 +1,6 @@
 union AddOrderResult = AddOrderPayload | ErrorPayload
 union UpdateOrderResult = UpdateOrderPayload | ErrorPayload
+union AddPaymentResult = AddPaymentPayload | ErrorPayload
 
 extend type Query {
     orders: [Orders!]!
@@ -26,6 +27,9 @@ extend type Mutation {
     updateObservation(id: String!, observation: String! @rules(apply: ["required"])): Boolean!
         @field(resolver: "OrderMutations@updateObservation")
         @namespace(field: "App\\GraphQL\\Mutations")
+    addPayment(order: String!, amount: Float!): AddPaymentResult!
+        @field(resolver: "OrderPaymentMutations@addPayment")
+        @namespace(field: "App\\GraphQL\\Mutations")
 }
 
 input OrderInput {
@@ -40,6 +44,12 @@ type UpdateOrderPayload {
 type AddOrderPayload {
     success: Boolean!
     order: String!
+}
+
+type AddPaymentPayload {
+    success: Boolean!
+    amount: Float!
+    created_at: DateTime!
 }
 
 input OrderChecks {
@@ -82,6 +92,13 @@ type Order {
     hasBudget: Boolean!
     diagnosis: String
     orderCheck: OrderCheck
+    payments: [Payment!]
+    budget: Budget
+}
+
+type Payment {
+    amount: Float!
+    created_at: DateTime!
 }
 
 type Orders {

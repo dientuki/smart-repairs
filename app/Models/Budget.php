@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Traits\HasTeamTrait;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 
 class Budget extends ModelAuditable
 {
@@ -13,13 +14,19 @@ class Budget extends ModelAuditable
     protected $fillable = [
         'order_id',
         'user_id',
-        'total',
         'subtotal',
         'discount',
         'status',
         'valid_until',
         'team_id'
     ];
+
+    public function total(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value, $attributes) => $attributes['subtotal'] - $attributes['discount'],
+        );
+    }
 
     public function order(): BelongsTo
     {
