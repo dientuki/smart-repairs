@@ -18,7 +18,7 @@ export const UnlockPattern = () => {
       colorBackground = StyleColor.Info;
       break;
     case "none":
-      code = <h1> Sin Código </h1>;
+      code = "Sin Código";
       colorBackground = StyleColor.Warning;
       break;
   }

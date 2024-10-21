@@ -91,12 +91,14 @@ export const Money = () => {
             </div>
           ))}
 
-        <div className='flex justify-between w-full'>
-          <p className='w-2/3 first-letter:uppercase'>Resta</p>
-          <p className='w-1/3'>
-            {user.currency} {rest}
-          </p>
-        </div>
+        {order.hasBudget && (
+          <div className='flex justify-between w-full'>
+            <p className='w-2/3 first-letter:uppercase'>Resta</p>
+            <p className='w-1/3'>
+              {user.currency} {rest}
+            </p>
+          </div>
+        )}
 
         <form
           onSubmit={handleSubmit(handleRegistration, handleErrorForm)}
