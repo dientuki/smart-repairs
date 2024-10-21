@@ -4,6 +4,7 @@ import {
   getOrderCreationData,
   updateDiagnosis,
   updateObservation,
+  addPayment,
 } from "@/services/orders";
 import { addComment, deleteComment, updateComment } from "@/services/comments";
 import { createOrder } from "@/services/orders";
@@ -41,6 +42,8 @@ interface OrderStore {
 
   updateDiagnosis: (diagnosis: string) => Promise<boolean>;
   updateObservation: (observation: string) => Promise<boolean>;
+
+  addPayment: (payment: number) => Promise<boolean>;
 }
 
 export const useOrderStore = create<OrderStore>((set) => ({
@@ -254,5 +257,29 @@ export const useOrderStore = create<OrderStore>((set) => ({
       set({ order: { ...useOrderStore.getState().order, observation } });
     }
     return status;
+  },
+
+  addPayment: async (ammount: number): Promise<boolean> => {
+    const payment = await addPayment(
+      useOrderStore.getState().order.$id,
+      ammount,
+    );
+
+    if (payment.success) {
+      set((state) => ({
+        order: {
+          ...state.order,
+          payments: [
+            ...state.order.payments,
+            {
+              amount: payment.amount,
+              created_at: payment.created_at,
+            },
+          ],
+        },
+      }));
+    }
+
+    return payment.success;
   },
 }));

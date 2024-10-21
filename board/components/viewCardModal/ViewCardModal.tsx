@@ -18,6 +18,7 @@ import {
   ChecklistDisplay,
   Diagnosis,
   OrderStatus,
+  Money,
 } from "@/components/viewCardModal";
 import { AbortControllerManager } from "@/helper/AbortControllerManager";
 
@@ -82,6 +83,7 @@ export const ViewCardModal = () => {
             <div className='basis-1/4 flex flex-col gap-4 overflow-y-scroll min-h-full max-h-full pr-2 pl-1'>
               <OrderStatus status={t(`status.${order.status}`)} />
               <Details />
+              <Money />
               <ChecklistDisplay
                 title={t("order.damages")}
                 checklist={order.orderCheck.damages}
