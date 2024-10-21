@@ -40,7 +40,6 @@ export const Money = () => {
   };
 
   const handleRegistration = async (data: FieldValues) => {
-    console.log(data);
     if (isSubmitting) return;
     setIsSubmitting(true);
     try {

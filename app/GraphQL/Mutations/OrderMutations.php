@@ -69,7 +69,6 @@ final readonly class OrderMutations
 
     public function create(null $root, array $args, GraphQLContext $context, ResolveInfo $resolveInfo): mixed
     {
-
         try {
             DB::beginTransaction();
 
@@ -107,84 +106,87 @@ final readonly class OrderMutations
                 ]);
             }
 
-            $budget = Budget::create(
-                [
-                    'order_id' => $order->id,
-                    'user_id' => $this->getUserId(),
-                    'team_id' => $this->getTeamId(),
-                ]
-            );
+            if (count($args['budgetItems']) > 0) {
+                $budget = Budget::create(
+                    [
+                        'order_id' => $order->id,
+                        'user_id' => $this->getUserId(),
+                        'team_id' => $this->getTeamId(),
+                    ]
+                );
 
-            $part = (new Part())->getMorphClass();
-            $discount = (new Discount())->getMorphClass();
-            $serviceJob = (new ServiceJob())->getMorphClass();
+                $part = (new Part())->getMorphClass();
+                $discount = (new Discount())->getMorphClass();
+                $serviceJob = (new ServiceJob())->getMorphClass();
 
-            $subtotal = 0;
-            $discountValue = 0;
-            $discountPercentageTotal = [];
+                $subtotal = 0;
+                $discountValue = 0;
+                $discountPercentageTotal = [];
 
-            foreach ($args['budgetItems'] as $key => $budgetItem) {
-                if (in_array($budgetItem['itemableType'], [$discount, $serviceJob])) {
-                    if ($budgetItem['quantity'] != 1) {
-                        throw new GraphQLBusinessException('budget.error.quantity');
+                foreach ($args['budgetItems'] as $key => $budgetItem) {
+                    if (in_array($budgetItem['itemableType'], [$discount, $serviceJob])) {
+                        if ($budgetItem['quantity'] != 1) {
+                            throw new GraphQLBusinessException('budget.error.quantity');
+                        }
+                    }
+
+                    $item = BudgetItem::find($budgetItem['id']);
+                    if ($item) {
+                        $item->update([
+                            'itemable_id' => $budgetItem['itemableId'],
+                            'itemable_type' => $budgetItem['itemableType'],
+                            'quantity' => $budgetItem['quantity'],
+                            'unit_price' => $budgetItem['unitPrice'],
+                            'item_total' => $budgetItem['quantity'] * $budgetItem['unitPrice'],
+                            'include_in_sum' => $budgetItem['includeInSum']
+                        ]);
+                    } else {
+                        $item = BudgetItem::create([
+                            'budget_id' => $budget->id,
+                            'itemable_id' => $budgetItem['itemableId'],
+                            'itemable_type' => $budgetItem['itemableType'],
+                            'quantity' => $budgetItem['quantity'],
+                            'unit_price' => $budgetItem['unitPrice'],
+                            'item_total' => $budgetItem['quantity'] * $budgetItem['unitPrice'],
+                            'include_in_sum' => $budgetItem['includeInSum']
+                        ]);
+                    }
+
+                    switch ($budgetItem['itemableType']) {
+                        case $part:
+                        case $serviceJob:
+                            $subtotal += ($item->unit_price * $item->quantity);
+                            break;
+                        case $discount:
+                            if (
+                                Discount::where('id', $budgetItem['itemableId'])
+                                    ->where('type', DiscountEnum::Percentage)
+                                    ->exists()
+                            ) {
+                                $discountPercentageTotal[] = [
+                                    'id' => $item->id,
+                                    'discount' => $item->unit_price,
+                                ];
+                            } else {
+                                $discountValue += $item->unit_price;
+                            }
+                            break;
                     }
                 }
 
-                $item = BudgetItem::find($budgetItem['id']);
-                if ($item) {
-                    $item->update([
-                        'itemable_id' => $budgetItem['itemableId'],
-                        'itemable_type' => $budgetItem['itemableType'],
-                        'quantity' => $budgetItem['quantity'],
-                        'unit_price' => $budgetItem['unitPrice'],
-                        'item_total' => $budgetItem['quantity'] * $budgetItem['unitPrice'],
-                        'include_in_sum' => $budgetItem['includeInSum']
-                    ]);
-                } else {
-                    $item = BudgetItem::create([
-                        'budget_id' => $budget->id,
-                        'itemable_id' => $budgetItem['itemableId'],
-                        'itemable_type' => $budgetItem['itemableType'],
-                        'quantity' => $budgetItem['quantity'],
-                        'unit_price' => $budgetItem['unitPrice'],
-                        'item_total' => $budgetItem['quantity'] * $budgetItem['unitPrice'],
-                        'include_in_sum' => $budgetItem['includeInSum']
-                    ]);
+                if (count($discountPercentageTotal) > 0) {
+                    foreach ($discountPercentageTotal as $discountPercentage) {
+                        $discountTmp = round(( ($subtotal * $discountPercentage['discount']) / 100), 2);
+                        $discountValue += $discountTmp;
+                        BudgetItem::find($discountPercentage['id'])->update(['item_total' => $discountTmp]);
+                    }
                 }
 
-                switch ($budgetItem['itemableType']) {
-                    case $part:
-                    case $serviceJob:
-                        $subtotal += ($item->unit_price * $item->quantity);
-                        break;
-                    case $discount:
-                        if (
-                            Discount::where('id', $budgetItem['itemableId'])
-                                ->where('type', DiscountEnum::Percentage)
-                                ->exists()
-                        ) {
-                            $discountPercentageTotal[] = [
-                                'id' => $item->id,
-                                'discount' => $item->unit_price,
-                            ];
-                        } else {
-                            $discountValue += $item->unit_price;
-                        }
-                        break;
-                }
+                $budget->subtotal = $subtotal;
+                $budget->discount = $discountValue;
+                $budget->save();
             }
 
-            if (count($discountPercentageTotal) > 0) {
-                foreach ($discountPercentageTotal as $discountPercentage) {
-                    $discountTmp = round(( ($subtotal * $discountPercentage['discount']) / 100), 2);
-                    $discountValue += $discountTmp;
-                    BudgetItem::find($discountPercentage['id'])->update(['item_total' => $discountTmp]);
-                }
-            }
-
-            $budget->subtotal = $subtotal;
-            $budget->discount = $discountValue;
-            $budget->save();
 
             DB::commit();
 
