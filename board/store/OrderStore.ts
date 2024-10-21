@@ -193,6 +193,8 @@ export const useOrderStore = create<OrderStore>((set) => ({
 
     const normalizedItems: ItemToDB[] = items.reduce(
       (acc: ItemToDB[], item: ViewItem) => {
+        if (!item.itemable) return acc;
+
         acc.push({
           id: item.id,
           itemableId: item.itemable.id,
