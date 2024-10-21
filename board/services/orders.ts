@@ -186,7 +186,7 @@ export const getOrder = async (id: string) => {
       features: JSON.parse(response.data.order.orderCheck.features),
       featuresDescription: response.data.order.orderCheck.features_description,
     },
-    total: response.data.order.budget.total,
+    total: response.data.order.budget?.total || 0,
     payments: response.data.order.payments,
   } as OrderExpanded;
 };
