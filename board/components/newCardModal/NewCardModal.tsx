@@ -140,7 +140,7 @@ export const NewCardModal = () => {
               selectedIndex={selectedIndex}
               className='flex flex-col min-h-full max-h-full rounded-xl bg-white shadow-sm ring-1 ring-gray-950/5 dark:bg-gray-900 dark:ring-white/10'
             >
-              <TabList className='grid divide-y divide-gray-200 dark:divide-white/5 md:grid-flow-col md:divide-y-0 md:overflow-x-auto border-b border-gray-200 dark:border-white/10'>
+              <TabList className='grid grid-cols-4 divide-y divide-gray-200 dark:divide-white/5 md:grid-flow-col md:divide-y-0 border-b border-gray-200 dark:border-white/10'>
                 <TabListTab
                   index={0}
                   title={t("order.customer")}
@@ -168,9 +168,6 @@ export const NewCardModal = () => {
                 <TabListTab
                   index={3}
                   title={t("new_order.budget")}
-                  subtitle={t("new_order.more_info", {
-                    record: t("new_order.budget"),
-                  })}
                   selectedIndex={selectedIndex}
                   hideArrow
                 />
