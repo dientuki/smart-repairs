@@ -9,7 +9,7 @@ import {
   InputField,
   SimpleAutocomplete,
 } from "@/components/form";
-import { useCustomerStore, useOrderStore } from "@/store";
+import { useCustomerStore } from "@/store";
 import { ButtonType, OperationStatus } from "@/types/enums";
 import { Icon } from "../Icon";
 import { useErrorHandler } from "@/components/hooks/useErrorHandler";
@@ -24,10 +24,9 @@ type Step1Props = {
 
 export const Step1 = ({ nextStep, customers, onNext }: Step1Props) => {
   const { upsertCustomer } = useCustomerStore();
-  const { setCreateOrderSelectedData, clearCreateOrderSelectedData } =
-    useOrderStore();
   const { t } = useTranslation();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isNew, setIsNew] = useState(false);
   const {
     handleSubmit,
     control,
@@ -53,6 +52,7 @@ export const Step1 = ({ nextStep, customers, onNext }: Step1Props) => {
   };
 
   const isUpdatedNeeded = (data: CustomerInput): boolean => {
+    if (isNew) return false;
     const customer = localCustomers.find((c) => c.id === data.id);
     if (!customer || !customer.info || typeof customer.info === "string") {
       return true;
@@ -76,6 +76,10 @@ export const Step1 = ({ nextStep, customers, onNext }: Step1Props) => {
 
   const handleRegistration = async (data: FieldValues) => {
     if (isSubmitting) return;
+    if (isNew) {
+      nextStep();
+      return;
+    }
     setIsSubmitting(true);
     try {
       if (isUpdatedNeeded(data as CustomerInput)) {
@@ -94,6 +98,7 @@ export const Step1 = ({ nextStep, customers, onNext }: Step1Props) => {
                 info: upsertData.customer.info,
               },
             ]);
+            setIsNew(true);
             break;
           case OperationStatus.Updated:
             toast.success(
@@ -110,6 +115,8 @@ export const Step1 = ({ nextStep, customers, onNext }: Step1Props) => {
           case OperationStatus.NoChange:
             break;
         }
+        onNext(upsertData.customer);
+        nextStep();
       }
       const customer = localCustomers.find((c) => c.id === data.id);
       if (customer) {
@@ -172,8 +179,8 @@ export const Step1 = ({ nextStep, customers, onNext }: Step1Props) => {
     reason?: string,
   ) => {
     if (newValue && newValue.id != "new" && reason === "selectOption") {
+      setIsNew(false);
       if (typeof newValue.info === "object" && newValue.info !== null) {
-        setCreateOrderSelectedData({ customer: newValue });
         setValue("id", newValue.id);
         setValue("firstname", newValue.info.first_name);
         setValue("lastname", newValue.info.last_name);
@@ -186,7 +193,7 @@ export const Step1 = ({ nextStep, customers, onNext }: Step1Props) => {
     }
 
     if (reason === "clear" || newValue?.id == "new") {
-      clearCreateOrderSelectedData("customer");
+      setIsNew(false);
       reset();
     }
   };

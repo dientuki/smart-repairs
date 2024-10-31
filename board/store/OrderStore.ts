@@ -4,29 +4,13 @@ import {
   getOrderCreationData,
   updateDiagnosis,
   updateObservation,
+  addPayment,
 } from "@/services/orders";
 import { addComment, deleteComment, updateComment } from "@/services/comments";
 import { createOrder } from "@/services/orders";
-import {
-  useCustomerStore,
-  useDeviceStore,
-  useBrandStore,
-  useDeviceTypeStore,
-  useBoardStore,
-} from "@/store";
+import { useBoardStore } from "@/store";
 import { device, extra } from "@/helper/reduceHelpers";
 import { CountOperation } from "@/types/enums";
-import { O } from "vitest/dist/chunks/environment.CzISCQ7o.js";
-import { serialize } from "v8";
-
-interface CreateOrderSelectedData {
-  customer?: OptionType | null;
-  deviceId?: string | null;
-  deviceLabel?: string | null;
-  deviceTypeId?: string | null;
-  deviceTypeLabel?: string | null;
-  temporaryDeviceUnitId?: string | null;
-}
 
 interface OrderStore {
   order: Order;
@@ -49,8 +33,6 @@ interface OrderStore {
     deviceTypeLabel: string | null;
     temporaryDeviceUnitId: string | null;
   };
-  setCreateOrderSelectedData: (data: CreateOrderSelectedData) => void;
-  clearCreateOrderSelectedData: (field: keyof CreateOrderSelectedData) => void;
 
   devicesChecks: DeviceCheck[];
 
@@ -60,6 +42,8 @@ interface OrderStore {
 
   updateDiagnosis: (diagnosis: string) => Promise<boolean>;
   updateObservation: (observation: string) => Promise<boolean>;
+
+  addPayment: (payment: number) => Promise<boolean>;
 }
 
 export const useOrderStore = create<OrderStore>((set) => ({
@@ -67,7 +51,6 @@ export const useOrderStore = create<OrderStore>((set) => ({
   tmpOrder: {} as NewOrder,
   getOrder: async (id: string) => {
     const order = await getOrder(id);
-    console.log(order);
     set({ order });
   },
 
@@ -177,33 +160,6 @@ export const useOrderStore = create<OrderStore>((set) => ({
 
   devicesChecks: [],
 
-  setCreateOrderSelectedData: (data: CreateOrderSelectedData): void => {
-    set((state) => ({
-      createOrderSelectedData: {
-        customer: data.customer ?? state.createOrderSelectedData.customer,
-        deviceId: data.deviceId ?? state.createOrderSelectedData.deviceId,
-        deviceLabel:
-          data.deviceLabel ?? state.createOrderSelectedData.deviceLabel,
-        deviceTypeId:
-          data.deviceTypeId ?? state.createOrderSelectedData.deviceTypeId,
-        deviceTypeLabel:
-          data.deviceTypeLabel ?? state.createOrderSelectedData.deviceTypeLabel,
-        temporaryDeviceUnitId:
-          data.temporaryDeviceUnitId ??
-          state.createOrderSelectedData.temporaryDeviceUnitId,
-      },
-    }));
-  },
-
-  clearCreateOrderSelectedData: (field: keyof CreateOrderSelectedData) => {
-    set((state) => ({
-      createOrderSelectedData: {
-        ...state.createOrderSelectedData,
-        [field]: null,
-      },
-    }));
-  },
-
   setTmpOrder: (newTmpOrder: any) => {
     set((state) => ({
       tmpOrder: {
@@ -214,20 +170,17 @@ export const useOrderStore = create<OrderStore>((set) => ({
   },
 
   createOrder: async (orderData: OrderData, items): Promise<string> => {
-
-    console.log(orderData);
-
     const orderTable = {
       customer: orderData.order.customer.id,
-      obervation: orderData.order.obervation,
-    }
+      observation: orderData.order.observation,
+    };
 
     const orderChecksTable = {
       damagesDescription: orderData.orderChecks.damagesDescription,
       featuresDescription: orderData.orderChecks.featuresDescription,
       damages: orderData.orderChecks.damages,
       features: orderData.orderChecks.features,
-    }
+    };
 
     const tmpDeviceUnitTable = {
       device: orderData.tmpDeviceUnit.device.id,
@@ -236,22 +189,40 @@ export const useOrderStore = create<OrderStore>((set) => ({
       unlockCode: orderData.tmpDeviceUnit.unlockCode,
       unlockType: orderData.tmpDeviceUnit.unlockType,
       serial: orderData.tmpDeviceUnit.serial,
-    }
+    };
 
-    const order = createOrder(orderTable, orderChecksTable, tmpDeviceUnitTable, orderData.money, items );
+    const normalizedItems: ItemToDB[] = items.reduce(
+      (acc: ItemToDB[], item: ViewItem) => {
+        if (!item.itemable) return acc;
 
-    /*
-    const tmpOrder = useOrderStore.getState().tmpOrder;
-    const createOrderSelectedData =
-      useOrderStore.getState().createOrderSelectedData;
-    tmpOrder.customerId = createOrderSelectedData.customer?.id;
-    tmpOrder.tempDeviceUnitId = createOrderSelectedData.temporaryDeviceUnitId;
-    tmpOrder.deviceid = createOrderSelectedData.deviceId;
+        acc.push({
+          id: item.id,
+          itemableId: item.itemable.id,
+          itemableType: item.itemable.info.item_type,
+          quantity:
+            typeof item.quantity === "number"
+              ? item.quantity
+              : parseInt(item.quantity, 10),
+          unitPrice:
+            typeof item.unitPrice === "number"
+              ? item.unitPrice
+              : parseFloat(item.unitPrice),
+          includeInSum: item.includeInSum,
+        });
+        return acc;
+      },
+      [],
+    );
 
-    await createOrder(tmpOrder);
+    const order = await createOrder(
+      orderTable,
+      orderChecksTable,
+      tmpDeviceUnitTable,
+      orderData.money,
+      normalizedItems,
+    );
 
-    useOrderStore.getState().clearAfterCreateOrder();
-    */
+    return order.order;
   },
 
   clearAfterCreateOrder: () => {
@@ -288,5 +259,29 @@ export const useOrderStore = create<OrderStore>((set) => ({
       set({ order: { ...useOrderStore.getState().order, observation } });
     }
     return status;
+  },
+
+  addPayment: async (ammount: number): Promise<boolean> => {
+    const payment = await addPayment(
+      useOrderStore.getState().order.$id,
+      ammount,
+    );
+
+    if (payment.success) {
+      set((state) => ({
+        order: {
+          ...state.order,
+          payments: [
+            ...state.order.payments,
+            {
+              amount: payment.amount,
+              created_at: payment.created_at,
+            },
+          ],
+        },
+      }));
+    }
+
+    return payment.success;
   },
 }));

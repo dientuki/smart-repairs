@@ -39,7 +39,7 @@ type TableProps = {
   budget?: ViewBudget;
   description: OptionType[];
   required?: boolean;
-  isSimple: boolean;
+  isSimple?: boolean;
 };
 
 export const BudgetTable = ({

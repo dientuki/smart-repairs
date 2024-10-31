@@ -82,6 +82,6 @@ export enum ApiLayerErrorEnum {
 }
 
 export enum Layout {
-  Column = 'col',
-  Row = 'row',
+  Column = "col",
+  Row = "row",
 }

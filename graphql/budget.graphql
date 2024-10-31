@@ -38,6 +38,7 @@ type Budget {
     subtotal: Float!
     discount: Float!
     items: [BudgetItem]
+    total: Float
 }
 
 type BudgetItem {

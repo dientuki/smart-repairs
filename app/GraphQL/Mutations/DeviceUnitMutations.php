@@ -22,7 +22,8 @@ final readonly class DeviceUnitMutations
 {
     use UserDataTrait;
 
-    private function separarString($input) {
+    private function separarString($input)
+    {
         $var1 = $input;
         $var2 = '';
 
@@ -172,6 +173,8 @@ final readonly class DeviceUnitMutations
         $order = Order::where('id', $args['input']['order'])->first();
         $tmpOrder = TemporaryDeviceUnit::where('order_id', $args['input']['order'])->first();
 
+        //dd($tmpOrder, $args);
+
         try {
             DB::beginTransaction();
 
@@ -231,7 +234,10 @@ final readonly class DeviceUnitMutations
 
             DB::commit();
 
-            return true;
+            return [
+                '__typename' => 'ConfirmDeviceUnitPayload',
+                'success' => true,
+            ];
         } catch (GraphQLBusinessException $e) {
             DB::rollBack();
 

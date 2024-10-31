@@ -1,20 +1,30 @@
 import { arrayToString } from "@/helper/stringHelpers";
-import { graphqlRequest, handleGraphQLErrors, handlePayloadErrors } from "@/helper/graphqlHelpers";
+import {
+  graphqlRequest,
+  handleGraphQLErrors,
+  handlePayloadErrors,
+} from "@/helper/graphqlHelpers";
 import { TypedColumn } from "@/types/enums";
 
-export const createOrder = async (orderTable, orderChecksTable, tmpDeviceUnitTable, money, items) => {
+export const createOrder = async (
+  orderTable,
+  orderChecksTable,
+  tmpDeviceUnitTable,
+  money,
+  items,
+) => {
   const response = await graphqlRequest(`
                         mutation {
                             addOrder(
                               order: {
                                 customer: "${orderTable.customer}"
-                                obervation: "${orderTable.obervation}"
+                                observation: "${orderTable.observation}"
                               },
                               orderChecks: {
                                 damages: ${arrayToString(orderChecksTable.damages)}
                                 features: ${arrayToString(orderChecksTable.features)}
-                                damagesDescription: "${orderChecksTable.damagesDescription}"
-                                featuresDescription: "${orderChecksTable.featuresDescription}"
+                                damagesdescription: "${orderChecksTable.damagesDescription}"
+                                featuresdescription: "${orderChecksTable.featuresDescription}"
                               },
                               tmpDeviceUnit: {
                                 device: "${tmpDeviceUnitTable.device}"
@@ -24,7 +34,7 @@ export const createOrder = async (orderTable, orderChecksTable, tmpDeviceUnitTab
                                 unlocktype: "${tmpDeviceUnitTable.unlockType}"
                                 serial: "${tmpDeviceUnitTable.serial}"
                               },
-                              money: ${orderTable.money},
+                              money: ${money},
                               budgetItems: ${arrayToString(items)}
                             ) {
                               __typename
@@ -106,6 +116,15 @@ export const getOrder = async (id: string) => {
                     }
                 }
 
+                budget {
+                  total
+                }
+
+                payments {
+                  amount
+                  created_at
+                }
+
                 orderCheck {
                   damages
                   damages_description
@@ -167,6 +186,8 @@ export const getOrder = async (id: string) => {
       features: JSON.parse(response.data.order.orderCheck.features),
       featuresDescription: response.data.order.orderCheck.features_description,
     },
+    total: response.data.order.budget?.total || 0,
+    payments: response.data.order.payments,
   } as OrderExpanded;
 };
 
@@ -373,4 +394,33 @@ export const updateObservation = async (
   handleGraphQLErrors(response.errors);
 
   return response.data.updateObservation;
+};
+
+export const addPayment = async (
+  order: string,
+  amount: number,
+): Promise<any> => {
+  const response = await graphqlRequest(`
+    mutation {
+      addPayment(
+        order: "${order}",
+        amount: ${amount}
+      ) {
+        __typename
+        ... on AddPaymentPayload {
+          success
+          amount
+          created_at
+        }
+        ... on ErrorPayload {
+          status
+          i18nKey
+        }
+      }
+    }
+  `);
+
+  handleGraphQLErrors(response.errors);
+
+  return response.data.addPayment;
 };

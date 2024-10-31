@@ -12,6 +12,7 @@ import { toast } from "react-toastify";
 import { t } from "i18next";
 import { ApiLayerError } from "@/helper/ApiLayerError";
 import { AbortControllerManager } from "@/helper/AbortControllerManager";
+import { useErrorHandler } from "../hooks/useErrorHandler";
 
 type BudgetModalProps = {
   order: string;
@@ -28,19 +29,21 @@ export const BudgetModal = ({ order }: BudgetModalProps) => {
     control,
     formState: { errors },
   } = useForm();
+  const { handleError } = useErrorHandler();
 
   useEffect(() => {
-    initialValues(order) // Asegúrate de pasar el valor correcto
-      .then((result) => {
-        setBudget(result.budget); // Descomentar para usarlo
-        setDescription(result.description); // Descomentar para usarlo
-      })
-      .catch((error) => {
-        toast.error(t(`toast.error.${error.message}`));
-      })
-      .finally(() => {
+    const fetchData = async () => {
+      try {
+        const { budget, description } = await initialValues(order);
+        setBudget(budget); // Descomentar para usarlo
+        setDescription(description); // Descomentar para usarlo
+      } catch (error) {
+        handleError(error);
+      } finally {
         setIsLoading(false);
-      });
+      }
+    };
+    fetchData();
 
     return () => {
       AbortControllerManager.abort();
@@ -59,9 +62,8 @@ export const BudgetModal = ({ order }: BudgetModalProps) => {
     }
   };
 
-  const handleError = () => {
-    //console.log(errors)
-    console.log("error", errors);
+  const handleErrorForm = () => {
+    //console.log("error", errors);
   };
 
   return (
@@ -77,7 +79,7 @@ export const BudgetModal = ({ order }: BudgetModalProps) => {
     >
       {!isLoading && (
         <form
-          onSubmit={handleSubmit(handleRegistration, handleError)}
+          onSubmit={handleSubmit(handleRegistration, handleErrorForm)}
           className='px-5 py-3 flex flex-col flex-grow justify-between'
         >
           <BudgetTable

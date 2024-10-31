@@ -97,7 +97,6 @@ export const ValidatedAutocomplete = ({
             render={({ field }) => (
               <Autocomplete
                 autoHighlight
-                autoSelect
                 selectOnFocus
                 handleHomeEndKeys
                 clearOnEscape

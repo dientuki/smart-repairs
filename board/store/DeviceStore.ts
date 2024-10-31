@@ -7,7 +7,6 @@ import {
   getTemporaryDeviceUnit,
 } from "@/services/deviceUnits";
 import { getDeviceVersions } from "@/services/deviceVersions";
-import { useBrandStore, useDeviceTypeStore, useOrderStore } from "@/store";
 import {
   device,
   deviceSingle,
@@ -59,10 +58,12 @@ interface DeviceStore {
 
   deviceUnit: any;
   getDeviceUnitUpdate: (id: string, deviceUnit: string | null) => Promise<void>;
-  getDevicesByTypeAndBrand: (typeId: string, brandId: string) => Promise<void>;
-  clear: (fields: string | string[]) => void;
+  getDevicesByTypeAndBrand: (
+    typeId: string,
+    brandId: string,
+  ) => Promise<OptionType[]>;
 
-  confirmDeviceUnit: (data: any) => Promise<void>;
+  confirmDeviceUnit: (data: FieldValues) => Promise<boolean>;
 }
 
 export const useDeviceStore = create<DeviceStore>((set) => ({
@@ -134,7 +135,9 @@ export const useDeviceStore = create<DeviceStore>((set) => ({
       brand: extraSingle(response.brand),
       type: extraSingle(response.deviceType),
       device: deviceSingle(response.device),
-      deviceVersion: response.deviceVersion ? extraSingle(response.deviceVersion) : null,
+      deviceVersion: response.deviceVersion
+        ? extraSingle(response.deviceVersion)
+        : null,
     };
 
     //return await addTemporaryDeviceUnit(data);
@@ -169,46 +172,43 @@ export const useDeviceStore = create<DeviceStore>((set) => ({
       result = await getTemporaryDeviceUnit(orderId);
     }
 
-    useBrandStore.getState().setBrands(result.brands);
-    useDeviceTypeStore.getState().setDeviceTypes(result.types);
-    set({
-      devices: result.devices,
-      deviceVersions: result.versions,
-      deviceUnitsByVersion: result.serials,
-      deviceUnit: result.deviceUnit,
-    });
-  },
-
-  clear: (fields: string | string[]) => {
-    set((state) => {
-      // Convertir el argumento en un array si es un string
-      const fieldsArray = Array.isArray(fields) ? fields : [fields];
-      const newState: Partial<DeviceStore> = { ...state };
-
-      // Limpiar los campos especificados
-      fieldsArray.forEach((field) => {
-        if (field in newState) {
-          (newState as any)[field] = [];
-        }
-      });
-
-      return newState as DeviceStore;
-    });
+    return result;
   },
 
   getDevicesByTypeAndBrand: async (
     typeId: string,
     brandId: string,
-  ): Promise<void> => {
+  ): Promise<OptionType[]> => {
     const devices: OptionType[] = await getDevicesByTypeAndBrand(
       typeId,
       brandId,
     );
-    set({ devices });
+    return devices;
   },
 
-  confirmDeviceUnit: async (data: any): Promise<void> => {
-    await confirmDeviceUnit(data);
-    //set({ deviceUnit: response });
+  confirmDeviceUnit: async (data: FieldValues): Promise<boolean> => {
+    const dunno = {
+      order: data.order,
+
+      brandid: data.brand.id,
+      brandlabel: data.brand.label,
+
+      typeid: data.type.id,
+      typelabel: data.type.label,
+
+      deviceid: data.device.id,
+      devicelabel: data.device.label,
+      url: data.url,
+
+      versionid: data.version.id,
+      versionlabel: data.version.label,
+
+      serialid: data.serial.id,
+      seriallabel: data.serial.label,
+
+      deviceunitid: data.deviceunitid,
+    };
+    const status = await confirmDeviceUnit(dunno);
+    return status;
   },
 }));

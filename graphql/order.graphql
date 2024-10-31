@@ -1,4 +1,6 @@
+union AddOrderResult = AddOrderPayload | ErrorPayload
 union UpdateOrderResult = UpdateOrderPayload | ErrorPayload
+union AddPaymentResult = AddPaymentPayload | ErrorPayload
 
 extend type Query {
     orders: [Orders!]!
@@ -12,7 +14,8 @@ extend type Mutation {
         order: OrderInput,
         orderChecks: OrderChecks,
         tmpDeviceUnit: TmpDeviceUnit,
-        money: String ): Boolean
+        money: Float,
+        budgetItems: [BudgetItemInput!]! ): AddOrderResult!
         @field(resolver: "OrderMutations@create")
         @namespace(field: "App\\GraphQL\\Mutations")
     updateOrderStatus(id: String, status: String!): UpdateOrderResult!
@@ -23,6 +26,9 @@ extend type Mutation {
         @namespace(field: "App\\GraphQL\\Mutations")
     updateObservation(id: String!, observation: String! @rules(apply: ["required"])): Boolean!
         @field(resolver: "OrderMutations@updateObservation")
+        @namespace(field: "App\\GraphQL\\Mutations")
+    addPayment(order: String!, amount: Float!): AddPaymentResult!
+        @field(resolver: "OrderPaymentMutations@addPayment")
         @namespace(field: "App\\GraphQL\\Mutations")
 }
 
@@ -35,19 +41,30 @@ type UpdateOrderPayload {
     success: Boolean!
 }
 
+type AddOrderPayload {
+    success: Boolean!
+    order: String!
+}
+
+type AddPaymentPayload {
+    success: Boolean!
+    amount: Float!
+    created_at: DateTime!
+}
+
 input OrderChecks {
     damages: [DamageInput]
-    damagedescription: String
+    damagesdescription: String
     features: [FeatureInput]
-    featuredescription: String
+    featuresdescription: String
 }
 
 input TmpDeviceUnit {
     device: String!
-    deviceVersion: String
-    deviceUnit: String
-    unlockCode: String
-    unlockType: String
+    deviceversion: String
+    deviceunit: String
+    unlockcode: String
+    unlocktype: String
     serial: String
 }
 
@@ -75,6 +92,13 @@ type Order {
     hasBudget: Boolean!
     diagnosis: String
     orderCheck: OrderCheck
+    payments: [Payment!]
+    budget: Budget
+}
+
+type Payment {
+    amount: Float!
+    created_at: DateTime!
 }
 
 type Orders {

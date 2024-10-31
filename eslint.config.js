@@ -26,7 +26,13 @@ export default [
       'promise/no-promise-in-callback': 'error',
       'promise/always-return': 'error',
       'promise/no-nesting': "error",
-      'promise/prefer-await-to-callbacks': "error"
-    }
+      'promise/prefer-await-to-callbacks': "error",
+      'no-console': "error",
+    },
+    settings: {
+      react: {
+        version: 'detect',
+      },
+    },
   }
 ];
