@@ -17,16 +17,20 @@ use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\AuthenticateSession;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
+use Illuminate\Support\Facades\Config;
 
 class AdminPanelProvider extends PanelProvider
 {
     public function panel(Panel $panel): Panel
     {
+        $domain = Config::get('app.domain', 'localhost');
+        $id = 'admin';
+
         return $panel
-            ->id('admin')
-            ->path('admin')
+            ->id($id)
+            ->path($id)
             ->login()
-            ->domain('admin.localhost')
+            ->domain($id . '.' . $domain)
             ->colors([
                 'primary' => Color::Blue,
             ])
@@ -53,7 +57,7 @@ class AdminPanelProvider extends PanelProvider
             ->authMiddleware([
                 Authenticate::class,
             ])
-            ->authGuard('admin')
+            ->authGuard($id)
             ->registration();
     }
 }

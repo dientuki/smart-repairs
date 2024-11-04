@@ -86,9 +86,9 @@
         "test": "@php artisan test --parallel",
 
         "clear": [
+            "@php artisan config:cache",
             "@php artisan route:cache",
             "@php artisan cache:clear",
-            "@php artisan config:cache",
             "@php artisan view:clear",
             "@php artisan lighthouse:clear-cache",
             "@php artisan config:clear"
