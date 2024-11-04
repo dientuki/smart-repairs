@@ -25,20 +25,24 @@ use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\AuthenticateSession;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
+use Illuminate\Support\Facades\Config;
 
 class TeamPanelProvider extends PanelProvider
 {
     public function panel(Panel $panel): Panel
     {
+        $domain = Config::get('app.domain', 'localhost');
+        $id = 'team';
+
         return $panel
             ->default()
-            ->id('team')
-            ->path('team')
+            ->id($id)
+            ->path($id)
             ->login(TeamLogin::class)
             ->registration()
             ->passwordReset()
             ->profile(TeamEditProfile::class)
-            ->domain('team.localhost')
+            ->domain($id . '.' . $domain)
             ->colors([
                 'danger' => Color::Red,
                 'gray' => Color::Stone,
