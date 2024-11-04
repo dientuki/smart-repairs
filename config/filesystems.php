@@ -39,7 +39,7 @@ return [
         'public' => [
             'driver' => 'local',
             'root' => storage_path('app/public'),
-            'url' => 'http://team.localhost' . '/storage',
+            'url' => env('FILESYSTEM_PUBLIC_URL', 'http://localhost') . '/storage',
             'visibility' => 'public',
             'throw' => false,
         ],
