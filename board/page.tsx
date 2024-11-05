@@ -9,17 +9,14 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/ReactToastify.min.css";
 import { I18nextProvider } from "react-i18next";
 import i18n from "./i18n";
-/*
 import Bugsnag from "@bugsnag/js";
 import BugsnagPluginReact, { BugsnagErrorBoundary } from "@bugsnag/plugin-react";
 import BugsnagPerformance from '@bugsnag/browser-performance'
-*/
 
-//let ErrorBoundary: React.ComponentType | BugsnagErrorBoundary = React.Fragment;
+let ErrorBoundary: React.ComponentType | BugsnagErrorBoundary = React.Fragment;
 const appElement = document.getElementById("app");
 
 if (appElement) {
-  /*
   if (appElement.hasAttribute('data-bug')) {
     const apiKey = appElement.getAttribute('data-bug');
 
@@ -36,9 +33,9 @@ if (appElement) {
       ErrorBoundary = bugsnagPlugin?.createErrorBoundary(React) ?? React.Fragment;
     }
   }
-    */
 
   ReactDOM.createRoot(appElement).render(
+    <ErrorBoundary>
       <I18nextProvider i18n={i18n}>
         <Board />
         <AddButton />
@@ -46,6 +43,7 @@ if (appElement) {
           <ModalContainer controller={Modal} />
           <ToastContainer position='top-right' newestOnTop={false} />
         </Suspense>
-      </I18nextProvider>,
+      </I18nextProvider>
+    </ErrorBoundary>,
   );
 }
