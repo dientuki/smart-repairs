@@ -22,3 +22,5 @@ coverage/
 coverage-php/
 * copy.*
 init.sh
+public/_version.txt
+build.tar.gz
