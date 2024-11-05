@@ -14,28 +14,26 @@ import BugsnagPluginReact, { BugsnagErrorBoundary } from "@bugsnag/plugin-react"
 import BugsnagPerformance from '@bugsnag/browser-performance'
 
 let ErrorBoundary: React.ComponentType | BugsnagErrorBoundary = React.Fragment;
-const apiKey = import.meta.env.VITE_BUGSNAG_API_KEY;
-
-if (apiKey && import.meta.env.prod) {
-  console.log('Iniciando Bugsnag');
-
-  // Inicializa Bugsnag solo en producción
-  Bugsnag.start({
-    apiKey: apiKey,
-    plugins: [new BugsnagPluginReact()]
-  });
-  BugsnagPerformance.start({ apiKey: apiKey });
-
-  // Obtén el plugin de React para crear el ErrorBoundary en producción
-  const bugsnagPlugin = Bugsnag.getPlugin('react');
-  ErrorBoundary = bugsnagPlugin?.createErrorBoundary(React) ?? React.Fragment;
-} else {
-  console.log('No se inicia Bugsnag', import.meta);
-}
-
 const appElement = document.getElementById("app");
 
 if (appElement) {
+  if (appElement.hasAttribute('data-bug')) {
+    const apiKey = appElement.getAttribute('data-bug');
+
+    // Inicializa Bugsnag solo en producción
+    if (apiKey !== '') {
+      Bugsnag.start({
+        apiKey: apiKey,
+        plugins: [new BugsnagPluginReact()]
+      });
+      BugsnagPerformance.start({ apiKey: apiKey });
+
+      // Obtén el plugin de React para crear el ErrorBoundary en producción
+      const bugsnagPlugin = Bugsnag.getPlugin('react');
+      ErrorBoundary = bugsnagPlugin?.createErrorBoundary(React) ?? React.Fragment;
+    }
+  }
+
   ReactDOM.createRoot(appElement).render(
     <ErrorBoundary>
       <I18nextProvider i18n={i18n}>
