@@ -18,21 +18,20 @@ const appElement = document.getElementById("app");
 
 if (appElement) {
   if (appElement.hasAttribute('data-bug')) {
-    console.log('Iniciando Bugsnag');
     const apiKey = appElement.getAttribute('data-bug');
 
     // Inicializa Bugsnag solo en producción
-    Bugsnag.start({
-      apiKey: apiKey,
-      plugins: [new BugsnagPluginReact()]
-    });
-    BugsnagPerformance.start({ apiKey: apiKey });
+    if (apiKey !== '') {
+      Bugsnag.start({
+        apiKey: apiKey,
+        plugins: [new BugsnagPluginReact()]
+      });
+      BugsnagPerformance.start({ apiKey: apiKey });
 
-    // Obtén el plugin de React para crear el ErrorBoundary en producción
-    const bugsnagPlugin = Bugsnag.getPlugin('react');
-    ErrorBoundary = bugsnagPlugin?.createErrorBoundary(React) ?? React.Fragment;
-  } else {
-    console.log('No se inicia Bugsnag');
+      // Obtén el plugin de React para crear el ErrorBoundary en producción
+      const bugsnagPlugin = Bugsnag.getPlugin('react');
+      ErrorBoundary = bugsnagPlugin?.createErrorBoundary(React) ?? React.Fragment;
+    }
   }
 
   ReactDOM.createRoot(appElement).render(
