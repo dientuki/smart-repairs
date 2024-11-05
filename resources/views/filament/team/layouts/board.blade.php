@@ -45,6 +45,6 @@
                 @endif
 
         </div>
-        <main class="fi-main flex flex-grow mx-auto  w-full p-2 " id="app" ></main>
+        <main class="fi-main flex flex-grow mx-auto  w-full p-2 " id="app" data-bug="{{ env('BUGSNAG_API_KEY') }}" ></main>
     </div>
 </x-filament-panels::layout.base>
