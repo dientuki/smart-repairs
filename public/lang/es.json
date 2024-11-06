@@ -77,7 +77,11 @@
     "new_order": {
         "budget": "presupuesto",
         "title": "creacion de orden",
-        "more_info": "informacion del {{record}}",
+        "more_info": "info del {{record}}",
+        "customer_more_info": "Dueño del equipo",
+        "device_more_info": "Equipo a reparar",
+        "issue_more_info": "Detalle",
+        "budget_more_info": "Posible costo",
         "issue": "problema"
     },
 
