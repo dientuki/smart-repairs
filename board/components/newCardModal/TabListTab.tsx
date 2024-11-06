@@ -20,7 +20,7 @@ export const TabListTab = ({
 }: TabListTabProps) => {
   return (
     <div className='relative flex'>
-      <Tab className='flex h-full items-center gap-x-4 px-6 py-4 text-start'>
+      <Tab className='flex h-full items-center gap-x-4 px-6 py-4 text-start w-full'>
         <div
           className={clsx(
             "flex h-10 w-10 shrink-0 items-center justify-center rounded-full",
@@ -52,7 +52,7 @@ export const TabListTab = ({
           <h3 className='font-bold leading-tight first-letter:uppercase'>
             {title}
           </h3>
-          {subtitle && <div className='first-letter:uppercase'>{subtitle}</div>}
+          {subtitle && <div className='first-letter:uppercase hidden 2xl:block '>{subtitle}</div>}
         </div>
       </Tab>
       <div className='fi-fo-wizard-header-step-separator absolute end-0 hidden h-full w-5 md:block'>
