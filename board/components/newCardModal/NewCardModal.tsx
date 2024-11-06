@@ -123,8 +123,7 @@ export const NewCardModal = () => {
 
   return (
     <ModalLayout
-      minHeight='460px'
-      width='70vw'
+      className='w-[95vw] min-h-[460px] 2xl:w-[1458px]'
       title={
         <h2 className='flex flex-row items-center gap-2 px-5 py-3 text-2xl font-bold tracking-tight sm:text-3xl border-b border-gray-200 dark:border-white/10'>
           <Icon size={7} icon={InboxIcon} />
@@ -144,30 +143,25 @@ export const NewCardModal = () => {
                 <TabListTab
                   index={0}
                   title={t("order.customer")}
-                  subtitle={t("new_order.more_info", {
-                    record: t("order.customer"),
-                  })}
+                  subtitle={t("new_order.customer_more_info")}
                   selectedIndex={selectedIndex}
                 />
                 <TabListTab
                   index={1}
                   title={t("device")}
-                  subtitle={t("new_order.more_info", {
-                    record: t("device"),
-                  })}
+                  subtitle={t("new_order.device_more_info")}
                   selectedIndex={selectedIndex}
                 />
                 <TabListTab
                   index={2}
                   title={t("new_order.issue")}
-                  subtitle={t("new_order.more_info", {
-                    record: t("new_order.issue"),
-                  })}
+                  subtitle={t("new_order.issue_more_info")}
                   selectedIndex={selectedIndex}
                 />
                 <TabListTab
                   index={3}
                   title={t("new_order.budget")}
+                  subtitle={t("new_order.budget_more_info")}
                   selectedIndex={selectedIndex}
                   hideArrow
                 />

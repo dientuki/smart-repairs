@@ -53,7 +53,7 @@ export const ViewCardModal = () => {
   };
 
   return (
-    <ModalLayout>
+    <ModalLayout className='w-[95vw] h-[95vh] 2xl:w-[1458px]'>
       {modal.params.order == order.$id && (
         <div className='h-full flex flex-col'>
           <h2 className='flex flex-row items-center gap-2 px-5 py-3 text-2xl font-bold tracking-tight sm:text-3xl'>

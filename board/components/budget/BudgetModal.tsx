@@ -68,8 +68,7 @@ export const BudgetModal = ({ order }: BudgetModalProps) => {
 
   return (
     <ModalLayout
-      minHeight='460px'
-      width='70vw'
+      className='w-[70vw] min-h-[460px] 2xl:w-[1458px]'
       title={
         <h2 className='flex flex-row items-center gap-2 px-5 py-3 text-2xl font-bold tracking-tight sm:text-3xl border-b border-gray-200 dark:border-white/10'>
           <Icon size={7} icon={ReceiptPercentIcon} />

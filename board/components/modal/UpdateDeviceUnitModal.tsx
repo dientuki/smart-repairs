@@ -192,8 +192,7 @@ export const UpdateDeviceUnitModal = () => {
 
   return (
     <ModalLayout
-      width='728px'
-      minHeight='460px'
+      className='w-[728px] min-h-[460px]'
       title={
         <h2 className='flex flex-row items-center gap-2 px-5 py-3 text-2xl font-bold tracking-tight sm:text-3xl border-b border-gray-200 dark:border-white/10'>
           <span className='first-letter:uppercase'>{t("new_order.title")}</span>

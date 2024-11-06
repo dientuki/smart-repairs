@@ -36,7 +36,7 @@ function PatternLockModal() {
   };
 
   return (
-    <ModalLayout width='328px' height='384px'>
+    <ModalLayout className="w-[328px] h-[384px]">
       <div className='p-4 flex flex-col justify-between h-full'>
         <div onPointerDown={reset}>
           <PatternLock
