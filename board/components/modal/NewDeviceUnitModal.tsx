@@ -53,7 +53,7 @@ export const NewDeviceUnitModal = () => {
   };
 
   return (
-    <ModalLayout width='328px' height='270px'>
+    <ModalLayout className='w-[328px] h-[270px]'>
       <form
         onSubmit={handleSubmit(handleRegistration, handleErrorForm)}
         className='p-4 flex flex-col h-full justify-between'
