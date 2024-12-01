@@ -16,7 +16,7 @@
         "@bugsnag/js": "^8.1.2",
         "@bugsnag/plugin-react": "^8.1.1",
         "@emotion/react": "^11.13.5",
-        "@emotion/styled": "^11.13.0",
+        "@emotion/styled": "^11.13.5",
         "@headlessui/react": "^2.1.10",
         "@heroicons/react": "^2.2.0",
         "@mui/material": "^6.1.9",
