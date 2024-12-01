@@ -12,7 +12,7 @@
         "coverage": "vitest run --coverage"
     },
     "dependencies": {
-        "@bugsnag/browser-performance": "^2.10.0",
+        "@bugsnag/browser-performance": "^2.10.1",
         "@bugsnag/js": "^8.1.2",
         "@bugsnag/plugin-react": "^8.1.1",
         "@emotion/react": "^11.13.3",
