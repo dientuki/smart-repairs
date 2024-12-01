@@ -18,7 +18,7 @@
         "@emotion/react": "^11.13.5",
         "@emotion/styled": "^11.13.0",
         "@headlessui/react": "^2.1.10",
-        "@heroicons/react": "^2.1.5",
+        "@heroicons/react": "^2.2.0",
         "@mui/material": "^6.1.6",
         "@vitejs/plugin-react": "^4.3.3",
         "dotenv": "^16.4.5",
