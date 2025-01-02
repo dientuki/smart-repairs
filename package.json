@@ -35,7 +35,7 @@
         "react-modal-global": "^2.3.7",
         "react-pattern-lock": "github:bosskabouter/react-pattern-lock",
         "react-toastify": "^11.0.2",
-        "zustand": "^5.0.1"
+        "zustand": "^5.0.2"
     },
     "devDependencies": {
         "@castlenine/vite-remove-attribute": "^1.0.2",
