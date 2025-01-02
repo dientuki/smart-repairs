@@ -21,7 +21,7 @@
         "@heroicons/react": "^2.2.0",
         "@mui/material": "^6.1.9",
         "@vitejs/plugin-react": "^4.3.4",
-        "dotenv": "^16.4.5",
+        "dotenv": "^16.4.7",
         "i18next": "^24.0.2",
         "i18next-browser-languagedetector": "^8.0.0",
         "i18next-http-backend": "^3.0.1",
