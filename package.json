@@ -52,7 +52,7 @@
         "autoprefixer": "^10.4.20",
         "axios": "^1.7.8",
         "bootstrap": "^5.2.3",
-        "eslint": "^9.16.0",
+        "eslint": "^9.17.0",
         "eslint-config-prettier": "^9.1.0",
         "eslint-plugin-i18next": "^6.1.1",
         "eslint-plugin-promise": "^7.2.1",
