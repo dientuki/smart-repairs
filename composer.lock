@@ -2263,16 +2263,16 @@
         },
         {
             "name": "laravel/framework",
-            "version": "v11.36.1",
+            "version": "v11.37.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/framework.git",
-                "reference": "df06f5163f4550641fdf349ebc04916a61135a64"
+                "reference": "6cb103d2024b087eae207654b3f4b26646119ba5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/framework/zipball/df06f5163f4550641fdf349ebc04916a61135a64",
-                "reference": "df06f5163f4550641fdf349ebc04916a61135a64",
+                "url": "https://api.github.com/repos/laravel/framework/zipball/6cb103d2024b087eae207654b3f4b26646119ba5",
+                "reference": "6cb103d2024b087eae207654b3f4b26646119ba5",
                 "shasum": ""
             },
             "require": {
@@ -2322,7 +2322,6 @@
                 "voku/portable-ascii": "^2.0.2"
             },
             "conflict": {
-                "mockery/mockery": "1.6.8",
                 "tightenco/collect": "<5.5.33"
             },
             "provide": {
@@ -2474,7 +2473,7 @@
                 "issues": "https://github.com/laravel/framework/issues",
                 "source": "https://github.com/laravel/framework"
             },
-            "time": "2024-12-17T22:32:08+00:00"
+            "time": "2025-01-02T20:10:21+00:00"
         },
         {
             "name": "laravel/prompts",
@@ -4298,16 +4297,16 @@
         },
         {
             "name": "owen-it/laravel-auditing",
-            "version": "v13.6.8",
+            "version": "v13.6.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/owen-it/laravel-auditing.git",
-                "reference": "28ecd2d5cc05c3619f99af42611877f54371af20"
+                "reference": "559b391e2ebf46a734b3f82d4f18faf425107054"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/owen-it/laravel-auditing/zipball/28ecd2d5cc05c3619f99af42611877f54371af20",
-                "reference": "28ecd2d5cc05c3619f99af42611877f54371af20",
+                "url": "https://api.github.com/repos/owen-it/laravel-auditing/zipball/559b391e2ebf46a734b3f82d4f18faf425107054",
+                "reference": "559b391e2ebf46a734b3f82d4f18faf425107054",
                 "shasum": ""
             },
             "require": {
@@ -4328,13 +4327,13 @@
             },
             "type": "package",
             "extra": {
-                "branch-alias": {
-                    "dev-master": "v13-dev"
-                },
                 "laravel": {
                     "providers": [
                         "OwenIt\\Auditing\\AuditingServiceProvider"
                     ]
+                },
+                "branch-alias": {
+                    "dev-master": "v13-dev"
                 }
             },
             "autoload": {
@@ -4382,7 +4381,7 @@
                 "issues": "https://github.com/owen-it/laravel-auditing/issues",
                 "source": "https://github.com/owen-it/laravel-auditing"
             },
-            "time": "2024-06-26T20:56:28+00:00"
+            "time": "2024-12-27T15:04:04+00:00"
         },
         {
             "name": "phpoption/phpoption",
