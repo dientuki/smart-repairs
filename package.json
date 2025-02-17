@@ -13,7 +13,7 @@
     },
     "dependencies": {
         "@bugsnag/browser-performance": "^2.10.1",
-        "@bugsnag/js": "^8.1.2",
+        "@bugsnag/js": "^8.2.0",
         "@bugsnag/plugin-react": "^8.1.1",
         "@emotion/react": "^11.14.0",
         "@emotion/styled": "^11.14.0",
