@@ -34,7 +34,7 @@
         "react-loader-spinner": "^6.1.6",
         "react-modal-global": "^2.3.7",
         "react-pattern-lock": "github:bosskabouter/react-pattern-lock",
-        "react-toastify": "^11.0.3",
+        "react-toastify": "^11.0.5",
         "zustand": "^5.0.3"
     },
     "devDependencies": {
